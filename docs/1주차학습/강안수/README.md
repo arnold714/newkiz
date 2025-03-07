@@ -1,7 +1,7 @@
 ## 1주차 학습
-### 아이디어 회의/자료 조사
+### - 아이디어 회의/자료 조사
 
-### FSD 아키텍처 학습
+### - FSD 아키텍처 학습
 #### 참고 자료 :
     https://feature-sliced.design/kr/docs/get-started/overview
 

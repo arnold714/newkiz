@@ -28,7 +28,7 @@ export default function StepConfirm({
 
   return (
     <div className="bg-white rounded-lg p-6 shadow-md">
-      <h2 className="text-xl font-bold mb-4">모든 정보가 맞나요?</h2>
+      <h2 className="text-xl font-bold mb-4">정보가 맞는지 확인해주세요!</h2>
 
       <div className="mb-2">
         <span className="font-medium">닉네임:</span> {basicInfo.nickname}

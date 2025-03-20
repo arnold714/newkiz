@@ -20,6 +20,12 @@ const SearchPage = lazy(() => import("../../pages/search").then(module => ({ def
 // 없는 페이지
 const NotFoundPage = lazy(() => import("../../pages/notfound").then(module => ({ default: module.NotFoundPage })));
 
+const OnboardingContainer = lazy(() =>
+  import("../../pages/login").then(module => ({
+    default: module.OnboardingContainer
+  }))
+);
+
 const routes: RouteObject[] = [
   {
     path: "/",
@@ -82,6 +88,14 @@ const routes: RouteObject[] = [
     element: (
       <Suspense fallback={Loading}>
         <NotFoundPage />
+      </Suspense>
+    )
+  },
+  {
+    path: "/onboarding",
+    element: (
+      <Suspense fallback={Loading}>
+        <OnboardingContainer />
       </Suspense>
     )
   }

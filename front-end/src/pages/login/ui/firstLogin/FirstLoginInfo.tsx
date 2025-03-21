@@ -104,7 +104,7 @@ export default function FirstLoginInfo({
           onChange={handleChange}
           className="border w-full px-2 py-1 rounded mt-1"
         >
-          <option value="">선택하세요</option>
+          <option value="">선택해주세요</option>
           <option value="male">남성</option>
           <option value="female">여성</option>
         </select>

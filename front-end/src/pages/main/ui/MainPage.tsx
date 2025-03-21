@@ -1,7 +1,11 @@
-import React from 'react'
+import Layout from '../../../shared/ui/Layout';
 
 export default function MainPage() {
   return (
-    <div>MainPage dddd</div>
+    <Layout>
+      <div>
+        main
+      </div>
+    </Layout>
   )
 }

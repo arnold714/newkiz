@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
-import background from '../../assets/images/background.png';
-
+import Header from './Header';
+import NavBar from './NavBar';
 
 type LayoutProps = {
   children: ReactNode;
@@ -9,10 +9,13 @@ type LayoutProps = {
 const Layout = ({ children }: LayoutProps) => {
   return (
     <div
-      className="w-screen h-screen bg-cover bg-center bg-no-repeat"
-      style={{ backgroundImage: `url(${background})` }}
+      className="bg-[url(https://newkiz.s3.ap-northeast-2.amazonaws.com/assets/background.png)] w-screen h-screen bg-cover bg-center bg-no-repeat"
     >
-      {children}
+      <Header />
+        <div className='pt-20'>
+          {children}
+        </div>
+      <NavBar />
     </div>
   );
 };

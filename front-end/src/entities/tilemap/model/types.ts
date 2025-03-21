@@ -1,0 +1,8 @@
+export interface TileMapProps {
+    tilesetPath: string;
+    tileSize: number;
+    mapWidth: number;
+    mapHeight: number;
+    tileData: number[];
+  }
+  

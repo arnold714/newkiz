@@ -14,6 +14,11 @@ export const useCharacterMovementSetup = (): {
     y: 0,
     isActive: false
   });
+
+  useEffect(()=>{
+    console.log("joystickData: x- ", joystickData.x," y- ", joystickData.y);
+    console.log("joystickData.isActive: ", joystickData.isActive);
+  }, [joystickData])
   
   // 조이스틱 데이터 처리
   const handleJoystickMove = (event: any) => {
@@ -54,7 +59,7 @@ export const CharacterMovementController: React.FC<{
   const [movementState, setMovementState] = useState<CharacterMovementState>({
     position: [0, 0, 0],
     isMoving: false,
-    direction: 'right'
+    direction: 1
   });
   
   const keysPressed = useRef<Record<string, boolean>>({});
@@ -76,9 +81,9 @@ export const CharacterMovementController: React.FC<{
       
       // 방향 설정
       if (e.code === 'ArrowLeft' || e.code === 'KeyA') {
-        setMovementState(prev => ({ ...prev, direction: 'left' }));
+        setMovementState(prev => ({ ...prev, direction: -1 }));
       } else if (e.code === 'ArrowRight' || e.code === 'KeyD') {
-        setMovementState(prev => ({ ...prev, direction: 'right' }));
+        setMovementState(prev => ({ ...prev, direction: 1 }));
       }
     };
     
@@ -109,7 +114,7 @@ export const CharacterMovementController: React.FC<{
       setMovementState(prev => ({
         ...prev,
         isMoving: true,
-        direction: joystickData.x < 0 ? 'left' : 'right'
+        direction: joystickData.x < 0 ? -1 : 1
       }));
     } else if (Object.keys(keysPressed.current).length === 0) {
       setMovementState(prev => ({ ...prev, isMoving: false }));

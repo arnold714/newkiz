@@ -19,8 +19,8 @@ export const GamePage: React.FC = () => {
   
   // 타일맵 크기 계산 (맵 데이터 기반)
   const tileMapSize = {
-    width: 20, // 가장 넓은 맵의 너비
-    height: 12 // 가장 높은 맵의 높이
+    width: 200, // 가장 넓은 맵의 너비
+    height: 120 // 가장 높은 맵의 높이
   };
   
   return (

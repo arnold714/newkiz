@@ -58,16 +58,19 @@ export default function OnboardingContainer() {
   };
 
   return (
-    <div className="w-full h-screen flex flex-col items-center justify-center bg-white">
-      {/* 페이지 인디케이터 (점 4개 등) */}
-      <div className="absolute top-5 flex gap-2">
-        {[1, 2, 3, 4].map((num) => (
-          <div
-            key={num}
-            className={`w-3 h-3 rounded-full transition-all
-              ${step === num ? "bg-blue-500 w-4 h-4" : "bg-gray-300"}`}
-          />
-        ))}
+    <div className="w-full h-screen flex flex-col items-center justify-center bg-[#FFFFFF]">
+      {/* 페이지 인디케이터 */}
+      <div className="mb-4">
+        <div className="flex space-x-2">
+          {[1, 2, 3].map((num) => (
+            <div
+              key={num}
+              className={`w-1 h-1 rounded-full ${
+                step === num ? "bg-[#748BFF]" : "bg-[#D9D9D9]"
+              }`}
+            />
+          ))}
+        </div>
       </div>
 
       {/* 스텝 렌더링 */}

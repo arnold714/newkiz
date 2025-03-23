@@ -34,7 +34,6 @@ export default function FirstLoginInfo({
     setIsModalOpen(false);
   };
 
-  // 선택된 학교가 있을 경우 basicInfo.school에 저장
   const handleSelectSchool = (schoolName: string) => {
     setBasicInfo((prev) => ({ ...prev, school: schoolName }));
   };
@@ -45,75 +44,90 @@ export default function FirstLoginInfo({
   };
 
   return (
-    <div className="bg-white p-6 rounded shadow-md w-[300px]">
-      <h2 className="text-xl font-bold mb-4">기본 정보</h2>
+    <div className="bg-white shadow-[0px_0px_20px_rgba(0,0,0,0.15)] rounded-[15px] w-[300px] h-[560px] py-8 px-5">
+      <h2 className="text-black font-bold text-2xl text-center mb-8">기본 정보</h2>
 
       {/* 닉네임 */}
-      <label className="block mb-2">
-        닉네임
+      <div className="mb-5">
+        <label className="block text-[#1C1C1C] font-semibold text-sm mb-1">
+          닉네임
+        </label>
         <input
           type="text"
           name="nickname"
           placeholder="닉네임을 입력해주세요"
           value={basicInfo.nickname}
           onChange={handleChange}
-          className="border w-full px-2 py-1 rounded mt-1"
+          className="w-full bg-[#FAFAFA] border border-[#EFEFEF] rounded-lg px-3 py-3 text-sm"
         />
-      </label>
+      </div>
 
       {/* 생년월일 */}
-      <label className="block mb-2">
-        생년월일
+      <div className="mb-5">
+        <label className="block text-[#1C1C1C] font-semibold text-sm mb-1">
+          생년월일
+        </label>
         <input
-          type="date"
+          type="date" 
           name="birthdate"
+          placeholder="연도-월-일"
           value={basicInfo.birthdate}
           onChange={handleChange}
-          className="border w-full px-2 py-1 rounded mt-1"
+          className="w-full bg-[#FAFAFA] border border-[#EFEFEF] rounded-lg px-3 py-3 text-sm"
         />
-      </label>
+      </div>
 
       {/* 출신 학교 */}
-      <label className="block mb-2">
-        출신 학교
-        <div className="flex">
+      <div className="mb-5">
+        <label className="block text-[#1C1C1C] font-semibold text-sm mb-1 flex items-center justify-between">
+          <span>출신 학교</span>
+        </label>
+        <div className="flex gap-2">
           <input
             type="text"
             name="school"
             value={basicInfo.school}
-            onChange={handleChange}
-            className="border w-full px-2 py-1 rounded mt-1 mr-1"
-            placeholder="학교를 검색해주세요."
             readOnly
+            placeholder="학교를 검색해주세요."
+            className="w-full bg-[#FAFAFA] border border-[#EFEFEF] rounded-lg px-3 py-3 text-sm"
           />
           <button
             onClick={handleOpenModal}
-            className="bg-blue-500 text-white px-3 py-1 rounded mt-1"
+            className="bg-[#4285F4] text-white px-3 py-2 rounded-lg text-sm whitespace-nowrap"
           >
             학교 검색
           </button>
         </div>
-      </label>
+      </div>
 
       {/* 성별 */}
-      <label className="block mb-4">
-        성별
-        <select
-          name="gender"
-          value={basicInfo.gender}
-          onChange={handleChange}
-          className="border w-full px-2 py-1 rounded mt-1"
-        >
-          <option value="">선택해주세요</option>
-          <option value="male">남성</option>
-          <option value="female">여성</option>
-        </select>
-      </label>
+      <div className="mb-8">
+        <label className="block text-[#1C1C1C] font-semibold text-sm mb-1">
+          성별
+        </label>
+        <div className="relative">
+          <select
+            name="gender"
+            value={basicInfo.gender}
+            onChange={handleChange}
+            className="w-full appearance-none bg-[#FAFAFA] border border-[#EFEFEF] rounded-lg px-3 py-3 text-sm"
+          >
+            <option value="">선택해주세요</option>
+            <option value="male">남성</option>
+            <option value="female">여성</option>
+          </select>
+          <span className="absolute right-3 top-1/2 transform -translate-y-1/2">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M4.5 6.75L9 11.25L13.5 6.75" stroke="#1C1C1C" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </span>
+        </div>
+      </div>
 
       {/* 다음 버튼 */}
       <button
         onClick={handleNext}
-        className="bg-blue-500 text-white px-4 py-2 rounded w-full mt-4 border-2 border-dotted border-purple-300"
+        className="w-full bg-[#748BFF] text-white font-semibold py-4 mt-2 rounded-lg"
       >
         관심사 등록하러 가기
       </button>

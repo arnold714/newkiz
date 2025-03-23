@@ -1,0 +1,1 @@
+export { useCharacterMovementSetup, CharacterMovementController } from './model/useCharacterMovement';

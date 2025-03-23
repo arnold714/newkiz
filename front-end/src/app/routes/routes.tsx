@@ -92,7 +92,7 @@ const routes: RouteObject[] = [
     )
   },
   {
-    path: "/onboarding",
+    path: "/userinfo",
     element: (
       <Suspense fallback={Loading}>
         <OnboardingContainer />

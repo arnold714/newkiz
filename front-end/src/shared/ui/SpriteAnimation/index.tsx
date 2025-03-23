@@ -1,0 +1,1 @@
+export { SpriteAnimation } from './SpriteAnimation';

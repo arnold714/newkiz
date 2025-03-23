@@ -1,13 +1,23 @@
 import React from "react";
 
+interface BasicInfo {
+  nickname: string;
+  birthdate: string;
+  school: string;
+  gender: string;
+}
+
 interface StepCharactersProps {
+  basicInfo?: BasicInfo; // Optional BasicInfo prop
   selectedCharacter: string;
   setSelectedCharacter: React.Dispatch<React.SetStateAction<string>>;
   nextStep: () => void;
   prevStep: () => void;
+  // 인디케이터에 표시할 스텝 정보도 추가할 수 있지만, 고정값으로 구현
 }
 
 export default function StepCharacters({
+  basicInfo, // Include basicInfo in destructuring
   selectedCharacter,
   setSelectedCharacter,
   nextStep,
@@ -56,27 +66,37 @@ export default function StepCharacters({
 
       {/* 컨텐츠 */}
       <div className="relative z-10 h-full flex flex-col p-6">
-        {/* 뒤로가기 버튼 */}
-        <div className="flex items-center">
+        {/* 뒤로가기 버튼과 페이지 인디케이터를 포함하는 row */}
+        <div className="flex items-center w-full mb-2">
+          {/* 뒤로가기 버튼 왼쪽에 고정 */}
           <button onClick={prevStep} className="p-1">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M15 18L9 12L15 6" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
           </button>
+          
+          {/* 페이지 인디케이터 (가운데 위치) - 뒤로가기 버튼을 제외한 영역에서 가운데 정렬 */}
+          <div className="flex-grow flex justify-center -ml-6">
+            <div className="flex space-x-2">
+              <div className="w-1 h-1 rounded-full bg-[#D9D9D9]" />
+              <div className="w-1 h-1 rounded-full bg-[#D9D9D9]" />
+              <div className="w-1 h-1 rounded-full bg-[#748BFF]" />
+            </div>
+          </div>
         </div>
 
-        {/* 캐릭터 이름과 선택된 캐릭터 표시 */}
+        {/* 닉네임과 선택된 캐릭터 표시 */}
         <div className="flex flex-col items-center mt-2 mb-3">
-          <h2 className="text-xl font-bold">닉네임</h2>
+          <h2 className="text-xl font-bold">{basicInfo?.nickname || "닉네임"}</h2>
           <div className="mt-2">
             {selectedCharacter ? (
               <img 
                 src={characters.find(c => c.id === selectedCharacter)?.img || "/images/char1.png"} 
                 alt="Selected character" 
-                className="w-20 h-20"
+                className="w-20 h-20 rounded-full"
               />
             ) : (
-              <img src="/images/char1.png" alt="Default character" className="w-20 h-20" />
+              <img src="/images/char1.png" alt="Default character" className="w-20 h-20 rounded-full" />
             )}
           </div>
         </div>
@@ -87,10 +107,10 @@ export default function StepCharacters({
             <button
               key={char.id}
               onClick={() => handleSelect(char.id)}
-              className={`w-[80px] h-[80px] rounded-full bg-white/90 flex items-center justify-center p-1
-                ${selectedCharacter === char.id ? "ring-2 ring-blue-500" : ""}`}
+              className={`w-[80px] h-[80px] rounded-full flex items-center justify-center p-1
+                ${selectedCharacter === char.id ? "ring-2 ring-blue-500 bg-white/90" : "bg-white/90"}`}
             >
-              <img src={char.img} alt={char.id} className="w-14 h-14" />
+              <img src={char.img} alt={char.id} className="w-14 h-14 rounded-full" />
             </button>
           ))}
         </div>

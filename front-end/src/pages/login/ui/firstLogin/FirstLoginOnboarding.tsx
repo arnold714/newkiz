@@ -37,6 +37,7 @@ export default function OnboardingContainer() {
       case 3:
         return (
           <FirstCharacterSelection
+            basicInfo={basicInfo}
             selectedCharacter={selectedCharacter}
             setSelectedCharacter={setSelectedCharacter}
             nextStep={nextStep}
@@ -60,18 +61,20 @@ export default function OnboardingContainer() {
   return (
     <div className="w-full h-screen flex flex-col items-center justify-center bg-[#FFFFFF]">
       {/* 페이지 인디케이터 */}
-      <div className="mb-4">
-        <div className="flex space-x-2">
-          {[1, 2, 3].map((num) => (
-            <div
-              key={num}
-              className={`w-1 h-1 rounded-full ${
-                step === num ? "bg-[#748BFF]" : "bg-[#D9D9D9]"
-              }`}
-            />
-          ))}
+      {step !== 3 && step !== 4 && (
+        <div className="mb-4">
+          <div className="flex space-x-2">
+            {[1, 2, 3].map((num) => (
+              <div
+                key={num}
+                className={`w-1 h-1 rounded-full ${
+                  step === num ? "bg-[#748BFF]" : "bg-[#D9D9D9]"
+                }`}
+              />
+            ))}
+          </div>
         </div>
-      </div>
+      )}
 
       {/* 스텝 렌더링 */}
       {renderStep()}

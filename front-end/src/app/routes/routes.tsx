@@ -19,12 +19,10 @@ const ReporterPage = lazy(() => import("../../pages/reporter").then(module => ({
 const SearchPage = lazy(() => import("../../pages/search").then(module => ({ default: module.SearchPage })));
 // 없는 페이지
 const NotFoundPage = lazy(() => import("../../pages/notfound").then(module => ({ default: module.NotFoundPage })));
-
-const OnboardingContainer = lazy(() =>
-  import("../../pages/login").then(module => ({
-    default: module.OnboardingContainer
-  }))
-);
+// 첫 로그인 정보 입력 페이지
+const OnboardingContainer = lazy(() => import("../../pages/login").then(module => ({ default: module.OnboardingContainer })));
+// 알림 페이지
+const NotificationPage = lazy(() => import("../../pages/notification").then(module => ({ default: module.NotificationPage })));
 
 const routes: RouteObject[] = [
   {
@@ -96,6 +94,14 @@ const routes: RouteObject[] = [
     element: (
       <Suspense fallback={Loading}>
         <OnboardingContainer />
+      </Suspense>
+    )
+  },
+  {
+    path: "/notification",
+    element: (
+      <Suspense fallback={Loading}>
+        <NotificationPage />
       </Suspense>
     )
   }

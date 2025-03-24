@@ -1,6 +1,17 @@
 import ReactApexChart from 'react-apexcharts';
+import { useEffect, useState } from 'react';
 
 const ProgressGraph: React.FC = () => {
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth)
+  
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   const options: ApexCharts.ApexOptions = {
     chart: {
       height: 300,
@@ -18,11 +29,11 @@ const ProgressGraph: React.FC = () => {
             offsetY: -10,
             show: true,
             color: '#202020',
-            fontSize: '10px',
+           fontSize: windowWidth < 640 ? '10px' : '18px',
           },
           value: {
             color: '#202020',
-            fontSize: '18px',
+            fontSize: windowWidth < 640 ? '18px' : '30px',
             show: true,
           },
         },
@@ -43,7 +54,10 @@ const ProgressGraph: React.FC = () => {
   const series = [50]; // 진행률 (퍼센트)
 
   return (
-    <div className="bg-white w-35 h-35 shadow-m rounded-[15px] opacity-90 mr-10">
+    <div className="bg-white shadow-m rounded-[15px] opacity-90 mr-10
+                    w-35 h-35
+                    sm:w-60 sm:h-60
+                    ">
       <ReactApexChart options={options} series={series} type="radialBar" height="100%" />
     </div>
   );

@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { Canvas } from "@react-three/fiber"
 import { OrthographicCamera } from "@react-three/drei"
 import { CharacterSprite } from "@entities/character"
@@ -6,6 +6,7 @@ import { TileMap, grassMapData, waterMapData, biomeData } from "@entities/tilema
 import { JoystickController } from "@entities/joystick"
 import { useCharacterMovementSetup, CharacterMovementController } from "@/features/CharacterMovement"
 import { CharacterMovementState } from "@/features/CharacterMovement/model/types"
+import { calculateWScale } from "@/features/MapWidthScale"
 
 export const GamePage: React.FC = () => {
   // Canvas 외부에서 관리할 상태
@@ -15,30 +16,51 @@ export const GamePage: React.FC = () => {
     isMoving: false,
     direction: 1,
   })
+  const [wScale, setWScale] = useState(1);
 
-  // 타일맵 크기 계산 (맵 데이터 기반)
+  // 너비 계산
+  useEffect(() => {
+    const handleResize = () => {
+      const currentWidth = Math.min(Math.max(window.innerWidth, 360), 600);
+      setWScale(calculateWScale(currentWidth));
+    };
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const tileMapUrl: string = import.meta.env.VITE_AWS_S3_BASE_URL;
+
+  // grassMapData의 크기 (크기는 타일의 갯수 = unit 수)
+  const grassMapSize = 8;
+
+  // 타일맵 크기 (mapData의 grassMapData 기준)
   const tileMapSize = {
-    width: 200, // 가장 넓은 맵의 너비
-    height: 120, // 가장 높은 맵의 높이
+    width: grassMapSize-0.5,
+    height: grassMapSize-0.5,
   }
-
+  
   return (
-    <div className="relative w-screen h-screen">
-      <Canvas>
-        <OrthographicCamera makeDefault position={[0, 0, 5]} zoom={70} />
-        <ambientLight intensity={1} />
-        <React.Suspense fallback={null}>
-          <TileMap tilesetPath="/Water.png" tileSize={16} mapWidth={20} mapHeight={12} tileData={waterMapData} />
-          <TileMap tilesetPath="/Grass.png" tileSize={16} mapWidth={8} mapHeight={6} tileData={grassMapData} />
-          <TileMap tilesetPath="/Basic_Grass_Biom_things.png" tileSize={16} mapWidth={20} mapHeight={12} tileData={biomeData} />
-          <CharacterSprite characterName="kuro" position={characterState.position} isMoving={characterState.isMoving} direction={characterState.direction} />
+    <div className="flex justify-center items-center w-full h-screen">
+      <div className="flex justify-center items-center w-full h-full">
+        <Canvas className="w-full">
+          <OrthographicCamera makeDefault position={[0, 0, 5]} zoom={70} />
+          <ambientLight intensity={1} />
+          <React.Suspense fallback={null}>
+            <group>
+              <TileMap tilesetPath={`${tileMapUrl}assets/Water.png`} tileSize={16} mapWidth={20} mapHeight={14} tileData={waterMapData} scale={1} wScale={wScale} />
+              <TileMap tilesetPath={`${tileMapUrl}assets/Grass.png`} tileSize={16} mapWidth={grassMapSize} mapHeight={grassMapSize} tileData={grassMapData} scale={1} wScale={wScale} />
+              <TileMap tilesetPath={`${tileMapUrl}assets/Basic_Grass_Biom_things.png`} tileSize={16} mapWidth={20} mapHeight={12} tileData={biomeData} scale={0.5} wScale={wScale} />
+              <CharacterSprite characterName="kuro" position={characterState.position} isMoving={characterState.isMoving} direction={characterState.direction} />
+            </group>
+            {/* 캐릭터 이동 로직 - Canvas 내부에서 실행(Canvas 외부에서 작동하면 에러 뜸)*/}
+            <CharacterMovementController tileMapSize={tileMapSize} joystickData={joystickData} onMovementChange={setCharacterState} />
+          </React.Suspense>
+        </Canvas>
 
-          {/* 캐릭터 이동 로직 - Canvas 내부에서 실행 */}
-          <CharacterMovementController tileMapSize={tileMapSize} joystickData={joystickData} onMovementChange={setCharacterState} />
-        </React.Suspense>
-      </Canvas>
-
-      <JoystickController onMove={handleJoystickMove} onStop={handleJoystickStop} />
+        <JoystickController onMove={handleJoystickMove} onStop={handleJoystickStop} />
+      </div>
     </div>
   )
 }

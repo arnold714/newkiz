@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react"
+import { useState, useRef, useEffect, useMemo } from "react"
 import { calculateCharacterBoundaries } from "@/entities/character"
 import { CharacterMovementState } from "./types"
 import { JoystickData } from "@/shared/types/joystick"
@@ -14,11 +14,6 @@ export const useCharacterMovementSetup = (): {
     y: 0,
     isMoving: false,
   })
-
-  useEffect(() => {
-    console.log("joystickData: x- ", joystickData.x, " y- ", joystickData.y)
-    console.log("joystickData.isMoving: ", joystickData.isMoving)
-  }, [joystickData])
 
   // 조이스틱 데이터 처리
   const handleJoystickMove = (event: any) => {
@@ -121,6 +116,21 @@ export const CharacterMovementController: React.FC<{
     }
   }, [joystickData])
 
+  // 경계 계산
+  const boundaries = useMemo(() => {
+    return calculateCharacterBoundaries(viewport, characterSize, tileMapSize);
+  }, [viewport.width, viewport.height, characterSize.width, characterSize.height, tileMapSize.width, tileMapSize.height]);
+
+  useEffect(() => {
+    console.log("boundaries minX: ", boundaries.minX, " boundaries maxX: ", boundaries.maxX)
+    console.log("boundaries minY: ", boundaries.minY, " boundaries maxY: ", boundaries.maxY)
+  }, [boundaries]);
+
+  useEffect(()=>{
+    let [x, y] = movementState.position
+    console.log("x: ", x, " y: ", y);
+  }, [movementState.isMoving])
+
   useFrame((_, delta) => {
     let [x, y, z] = movementState.position
 
@@ -136,12 +146,10 @@ export const CharacterMovementController: React.FC<{
       y += joystickData.y * SPEED * delta
     }
 
-    // 현재 경계 가져오기 - 타일맵 크기를 고려하여 계산
-    const boundaries = calculateCharacterBoundaries(viewport, characterSize, tileMapSize)
-
     // 경계 내로 위치 제한
     x = Math.max(boundaries.minX, Math.min(x, boundaries.maxX))
     y = Math.max(boundaries.minY, Math.min(y, boundaries.maxY))
+    // console.log("x: ", x, " y: ", y)
 
     const newMovementState = {
       ...movementState,
@@ -156,5 +164,5 @@ export const CharacterMovementController: React.FC<{
     }
   })
 
-  return null // 이 컴포넌트는 UI를 렌더링하지 않고 로직만 처리
+  return null
 }

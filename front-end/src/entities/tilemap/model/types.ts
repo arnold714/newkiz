@@ -4,5 +4,7 @@ export interface TileMapProps {
     mapWidth: number;
     mapHeight: number;
     tileData: number[];
+    scale: number;
+    wScale: number;
   }
   

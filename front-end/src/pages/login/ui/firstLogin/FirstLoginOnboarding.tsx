@@ -4,6 +4,9 @@ import FirstInterestSelection from "./FirstInterestSelection";
 import FirstCharacterSelection from "./FirstCharacterSelection";
 import FinalConfirm from "./FinalConfirm";
 
+// Add this in your index.html or App component to ensure proper viewport settings
+// <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
 export default function OnboardingContainer() {
   const [step, setStep] = useState(1);
 
@@ -58,26 +61,30 @@ export default function OnboardingContainer() {
     }
   };
 
-  return (
-    <div className="w-full h-screen flex flex-col items-center justify-center bg-[#FFFFFF]">
-      {/* 페이지 인디케이터 */}
-      {step !== 3 && step !== 4 && (
-        <div className="mb-4">
-          <div className="flex space-x-2">
-            {[1, 2, 3].map((num) => (
-              <div
-                key={num}
-                className={`w-1 h-1 rounded-full ${
-                  step === num ? "bg-[#748BFF]" : "bg-[#D9D9D9]"
-                }`}
-              />
-            ))}
-          </div>
-        </div>
-      )}
+  // Style for full viewport background
+  const containerStyle = {
+    width: '100%',
+    minHeight: '100vh',
+    backgroundColor: '#FFFFFF',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: '1rem'
+  };
 
-      {/* 스텝 렌더링 */}
-      {renderStep()}
+  // Style for content container (max 600px)
+  const contentStyle = {
+    width: '100%',
+    maxWidth: '600px',
+    margin: '0 auto'
+  };
+
+  return (
+    // Use inline styles for critical layout to avoid any CSS conflicts
+    <div style={containerStyle}>
+      <div style={contentStyle}>
+        {renderStep()}
+      </div>
     </div>
   );
 }

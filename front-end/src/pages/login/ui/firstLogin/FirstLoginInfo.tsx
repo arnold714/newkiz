@@ -44,7 +44,26 @@ export default function FirstLoginInfo({
   };
 
   return (
-    <div className="bg-white shadow-[0px_0px_20px_rgba(0,0,0,0.15)] rounded-[15px] w-[300px] h-[560px] py-8 px-5">
+    <div className="bg-white shadow-[0px_0px_20px_rgba(0,0,0,0.15)] rounded-[15px] w-full h-auto py-8 px-5 relative">
+      {/* 페이지 인디케이터를 추가 */}
+      <div className="flex items-center w-full mb-4">
+        {/* 뒤로가기 버튼 자리는 비워둠 (첫 페이지이므로) */}
+        <div className="p-1 invisible">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M15 18L9 12L15 6" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        </div>
+        
+        {/* 페이지 인디케이터 (가운데 위치) */}
+        <div className="flex-grow flex justify-center -ml-6">
+          <div className="flex space-x-2">
+            <div className="w-1 h-1 rounded-full bg-[#748BFF]" />
+            <div className="w-1 h-1 rounded-full bg-[#D9D9D9]" />
+            <div className="w-1 h-1 rounded-full bg-[#D9D9D9]" />
+          </div>
+        </div>
+      </div>
+
       <h2 className="text-black font-bold text-2xl text-center mb-8">기본 정보</h2>
 
       {/* 닉네임 */}

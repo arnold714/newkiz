@@ -51,7 +51,7 @@ export default function StepCharacters({
   };
 
   return (
-    <div className="w-11/12 max-w-sm h-11/12 rounded-xl overflow-hidden relative mx-auto shadow-[0px_0px_20px_rgba(0,0,0,0.15)] rounded-[15px]">
+    <div className="w-11/12 max-w-sm h-11/12 overflow-hidden relative mx-auto shadow-[0px_0px_20px_rgba(0,0,0,0.15)] rounded-[15px]">
       {/* 배경 이미지 */}
       <div 
         className="absolute inset-0 w-full h-full z-0"

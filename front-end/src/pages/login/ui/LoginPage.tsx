@@ -1,5 +1,5 @@
 import React from "react";
-import { handleLogin, checkUserExists } from "../api/LoginApi";
+import { handleLogin, checkUserExists } from "@/pages/login/api/LoginApi";
 
 export default function LoginPage() {
   const handleKakaoLogin = async () => {

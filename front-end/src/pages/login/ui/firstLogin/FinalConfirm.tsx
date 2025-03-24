@@ -32,7 +32,7 @@ export default function StepConfirm({
   };
 
   return (
-    <div className="w-11/12 max-w-sm mx-auto bg-white rounded-lg shadow-md p-6 flex flex-col items-center justify-center">
+    <div className="bg-white shadow-[0px_0px_20px_rgba(0,0,0,0.15)] rounded-[15px] w-full h-[610px] flex flex-col justify-center ">
       <div className="text-center w-full flex flex-col items-center gap-2 mb-6">
         <h2 className="text-xl font-bold">
           안녕하세요 {basicInfo.nickname}님
@@ -51,12 +51,14 @@ export default function StepConfirm({
         />
       </div>
 
-      <button
-        onClick={handleConfirm}
-        className="w-full bg-[#748BFF] text-white py-3 rounded-lg font-semibold hover:bg-blue-600"
-      >
-        확인
-      </button>
+      <div className="py-8 px-6">
+        <button
+          onClick={handleConfirm}
+          className="w-full bg-[#748BFF] text-white py-3 rounded-lg font-semibold hover:bg-blue-600"
+        >
+          확인
+        </button>
+      </div>
     </div>
   );
 }

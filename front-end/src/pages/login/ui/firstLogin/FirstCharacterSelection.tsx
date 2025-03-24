@@ -51,19 +51,7 @@ export default function StepCharacters({
   };
 
   return (
-    <div className="w-11/12 max-w-sm h-11/12 overflow-hidden relative mx-auto shadow-[0px_0px_20px_rgba(0,0,0,0.15)] rounded-[15px]">
-      {/* 배경 이미지 */}
-      <div 
-        className="absolute inset-0 w-full h-full z-0"
-        style={{ 
-          backgroundImage: "url(https://newkiz.s3.ap-northeast-2.amazonaws.com/assets/background.png)",
-          backgroundSize: "cover",
-          backgroundPosition: "center"
-        }}
-      >
-        {/* 작은 픽셀 배경 요소들은 배경 이미지에 포함되어 있다고 가정 */}
-      </div>
-
+    <div className="rounded-[15px] w-full h-full overflow-hidden relative mx-auto shadow-[0px_0px_20px_rgba(0,0,0,0.15)]">
       {/* 컨텐츠 */}
       <div className="relative z-10 h-full flex flex-col p-6">
         {/* 뒤로가기 버튼과 페이지 인디케이터를 포함하는 row */}
@@ -110,7 +98,13 @@ export default function StepCharacters({
               className={`w-[80px] h-[80px] rounded-full flex items-center justify-center p-1
                 ${selectedCharacter === char.id ? "ring-2 ring-blue-500 bg-white/90" : "bg-white/90"}`}
             >
-              <img src={char.img} alt={char.id} className="w-14 h-14 rounded-full" />
+              <div className="w-full h-full rounded-full overflow-hidden">
+                <img
+                  src={char.img}
+                  alt={char.id}
+                  className="w-full h-full object-cover rounded-full"
+                />
+              </div>
             </button>
           ))}
         </div>

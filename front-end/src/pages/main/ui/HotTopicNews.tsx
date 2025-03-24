@@ -1,4 +1,5 @@
-import React from "react";
+
+import Carousel from "./Carousel";
 
 const HotTopicNews = () => {
 
@@ -8,7 +9,9 @@ const HotTopicNews = () => {
         주목해야 할 오늘의 뉴스🔥
       </div>
       <div className="flex justify-center">
-        캐러셀
+      <div className="relative w-full h-[300px] overflow-hidden flex justify-center items-center perspective-[1000px]">
+          <Carousel />
+        </div>
       </div>
     </div>
   );

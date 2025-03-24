@@ -2,7 +2,7 @@ import { LuMenu, LuCircleUserRound, LuSearch, LuHouse, LuNewspaper  } from "reac
 
 const NavBar = () => {
     return (
-        <div className="fixed bottom-0 bg-white w-screen h-18 shadow-md flex justify-around gap-x-5 items-center">
+        <div className="fixed bottom-0 bg-white w-screen max-w-[var(--max-width)] min-w-[var(--min-width)] h-18 shadow-md flex justify-around gap-x-5 items-center">
             <div className="flex flex-col items-center">
                 <LuMenu  className="w-8 h-8"/>
                 <p>메뉴</p>

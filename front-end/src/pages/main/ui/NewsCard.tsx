@@ -1,25 +1,31 @@
-import React from "react";
 
 interface NewsCardProps {
     image: string;
     title: string;
     onClick: () => void;
-    transformZ: string; 
+    index: number;
+    totalCards: number;
 }
 
-const NewsCard = ({image, title, onClick,transformZ }: NewsCardProps) => {
+const NewsCard = ({ image, title, onClick, index, totalCards }: NewsCardProps) => {
+    const angleBetweenCards = 360 / totalCards;
+    // const radius = (200 / 2) / Math.tan(Math.PI / totalCards); // 반지름 계산
+    const radius=300; // 반지름 설정
     return (
-        <div className="w-[200px] h-[200px] bg-cover bg-center rounded flex justify-center items-center cursor-pointer mx-1"
-        style={{
-            backgroundImage: `url(${image})`,
-            transform: `translateZ(${transformZ})`, // translateZ 적용
-          }}
-        onClick={onClick}
-        >
-            <span className="text-sm font-normal">{title}</span>
+        <div
+            className=" absolute flex justify-center items-center w-[170px] h-[170px] transition-transform shadow-lg rounded-md transform-gpu cursor-pointer "
+            style={{
+                backgroundImage: `url(${image})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
 
+                transform: `rotateY(${index * angleBetweenCards}deg) translateZ(${radius}px)`,
+            }}
+            onClick={onClick}
+            >
+            <span className="bg-white text-black px-4 py-2 rounded-md">{title}</span>
         </div>
-    );
+      );
 };
 
 export default NewsCard;

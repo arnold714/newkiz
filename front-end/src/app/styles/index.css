@@ -64,6 +64,8 @@
 }
 
 :root {
+  --max-width: 600px;
+  --min-width: 360px;
   font-family: 'Pretendard', system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
@@ -84,11 +86,14 @@ html, body {
   width: 100%;
   height: 100%;
   background-color: #F8F9FC;
+  max-width: var(--max-width); /* CSS 변수로 최대 너비 적용 */
+  min-width: var(--min-width);
+  margin: 0 auto; /* 중앙 정렬 */
 }
 
 body {
   display: flex;
-  justify-content: center;
+  justify-content: start;
   align-items: center;
   min-height: 100vh;
   width: 100vw;
@@ -108,5 +113,11 @@ button {
   :root {
     color: #000000;
     background-color: #F8F9FC;
+  }
+}
+
+@media (max-width: 600px) {
+  :root {
+    --max-width: 100vw;
   }
 }

@@ -1,6 +1,5 @@
 export interface JoystickData {
-    x: number;
-    y: number;
-    isActive: boolean;
-  }
-  
+  x: number
+  y: number
+  isMoving: boolean
+}

@@ -40,15 +40,25 @@ export default function StepInterests({
   };
 
   return (
-    <div className="bg-white shadow-[0px_0px_20px_rgba(0,0,0,0.15)] rounded-[15px] w-[300px] h-[550px] flex flex-col">
+    <div className="bg-white shadow-[0px_0px_20px_rgba(0,0,0,0.15)] rounded-[15px] w-full h-[610px] flex flex-col">
       <div className="py-6 px-6">
-        {/* 뒤로가기 버튼 */}
-        <div className="flex items-center mb-2">
+        {/* 뒤로가기 버튼과 페이지 인디케이터를 포함하는 row */}
+        <div className="flex items-center w-full mb-2">
+          {/* 뒤로가기 버튼 왼쪽에 고정 */}
           <button onClick={prevStep} className="p-1">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M15 18L9 12L15 6" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
           </button>
+          
+          {/* 페이지 인디케이터 (가운데 위치) - 뒤로가기 버튼을 제외한 영역에서 가운데 정렬 */}
+          <div className="flex-grow flex justify-center -ml-6">
+            <div className="flex space-x-2">
+              <div className="w-1 h-1 rounded-full bg-[#D9D9D9]" />
+              <div className="w-1 h-1 rounded-full bg-[#748BFF]" />
+              <div className="w-1 h-1 rounded-full bg-[#D9D9D9]" />
+            </div>
+          </div>
         </div>
 
         {/* 제목 */}

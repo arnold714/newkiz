@@ -1,5 +1,5 @@
 import React, { ChangeEvent, useState } from "react";
-import SchoolSearchModal from "./SchoolSearchModal";
+import SchoolSearchModal from "@/pages/login/ui/firstLogin/SchoolSearchModal";
 
 interface BasicInfo {
   nickname: string;
@@ -44,7 +44,7 @@ export default function FirstLoginInfo({
   };
 
   return (
-    <div className="bg-white shadow-[0px_0px_20px_rgba(0,0,0,0.15)] rounded-[15px] w-full h-auto py-8 px-5 relative">
+    <div className="bg-white shadow-[0px_0px_20px_rgba(0,0,0,0.15)] rounded-[15px] w-full h-[610px] py-8 px-5 relative">
       {/* 페이지 인디케이터를 추가 */}
       <div className="flex items-center w-full mb-4">
         {/* 뒤로가기 버튼 자리는 비워둠 (첫 페이지이므로) */}

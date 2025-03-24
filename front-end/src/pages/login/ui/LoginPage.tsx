@@ -20,7 +20,7 @@ export default function LoginPage() {
         <img
           src="https://newkiz.s3.ap-northeast-2.amazonaws.com/assets/Logo.png"
           alt="Logo"
-          className="mx-auto w-auto h12"/>
+          className="mx-auto w-auto"/>
         <p className="text-gray-500 mt-2 text-lg font-bold">
           <span className="text-blue-500">세상</span>을 재미있게 배우자!
         </p>

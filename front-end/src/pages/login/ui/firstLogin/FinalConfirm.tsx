@@ -23,46 +23,40 @@ export default function StepConfirm({
   const handleConfirm = () => {
     // 여기서 서버에 가입완료 요청을 보내거나, 상태를 저장하고
     // 메인 페이지로 이동
-    window.location.href = "/"; // 
+    window.location.href = "/"; 
+  };
+
+  // 캐릭터 이미지 경로 가져오기
+  const getCharacterImage = () => {
+    return `/images/${selectedCharacter}.png`;
   };
 
   return (
-    <div className="bg-white rounded-lg p-6 shadow-md">
-      <h2 className="text-xl font-bold mb-4">정보가 맞는지 확인해주세요!</h2>
-
-      <div className="mb-2">
-        <span className="font-medium">닉네임:</span> {basicInfo.nickname}
-      </div>
-      <div className="mb-2">
-        <span className="font-medium">생년월일:</span> {basicInfo.birthdate}
-      </div>
-      <div className="mb-2">
-        <span className="font-medium">출신 학교:</span> {basicInfo.school}
-      </div>
-      <div className="mb-2">
-        <span className="font-medium">성별:</span> {basicInfo.gender}
-      </div>
-      <div className="mb-2">
-        <span className="font-medium">관심사:</span> {interests.join(", ")}
-      </div>
-      <div className="mb-4">
-        <span className="font-medium">캐릭터:</span> {selectedCharacter}
+    <div className="w-11/12 max-w-sm mx-auto bg-white rounded-lg shadow-md p-6 flex flex-col items-center justify-center">
+      <div className="text-center w-full flex flex-col items-center gap-2 mb-6">
+        <h2 className="text-xl font-bold">
+          안녕하세요 {basicInfo.nickname}님
+        </h2>
+        <p className="text-lg">
+          우리 함께 <span className="text-blue-500">세상</span>을 알아봐요
+        </p>
       </div>
 
-      <div className="flex justify-between">
-        <button
-          onClick={prevStep}
-          className="bg-gray-300 text-black py-2 px-4 rounded hover:bg-gray-400"
-        >
-          이전
-        </button>
-        <button
-          onClick={handleConfirm}
-          className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
-        >
-          확인
-        </button>
+      <div className="mb-6 text-center">
+        <p className="text-gray-600">{basicInfo.nickname}</p>
+        <img 
+          src={getCharacterImage()} 
+          alt="Selected character" 
+          className="w-20 h-20 mx-auto mt-2"
+        />
       </div>
+
+      <button
+        onClick={handleConfirm}
+        className="w-full bg-[#748BFF] text-white py-3 rounded-lg font-semibold hover:bg-blue-600"
+      >
+        확인
+      </button>
     </div>
   );
 }

@@ -4,9 +4,9 @@ import { OrthographicCamera } from "@react-three/drei"
 import { CharacterSprite } from "@entities/character"
 import { TileMap, grassMapData, waterMapData, biomeData, newMapData } from "@entities/tilemap"
 import { JoystickController } from "@entities/joystick"
-import { useCharacterMovementSetup, CharacterMovementController } from "@/features/CharacterMovement"
-import { CharacterMovementState } from "@/features/CharacterMovement/model/types"
-import { calculateWScale } from "@/features/MapWidthScale"
+import { useCharacterMovementSetup, CharacterMovementController, calculateWScale } from "@/features/game"
+import { CharacterMovementState } from "@/features/game/model/types"
+import { WaitingPage, QuestionComponent } from "@/entities/game"
 
 export const GamePage: React.FC = () => {
   // Canvas 외부에서 관리할 상태
@@ -43,13 +43,19 @@ export const GamePage: React.FC = () => {
 
   return (
     <div className="flex justify-center items-center w-full h-screen">
-      <div className="flex justify-center items-center w-full h-full">
+      <div className="flex justify-center items-center w-full h-full relative">
+        <div className="absolute w-[70%] h-2/3 top-15 z-99 flex justify-center items-center">
+          <WaitingPage />
+        </div>
+        {/* <div className="absolute w-[90%] h-1/3 top-5 z-99 flex justify-center items-center">
+          <QuestionComponent />
+        </div> */}
         <Canvas className="w-full">
           <OrthographicCamera makeDefault position={[0, 0, 5]} zoom={70} />
           <ambientLight intensity={1} />
           <React.Suspense fallback={null}>
             <group>
-              <TileMap tilesetPath={`${tileMapUrl}assets/Water.png`} tileSize={16} mapWidth={20} mapHeight={14} tileData={waterMapData} scale={1} wScale={wScale} />
+              <TileMap tilesetPath={`${tileMapUrl}assets/Water.png`} tileSize={16} mapWidth={10} mapHeight={10} tileData={waterMapData} scale={1} wScale={wScale} />
               <TileMap tilesetPath={`${tileMapUrl}assets/Grass.png`} tileSize={16} mapWidth={grassMapSize} mapHeight={grassMapSize} tileData={grassMapData} scale={1} wScale={wScale} />
               <TileMap
                 tilesetPath={`${tileMapUrl}assets/Tilled_Dirt.png`}
@@ -61,7 +67,7 @@ export const GamePage: React.FC = () => {
                 wScale={0.1 * wScale}
                 hScale={0.1}
               />
-              <TileMap tilesetPath={`${tileMapUrl}assets/Basic_Grass_Biom_things.png`} tileSize={16} mapWidth={20} mapHeight={12} tileData={biomeData} scale={0.5} wScale={wScale} />
+              <TileMap tilesetPath={`${tileMapUrl}assets/Basic_Grass_Biom_things.png`} tileSize={16} mapWidth={16} mapHeight={10} tileData={biomeData} scale={0.5} wScale={wScale} />
               <CharacterSprite characterName="kuro" position={characterState.position} isMoving={characterState.isMoving} direction={characterState.direction} />
             </group>
             {/* 캐릭터 이동 로직 - Canvas 내부에서 실행(Canvas 외부에서 작동하면 에러 뜸)*/}

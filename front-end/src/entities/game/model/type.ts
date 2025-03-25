@@ -1,0 +1,1 @@
+export type rankType = "school" | "personal";

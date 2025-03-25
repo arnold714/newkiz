@@ -9,7 +9,7 @@ export default function MainPage() {
         <div className='my-5 flex justify-end '>
           <ProgressGraph />
         </div>
-        <div className='bg-white h-70 opacity-80 p-2'>
+        <div className='bg-white h-70 opacity-75 p-2'>
           <HotTopicNews />
         </div>
         

@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import FirstLoginInfo from "./FirstLoginInfo";
-import FirstInterestSelection from "./FirstInterestSelection";
-import FirstCharacterSelection from "./FirstCharacterSelection";
-import FinalConfirm from "./FinalConfirm";
+import FirstLoginInfo from "@/pages/login/ui/firstLogin/FirstLoginInfo";
+import FirstInterestSelection from "@/pages/login/ui/firstLogin/FirstInterestSelection";
+import FirstCharacterSelection from "@/pages/login/ui/firstLogin/FirstCharacterSelection";
+import FinalConfirm from "@/pages/login/ui/firstLogin/FinalConfirm";
 
 // Add this in your index.html or App component to ensure proper viewport settings
 // <meta name="viewport" content="width=device-width, initial-scale=1.0" />

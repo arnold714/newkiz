@@ -9,8 +9,8 @@ type ButtonProps = {
 const Button: React.FC<ButtonProps> = ({label, onClick, className, icon, selected }) => {
     return (
         <button
-            className={`px-4 py-2 rounded-md font-semibold flex items-center  ${
-            selected ? 'bg-[#7CBA36] text-white ' : 'bg-gray-100 text-[#202020] '
+            className={`px-4 py-2 rounded-md flex items-center  ${
+            selected ? 'bg-[#7CBA36] text-white font-extrabold ' : 'bg-white text-[#202020] font-bold'
           } ${className}`}
           onClick={onClick}
         >

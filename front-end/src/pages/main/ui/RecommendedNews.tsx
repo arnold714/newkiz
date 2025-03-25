@@ -63,22 +63,28 @@ const RecommendedNews = () => {
                     label={category.label}
                     selected={selectedCategory === category.label}
                     onClick={() => setSelectedCategory(category.label)}
-                    className="text-xl font-bold"
+                    className="text-xl  rounded-xl"
                   />
                 ])}
             </div>
 
             {/* 해당 카테고리의 뉴스 카드 */}
             <div className="mt-5 space-y-4">
-                {filteredNews.map((news, index) => (
-                    <NewsCard
+                {filteredNews.length > 0 ? (
+                    filteredNews.map((news, index) => (
+                        <NewsCard
                         key={index}
                         title={news.title}
                         content={news.content}
                         imageUrl={news.imageUrl}
                         category={news.category}
-                    />
-                    ))}
+                        />
+                    ))
+                    ) : (
+                    <div className="text-center text-gray-500 text-lg">
+                        해당 카테고리에 추천 뉴스가 없습니다.
+                    </div>
+                    )}
             </div>
         </div>
     );

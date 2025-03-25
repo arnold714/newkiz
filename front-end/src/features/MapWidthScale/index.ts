@@ -1,1 +1,0 @@
-export { calculateWScale } from './model/CalculateWScale';

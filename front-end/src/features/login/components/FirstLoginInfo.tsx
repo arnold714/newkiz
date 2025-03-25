@@ -44,7 +44,7 @@ export default function FirstLoginInfo({
   };
 
   return (
-    <div className="bg-white shadow-[0px_0px_20px_rgba(0,0,0,0.15)] rounded-[15px] w-full h-[610px] py-8 px-5 relative">
+    <div className="bg-white shadow-[0px_0px_20px_rgba(0,0,0,0.15)] rounded-[15px] w-full h-[650px] py-8 px-5 relative">
       {/* 페이지 인디케이터를 추가 */}
       <div className="flex items-center w-full mb-4">
         {/* 뒤로가기 버튼 자리는 비워둠 (첫 페이지이므로) */}
@@ -64,11 +64,11 @@ export default function FirstLoginInfo({
         </div>
       </div>
 
-      <h2 className="text-black font-bold text-2xl text-center mb-8">기본 정보</h2>
+      <h2 className="text-black font-bold text-4xl text-center mb-8">기본 정보</h2>
 
       {/* 닉네임 */}
       <div className="mb-5">
-        <label className="block text-[#1C1C1C] font-semibold text-sm mb-1">
+        <label className="block text-[#1C1C1C] font-semibold text-lg mb-1">
           닉네임
         </label>
         <input
@@ -77,13 +77,13 @@ export default function FirstLoginInfo({
           placeholder="닉네임을 입력해주세요"
           value={basicInfo.nickname}
           onChange={handleChange}
-          className="w-full bg-[#FAFAFA] border border-[#EFEFEF] rounded-lg px-3 py-3 text-sm"
+          className="w-full bg-[#FAFAFA] border border-[#EFEFEF] rounded-lg px-3 py-3 text-md"
         />
       </div>
 
       {/* 생년월일 */}
       <div className="mb-5">
-        <label className="block text-[#1C1C1C] font-semibold text-sm mb-1">
+        <label className="block text-[#1C1C1C] font-semibold text-lg mb-1">
           생년월일
         </label>
         <input
@@ -92,13 +92,13 @@ export default function FirstLoginInfo({
           placeholder="연도-월-일"
           value={basicInfo.birthdate}
           onChange={handleChange}
-          className="w-full bg-[#FAFAFA] border border-[#EFEFEF] rounded-lg px-3 py-3 text-sm"
+          className="w-full bg-[#FAFAFA] border border-[#EFEFEF] rounded-lg px-3 py-3 text-md"
         />
       </div>
 
       {/* 출신 학교 */}
       <div className="mb-5">
-        <label className="block text-[#1C1C1C] font-semibold text-sm mb-1 flex items-center justify-between">
+        <label className="block text-[#1C1C1C] font-semibold text-lg mb-1 items-center justify-between">
           <span>출신 학교</span>
         </label>
         <div className="flex gap-2">
@@ -108,11 +108,11 @@ export default function FirstLoginInfo({
             value={basicInfo.school}
             readOnly
             placeholder="학교를 검색해주세요."
-            className="w-full bg-[#FAFAFA] border border-[#EFEFEF] rounded-lg px-3 py-3 text-sm"
+            className="w-full bg-[#FAFAFA] border border-[#EFEFEF] rounded-lg px-3 py-3 text-md"
           />
           <button
             onClick={handleOpenModal}
-            className="bg-[#4285F4] text-white px-3 py-2 rounded-lg text-sm whitespace-nowrap"
+            className="bg-[#4285F4] text-white px-3 py-2 rounded-lg text-md whitespace-nowrap"
           >
             학교 검색
           </button>
@@ -121,7 +121,7 @@ export default function FirstLoginInfo({
 
       {/* 성별 */}
       <div className="mb-8">
-        <label className="block text-[#1C1C1C] font-semibold text-sm mb-1">
+        <label className="block text-[#1C1C1C] font-semibold text-lg mb-1">
           성별
         </label>
         <div className="relative">
@@ -129,7 +129,7 @@ export default function FirstLoginInfo({
             name="gender"
             value={basicInfo.gender}
             onChange={handleChange}
-            className="w-full appearance-none bg-[#FAFAFA] border border-[#EFEFEF] rounded-lg px-3 py-3 text-sm"
+            className="w-full appearance-none bg-[#FAFAFA] border border-[#EFEFEF] rounded-lg px-3 py-3 text-md"
           >
             <option value="">선택해주세요</option>
             <option value="male">남성</option>
@@ -146,7 +146,7 @@ export default function FirstLoginInfo({
       {/* 다음 버튼 */}
       <button
         onClick={handleNext}
-        className="w-full bg-[#748BFF] text-white font-semibold py-4 mt-2 rounded-lg"
+        className="w-full bg-[#748BFF] text-white font-semibold py-3 mt-2 rounded-lg text-lg"
       >
         관심사 등록하러 가기
       </button>

@@ -7,4 +7,5 @@ export interface TileMapProps {
   scale: number
   wScale: number
   hScale?: number
+  color?: string
 }

@@ -62,7 +62,7 @@ export default function StepInterests({
         </div>
 
         {/* 제목 */}
-        <h2 className="text-2xl font-bold text-center mb-1">
+        <h2 className="text-4xl font-bold text-center mb-1">
           현재 가장 관심있는 분야가<br />무엇인가요?
         </h2>
       </div>
@@ -81,8 +81,8 @@ export default function StepInterests({
               }`}
             >
               <div className="flex items-center">
-                <span className="mr-3 text-xl">{item.icon}</span>
-                <span className="font-medium">{item.id}</span>
+                <span className="mr-3 text-3xl">{item.icon}</span>
+                <span className="font-medium text-xl">{item.id}</span>
               </div>
               {interests.includes(item.id) ? (
                 <div className="w-6 h-6 rounded-full bg-[#748BFF] flex items-center justify-center">
@@ -100,10 +100,10 @@ export default function StepInterests({
       </div>
 
       {/* 다음 버튼 - 고정 위치 */}
-      <div className="py-8 px-6">
+      <div className="py-6 px-6">
         <button
           onClick={handleNext}
-          className="w-full bg-[#748BFF] text-white font-semibold py-4 rounded-lg"
+          className="w-full bg-[#748BFF] text-lg text-white font-semibold py-3 rounded-lg"
         >
           캐릭터 선택하러 가기
         </button>

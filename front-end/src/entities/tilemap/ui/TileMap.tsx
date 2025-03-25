@@ -3,7 +3,7 @@ import { useLoader } from "@react-three/fiber"
 import * as THREE from "three"
 import { TileMapProps } from "../model/types"
 
-export const TileMap: React.FC<TileMapProps> = ({ tilesetPath, tileSize, mapWidth, mapHeight, tileData, scale, wScale }) => {
+export const TileMap: React.FC<TileMapProps> = ({ tilesetPath, tileSize, mapWidth, mapHeight, tileData, scale, wScale, hScale, color }) => {
   const texture = useLoader(THREE.TextureLoader, tilesetPath)
   texture.magFilter = THREE.NearestFilter
   texture.minFilter = THREE.NearestFilter
@@ -14,6 +14,9 @@ export const TileMap: React.FC<TileMapProps> = ({ tilesetPath, tileSize, mapWidt
   const tilesPerRow = Math.floor(tilesetWidth / tileSize)
 
   const tiles: JSX.Element[] = []
+
+  // hScale의 값이 없으면 1
+  const yPos = hScale ?? 1
 
   // 타일맵 생성
   for (let y = 0; y < mapHeight; y++) {
@@ -37,9 +40,9 @@ export const TileMap: React.FC<TileMapProps> = ({ tilesetPath, tileSize, mapWidt
       tileTexture.offset.set(u, v)
 
       tiles.push(
-        <mesh key={`${x}-${y}`} position={[(x - mapWidth / 2 + 0.5)*wScale, mapHeight / 2 - y - 0.5, 0]}>
+        <mesh key={`${x}-${y}`} position={[(x - mapWidth / 2 + 0.5) * wScale, (mapHeight / 2 - y - 0.5) * yPos, 0]}>
           <planeGeometry args={[scale, scale]} />
-          <meshBasicMaterial map={tileTexture} transparent={true} />
+          <meshBasicMaterial map={tileTexture} transparent={true} color={color || 0xffffff} />
         </mesh>
       )
     }

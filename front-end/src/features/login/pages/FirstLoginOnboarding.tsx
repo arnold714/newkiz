@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import FirstLoginInfo from "@/pages/login/ui/firstLogin/FirstLoginInfo";
-import FirstInterestSelection from "@/pages/login/ui/firstLogin/FirstInterestSelection";
-import FirstCharacterSelection from "@/pages/login/ui/firstLogin/FirstCharacterSelection";
-import FinalConfirm from "@/pages/login/ui/firstLogin/FinalConfirm";
+import FirstLoginInfo from "@/features/login/components/FirstLoginInfo";
+import FirstInterestSelection from "@/features/login/components/FirstInterestSelection";
+import FirstCharacterSelection from "@/features/login/components/FirstCharacterSelection";
+import FinalConfirm from "@/features/login/components/FinalConfirm";
 
 // Add this in your index.html or App component to ensure proper viewport settings
 // <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -51,9 +51,7 @@ export default function OnboardingContainer() {
         return (
           <FinalConfirm
             basicInfo={basicInfo}
-            interests={interests}
             selectedCharacter={selectedCharacter}
-            prevStep={prevStep}
           />
         );
       default:

@@ -23,6 +23,8 @@ const NotFoundPage = lazy(() => import("../../pages/notfound").then(module => ({
 const OnboardingContainer = lazy(() => import("../../pages/login").then(module => ({ default: module.OnboardingContainer })));
 // 알림 페이지
 const NotificationPage = lazy(() => import("../../pages/notification").then(module => ({ default: module.NotificationPage })));
+// 챗봇 페이지
+const ChatbotPage = lazy(() => import("../../pages/chatbot").then(module => ({ default: module.ChatbotPage })));
 
 const routes: RouteObject[] = [
   {
@@ -102,6 +104,14 @@ const routes: RouteObject[] = [
     element: (
       <Suspense fallback={Loading}>
         <NotificationPage />
+      </Suspense>
+    )
+  },
+  {
+    path: "/chatbot",
+    element: (
+      <Suspense fallback={Loading}>
+        <ChatbotPage />
       </Suspense>
     )
   }

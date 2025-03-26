@@ -28,6 +28,7 @@ public class SecurityConfig {
   public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
     return http
         .csrf(ServerHttpSecurity.CsrfSpec::disable)
+        .cors(cors -> {})
         .authorizeExchange(exchanges -> exchanges
             .pathMatchers("/", "/oauth2/**").permitAll()
             .anyExchange().authenticated()
@@ -35,7 +36,7 @@ public class SecurityConfig {
         .oauth2Login(oauth2 -> oauth2
             .authenticationSuccessHandler(new CustomAuthenticationSuccessHandler(applicationConfig, jwtUtil, cookieUtil, userRepository, profileRepository))
         )
-        .addFilterAt(new JwtAuthenticationFilter(jwtUtil, cookieUtil), SecurityWebFiltersOrder.AUTHENTICATION)
+        .addFilterAt(new JwtAuthenticationFilter(applicationConfig, jwtUtil, cookieUtil, profileRepository), SecurityWebFiltersOrder.AUTHENTICATION)
         .build();
   }
 }

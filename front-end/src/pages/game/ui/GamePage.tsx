@@ -6,7 +6,7 @@ import { TileMap, grassMapData, waterMapData, biomeData, newMapData } from "@ent
 import { JoystickController } from "@entities/joystick"
 import { useCharacterMovementSetup, CharacterMovementController, calculateWScale } from "@/features/game"
 import { CharacterMovementState } from "@/features/game/model/types"
-import { WaitingPage, QuestionComponent } from "@/entities/game"
+// import { WaitingPage, QuestionComponent } from "@/entities/game"
 
 export const GamePage: React.FC = () => {
   // Canvas 외부에서 관리할 상태
@@ -41,14 +41,14 @@ export const GamePage: React.FC = () => {
     height: grassMapSize - 0.5,
   }
 
-  const question = " 마라톤은 42.195 Km를 달린다. 이 거리는 제1회 아테네 올림픽부터 채택된 것이다."
+  // const question = " 마라톤은 42.195 Km를 달린다. 이 거리는 제1회 아테네 올림픽부터 채택된 것이다."
 
   return (
     <div className="flex justify-center items-center w-full h-screen">
       <div className="flex justify-center items-center w-full h-full relative">
-        <div className="absolute w-[70%] top-15 z-99 flex justify-center">
+        {/* <div className="absolute w-[70%] top-15 z-99 flex justify-center">
           <WaitingPage />
-        </div>
+        </div> */}
         {/* <div className="absolute w-[70%] top-10 z-99 flex flex-col justify-center items-center">
           <QuestionComponent questionNo={1} question={question} />
         </div> */}

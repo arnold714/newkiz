@@ -4,10 +4,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
+import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import site.newkiz.gatewayserver.entity.ProfileRepository;
 import site.newkiz.gatewayserver.entity.UserRepository;
+import site.newkiz.gatewayserver.filter.JwtAuthenticationFilter;
 import site.newkiz.gatewayserver.util.CookieUtil;
 import site.newkiz.gatewayserver.util.JwtUtil;
 
@@ -24,7 +26,7 @@ public class SecurityConfig {
 
   @Bean
   public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
-    http
+    return http
         .csrf(ServerHttpSecurity.CsrfSpec::disable)
         .authorizeExchange(exchanges -> exchanges
             .pathMatchers("/", "/oauth2/**").permitAll()
@@ -32,7 +34,8 @@ public class SecurityConfig {
         )
         .oauth2Login(oauth2 -> oauth2
             .authenticationSuccessHandler(new CustomAuthenticationSuccessHandler(applicationConfig, jwtUtil, cookieUtil, userRepository, profileRepository))
-        );
-    return http.build();
+        )
+        .addFilterAt(new JwtAuthenticationFilter(jwtUtil, cookieUtil), SecurityWebFiltersOrder.AUTHENTICATION)
+        .build();
   }
 }

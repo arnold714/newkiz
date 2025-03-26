@@ -20,12 +20,12 @@ public class CustomOAuth2UserService extends DefaultReactiveOAuth2UserService {
   @Override
   public Mono<OAuth2User> loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
     return super.loadUser(userRequest)
-        .flatMap(oauth2User -> {
+        .flatMap(oAuth2User -> {
           // 1. OAuth2 제공자 정보 추출
           String provider = userRequest.getClientRegistration().getRegistrationId();
 
           // 2. 카카오 사용자 정보 파싱
-          Map<String, Object> attributes = oauth2User.getAttributes();
+          Map<String, Object> attributes = oAuth2User.getAttributes();
           Map<String, Object> kakaoAccount = (Map<String, Object>) attributes.get("kakao_account");
           Map<String, Object> profile = (Map<String, Object>) kakaoAccount.get("profile");
 

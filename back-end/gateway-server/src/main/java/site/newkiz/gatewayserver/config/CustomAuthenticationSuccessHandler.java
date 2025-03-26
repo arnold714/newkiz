@@ -33,10 +33,10 @@ public class CustomAuthenticationSuccessHandler implements ServerAuthenticationS
     ServerHttpResponse response = exchange.getResponse();
 
     // 1. 인증 정보에서 사용자 추출
-    CustomOAuth2User oauth2User = (CustomOAuth2User) authentication.getPrincipal();
+    CustomOAuth2User oAuth2User = (CustomOAuth2User) authentication.getPrincipal();
 
     // 2. 유저 정보 조회
-    return userRepository.findByProviderAndProviderId(oauth2User.getUser().getProvider(), oauth2User.getUser().getProviderId())
+    return userRepository.findByProviderAndProviderId(oAuth2User.getUser().getProvider(), oAuth2User.getUser().getProviderId())
         .flatMap(user -> {
           // 3. JWT 토큰 생성
           String accessToken = jwtUtil.createAccessToken(user.getId(), user.getName());

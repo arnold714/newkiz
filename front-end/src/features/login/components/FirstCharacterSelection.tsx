@@ -1,4 +1,5 @@
 import React from "react";
+import { LuChevronLeft } from "react-icons/lu";
 
 interface BasicInfo {
   nickname: string;
@@ -7,7 +8,7 @@ interface BasicInfo {
   gender: string;
 }
 
-interface StepCharactersProps {
+interface FirstCharacterSelectionProps {
   basicInfo?: BasicInfo; // Optional BasicInfo prop
   selectedCharacter: string;
   setSelectedCharacter: React.Dispatch<React.SetStateAction<string>>;
@@ -15,13 +16,13 @@ interface StepCharactersProps {
   prevStep: () => void;
 }
 
-export default function StepCharacters({
+export default function FirstCharacterSelection({
   basicInfo, 
   selectedCharacter,
   setSelectedCharacter,
   nextStep,
   prevStep,
-}: StepCharactersProps) {
+}: FirstCharacterSelectionProps) {
   const characters = [
     { id: "cole", img: "https://newkiz.s3.ap-northeast-2.amazonaws.com/dinos/cole.png" },
     { id: "doux", img: "https://newkiz.s3.ap-northeast-2.amazonaws.com/dinos/doux.png" },
@@ -52,7 +53,7 @@ export default function StepCharacters({
   return (
     <div className="rounded-[15px] w-full h-full overflow-hidden relative mx-auto shadow-[0px_0px_20px_rgba(0,0,0,0.15)]">
       {/* 배경 장식 요소 - 상단 파스텔 무지개 그라데이션 */}
-      <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-r from-blue-100 via-purple-100 to-pink-100 opacity-60" />
+      <div className="absolute top-0 left-0 right-0 h-43 bg-gradient-to-r from-blue-100 via-purple-100 to-pink-100 opacity-60" />
          
       {/* 컨텐츠 */}
       <div className="relative z-10 h-full flex flex-col p-6">
@@ -60,9 +61,7 @@ export default function StepCharacters({
         <div className="flex items-center w-full mb-2">
           {/* 뒤로가기 버튼 왼쪽에 고정 */}
           <button onClick={prevStep} className="p-1 rounded-full transition duration-200">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M15 18L9 12L15 6" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
+            <LuChevronLeft size={24} />
           </button>
           
           {/* 페이지 인디케이터 (가운데 위치) - 뒤로가기 버튼을 제외한 영역에서 가운데 정렬 */}
@@ -77,9 +76,7 @@ export default function StepCharacters({
 
         {/* 닉네임과 선택된 캐릭터 표시 */}
         <div className="flex flex-col items-center mt-1 mb-3">
-          <div className="bg-gradient-to-r from-indigo-100 to-purple-100 px-6 py-1 rounded-full">
             <h2 className="text-3xl font-bold text-indigo-800">{basicInfo?.nickname || "닉네임"}</h2>
-          </div>
           
           <div className="mt-3 bg-white rounded-full p-1 shadow-md">
             {selectedCharacter ? (

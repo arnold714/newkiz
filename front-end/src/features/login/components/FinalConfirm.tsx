@@ -7,15 +7,15 @@ interface BasicInfo {
   gender: string;
 }
 
-interface StepConfirmProps {
+interface FinalConfirmProps {
   basicInfo: BasicInfo;
   selectedCharacter: string;
 }
 
-export default function StepConfirm({
+export default function FinalConfirm({
   basicInfo,
   selectedCharacter,
-}: StepConfirmProps) {
+}: FinalConfirmProps) {
   const handleConfirm = () => {
     window.location.href = "/"; 
   };

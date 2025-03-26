@@ -46,12 +46,12 @@ export const GamePage: React.FC = () => {
   return (
     <div className="flex justify-center items-center w-full h-screen">
       <div className="flex justify-center items-center w-full h-full relative">
-        {/* <div className="absolute w-[70%] h-2/3 top-15 z-99 flex justify-center items-center">
+        <div className="absolute w-[70%] top-15 z-99 flex justify-center">
           <WaitingPage />
-        </div> */}
-        <div className="absolute w-[70%] top-10 z-99 flex flex-col justify-center items-center">
-          <QuestionComponent questionNo={1} question={question} />
         </div>
+        {/* <div className="absolute w-[70%] top-10 z-99 flex flex-col justify-center items-center">
+          <QuestionComponent questionNo={1} question={question} />
+        </div> */}
         <Canvas className="w-full">
           <OrthographicCamera makeDefault position={[0, 0, 5]} zoom={70} />
           <ambientLight intensity={1} />

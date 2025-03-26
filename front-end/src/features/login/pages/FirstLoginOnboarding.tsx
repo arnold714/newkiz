@@ -7,7 +7,7 @@ import FinalConfirm from "@/features/login/components/FinalConfirm";
 // Add this in your index.html or App component to ensure proper viewport settings
 // <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-export default function OnboardingContainer() {
+export default function FirstLoginOnboarding() {
   const [step, setStep] = useState(1);
 
   // 예시: 각 단계에서 입력받은 값들을 상위에서 관리

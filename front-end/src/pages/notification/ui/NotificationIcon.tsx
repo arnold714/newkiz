@@ -4,7 +4,7 @@ interface NotificationIconProps {
   type: 'like' | 'comment';
 }
 
-const NotificationIcon: React.FC<NotificationIconProps> = ({ type }) => {
+export default function NotificationIcon({ type }: NotificationIconProps) {
   if (type === 'like') {
     return (
       <div className="mr-3 flex items-center justify-center">
@@ -47,6 +47,4 @@ const NotificationIcon: React.FC<NotificationIconProps> = ({ type }) => {
       </div>
     </div>
   );
-};
-
-export default NotificationIcon;
+}

@@ -3,8 +3,9 @@ import React, { useState } from 'react';
 import { TabType, Notification } from '@/pages/notification/model/NotificationModel';
 import NotificationIcon from '@/pages/notification/ui/NotificationIcon';
 import TabButton from '@/pages/notification/ui/TabButton';
+import { LuChevronLeft } from "react-icons/lu";
 
-const NotificationPage: React.FC = () => {
+export default function NotificationPage() {
   React.useEffect(() => {
     const style = document.createElement('style');
     style.innerHTML = `
@@ -62,6 +63,10 @@ const NotificationPage: React.FC = () => {
     }));
   };
 
+  const handleReturn = () => {
+    window.history.back();
+  };
+
   const hasNotifications = notifications[activeTab].length > 0;
 
   return (
@@ -69,21 +74,8 @@ const NotificationPage: React.FC = () => {
       <div className="w-full p-2">
         {/* Header 영역 */}
         <div className="flex items-center p-2 w-full">
-          <button className="p-1">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="w-5 h-5"
-            >
-              <path d="M15 18l-6-6 6-6" />
-            </svg>
+          <button onClick={handleReturn} className="p-1">
+            <LuChevronLeft size={24} />
           </button>
           <h2 className="text-lg font-medium flex-1 text-center">알림</h2>
           <div className="w-8" />
@@ -108,28 +100,28 @@ const NotificationPage: React.FC = () => {
           <div className="w-full">
             {notifications[activeTab].map((notification) => (
               <div key={notification.id} className="flex items-start p-3 w-full overflow-hidden">
-              <NotificationIcon type={notification.type} />
-              <div className="flex-1 min-w-0 ml-3">
-                <p className="text-sm break-words overflow-wrap-anywhere">
-                  {notification.message}
-                </p>
-                <div className="flex flex-col mt-1">
-                  <p className="text-xs text-gray-500 mt-1">
-                    {notification.time}
+                <NotificationIcon type={notification.type} />
+                <div className="flex-1 min-w-0 ml-3">
+                  <p className="text-sm break-words overflow-wrap-anywhere">
+                    {notification.message}
                   </p>
-                  <div className="w-full border-b border-[#BDBDBD] mt-3" style={{ width: '100vw', marginLeft: '-16px' }} />
+                  <div className="flex flex-col mt-1">
+                    <p className="text-xs text-gray-500 mt-1">
+                      {notification.time}
+                    </p>
+                    <div className="w-full border-b border-[#BDBDBD] mt-3" style={{ width: '100vw', marginLeft: '-16px' }} />
+                  </div>
                 </div>
+                <button
+                  className="text-gray-400 hover:text-gray-600 flex-shrink-0 ml-3"
+                  onClick={() => handleDeleteNotification(notification.id)}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                  </svg>
+                </button>
               </div>
-              <button
-                className="text-gray-400 hover:text-gray-600 flex-shrink-0 ml-3"
-                onClick={() => handleDeleteNotification(notification.id)}
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <line x1="18" y1="6" x2="6" y2="18"></line>
-                  <line x1="6" y1="6" x2="18" y2="18"></line>
-                </svg>
-              </button>
-            </div>            
             ))}
           </div>
         ) : (
@@ -142,6 +134,4 @@ const NotificationPage: React.FC = () => {
       </div>
     </div>
   );
-};
-
-export default NotificationPage;
+}

@@ -1,4 +1,5 @@
 import { LuMenu, LuCircleUserRound, LuSearch, LuHouse, LuNewspaper  } from "react-icons/lu";
+import { Link } from "react-router-dom";
 
 const NavBar = () => {
     return (
@@ -13,7 +14,9 @@ const NavBar = () => {
                 <p>기자단</p>
             </div>
             <div className="flex flex-col items-center">
-                <LuHouse className="w-8 h-8"/>
+                <Link to="/">
+                    <LuHouse className="w-8 h-8"/>
+                </Link>
                 <p>홈</p>
             </div>
             <div className="flex flex-col items-center">

@@ -9,7 +9,7 @@ const config: Config = {
       },
       fontFamily: {
         pretendard: ['Pretendard']
-      }
+      },
     },
   },
   plugins: [],

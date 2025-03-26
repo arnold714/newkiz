@@ -1,18 +1,19 @@
 import React from "react";
+import { LuChevronLeft } from "react-icons/lu";
 
-interface StepInterestsProps {
+interface FirstInterestSelectionProps {
   interests: string[];
   setInterests: React.Dispatch<React.SetStateAction<string[]>>;
   nextStep: () => void;
   prevStep: () => void;
 }
 
-export default function StepInterests({
+export default function FirstInterestSelection({
   interests,
   setInterests,
   nextStep,
   prevStep,
-}: StepInterestsProps) {
+}: FirstInterestSelectionProps) {
   const possibleInterests = [
     { id: "경제", icon: "💰" },
     { id: "정치", icon: "📚" },
@@ -46,9 +47,7 @@ export default function StepInterests({
         <div className="flex items-center w-full mb-2">
           {/* 뒤로가기 버튼 왼쪽에 고정 */}
           <button onClick={prevStep} className="p-1">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M15 18L9 12L15 6" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
+            <LuChevronLeft size={24} />
           </button>
           
           {/* 페이지 인디케이터 (가운데 위치) - 뒤로가기 버튼을 제외한 영역에서 가운데 정렬 */}

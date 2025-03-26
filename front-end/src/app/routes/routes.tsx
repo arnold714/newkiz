@@ -20,7 +20,7 @@ const SearchPage = lazy(() => import("../../pages/search").then(module => ({ def
 // 없는 페이지
 const NotFoundPage = lazy(() => import("../../pages/notfound").then(module => ({ default: module.NotFoundPage })));
 // 첫 로그인 정보 입력 페이지
-const OnboardingContainer = lazy(() => import("../../pages/login").then(module => ({ default: module.OnboardingContainer })));
+const FirstLoginOnboarding = lazy(() => import("../../pages/login").then(module => ({ default: module.FirstLoginOnboarding })));
 // 알림 페이지
 const NotificationPage = lazy(() => import("../../pages/notification").then(module => ({ default: module.NotificationPage })));
 // 챗봇 페이지
@@ -95,7 +95,7 @@ const routes: RouteObject[] = [
     path: "/userinfo",
     element: (
       <Suspense fallback={Loading}>
-        <OnboardingContainer />
+        <FirstLoginOnboarding />
       </Suspense>
     )
   },

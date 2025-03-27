@@ -1,4 +1,6 @@
-export { UserStatistic } from './ui/UserStatistic';
-export { UserProfile } from './ui/UserProfile';
-export { RankingSelect } from './ui/RankingSelect';
-export { UserActivity } from './ui/UserActivity';
+export { UserStatistic } from "./ui/UserStatistic"
+export { UserProfile } from "./ui/UserProfile"
+export { RankingSelect } from "./ui/RankingSelect"
+export { UserActivity } from "./ui/UserActivity"
+export { MyInfoModal } from "./ui/MyInfoModal"
+export { ScrapModal } from "./ui/ScrapModal"

@@ -1,3 +1,4 @@
+import { NoHeaderLayout } from "@/shared";
 import { Suspense, lazy } from "react";
 import { createBrowserRouter, RouteObject } from "react-router-dom";
 
@@ -65,7 +66,9 @@ const routes: RouteObject[] = [
     path: "/mypage",
     element: (
       <Suspense fallback={Loading}>
-        <MyPage />
+        <NoHeaderLayout>
+          <MyPage />
+        </NoHeaderLayout>
       </Suspense>
     )
   },

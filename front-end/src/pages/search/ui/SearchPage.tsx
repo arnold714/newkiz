@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { LuSearch, LuChevronLeft, LuX } from "react-icons/lu";
-import WordCloud from "@/pages/search/ui/WordCloud";
+import WordCloud from "@/features/search/components/WordCloud";
 
 // 인기 키워드 타입 정의
 interface PopularKeyword {

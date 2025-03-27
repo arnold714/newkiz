@@ -6,7 +6,7 @@ import RecommendedNews from './RecommendedNews';
 export default function MainPage() {
   return (
     <Layout>
-      <div className="h-screen overflow-y-auto">
+      <div className="h-screen">
         <div className='my-5 flex justify-end '>
           <ProgressGraph />
         </div>

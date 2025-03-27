@@ -1,9 +1,37 @@
 import React, { useState } from "react";
-import { LuSearch, LuChevronLeft, LuSend } from "react-icons/lu"; // Lu 아이콘으로 변경
+import { LuSearch, LuChevronLeft, LuX } from "react-icons/lu";
+import WordCloud from "@/pages/search/ui/WordCloud";
+
+// 인기 키워드 타입 정의
+interface PopularKeyword {
+  text: string;
+  weight: number; // 가중치 (조회수 또는 중요도)
+}
 
 export default function SearchPage() {
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const [recentSearches, setRecentSearches] = useState<string[]>(["손흥민", "챗 지피티", "야구"]);
+  const [recentSearches, setRecentSearches] = useState<string[]>([
+    "손흥민",
+    "챗 지피티",
+    "야구",
+  ]);
+
+  // 인기 키워드 데이터 (예시)
+  const [popularKeywords] = useState<PopularKeyword[]>([
+    { text: "올림픽", weight: 95 },
+    { text: "방탄소년단", weight: 88 },
+    { text: "코로나", weight: 75 },
+    { text: "이변", weight: 50 },
+    { text: "주식", weight: 85 },
+    { text: "전기차", weight: 70 },
+    { text: "갤럭시", weight: 65 },
+    { text: "아이폰", weight: 60 },
+    { text: "AI", weight: 90 },
+    { text: "날씨", weight: 55 },
+    { text: "월드컵", weight: 72 },
+    { text: "여행", weight: 68 },
+    { text: "배달", weight: 58 },
+  ]);
 
   const handleSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
@@ -17,11 +45,17 @@ export default function SearchPage() {
   const handleClearSearch = (index: number) => {
     const updatedSearches = [...recentSearches];
     updatedSearches.splice(index, 1);
-    setRecentSearches(updatedSearches); 
+    setRecentSearches(updatedSearches);
   };
 
   const handleReturn = () => {
     window.history.back();
+  };
+
+  // 키워드 클릭 시 검색어 업데이트
+  const handleKeywordClick = (keyword: string) => {
+    setSearchQuery(keyword);
+    console.log("Selected keyword:", keyword);
   };
 
   return (
@@ -29,12 +63,12 @@ export default function SearchPage() {
       {/* Header with back button */}
       <div className="flex items-center">
         <button className="p-2" onClick={handleReturn}>
-          <LuChevronLeft size={20} />
+          <LuChevronLeft size={25} />
         </button>
         <div className="relative flex-1 ml-2">
           <input
             type="text"
-            className="w-full p-3 pr-12 rounded-[25px] border border-gray-300 text-gray-600 placeholder-gray-400"
+            className="w-full p-3 pr-12 rounded-[25px] border border-gray-300 text-xl text-gray-600 placeholder-gray-400"
             placeholder="검색어를 입력하세요"
             value={searchQuery}
             onChange={handleSearchInputChange}
@@ -44,7 +78,7 @@ export default function SearchPage() {
             onClick={handleSearch}
             disabled={!searchQuery.trim()}
           >
-            <LuSearch size={20} />
+            <LuSearch size={24} className="mr-2 mb-1" />
           </button>
         </div>
       </div>
@@ -58,15 +92,14 @@ export default function SearchPage() {
         {recentSearches.map((search, index) => (
           <div key={index} className="flex justify-between items-center mb-5 ml-8">
             <div className="flex items-center space-x-2">
-              <LuSearch className="text-gray-400 mr-5" size={22}/>
+              <LuSearch className="text-gray-400 mr-5" size={22} />
               <span className="text-gray-600 text-xl">{search}</span>
             </div>
-            <button
-              className="text-black hover:text-gray-800"
+            <LuX
+              className="text-gray-500 hover:text-gray-800 cursor-pointer"
+              size={20}
               onClick={() => handleClearSearch(index)}
-            >
-              X
-            </button>
+            />
           </div>
         ))}
       </div>
@@ -74,9 +107,16 @@ export default function SearchPage() {
       {/* 회색 구분선 */}
       <hr className="border-b-5 border-gray-100 -mx-4" />
 
+      {/* 인기 키워드 워드 클라우드 */}
       <div>
         <h2 className="font-semibold text-xl mb-5">인기있는 키워드</h2>
-        <div className="flex flex-wrap gap-2 mt-2">
+        <div className="p-4 bg-white rounded-xl">
+          <WordCloud
+            keywords={popularKeywords}
+            onKeywordClick={handleKeywordClick}
+            width={550}
+            height={350}
+          />
         </div>
       </div>
     </div>

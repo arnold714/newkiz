@@ -1,7 +1,15 @@
+import { useState } from 'react';
 import { LuChevronLeft } from "react-icons/lu";
 import { UserProfile, UserStatistic, RankingSelect, UserActivity } from '@/widgets/mypage';
+import Modal from 'react-modal';
+
+Modal.setAppElement("#root");
 
 export default function MyPage() {
+  const [modifyProfileIsOpen, setModfiyProfileIsOpen] = useState<boolean>(false);
+  
+  
+
   return (
     <div className="h-screen w-full flex flex-col items-center overflow-auto">
       <div className="w-[90%] h-16 flex flex-row justify-start items-center mx-auto my-5">

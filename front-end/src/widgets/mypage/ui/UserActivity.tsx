@@ -1,7 +1,10 @@
 import { LuChevronRight } from "react-icons/lu";
+import { useDispatch } from "react-redux";
 
 
 export const UserActivity = () => {
+
+    const dispatch = useDispatch();
 
     const imgUrl = import.meta.env.VITE_AWS_S3_BASE_URL;
 

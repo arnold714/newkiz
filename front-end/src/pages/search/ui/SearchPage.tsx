@@ -110,12 +110,12 @@ export default function SearchPage() {
       {/* 인기 키워드 워드 클라우드 */}
       <div>
         <h2 className="font-semibold text-xl mb-5">인기있는 키워드</h2>
-        <div className="p-4 bg-gray-50 rounded-xl">
+        <div className="p-4 bg-white rounded-xl">
           <WordCloud
             keywords={popularKeywords}
             onKeywordClick={handleKeywordClick}
-            width={600}   // 필요에 따라 크기 조정
-            height={400}
+            width={550}
+            height={350}
           />
         </div>
       </div>

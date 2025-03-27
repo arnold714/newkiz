@@ -30,18 +30,18 @@ const colors = [
 
 const AnimatedText = animated(Text);
 
-const WordCloud: React.FC<WordCloudProps> = ({
+export default function WordCloud({
   keywords,
   onKeywordClick,
   width = 550,
   height = 350,
-}) => {
+}: WordCloudProps) {
   // 인기 키워드 데이터를 visx의 단어 데이터 형태로 변환
   const words = useMemo(() => {
     return keywords
       .map((item) => ({
         text: item.text,
-        value: item.weight,
+        value: item.weight, // weight를 value로 사용
       }))
       .sort((a, b) => b.value - a.value);
   }, [keywords]);
@@ -69,19 +69,21 @@ const WordCloud: React.FC<WordCloudProps> = ({
   }, [api]);
 
   return (
+    // w.text ?? "" 를 통해 w.text가 undefined인 경우를 방지
     <div style={{ width, height }}>
       <Wordcloud
         words={words}
         width={width}
         height={height}
         fontSize={(d) => fontScale(d.value)}
-        font={"Righteous"} // 필요 시 폰트 로딩 (Google Fonts 등)
+        font={"Pretendard"} 
         spiral={"archimedean"}
         rotate={0}
         random={() => 0.5}
       >
         {(cloudWords) =>
-          cloudWords.map((w, i) => (
+        // any 타입 설정을 통해 w.value와 w.text가 @visx/wordcloud에서 제공하는 기본 타입 사용
+          cloudWords.map((w: any, i) => (
             <AnimatedText
               key={w.text}
               fill={colors[i % colors.length]}
@@ -99,13 +101,11 @@ const WordCloud: React.FC<WordCloudProps> = ({
               cursor="pointer"
               onClick={() => onKeywordClick(w.text)}
             >
-              {w.text}
+              {w.text ?? ""}
             </AnimatedText>
           ))
         }
       </Wordcloud>
     </div>
   );
-};
-
-export default WordCloud;
+}

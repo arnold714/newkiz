@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { TabType, Notification } from '@/pages/notification/model/NotificationModel';
 import NotificationIcon from '@/pages/notification/ui/NotificationIcon';
 import TabButton from '@/pages/notification/ui/TabButton';
-import { LuChevronLeft } from "react-icons/lu";
+import { LuChevronLeft, LuX } from "react-icons/lu";
 
 export default function NotificationPage() {
   React.useEffect(() => {
@@ -112,15 +112,11 @@ export default function NotificationPage() {
                     <div className="w-full border-b border-[#BDBDBD] mt-3" style={{ width: '100vw', marginLeft: '-16px' }} />
                   </div>
                 </div>
-                <button
+                <LuX
                   className="text-gray-400 hover:text-gray-600 flex-shrink-0 ml-3"
                   onClick={() => handleDeleteNotification(notification.id)}
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <line x1="18" y1="6" x2="6" y2="18"></line>
-                    <line x1="6" y1="6" x2="18" y2="18"></line>
-                  </svg>
-                </button>
+                  size={20}
+                />
               </div>
             ))}
           </div>

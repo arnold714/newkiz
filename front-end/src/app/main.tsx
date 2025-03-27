@@ -3,7 +3,8 @@ import { createRoot } from "react-dom/client"
 import "./styles/index.css"
 import App from "./App.tsx"
 import { registerSW } from "virtual:pwa-register"
-
+import { Provider } from "react-redux"
+import { store } from "./redux/store.ts"
 
 const updateSW = registerSW({
   onNeedRefresh() {
@@ -15,6 +16,8 @@ const updateSW = registerSW({
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <App />
+    <Provider store={store}>
+      <App />
+    </Provider>
   </StrictMode>
 )

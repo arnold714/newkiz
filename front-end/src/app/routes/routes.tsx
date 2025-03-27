@@ -17,6 +17,8 @@ const MyPage = lazy(() => import("../../pages/mypage").then(module => ({ default
 const ReporterPage = lazy(() => import("../../pages/reporter").then(module => ({ default: module.ReporterPage })));
 // 검색 페이지
 const SearchPage = lazy(() => import("../../pages/search").then(module => ({ default: module.SearchPage })));
+// 검색 결과 페이지
+const SearchResultsPage = lazy(() => import("../../pages/search").then(module => ({ default: module.SearchResultsPage })));
 // 없는 페이지
 const NotFoundPage = lazy(() => import("../../pages/notfound").then(module => ({ default: module.NotFoundPage })));
 // 첫 로그인 정보 입력 페이지
@@ -80,6 +82,14 @@ const routes: RouteObject[] = [
     element: (
       <Suspense fallback={Loading}>
         <SearchPage />
+      </Suspense>
+    )
+  },
+  {
+    path: "/search/result",
+    element: (
+      <Suspense fallback={Loading}>
+        <SearchResultsPage />
       </Suspense>
     )
   },

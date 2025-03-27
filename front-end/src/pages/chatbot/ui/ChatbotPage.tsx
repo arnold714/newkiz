@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { LuSend } from "react-icons/lu";
+import { LuSend, LuX } from "react-icons/lu";
 
 export default function ChatbotPage () {
   const [message, setMessage] = useState<string>(""); // 사용자가 입력하는 메시지
@@ -32,17 +32,15 @@ export default function ChatbotPage () {
   const isMessageEmpty = !message.trim();
 
   return (
-    <div className="chatbot-container w-full mx-auto mt-8 rounded-lg shadow-xl bg-white flex flex-col h-screen">
+    <div className="chatbot-container w-full mx-auto rounded-lg shadow-xl bg-white flex flex-col h-screen">
       {/* 챗봇 헤더 (X 버튼을 가운데 정렬) */}
       <div className="chatbot-header p-4 bg-white flex justify-center items-center rounded-t-lg relative">
         <span className="font-semibold text-2xl">뉴키즈 챗봇</span>
         {/* X 버튼을 헤더 안에 위치시키기 위해 position: absolute 사용 */}
-        <button 
+        <LuX
           onClick={handleCloseChat} 
           className="absolute left-4 text-2xl font-bold text-gray-500"
-        >
-          X
-        </button>
+        />
       </div>
 
       {/* 회색 구분선 */}

@@ -66,42 +66,42 @@ export const CharacterMovementController: React.FC<{
   const characterSize = { width: 1, height: 1 }
 
   // 키보드 이벤트 처리
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      keysPressed.current[e.code] = true
+  // useEffect(() => {
+  //   const handleKeyDown = (e: KeyboardEvent) => {
+  //     keysPressed.current[e.code] = true
 
-      if (["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "KeyW", "KeyA", "KeyS", "KeyD"].includes(e.code)) {
-        setMovementState((prev) => ({ ...prev, isMoving: true }))
-      }
+  //     if (["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "KeyW", "KeyA", "KeyS", "KeyD"].includes(e.code)) {
+  //       setMovementState((prev) => ({ ...prev, isMoving: true }))
+  //     }
 
-      // 방향 설정
-      if (e.code === "ArrowLeft" || e.code === "KeyA") {
-        setMovementState((prev) => ({ ...prev, direction: -1 }))
-      } else if (e.code === "ArrowRight" || e.code === "KeyD") {
-        setMovementState((prev) => ({ ...prev, direction: 1 }))
-      }
-    }
+  //     // 방향 설정
+  //     if (e.code === "ArrowLeft" || e.code === "KeyA") {
+  //       setMovementState((prev) => ({ ...prev, direction: -1 }))
+  //     } else if (e.code === "ArrowRight" || e.code === "KeyD") {
+  //       setMovementState((prev) => ({ ...prev, direction: 1 }))
+  //     }
+  //   }
 
-    const handleKeyUp = (e: KeyboardEvent) => {
-      delete keysPressed.current[e.code]
+  //   const handleKeyUp = (e: KeyboardEvent) => {
+  //     delete keysPressed.current[e.code]
 
-      // 모든 이동 키가 떼어졌는지 확인
-      const movementKeys = ["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "KeyW", "KeyA", "KeyS", "KeyD"]
-      const isAnyMovementKeyPressed = movementKeys.some((key) => keysPressed.current[key])
+  //     // 모든 이동 키가 떼어졌는지 확인
+  //     const movementKeys = ["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "KeyW", "KeyA", "KeyS", "KeyD"]
+  //     const isAnyMovementKeyPressed = movementKeys.some((key) => keysPressed.current[key])
 
-      if (!isAnyMovementKeyPressed && !joystickData.isMoving) {
-        setMovementState((prev) => ({ ...prev, isMoving: false }))
-      }
-    }
+  //     if (!isAnyMovementKeyPressed && !joystickData.isMoving) {
+  //       setMovementState((prev) => ({ ...prev, isMoving: false }))
+  //     }
+  //   }
 
-    window.addEventListener("keydown", handleKeyDown)
-    window.addEventListener("keyup", handleKeyUp)
+  //   window.addEventListener("keydown", handleKeyDown)
+  //   window.addEventListener("keyup", handleKeyUp)
 
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown)
-      window.removeEventListener("keyup", handleKeyUp)
-    }
-  }, [joystickData.isMoving])
+  //   return () => {
+  //     window.removeEventListener("keydown", handleKeyDown)
+  //     window.removeEventListener("keyup", handleKeyUp)
+  //   }
+  // }, [joystickData.isMoving])
 
   // 조이스틱 데이터 변경 시 캐릭터 상태 업데이트
   useEffect(() => {
@@ -122,14 +122,16 @@ export const CharacterMovementController: React.FC<{
   }, [viewport.width, viewport.height, characterSize.width, characterSize.height, tileMapSize.width, tileMapSize.height]);
 
   useEffect(() => {
-    console.log("boundaries minX: ", boundaries.minX, " boundaries maxX: ", boundaries.maxX)
-    console.log("boundaries minY: ", boundaries.minY, " boundaries maxY: ", boundaries.maxY)
+    console.log("boundaries minX: ", boundaries.minX, "\n boundaries maxX: ", boundaries.maxX)
   }, [boundaries]);
 
   useEffect(()=>{
     let [x, y] = movementState.position
-    console.log("x: ", x, " y: ", y);
-  }, [movementState.isMoving])
+    if(movementState.isMoving){
+      console.log(new Date())
+      console.log("x: ", x, "\n y: ", y);
+    }
+  }, [movementState.position])
 
   useFrame((_, delta) => {
     let [x, y, z] = movementState.position

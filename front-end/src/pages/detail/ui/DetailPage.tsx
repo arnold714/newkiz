@@ -1,4 +1,4 @@
-import Layout from '@/shared/ui/Layout';
+
 import { LuChevronLeft, LuBookmark, LuChevronDown, LuChevronUp,  LuBookmarkCheck } from "react-icons/lu";
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -25,8 +25,7 @@ export default function DetailPage() {
 
 
   return (
-    <Layout>
-      <div className="bg-white w-[calc(100%-70px)] mx-auto h-[calc(100%-20px)] my-5 p-5 rounded-xl">
+      <div className="bg-white w-[calc(100%-70px)] mx-auto my-5 p-5 rounded-xl overflow-y-auto pb-18  max-h-[calc(100vh-100px)]">
         <div className="flex justify-between items-center">
           {/* 뒤로 가기 아이콘 */}
           <LuChevronLeft size={25} />
@@ -135,6 +134,5 @@ export default function DetailPage() {
 
         </div>
       </div>
-    </Layout>
   );
 }

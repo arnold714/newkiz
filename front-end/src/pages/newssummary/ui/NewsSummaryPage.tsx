@@ -1,4 +1,3 @@
-import Layout from '@/shared/ui/Layout';
 import { useState,ChangeEvent } from 'react';
 import { LuX } from "react-icons/lu";
 import NewsSummaryResult from './NewsSummaryResult';
@@ -29,7 +28,6 @@ export default function NewsSummaryPage() {
     }
 
     return (
-      <Layout>
         <div className='bg-white  w-[calc(100%-70px)] mx-auto h-[calc(100%-20px)] my-5 p-5 rounded-xl'>
           <div className='flex justify-end'>
             <LuX size={30} 
@@ -47,7 +45,7 @@ export default function NewsSummaryPage() {
               value={thought}
               onChange={handleChange}
               placeholder='여기에 생각을 적어주세요'
-              className='w-full border-2 border-[#E6E6E6] rounded-[10px] p-3 h-100'
+              className='w-full bg-[#FAFAFA] border-2 border-[#E6E6E6] rounded-[10px] p-3 h-100'
             />
           </div>
 
@@ -60,6 +58,5 @@ export default function NewsSummaryPage() {
           </div>
           
         </div>
-      </Layout>
     );
   };

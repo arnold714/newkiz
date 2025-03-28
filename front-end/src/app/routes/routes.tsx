@@ -1,4 +1,4 @@
-import { NoHeaderLayout } from "@/shared";
+import { NoHeaderLayout, Layout } from "@/shared";
 import { Suspense, lazy } from "react";
 import { createBrowserRouter, RouteObject } from "react-router-dom";
 
@@ -28,13 +28,17 @@ const FirstLoginOnboarding = lazy(() => import("../../pages/login").then(module 
 const NotificationPage = lazy(() => import("../../pages/notification").then(module => ({ default: module.NotificationPage })));
 // 챗봇 페이지
 const ChatbotPage = lazy(() => import("../../pages/chatbot").then(module => ({ default: module.ChatbotPage })));
+// ai뉴스 요약 페이지
+const NewsSummaryPage = lazy(() => import("../../pages/newssummary").then(module => ({ default: module.NewsSummaryPage})));
 
 const routes: RouteObject[] = [
   {
     path: "/",
     element: (
       <Suspense fallback={Loading}>
-        <MainPage />
+        <Layout>
+          <MainPage />
+        </Layout>
       </Suspense>
     )
   },
@@ -42,7 +46,9 @@ const routes: RouteObject[] = [
     path: "/detail",
     element: (
       <Suspense fallback={Loading}>
-        <DetailPage />
+        <Layout>
+          <DetailPage />
+        </Layout>
       </Suspense>
     )
   },
@@ -125,6 +131,16 @@ const routes: RouteObject[] = [
     element: (
       <Suspense fallback={Loading}>
         <ChatbotPage />
+      </Suspense>
+    )
+  },
+  {
+    path: "/newssummary",
+    element: (
+      <Suspense fallback={Loading}>
+        <Layout>
+          <NewsSummaryPage/>
+        </Layout>
       </Suspense>
     )
   }

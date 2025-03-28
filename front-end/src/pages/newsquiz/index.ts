@@ -1,0 +1,1 @@
+export { default as NewsQuiz } from './ui/NewsQuizPage';

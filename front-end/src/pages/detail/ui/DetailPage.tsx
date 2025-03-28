@@ -6,9 +6,13 @@ import { useNavigate } from 'react-router-dom';
 export default function DetailPage() {
   const navigate = useNavigate();
 
-  const handleClick = () => {
+  const handleNewsSummary = () => {
     navigate('/newssummary');
-  }
+  };
+
+  const handleNewsQuiz = () => {
+    navigate('/newsquiz');
+  };
   
   // 기본 활성 버튼 설정
   const [activeButton, setActiveButton] = useState('상'); 
@@ -113,7 +117,7 @@ export default function DetailPage() {
             <div className='bg-[#F8D460] p-5 w-35 h-35 rounded-[20px] flex flex-col justify-center items-center shadow-[4px_4px_3px_rgba(0,0,0,0.13)]'>
               <img src="https://newkiz.s3.ap-northeast-2.amazonaws.com/assets/ai_news_summary.png" alt="ai_news_summary_icon" 
                 className='h-[80px]'
-                onClick={handleClick}
+                onClick={handleNewsSummary}
               />
               <p className='text-white font-semibold text-2xl'>뉴스 요약</p>
             </div>
@@ -122,6 +126,7 @@ export default function DetailPage() {
             <div className='bg-[#FF5C5C] p-5 w-35 h-35 rounded-[20px] flex flex-col justify-center items-center shadow-[4px_4px_3px_rgba(0,0,0,0.13)]'>
               <img src="https://newkiz.s3.ap-northeast-2.amazonaws.com/assets/quiz.png" alt="quiz_icon" 
                 className='h-[90px]'
+                onClick={handleNewsQuiz}
                 />
               <p className='text-white font-semibold text-2xl'>퀴즈 도전</p>
             </div>

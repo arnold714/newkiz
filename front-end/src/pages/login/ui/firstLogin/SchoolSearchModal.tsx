@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { searchPlaces } from "../../api/KakaoApi";
-
+import { LuSearch, LuX } from "react-icons/lu";
 interface SchoolSearchModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -66,25 +66,10 @@ export default function SchoolSearchModal({
         <div className="flex justify-between items-center mb-4 pb-3 border-b">
           <h2 className="text-xl font-bold text-gray-800">학교 검색</h2>
           {/* 닫기 버튼 */}
-          <button
+          <LuX
             onClick={onClose}
             className="rounded-full w-8 h-8 flex items-center justify-center text-gray-500 hover:bg-gray-100 transition-colors"
-          >
-            <svg 
-              xmlns="http://www.w3.org/2000/svg" 
-              width="20" 
-              height="20" 
-              viewBox="0 0 24 24" 
-              fill="none" 
-              stroke="currentColor" 
-              strokeWidth="2" 
-              strokeLinecap="round" 
-              strokeLinejoin="round"
-            >
-              <line x1="18" y1="6" x2="6" y2="18"></line>
-              <line x1="6" y1="6" x2="18" y2="18"></line>
-            </svg>
-          </button>
+          />
         </div>
 
         {/* 검색 영역 */}
@@ -101,21 +86,6 @@ export default function SchoolSearchModal({
             onClick={handleSearchClick}
             className="bg-blue-500 text-white px-5 hover:bg-blue-600 transition-colors flex items-center justify-center"
           >
-            <svg 
-              xmlns="http://www.w3.org/2000/svg" 
-              width="18" 
-              height="18" 
-              viewBox="0 0 24 24" 
-              fill="none" 
-              stroke="currentColor" 
-              strokeWidth="2" 
-              strokeLinecap="round" 
-              strokeLinejoin="round"
-              className="mr-1"
-            >
-              <circle cx="11" cy="11" r="8"></circle>
-              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-            </svg>
             검색
           </button>
         </div>
@@ -124,21 +94,7 @@ export default function SchoolSearchModal({
         <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar">
           {searchResults.length === 0 ? (
             <div className="text-gray-500 text-center py-10 flex flex-col items-center">
-              <svg 
-                xmlns="http://www.w3.org/2000/svg" 
-                width="48" 
-                height="48" 
-                viewBox="0 0 24 24" 
-                fill="none" 
-                stroke="currentColor" 
-                strokeWidth="1" 
-                strokeLinecap="round" 
-                strokeLinejoin="round"
-                className="text-gray-300 mb-2"
-              >
-                <circle cx="11" cy="11" r="8"></circle>
-                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-              </svg>
+              <LuSearch size={48}/>
               {keyword.trim() ? "검색 결과가 없습니다." : "학교 이름을 검색해 주세요."}
             </div>
           ) : (
@@ -146,7 +102,7 @@ export default function SchoolSearchModal({
               {searchResults.map((place) => (
                 <li
                   key={place.id}
-                  className="py-3 hover:bg-gray-50 transition-colors rounded-md px-2 cursor-pointer"
+                  className="py-3 hover:bg-gray-50 transition-colors px-2 cursor-pointer"
                   onClick={() => handleSelect(place)}
                 >
                   <div className="flex justify-between items-center">

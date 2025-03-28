@@ -4,9 +4,6 @@ import FirstInterestSelection from "@/features/login/components/FirstInterestSel
 import FirstCharacterSelection from "@/features/login/components/FirstCharacterSelection";
 import FinalConfirm from "@/features/login/components/FinalConfirm";
 
-// Add this in your index.html or App component to ensure proper viewport settings
-// <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
 export default function FirstLoginOnboarding() {
   const [step, setStep] = useState(1);
 

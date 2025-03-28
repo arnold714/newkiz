@@ -3,7 +3,7 @@ import { RankType } from "../model/type"
 import PersonalRanking from './PersonalRanking'
 import SchoolRanking from "./SchoolRanking"
 import { MdOutlineKeyboardArrowDown, MdOutlineKeyboardArrowUp } from "react-icons/md";
-import '../style/WatingPage.css';
+import '@shared/styles/CustomScroll.css';
 
 export const WaitingPage = () => {
   const [selected, setSelected] = useState<RankType>("personal")

@@ -1,9 +1,16 @@
-import { scrapModal } from "@/features/mypage"
 import { LuChevronLeft } from "react-icons/lu"
-import { useDispatch } from "react-redux"
+import { useNavigate } from "react-router-dom"
+import Modal from "react-modal"
+import '@pages/mypage/styles/MyPage.css'
+import { useState } from "react"
+import { ScrappedWordModal } from "@/widgets/mypage" 
 
-export const ScrapModal = () => {
-  const dispatch = useDispatch()
+Modal.setAppElement("#root")
+
+export const ScrapPage = () => {
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(true);
+
+  const navigate = useNavigate()
 
   const scrappedNews = [
     {
@@ -22,13 +29,12 @@ export const ScrapModal = () => {
       date: "2025/03/25",
     },
   ]
-
-  const scrappedWords: any[] = [] // 스크랩한 단어 리스트
+  const scrappedWords: any[] = []
 
   return (
-    <div className="w-full h-full flex flex-col overflow-auto px-4">
+    <div className="w-[90%] flex flex-col overflow-auto px-4 mt-5 scroll">
       <div className="flex flex-row justify-start items-center gap-3 my-3">
-        <LuChevronLeft className="text-[25px] cursor-pointer" onClick={() => dispatch(scrapModal())} />
+        <LuChevronLeft className="text-[25px] cursor-pointer" onClick={() => navigate(-1)} />
         <p className="font-bold text-xl">스크랩</p>
       </div>
       <div className="flex flex-col w-full items-start my-5">
@@ -59,8 +65,12 @@ export const ScrapModal = () => {
             </div>
           )}
         </div>
+        <button onClick={()=>{setIsModalOpen(true)}}>스크랩 단어 모달 테스트 버튼</button>
         {scrappedWords.length > 0 && <button className="flex justify-center items-center w-full text-[#9E9E9E] font-semibold py-2">더보기 &gt;</button>}
       </div>
+      <Modal isOpen={isModalOpen} onRequestClose={() => setIsModalOpen(false)} className="modal wrong-answer-modal" overlayClassName="modal-overlay" shouldCloseOnOverlayClick={true}>
+        <ScrappedWordModal closeModal={() => setIsModalOpen(false)} />
+      </Modal>
     </div>
   )
 }

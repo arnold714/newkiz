@@ -1,24 +1,27 @@
 package site.newkiz.newsserver.entitiy;
 
 import java.time.LocalDateTime;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-//@Document(collection = "news_view_logs")
+@Document(collection = "news_scraps")
+@Data
 @Builder
-@Document(collection = "news_view_logs_test")
-public class NewsViewLog {
+@NoArgsConstructor
+@AllArgsConstructor
+public class NewsScrap {
 
   @Id
   private String id;
 
-  private String userId;         // 사용자 ID
-  private String newsId;         // 어떤 뉴스
+  private String userId;
+  private String newsId;
 
   @CreatedDate
-  private LocalDateTime viewedAt;
+  private LocalDateTime createdAt;
 }
-

@@ -22,4 +22,5 @@ public class NewsDocument {
   private String article;
   private String img;
   private int views;
+  private int scrap;
 }

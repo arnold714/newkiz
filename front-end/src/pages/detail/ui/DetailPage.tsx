@@ -93,8 +93,9 @@ export default function DetailPage() {
 
         {/* content */}
         <div className='mt-5'>
-          {/* <div className='font-extrabold text-xl sm:text-3xl'> {title} </div>
-          <div className='mt-2 text-[#757575]'> {updateDayy} | {reporterName} </div> */}
+          <div className='font-extrabold text-xl sm:text-3xl'> {newsDetailData.title} </div>
+          <div className='mt-2 text-[#757575]'> 업데이트: {updateDay} | 
+            <a href={newsDetailData.link}  target="_blank" rel="noopener noreferrer"> 기사 원문</a></div>
           <div className="flex items-center mx-4 mt-4">
             <img src="https://newkiz.s3.ap-northeast-2.amazonaws.com/dinos/nico.png" alt="character_nico" className='w-20 m-1 '/>
             <div className="relative w-full">
@@ -118,15 +119,29 @@ export default function DetailPage() {
             </div>
           </div>
           {/* 뉴스 이미지 */}
-          <div className='m-3'>
-            <img src="/newsImage3.png" alt="" className='w-full'/>
+          <div className='m-5'>
+            <img src={newsDetailData.img} alt="" className='w-full rounded-lg'/>
           </div>
           {/* 뉴스 내용 */}
           <div className='text-xl m-3'>
-            안녕하세요. 여기에는 뉴스 내용이 들어 갈겁니다.
-            근데 아 이제 살짝 지겨운데 속도를 내보려하는데 이거 이거 사전기능 언제 구현할까요?
-            제가 할 수 있을까요...? 이제 버겁네여..^^
-          </div>
+          {(() => {
+            const parts = newsDetailData.article.split('#'); 
+            const firstPart = parts[0]; // 본문(해시태그 제외)
+            const hashtags = parts.slice(1); // 해시태그
+
+            return (
+              <>
+                <div>{firstPart}</div>
+                {hashtags.length > 0 && <br />} 
+                <div className="flex flex-wrap gap-2 mt-2">
+                  {hashtags.map((hashtag, index) => (
+                    <span key={index} className="text-[#0070F3]">#{hashtag.split(' ')[0]}</span>
+                  ))}
+                </div>
+              </>
+            );
+          })()}
+        </div>
         </div>
 
         <div className="h-1.5 w-full bg-[#F5F6FA]"></div>

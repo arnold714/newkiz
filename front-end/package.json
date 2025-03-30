@@ -34,6 +34,7 @@
     "react-slick": "^0.30.3",
     "react-spring": "^9.7.5",
     "slick-carousel": "^1.8.1",
+    "sweetalert2": "^11.17.2",
     "three": "^0.174.0"
   },
   "devDependencies": {

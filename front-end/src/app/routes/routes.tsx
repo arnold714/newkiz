@@ -30,8 +30,7 @@ const NotificationPage = lazy(() => import("../../pages/notification").then(modu
 const ChatbotPage = lazy(() => import("../../pages/chatbot").then(module => ({ default: module.ChatbotPage })));
 // ai뉴스 요약 페이지
 const NewsSummaryPage = lazy(() => import("../../pages/newssummary").then(module => ({ default: module.NewsSummaryPage})));
-// 뉴스 퀴즈 페이지
-const NewsQuizPage = lazy(() => import('../../pages/newsquiz').then(module => ({ default: module.NewsQuiz })));
+
 
 const routes: RouteObject[] = [
   {
@@ -146,16 +145,7 @@ const routes: RouteObject[] = [
       </Suspense>
     )
   },
-  {
-    path: '/newsquiz',
-    element: (
-      <Suspense fallback={Loading}>
-        <Layout>
-            <NewsQuizPage />
-        </Layout>
-      </Suspense>
-    )
-  }
+
 ];
 
 export const router = createBrowserRouter(routes);

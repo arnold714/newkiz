@@ -1,0 +1,1 @@
+export { detailReducer, quizModal } from './model/detailSlice';

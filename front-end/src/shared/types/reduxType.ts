@@ -12,3 +12,9 @@ export interface MypageState {
         isOpen: boolean;
     }    
 }
+
+export interface DetailState {
+    quizModal: {
+        isOpen: boolean;
+    };
+}

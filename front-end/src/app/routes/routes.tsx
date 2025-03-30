@@ -183,6 +183,14 @@ const routes: RouteObject[] = [
         </Layout>
       </Suspense>
     )
+  },
+  {
+    path: "/category",
+    element: (
+      <Suspense fallback={Loading}>
+          <CategoryPage />
+      </Suspense>
+    ),
   }
 ];
 

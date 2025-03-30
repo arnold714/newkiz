@@ -3,23 +3,16 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { NewsDetail } from "@/features/detail/types";
 import Modal from 'react-modal';
-import { useDispatch, useSelector } from "react-redux";
-import { quizModal } from "@/features/detail";
-import { selectQuizModalState } from "@/features/detail/model/seletor";
 import "../styles/Detail.css"
 import { QuizModal } from "@/widgets/detail";
 
 Modal.setAppElement('#root');
 
 export default function DetailPage() {
-  const dispatch = useDispatch();
+
   const navigate = useNavigate();
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
-  const quizModalIsOpen = useSelector(selectQuizModalState);
-
-  const handleCloseQuizModal = () => {
-    dispatch(quizModal())
-  };
 
   const handleNewsSummary = () => {
     navigate('/newssummary');
@@ -46,6 +39,7 @@ export default function DetailPage() {
   };
 
   const publishedDate = new Date(newsDetailData.published);
+
   const updateDay = `${publishedDate.getFullYear()}.${
     String(publishedDate.getMonth() + 1).padStart(2, '0')
   }.${
@@ -152,15 +146,15 @@ export default function DetailPage() {
 
             {/* 퀴즈 도전 */}
             <div className='bg-[#FF5C5C] p-5 w-35 h-35 rounded-[20px] flex flex-col justify-center items-center shadow-[4px_4px_3px_rgba(0,0,0,0.13)]'
-              onClick={() => dispatch(quizModal())}
+              onClick={()=>{setIsModalOpen(true)}}
             >
               <img src="https://newkiz.s3.ap-northeast-2.amazonaws.com/assets/quiz.png" 
                 alt="quiz_icon" 
                 className='h-[90px]'/>
               <p className='text-white font-semibold text-2xl'>퀴즈 도전</p>
             </div>
-            <Modal isOpen={quizModalIsOpen} onRequestClose={handleCloseQuizModal} className="modal my-info-modal" overlayClassName="modal-overlay" shouldCloseOnOverlayClick={true}>
-              <QuizModal />
+            <Modal isOpen={isModalOpen} onRequestClose={() => setIsModalOpen(false)} className="modal my-info-modal" overlayClassName="modal-overlay" shouldCloseOnOverlayClick={true}>
+              <QuizModal closeModal={() => setIsModalOpen(false)} />
             </Modal>
           </div>
         </div>

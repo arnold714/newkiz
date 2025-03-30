@@ -1,19 +1,18 @@
-import { useDispatch } from "react-redux";
 import { LuX } from "react-icons/lu";
-import { quizModal } from "@/features/detail"; // 올바른 경로로 import 확인
 import { useState } from "react";
 import { QuizData } from "@/features/detail/types";
 import { QuizResult } from "./QuizResult";
 import Swal from "sweetalert2";  
 
-export const QuizModal = () => {
-  const dispatch = useDispatch();
+interface QuizModalProps {
+  closeModal: () => void;
+}
+
+export const QuizModal = ({ closeModal }: QuizModalProps) => {
   const [selectedChoice, setSelectedChoice] = useState(null);
   const [isAnswerSubmitted, setIsAnswerSubmitted] = useState(false);
 
-  const handleXClick = () => {
-    dispatch(quizModal()); 
-  };
+
   //일단 퀴즈 데이터 하드 코딩
   const quizData: QuizData = {
     id: 1,
@@ -54,7 +53,7 @@ export const QuizModal = () => {
       {!isAnswerSubmitted ? (
         <div>
           <div className="flex justify-end">
-            <LuX size={30} onClick={handleXClick} />
+            <LuX size={30} onClick={() => closeModal()} />
           </div>
           <div className="m-5">
             <p>퀴즈 | 다음 문제를 읽고 답을 고르시오.</p>
@@ -86,7 +85,7 @@ export const QuizModal = () => {
         </div>
       ) : (
         // QuizResult 모달 표시
-        <QuizResult isCorrect={isCorrect} onClose={handleXClick} />
+        <QuizResult isCorrect={isCorrect} onClose={closeModal} />
       )}
     </div>
   );

@@ -46,7 +46,7 @@ export const UserStatistic = () => {
 
     return (
         <div className="w-full flex flex-col items-center">
-            <p className="font-bold">어떤 카테고리에 관심이 많을까요?</p>
+            <p className="font-bold text-xl">어떤 카테고리에 관심이 많을까요?</p>
             <div className="w-[90%] aspect-square shadow-lg rounded-xl flex justify-center items-center">
                 <Radar data={data} options={options} />
             </div>

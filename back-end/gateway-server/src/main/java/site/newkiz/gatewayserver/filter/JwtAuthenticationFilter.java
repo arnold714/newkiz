@@ -35,8 +35,15 @@ public class JwtAuthenticationFilter implements WebFilter {
         Authentication authentication = new UsernamePasswordAuthenticationToken(userId, "", null);
 
         return profileRepository.findByUserId(userId)
-            .flatMap(profile -> chain.filter(exchange)
-                .contextWrite(ReactiveSecurityContextHolder.withAuthentication(authentication)))
+            .flatMap(profile -> {
+              ServerWebExchange mutatedExchange = exchange.mutate()
+                  .request(exchange.getRequest().mutate()
+                      .header("User-Id", String.valueOf(userId))
+                      .build())
+                  .build();
+              return chain.filter(mutatedExchange)
+                  .contextWrite(ReactiveSecurityContextHolder.withAuthentication(authentication));
+            })
             .switchIfEmpty(redirectToProfileSetup(exchange.getResponse()));
       }
     } catch (Exception e) {

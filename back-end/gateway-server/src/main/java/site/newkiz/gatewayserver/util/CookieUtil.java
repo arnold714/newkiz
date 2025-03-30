@@ -44,4 +44,12 @@ public class CookieUtil {
     }
     return null;
   }
+
+  public String getRefreshToken(ServerHttpRequest request) {
+    var cookies = request.getCookies();
+    if (cookies.containsKey(TokenType.REFRESH_TOKEN.toString())) {
+      return Objects.requireNonNull(cookies.getFirst(TokenType.REFRESH_TOKEN.toString())).getValue();
+    }
+    return null;
+  }
 }

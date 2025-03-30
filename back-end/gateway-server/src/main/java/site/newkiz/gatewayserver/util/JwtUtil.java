@@ -69,4 +69,7 @@ public class JwtUtil {
     return Integer.parseInt(parseClaims(token).getSubject());
   }
 
+  public String getName(String token) {
+    return parseClaims(token).get("name", String.class);
+  }
 }

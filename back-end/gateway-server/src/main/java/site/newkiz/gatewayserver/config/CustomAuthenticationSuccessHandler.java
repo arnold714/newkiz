@@ -43,8 +43,8 @@ public class CustomAuthenticationSuccessHandler implements ServerAuthenticationS
           String refreshToken = jwtUtil.createRefreshToken(user.getId(), user.getName());
 
           // 4. 쿠키 설정
-          cookieUtil.addRefreshTokenCookie(response, refreshToken);
           cookieUtil.addAccessTokenCookie(response, accessToken);
+          cookieUtil.addRefreshTokenCookie(response, refreshToken);
 
           // 5. 프로필 존재 여부 확인 후 리다이렉트 결정
           return profileRepository.findByUserId(user.getId())

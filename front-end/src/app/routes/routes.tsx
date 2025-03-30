@@ -34,6 +34,8 @@ const NotificationPage = lazy(() => import("@pages/notification").then((module) 
 const ChatbotPage = lazy(() => import("../../pages/chatbot").then((module) => ({ default: module.ChatbotPage })))
 // ai뉴스 요약 페이지
 const NewsSummaryPage = lazy(() => import("../../pages/newssummary").then((module) => ({ default: module.NewsSummaryPage })))
+// 카테고리 페이지
+const CategoryPage = lazy(() => import("../../pages/category").then((module) => ({ default: module.CategoryPage })))
 
 const routes: RouteObject[] = [
   {
@@ -182,6 +184,14 @@ const routes: RouteObject[] = [
       </Suspense>
     ),
   },
+  {
+    path: "/category",
+    element: (
+      <Suspense fallback={Loading}>
+          <CategoryPage />
+      </Suspense>
+    ),
+  }
 ]
 
 export const router = createBrowserRouter(routes)

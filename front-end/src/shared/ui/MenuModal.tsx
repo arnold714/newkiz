@@ -12,14 +12,13 @@ interface Category {
   id: string;
   name: string;
   iconName: string;
-  color: string; // 색상 정보 추가
+  color: string;
 }
 
-const MenuModal: React.FC<MenuModalProps> = ({ onClose }) => {
+export default function MenuModal({ onClose }: MenuModalProps) {
   const navigate = useNavigate();
   const [selectedCategory, setSelectedCategory] = useState('news');
-  
-  // 카테고리 데이터
+
   const categories = [
     { id: 'news', name: '뉴키즈 뉴스' },
     { id: 'it', name: 'IT/과학' },
@@ -31,7 +30,6 @@ const MenuModal: React.FC<MenuModalProps> = ({ onClose }) => {
     { id: 'sports', name: '스포츠' },
   ];
 
-  // 인기 카테고리 - 무지개 색상 정의
   const popularCategories: Category[] = [
     { id: 'soccer', name: '축구', iconName: 'soccer', color: 'bg-red-500' },
     { id: 'baseball', name: '야구', iconName: 'baseball', color: 'bg-orange-400' },
@@ -40,19 +38,16 @@ const MenuModal: React.FC<MenuModalProps> = ({ onClose }) => {
     { id: 'e-sports', name: 'e스포츠', iconName: 'e-sports', color: 'bg-blue-400' },
   ];
 
-  // 이미지 URL 생성 함수
   const getIconUrl = (iconName: string) => {
     return `https://newkiz.s3.ap-northeast-2.amazonaws.com/categories/${iconName}.png`;
   };
 
-  // 카테고리 클릭 핸들러
   const handleCategoryClick = (categoryId: string) => {
     setSelectedCategory(categoryId);
-    navigate(`/category/${categoryId}`);
+    navigate('/category');
     onClose();
   };
 
-  // 모달 외부 클릭 시 닫기
   const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target === e.currentTarget) {
       onClose();
@@ -64,23 +59,16 @@ const MenuModal: React.FC<MenuModalProps> = ({ onClose }) => {
       className="fixed inset-0 bg-[#BFD46F] bg-opacity-50 z-50 flex flex-col"
       onClick={handleBackdropClick}
     >
-      {/* 상단에 공통 Header 컴포넌트 사용 */}
       <div>
         <Header />
       </div>
 
-      {/* 카테고리 메뉴 제목과 닫기 버튼 */}
       <div className="bg-gray-100 px-6 py-3 flex justify-between items-center border-b border-gray-100">
         <h2 className="text-3xl font-bold">카테고리 메뉴</h2>
-          <LuX size={30} 
-            onClick={onClose}
-            className="cursor-pointer"
-          />
+        <LuX size={30} onClick={onClose} className="cursor-pointer" />
       </div>
 
-      {/* 메뉴 내용 */}
       <div className="flex flex-1 overflow-hidden">
-        {/* 카테고리 목록 - 왼쪽 사이드바 */}
         <div className="w-1/3 bg-gray-100 overflow-y-auto">
           {categories.map((category) => (
             <div 
@@ -91,12 +79,11 @@ const MenuModal: React.FC<MenuModalProps> = ({ onClose }) => {
             >
               <span className={`text-xl font-semibold ${
                 selectedCategory === category.id ? 'text-green-500' : 'text-gray-700'
-                }`}>{category.name}</span>
+              }`}>{category.name}</span>
             </div>
           ))}
         </div>
 
-        {/* 메인 내용 영역 - 오른쪽 */}
         <div className="w-2/3 bg-white p-4 overflow-y-auto">
           <div className="flex justify-between items-center mb-4">
             <h3 className="text-xl font-medium">
@@ -109,8 +96,7 @@ const MenuModal: React.FC<MenuModalProps> = ({ onClose }) => {
               전체보기 &gt;
             </span>
           </div>
-          
-          {/* 카테고리 그리드 - 무지개색 적용 & 정사각형 */}
+
           <div className="grid grid-cols-3 gap-4 mb-4">
             {popularCategories.map((category) => (
               <div 
@@ -135,13 +121,10 @@ const MenuModal: React.FC<MenuModalProps> = ({ onClose }) => {
           </div>
         </div>
       </div>
-      
-      {/* 하단 네비게이션 */}
+
       <div className="mt-auto">
         <NavBar />
       </div>
     </div>
   );
-};
-
-export default MenuModal;
+}

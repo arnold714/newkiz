@@ -59,64 +59,69 @@ export default function SearchPage() {
   };
 
   return (
-    <div className="flex flex-col p-4 space-y-6">
-      {/* Header with back button */}
-      <div className="flex items-center">
-        <button className="p-2" onClick={handleReturn}>
-          <LuChevronLeft size={25} />
-        </button>
-        <div className="relative flex-1 ml-2">
-          <input
-            type="text"
-            className="w-full p-3 pr-12 rounded-[25px] border border-gray-300 text-xl text-gray-600 placeholder-gray-400"
-            placeholder="검색어를 입력하세요"
-            value={searchQuery}
-            onChange={handleSearchInputChange}
-          />
-          <button
-            className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-600"
-            onClick={handleSearch}
-            disabled={!searchQuery.trim()}
-          >
-            <LuSearch size={24} className="mr-2 mb-1" />
+    <div className="flex flex-col h-screen">
+      {/* 고정 헤더 부분 */}
+      <div className="flex-none p-4">
+        <div className="flex items-center">
+          <button className="p-2" onClick={handleReturn}>
+            <LuChevronLeft size={25} />
           </button>
+          <div className="relative flex-1 ml-2">
+            <input
+              type="text"
+              className="w-full p-3 pr-12 rounded-[25px] border border-gray-300 text-xl text-gray-600 placeholder-gray-400"
+              placeholder="검색어를 입력하세요"
+              value={searchQuery}
+              onChange={handleSearchInputChange}
+            />
+            <button
+              className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-600"
+              onClick={handleSearch}
+              disabled={!searchQuery.trim()}
+            >
+              <LuSearch size={24} className="mr-2 mb-1" />
+            </button>
+          </div>
         </div>
       </div>
 
-      {/* 회색 구분선 */}
-      <hr className="border-b-5 border-gray-100 -mx-4" />
+      {/* 스크롤 가능한 컨텐츠 부분 */}
+      <div className="flex-1 overflow-y-auto p-4">
+        {/* 회색 구분선 */}
+        <hr className="border-b-5 border-gray-100 -mx-4 mb-6" />
 
-      {/* Recent Searches */}
-      <div className="space-y-2">
-        <h2 className="font-semibold text-xl mb-5">최근 검색어</h2>
-        {recentSearches.map((search, index) => (
-          <div key={index} className="flex justify-between items-center mb-5 ml-8">
-            <div className="flex items-center space-x-2">
-              <LuSearch className="text-gray-400 mr-5" size={22} />
-              <span className="text-gray-600 text-xl">{search}</span>
+        {/* Recent Searches */}
+        <div className="space-y-2 mb-6">
+          <h2 className="font-semibold text-xl mb-5">최근 검색어</h2>
+          {recentSearches.map((search, index) => (
+            <div key={index} className="flex justify-between items-center mb-5 ml-8">
+              <div className="flex items-center space-x-2">
+                <LuSearch className="text-gray-400 mr-5" size={22} />
+                <span className="text-gray-600 text-xl">{search}</span>
+              </div>
+              <LuX
+                className="text-gray-500 hover:text-gray-800 cursor-pointer"
+                size={20}
+                onClick={() => handleClearSearch(index)}
+              />
             </div>
-            <LuX
-              className="text-gray-500 hover:text-gray-800 cursor-pointer"
-              size={20}
-              onClick={() => handleClearSearch(index)}
+          ))}
+        </div>
+
+        {/* 회색 구분선 */}
+        <hr className="border-b-5 border-gray-100 -mx-4 mb-6" />
+
+        {/* 인기 키워드 워드 클라우드 */}
+        <div>
+          <h2 className="font-semibold text-xl mb-5">인기있는 키워드</h2>
+          <div className="p-4 bg-white rounded-xl">
+            <WordCloud
+              keywords={popularKeywords}
+              onKeywordClick={handleKeywordClick}
+              width={550}
+              height={350}
             />
           </div>
-        ))}
-      </div>
-
-      {/* 회색 구분선 */}
-      <hr className="border-b-5 border-gray-100 -mx-4" />
-
-      {/* 인기 키워드 워드 클라우드 */}
-      <div>
-        <h2 className="font-semibold text-xl mb-5">인기있는 키워드</h2>
-        <div className="p-4 bg-white rounded-xl">
-          <WordCloud
-            keywords={popularKeywords}
-            onKeywordClick={handleKeywordClick}
-            width={550}
-            height={350}
-          />
         </div>
       </div>
     </div>

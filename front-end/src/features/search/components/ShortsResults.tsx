@@ -45,6 +45,8 @@ export function ShortsResults({ results, isFilterView = false, onSeeMore }: Shor
     return null;
   }
 
+  const SliderAny = Slider as any;
+
   return (
     <div className="mb-6">
       <div className="flex justify-between items-center mb-4">
@@ -61,7 +63,7 @@ export function ShortsResults({ results, isFilterView = false, onSeeMore }: Shor
       </div>
 
       <div className="px-1 mx-auto max-w-6xl">
-        <Slider {...settings}>
+        <SliderAny {...settings}>
         {results.map((item) => (
             <div key={item.id} className={`px-2 ${isFilterView ? 'w-full' : ''}`}>
               <div className="border rounded-lg shadow-sm overflow-hidden">
@@ -85,7 +87,7 @@ export function ShortsResults({ results, isFilterView = false, onSeeMore }: Shor
               </div>
             </div>
           ))}
-        </Slider>
+        </SliderAny>
       </div>
 
       {isFilterView && results.length === 0 && (

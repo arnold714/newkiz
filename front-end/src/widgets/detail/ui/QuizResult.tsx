@@ -20,7 +20,7 @@ export const QuizResult = ({ isCorrect, onClose }) => {
                         />}
         </div>
         <p className="flex justify-center item-center mt-10 font-bold text-3xl">
-        {isCorrect ? "축하합니다 정답을 맞히셨습니다!" : "아쉬워요.. 다시 도전해보세요!"}
+        {isCorrect ? "축하합니다 정답을 맞히셨습니다!" : "아쉬워요.. !"}
         </p>
       </div>
       <div className='flex justify-center'>

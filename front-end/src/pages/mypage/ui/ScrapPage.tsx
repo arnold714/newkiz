@@ -1,14 +1,14 @@
 import { LuChevronLeft } from "react-icons/lu"
 import { useNavigate } from "react-router-dom"
 import Modal from "react-modal"
-import '@pages/mypage/styles/MyPage.css'
+import "@pages/mypage/styles/MyPage.css"
 import { useState } from "react"
-import { ScrappedWordModal } from "@/widgets/mypage" 
+import { ScrappedWordModal } from "@/widgets/mypage"
 
 Modal.setAppElement("#root")
 
 export const ScrapPage = () => {
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(true);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(true)
 
   const navigate = useNavigate()
 
@@ -32,7 +32,7 @@ export const ScrapPage = () => {
   const scrappedWords: any[] = []
 
   return (
-    <div className="w-[90%] flex flex-col overflow-auto px-4 mt-5 scroll">
+    <div className="w-full flex flex-col overflow-auto px-4 mt-5 scroll">
       <div className="flex flex-row justify-start items-center gap-3 my-3">
         <LuChevronLeft className="text-[25px] cursor-pointer" onClick={() => navigate(-1)} />
         <p className="font-bold text-xl">스크랩</p>
@@ -65,7 +65,13 @@ export const ScrapPage = () => {
             </div>
           )}
         </div>
-        <button onClick={()=>{setIsModalOpen(true)}}>스크랩 단어 모달 테스트 버튼</button>
+        <button
+          onClick={() => {
+            setIsModalOpen(true)
+          }}
+        >
+          스크랩 단어 모달 테스트 버튼
+        </button>
         {scrappedWords.length > 0 && <button className="flex justify-center items-center w-full text-[#9E9E9E] font-semibold py-2">더보기 &gt;</button>}
       </div>
       <Modal isOpen={isModalOpen} onRequestClose={() => setIsModalOpen(false)} className="modal wrong-answer-modal" overlayClassName="modal-overlay" shouldCloseOnOverlayClick={true}>

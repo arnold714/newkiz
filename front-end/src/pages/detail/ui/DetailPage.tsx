@@ -1,8 +1,14 @@
-import Layout from '@/shared/ui/Layout';
+
 import { LuChevronLeft, LuBookmark, LuChevronDown, LuChevronUp,  LuBookmarkCheck } from "react-icons/lu";
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function DetailPage() {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate('/newssummary');
+  }
   
   // 기본 활성 버튼 설정
   const [activeButton, setActiveButton] = useState('상'); 
@@ -19,8 +25,7 @@ export default function DetailPage() {
 
 
   return (
-    <Layout>
-      <div className="bg-white w-[calc(100%-70px)] mx-auto h-[calc(100%-20px)] my-5 p-5 rounded-xl">
+      <div className="bg-white w-[calc(100%-70px)] mx-auto my-5 p-5 rounded-xl overflow-y-auto pb-18  max-h-[calc(100vh-100px)]">
         <div className="flex justify-between items-center">
           {/* 뒤로 가기 아이콘 */}
           <LuChevronLeft size={25} />
@@ -103,14 +108,31 @@ export default function DetailPage() {
         {/* 참여 컨텐츠 */}
         <div>
           <p className='m-5 text-2xl font-bold '>함께 참여해 볼까요?</p>
-          
+          <div className='flex justify-center items-center gap-10 m-5'>
+            {/* 뉴스 요약 */}
+            <div className='bg-[#F8D460] p-5 w-35 h-35 rounded-[20px] flex flex-col justify-center items-center shadow-[4px_4px_3px_rgba(0,0,0,0.13)]'>
+              <img src="https://newkiz.s3.ap-northeast-2.amazonaws.com/assets/ai_news_summary.png" alt="ai_news_summary_icon" 
+                className='h-[80px]'
+                onClick={handleClick}
+              />
+              <p className='text-white font-semibold text-2xl'>뉴스 요약</p>
+            </div>
+
+            {/* 퀴즈 도전 */}
+            <div className='bg-[#FF5C5C] p-5 w-35 h-35 rounded-[20px] flex flex-col justify-center items-center shadow-[4px_4px_3px_rgba(0,0,0,0.13)]'>
+              <img src="https://newkiz.s3.ap-northeast-2.amazonaws.com/assets/quiz.png" alt="quiz_icon" 
+                className='h-[90px]'
+                />
+              <p className='text-white font-semibold text-2xl'>퀴즈 도전</p>
+            </div>
+          </div>
         </div>
 
         <div className="h-1.5 w-full bg-[#F5F6FA]"></div>
         <div>
           <p className='m-5 text-2xl font-semibold'>이런 기사도 있어요!</p>
+
         </div>
       </div>
-    </Layout>
   );
 }

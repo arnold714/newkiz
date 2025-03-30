@@ -1,50 +1,60 @@
-import { NoHeaderLayout } from "@/shared";
-import { Suspense, lazy } from "react";
-import { createBrowserRouter, RouteObject } from "react-router-dom";
+import { NoHeaderLayout, Layout } from "@/shared"
+import { Suspense, lazy } from "react"
+import { createBrowserRouter, RouteObject } from "react-router-dom"
 
-const Loading = <div>로딩중입니다...</div>;
+const Loading = <div>로딩중입니다...</div>
 
 // 디테일 페이지
-const DetailPage = lazy(() => import("../../pages/detail").then(module => ({ default: module.DetailPage })));
+const DetailPage = lazy(() => import("@pages/detail").then((module) => ({ default: module.DetailPage })))
 // 게임 페이지
-const GamePage = lazy(() => import("../../pages/game").then(module => ({ default: module.GamePage })));
+const GamePage = lazy(() => import("@pages/game").then((module) => ({ default: module.GamePage })))
 // 로그인 페이지
-const LoginPage = lazy(() => import("../../pages/login").then(module => ({ default: module.LoginPage })));
+const LoginPage = lazy(() => import("@pages/login").then((module) => ({ default: module.LoginPage })))
 // 메인 페이지
-const MainPage = lazy(() => import("../../pages/main").then(module => ({ default: module.MainPage })));
+const MainPage = lazy(() => import("@pages/main").then((module) => ({ default: module.MainPage })))
 // 마이 페이지
-const MyPage = lazy(() => import("../../pages/mypage").then(module => ({ default: module.MyPage })));
+const MyPage = lazy(() => import("@pages/mypage").then((module) => ({ default: module.MyPage })))
+const ModifyInfoPage = lazy(() => import("@pages/mypage").then((module) => ({ default: module.ModifyInfoPage })))
+const ScrapPage = lazy(() => import("@pages/mypage").then((module) => ({ default: module.ScrapPage })))
+const Summary = lazy(() => import("@pages/mypage").then((module) => ({ default: module.Summary })))
+const WrongAnswerPage = lazy(() => import("@pages/mypage").then((module) => ({ default: module.WrongAnswerPage })))
 // 리포터 페이지
-const ReporterPage = lazy(() => import("../../pages/reporter").then(module => ({ default: module.ReporterPage })));
+const ReporterPage = lazy(() => import("@pages/reporter").then((module) => ({ default: module.ReporterPage })))
 // 검색 페이지
-const SearchPage = lazy(() => import("../../pages/search").then(module => ({ default: module.SearchPage })));
+const SearchPage = lazy(() => import("@pages/search").then((module) => ({ default: module.SearchPage })))
 // 검색 결과 페이지
-const SearchResultsPage = lazy(() => import("../../pages/search").then(module => ({ default: module.SearchResultsPage })));
+const SearchResultsPage = lazy(() => import("@pages/search").then((module) => ({ default: module.SearchResultsPage })))
 // 없는 페이지
-const NotFoundPage = lazy(() => import("../../pages/notfound").then(module => ({ default: module.NotFoundPage })));
+const NotFoundPage = lazy(() => import("@pages/notfound").then((module) => ({ default: module.NotFoundPage })))
 // 첫 로그인 정보 입력 페이지
-const FirstLoginOnboarding = lazy(() => import("../../pages/login").then(module => ({ default: module.FirstLoginOnboarding })));
+const FirstLoginOnboarding = lazy(() => import("@pages/login").then((module) => ({ default: module.FirstLoginOnboarding })))
 // 알림 페이지
-const NotificationPage = lazy(() => import("../../pages/notification").then(module => ({ default: module.NotificationPage })));
+const NotificationPage = lazy(() => import("@pages/notification").then((module) => ({ default: module.NotificationPage })))
 // 챗봇 페이지
-const ChatbotPage = lazy(() => import("../../pages/chatbot").then(module => ({ default: module.ChatbotPage })));
+const ChatbotPage = lazy(() => import("../../pages/chatbot").then((module) => ({ default: module.ChatbotPage })))
+// ai뉴스 요약 페이지
+const NewsSummaryPage = lazy(() => import("../../pages/newssummary").then((module) => ({ default: module.NewsSummaryPage })))
 
 const routes: RouteObject[] = [
   {
     path: "/",
     element: (
       <Suspense fallback={Loading}>
-        <MainPage />
+        <Layout>
+          <MainPage />
+        </Layout>
       </Suspense>
-    )
+    ),
   },
   {
     path: "/detail",
     element: (
       <Suspense fallback={Loading}>
-        <DetailPage />
+        <Layout>
+          <DetailPage />
+        </Layout>
       </Suspense>
-    )
+    ),
   },
   {
     path: "/game",
@@ -52,7 +62,7 @@ const routes: RouteObject[] = [
       <Suspense fallback={Loading}>
         <GamePage />
       </Suspense>
-    )
+    ),
   },
   {
     path: "/login",
@@ -60,7 +70,7 @@ const routes: RouteObject[] = [
       <Suspense fallback={Loading}>
         <LoginPage />
       </Suspense>
-    )
+    ),
   },
   {
     path: "/mypage",
@@ -70,7 +80,41 @@ const routes: RouteObject[] = [
           <MyPage />
         </NoHeaderLayout>
       </Suspense>
-    )
+    ),
+    children: [
+      {
+        path: "info",
+        element: (
+          <Suspense fallback={Loading}>
+            <ModifyInfoPage />
+          </Suspense>
+        ),
+      },
+      {
+        path: "scrap",
+        element: (
+          <Suspense fallback={Loading}>
+            <ScrapPage />
+          </Suspense>
+        ),
+      },
+      {
+        path: "summary",
+        element: (
+          <Suspense fallback={Loading}>
+            <Summary />
+          </Suspense>
+        ),
+      },
+      {
+        path: "wronganswer",
+        element: (
+          <Suspense fallback={Loading}>
+            <WrongAnswerPage />
+          </Suspense>
+        ),
+      },
+    ],
   },
   {
     path: "/reporter",
@@ -78,7 +122,7 @@ const routes: RouteObject[] = [
       <Suspense fallback={Loading}>
         <ReporterPage />
       </Suspense>
-    )
+    ),
   },
   {
     path: "/search",
@@ -86,7 +130,7 @@ const routes: RouteObject[] = [
       <Suspense fallback={Loading}>
         <SearchPage />
       </Suspense>
-    )
+    ),
   },
   {
     path: "/search/result",
@@ -94,7 +138,7 @@ const routes: RouteObject[] = [
       <Suspense fallback={Loading}>
         <SearchResultsPage />
       </Suspense>
-    )
+    ),
   },
   {
     path: "*",
@@ -102,7 +146,7 @@ const routes: RouteObject[] = [
       <Suspense fallback={Loading}>
         <NotFoundPage />
       </Suspense>
-    )
+    ),
   },
   {
     path: "/userinfo",
@@ -110,7 +154,7 @@ const routes: RouteObject[] = [
       <Suspense fallback={Loading}>
         <FirstLoginOnboarding />
       </Suspense>
-    )
+    ),
   },
   {
     path: "/notification",
@@ -118,7 +162,7 @@ const routes: RouteObject[] = [
       <Suspense fallback={Loading}>
         <NotificationPage />
       </Suspense>
-    )
+    ),
   },
   {
     path: "/chatbot",
@@ -126,8 +170,18 @@ const routes: RouteObject[] = [
       <Suspense fallback={Loading}>
         <ChatbotPage />
       </Suspense>
-    )
-  }
-];
+    ),
+  },
+  {
+    path: "/newssummary",
+    element: (
+      <Suspense fallback={Loading}>
+        <Layout>
+          <NewsSummaryPage />
+        </Layout>
+      </Suspense>
+    ),
+  },
+]
 
-export const router = createBrowserRouter(routes);
+export const router = createBrowserRouter(routes)

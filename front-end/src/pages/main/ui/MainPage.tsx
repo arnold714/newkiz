@@ -1,11 +1,9 @@
-import Layout from '../../../shared/ui/Layout';
 import ProgressGraph from './ProgressGraph';
 import HotTopicNews from './HotTopicNews';
 import RecommendedNews from './RecommendedNews';
 
 export default function MainPage() {
   return (
-    <Layout>
       <div className="h-screen">
         <div className='my-5 flex justify-end '>
           <ProgressGraph />
@@ -17,6 +15,5 @@ export default function MainPage() {
           <RecommendedNews />
         </div>
       </div>
-    </Layout>
-  )
-}
+  );
+};

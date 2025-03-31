@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -18,23 +19,28 @@ import site.newkiz.gameserver.entity.enums.State;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class GameService {
 
   private final SimpMessagingTemplate messagingTemplate;
   private Game game;
 
   @Scheduled(cron = "0 55 17 * * ?")
-  public void createGame() {
+  public void createGame() throws InterruptedException {
+    log.info("게임 생성");
+
     // 게임 생성 및 퀴즈 세팅
     game = new Game();
     game.setQuizList(getTodayQuizList());
   }
 
   public List<Quiz> getTodayQuizList() {
+    log.info("퀴즈 세팅");
+
     List<Quiz> quizList = new ArrayList<>();
     // todo 임의 퀴즈 세팅
     for (int i = 1; i <= 10; i++) {
-      game.getQuizList().add(new Quiz("퀴즈 질문", true, "해설"));
+      quizList.add(new Quiz("퀴즈 질문", true, "해설"));
     }
     return quizList;
   }
@@ -62,6 +68,8 @@ public class GameService {
 
   @Scheduled(cron = "0 0 18 * * ?")
   public void startGame() throws InterruptedException {
+    log.info("게임 시작 - 총 " + game.quizCount() + " 문제");
+
     // 게임 상태 PLAYING 으로 변경
     game.setState(State.PLAYING);
 
@@ -69,7 +77,7 @@ public class GameService {
 
     // 게임의 퀴즈 수 만큼 진행
     for (int currentQuizNumber = 1; currentQuizNumber <= game.quizCount(); currentQuizNumber++) {
-
+      log.info("현재 문제 번호: " + currentQuizNumber);
       // 현재 문제
       game.setCurrentQuizNumber(currentQuizNumber);
       Quiz quiz = game.getCurrnetQuiz();
@@ -79,9 +87,9 @@ public class GameService {
 
       // todo 퀴즈 시간 만큼 대기
       Thread.sleep(10000);
-
       // todo 플레이어들 정답 판정, 오답자 스코어 정보 제공 및 나가기 or 관전 선택
 
+      log.info(currentQuizNumber + " 번 문제 정답: " + quiz.getQuestion());
       // todo 정답 판정 보여주는 시간만큼 대기
       Thread.sleep(3000);
 

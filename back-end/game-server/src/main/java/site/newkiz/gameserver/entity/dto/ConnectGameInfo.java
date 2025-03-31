@@ -4,11 +4,13 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Map;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import site.newkiz.gameserver.entity.Game;
 import site.newkiz.gameserver.entity.Player;
 import site.newkiz.gameserver.entity.enums.State;
 
 @Data
+@NoArgsConstructor
 public class ConnectGameInfo {
   private State state;
   private int timeLeft;

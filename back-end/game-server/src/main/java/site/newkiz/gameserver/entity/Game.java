@@ -42,8 +42,4 @@ public class Game {
   public Quiz getCurrnetQuiz() {
     return this.quizList.get(this.currentQuizNumber - 1);
   }
-
-  public void setCurrentQuizNumber(int currentQuizNumber) {
-    this.currentQuizNumber = currentQuizNumber - 1;
-  }
 }

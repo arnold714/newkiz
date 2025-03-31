@@ -9,7 +9,7 @@ interface QuizModalProps {
 }
 
 export const QuizModal = ({ closeModal }: QuizModalProps) => {
-  const [selectedChoice, setSelectedChoice] = useState(null);
+  const [selectedChoice, setSelectedChoice] = useState<number | null>(null);
   const [isAnswerSubmitted, setIsAnswerSubmitted] = useState(false);
 
 
@@ -27,7 +27,7 @@ export const QuizModal = ({ closeModal }: QuizModalProps) => {
   };
   
   // 답 클릭
-  const handleChoiceClick = (choiceId) => {
+  const handleChoiceClick = (choiceId: number) => {
     setSelectedChoice(choiceId)
   };
 

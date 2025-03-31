@@ -1,6 +1,12 @@
 import { LuX, LuCircle } from "react-icons/lu";
 
-export const QuizResult = ({ isCorrect, onClose }) => {
+interface QuizResultProps {
+  isCorrect: boolean;
+  onClose: () => void;
+
+}
+
+export const QuizResult = ({ isCorrect, onClose }: QuizResultProps) => {
    
 
   return (

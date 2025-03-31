@@ -1,5 +1,5 @@
 // VisxWordCloud.tsx
-import React, { useMemo, useEffect } from "react";
+import { useMemo, useEffect } from "react";
 import { Text } from "@visx/text";
 import Wordcloud from "@visx/wordcloud/lib/Wordcloud";
 import { scaleLog } from "@visx/scale";

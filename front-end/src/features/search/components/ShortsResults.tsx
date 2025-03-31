@@ -1,4 +1,4 @@
-import React from "react";
+
 import Slider from "react-slick";
 import { LuChevronRight } from "react-icons/lu";
 

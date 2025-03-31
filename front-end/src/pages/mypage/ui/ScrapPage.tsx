@@ -1,5 +1,5 @@
 import { LuChevronLeft } from "react-icons/lu"
-import { useNavigate } from "react-router-dom"
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom"
 import Modal from "react-modal"
 import "@pages/mypage/styles/MyPage.css"
 import { useState } from "react"
@@ -8,9 +8,10 @@ import { ScrappedWordModal } from "@/widgets/mypage"
 Modal.setAppElement("#root")
 
 export const ScrapPage = () => {
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(true)
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
 
   const navigate = useNavigate()
+  const location = useLocation()
 
   const scrappedNews = [
     {
@@ -28,55 +29,83 @@ export const ScrapPage = () => {
       title: "'대충격' 그냥 충격...",
       date: "2025/03/25",
     },
+    {
+      id: 4,
+      title: "누가 내 커피 훔쳐 마셨냐...",
+      date: "2025/03/28",
+    },
   ]
   const scrappedWords: any[] = []
 
   return (
-    <div className="w-full flex flex-col overflow-auto px-4 mt-5 scroll">
-      <div className="flex flex-row justify-start items-center gap-3 my-3">
-        <LuChevronLeft className="text-[25px] cursor-pointer" onClick={() => navigate(-1)} />
-        <p className="font-bold text-xl">스크랩</p>
-      </div>
-      <div className="flex flex-col w-full items-start my-5">
-        <p className="text-[#9E9E9E] font-semibold">스크랩한 기사</p>
-        <div className="flex flex-col w-full items-start my-3">
-          {scrappedNews.map((news) => (
-            <div key={news.id} className="flex flex-col w-full border-b border-gray-200 pb-3 mb-3">
-              <p className="font-semibold text-[16px]">{news.title}</p>
-              <p className="text-sm text-[#9E9E9E] mt-1">{news.date}</p>
+    <div className="w-full flex flex-col overflow-auto px-4 mt-4 scroll">
+      {location.pathname === "/mypage/scrap" ? (
+        <>
+          <div className="flex flex-row justify-start items-center gap-3 my-3">
+            <LuChevronLeft className="text-[25px] cursor-pointer" onClick={() => navigate(-1)} />
+            <p className="font-bold text-xl">스크랩</p>
+          </div>
+          <div className="flex flex-col w-full items-start my-5">
+            <p className="text-[#9E9E9E] font-semibold">스크랩한 기사</p>
+            <div className="flex flex-col w-full items-center my-3">
+              {scrappedNews.length > 0 ? (
+                <>
+                  {scrappedNews.slice(0, 3).map((news) => (
+                    <div key={news.id} className="flex flex-col w-full border-b border-gray-200 pb-3 mb-3">
+                      <p className="font-semibold text-[16px]">{news.title}</p>
+                      <p className="text-sm text-[#9E9E9E] mt-1">{news.date}</p>
+                    </div>
+                  ))}
+                  {scrappedNews.length > 3 && ( // 기사 수 3개 이상이면 더보기 버튼 생성
+                    <Link className="flex justify-center items-center text-[#9E9E9E] font-semibold py-2" to="news">더보기 &gt;</Link>
+                  )}
+                </>
+              ) : (
+                <div className="w-full flex justify-center">
+                  <p className="text-sm text-[#9E9E9E]">스크랩한 기사가 없습니다.</p>
+                </div>
+              )}
             </div>
-          ))}
-        </div>
-        {scrappedNews.length > 0 && <button className="flex justify-center items-center w-full text-[#9E9E9E] font-semibold py-2">더보기 &gt;</button>}
-      </div>
-      <div className="flex flex-col w-full items-start my-5">
-        <p className="text-[#9E9E9E] font-semibold">스크랩한 단어</p>
-        <div className="flex flex-col w-full items-start my-3">
-          {scrappedWords.length > 0 ? (
-            scrappedWords.map((word) => (
-              <div key={word.id} className="flex flex-col w-full border-b border-gray-200 pb-3 mb-3">
-                <p className="font-semibold text-[16px]">{word.title}</p>
-                <p className="text-sm text-[#9E9E9E] mt-1">{word.date}</p>
-              </div>
-            ))
-          ) : (
-            <div className="w-full flex justify-center">
-              <p className="text-sm text-[#9E9E9E]">스크랩한 단어가 없습니다.</p>
+          </div>
+          <div className="flex flex-col w-full items-start my-5">
+            <p className="text-[#9E9E9E] font-semibold">스크랩한 단어</p>
+            <div className="flex flex-col w-full items-center my-3">
+              {scrappedWords.length > 0 ? (
+                <>
+                  {scrappedWords.slice(0, 3).map((word) => (
+                    <div key={word.id} className="flex flex-col w-full border-b border-gray-200 pb-3 mb-3">
+                      <p className="font-semibold text-[16px]">{word.title}</p>
+                      <p className="text-sm text-[#9E9E9E] mt-1">{word.date}</p>
+                    </div>
+                  ))}
+                  {scrappedWords.length > 3 && (
+                    <Link className="flex justify-center items-center text-[#9E9E9E] font-semibold py-2" to="words">더보기 &gt;</Link>
+                  )}
+                </>
+              ) : (
+                <div className="w-full flex justify-center mt-5">
+                  <p className="text-sm text-[#9E9E9E]">스크랩한 단어가 없습니다.</p>
+                </div>
+              )}
             </div>
-          )}
+            {/* <button
+              onClick={() => {
+                setIsModalOpen(true)
+              }}
+            >
+              스크랩 단어 모달 테스트 버튼
+            </button> */}
+          </div>
+          <Modal isOpen={isModalOpen} onRequestClose={() => setIsModalOpen(false)} className="modal wrong-answer-modal" overlayClassName="modal-overlay" shouldCloseOnOverlayClick={true}>
+            <ScrappedWordModal closeModal={() => setIsModalOpen(false)} />
+          </Modal>
+        </>
+      ) : (
+        <div className="w-full h-full flex flex-row justify-center pb-20">
+          <Outlet />
         </div>
-        <button
-          onClick={() => {
-            setIsModalOpen(true)
-          }}
-        >
-          스크랩 단어 모달 테스트 버튼
-        </button>
-        {scrappedWords.length > 0 && <button className="flex justify-center items-center w-full text-[#9E9E9E] font-semibold py-2">더보기 &gt;</button>}
-      </div>
-      <Modal isOpen={isModalOpen} onRequestClose={() => setIsModalOpen(false)} className="modal wrong-answer-modal" overlayClassName="modal-overlay" shouldCloseOnOverlayClick={true}>
-        <ScrappedWordModal closeModal={() => setIsModalOpen(false)} />
-      </Modal>
+      )}
+
     </div>
   )
 }

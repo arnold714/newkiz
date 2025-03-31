@@ -1,10 +1,16 @@
 import { useState } from "react"
+import Modal from "react-modal"
 import { FaCheckCircle } from "react-icons/fa"
 import { LuChevronLeft } from "react-icons/lu"
 import { useNavigate } from "react-router-dom"
 import "@shared/styles/CustomScroll.css"
+import { SelectCharacterModal } from "@/widgets/mypage"
+
+Modal.setAppElement("#root")
 
 export const ModifyInfoPage = () => {
+  const [isCharacterMoalOpen, setIsCharacterMoalOpen] = useState<boolean>(false)
+
   const navigate = useNavigate()
   const imgUrl: string = import.meta.env.VITE_AWS_S3_BASE_URL
 
@@ -21,13 +27,13 @@ export const ModifyInfoPage = () => {
   }
 
   return (
-    <div className="w-full h-full flex flex-col mt-5">
+    <div className="w-full flex flex-col mt-5">
       <div className="flex flex-row justify-start items-center gap-3">
         <LuChevronLeft className="text-[25px] cursor-pointer" onClick={() => navigate(-1)} />
         <p className="font-bold text-xl">내 정보</p>
       </div>
       <div className="flex flex-col items-center w-full gap-3">
-        <div className="flex flex-row justify-center my-5">
+        <div className="flex flex-row justify-center my-5 cursor-pointer" onClick={()=>{setIsCharacterMoalOpen(true)}}>
           <img src={`${imgUrl}dinos/nico.png`} alt="user character image" className="h-20" />
         </div>
         <div className="flex flex-col items-start w-full px-3 gap-2">
@@ -61,9 +67,8 @@ export const ModifyInfoPage = () => {
             <button
               key={interest}
               onClick={() => toggleInterest(interest)}
-              className={`w-full h-10 rounded-lg border flex justify-between items-center px-3 ${
-                selectedInterests.includes(interest) ? "border-3 border-[#7CBA36] text-black bg-white" : "border-3 border-gray-200 text-black bg-white"
-              }`}
+              className={`w-full h-10 rounded-lg border flex justify-between items-center px-3 ${selectedInterests.includes(interest) ? "border-3 border-[#7CBA36] text-black bg-white" : "border-3 border-gray-200 text-black bg-white"
+                }`}
             >
               {interest}
               {selectedInterests.includes(interest) ? <FaCheckCircle className="text-[#7CBA36]" /> : <FaCheckCircle className="text-gray-400" />}
@@ -75,6 +80,9 @@ export const ModifyInfoPage = () => {
       <div className="flex flex-row justify-center items-center">
         <button className="flex justify-center items-center bg-[#7CBA36] py-3 rounded-lg w-full text-white font-semibold text-lg">저장하기</button>
       </div>
+      <Modal isOpen={isCharacterMoalOpen} onRequestClose={() => setIsCharacterMoalOpen(false)} className="modal ranking-modal" overlayClassName="modal-overlay" shouldCloseOnOverlayClick={true}>
+        <SelectCharacterModal closeModal={() => setIsCharacterMoalOpen(false)} />
+      </Modal>
     </div>
   )
 }

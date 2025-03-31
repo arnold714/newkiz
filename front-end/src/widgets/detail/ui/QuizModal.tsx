@@ -1,6 +1,6 @@
 import { LuX } from "react-icons/lu";
 import { useState } from "react";
-import { QuizData } from "@/features/detail/types";
+import { QuizData } from "@/features/detail/model/types";
 import { QuizResult } from "./QuizResult";
 import Swal from "sweetalert2";  
 

@@ -182,7 +182,7 @@ const routes: RouteObject[] = [
           <NewsSummaryPage />
         </Layout>
       </Suspense>
-    ),
+    )
   },
   {
     path: "/category",
@@ -192,6 +192,6 @@ const routes: RouteObject[] = [
       </Suspense>
     ),
   }
-]
+];
 
 export const router = createBrowserRouter(routes)

@@ -1,14 +1,23 @@
-
 import { LuChevronLeft, LuBookmark, LuChevronDown, LuChevronUp,  LuBookmarkCheck } from "react-icons/lu";
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { NewsDetail } from "@/features/detail/types";
+import Modal from 'react-modal';
+import "../styles/Detail.css"
+import { QuizModal } from "@/widgets/detail";
+
+Modal.setAppElement('#root');
 
 export default function DetailPage() {
-  const navigate = useNavigate();
 
-  const handleClick = () => {
+  const navigate = useNavigate();
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+
+
+  const handleNewsSummary = () => {
     navigate('/newssummary');
-  }
+  };
+
   
   // 기본 활성 버튼 설정
   const [activeButton, setActiveButton] = useState('상'); 
@@ -18,10 +27,27 @@ export default function DetailPage() {
   // 북마크 상태 관리
   const [isBookmarkClicked, setIsBookmarkClicked] = useState(false);
 
-  const title = "'대충격' '20분 뛴 이토', 김민재 스피드 압도해 완벽 대체 가능  ";
-  const updateDay = '2025.03.13';
-  const reporterName = "신승아";
-  const beforReadingTips = '이 곳에는 뉴스를 보기 전 알고 있으면 좋은 지식들을 제공 할 예정입니다. 참고 해 보세요';
+  const newsDetailData: NewsDetail = {
+    "id": "67e8ed47964fa9feac885922",
+    "title": "[단독] JY, 이건희 ‘디자인 혁명’ 잇는다...삼성, 디자인 인력 수술대에",
+    "link": "https://n.news.naver.com/mnews/article/014/0005328348",
+    "published": "2025-03-30T09:00:00",
+    "category": "경제",
+    "article": "DX 내 사업부 UX, 제품 디자인 등 디자인 인력 타 직군에 재배치 인력 효율화하고, 삼성 제품 정체성 확립 위한 디자인 조직 강화 이재용 회장 '수시 인사' 기조 언급한 만큼, 필요할 때 인력 보강도 서울 서초구 삼성전자 본사 전경. 뉴스1 [파이낸셜뉴스]삼성전자가 디자인 조직 일부 인력 전환배치를 단행한다. 모바일(MX), 영상디스플레이(VD), 생활가전(DA) 등 디바이스경험(DX) 사업 부문 전반의 디자인 인력 효율화를 통해 혁신을 이어간다는 계획이다. 전반적인 디자인 전략 재정비와, 조직 운영 방식까지 손보는 구조적 개편에 나설 것으로 관측된다. 이재용 삼성전자 회장이 이건희 선대회장의 '디자인 혁명'을 계승·발전해 전사적인 변화를 시도하고 있는 것으로 분석된다. 30일 업계에 따르면 삼성전자는 최근 사용자경험(UX), 제품 디자인 등을 포함한 디자인 직군 인력 중 약 10%가량을 타 부서로 전환 배치한 것으로 확인됐다. 특히 우면동 연구개발(R&D)센터 등에서 근무하던 기존 구성원들은 디자인과는 거리가 먼 영업 조직, 전략마케팅실 등으로 이동한 것으로 파악된다. 업계 관계자는 \"전환 배치를 통해 전반적인 디자인 직군의 인력 수는 줄어드는 것으로 안다\"며 \"디자인 쪽은 인력을 줄이고, 인력이 부족한 부서에는 보강하는 조치\"라고 전했다. 이번 전환은 단순한 순환 배치를 넘어, 조직 구조 재정비를 위한 조치로 해석된다. 삼성전자는 지난해부터 반도체(DS) 부문을 중심으로 조직 전반에 대한 경영 진단을 진행하며, '아픈 손가락'을 살펴보고 있다. 디자인 조직 역시 이 같은 기조에 따라 내부적으로 진단을 진행, 인력 구조와 기능을 재정비하는 과정에 들어간 것으로 분석된다. 실제 MZ세대(1980년~2009년 출생)에게 보다 소구력이 필요한 스마트폰, 스마트워치뿐 아니라 생활가전·TV 등 여타 사업부에서도 제품 간 디자인 정체성이 부족하다는 평가가 이어지는 가운데, DX 사업부의 전반적인 디자인 경쟁력 강화가 필요하단 지적이 나오고 있다. 이 같은 움직임은 이 회장이 강조한 '수시 인사' 기조와도 맞닿아 있다는 분석이 나온다. 이 회장은 최근 임원 교육에서 \"국적과 성별을 불문하고 경영진보다 더 뛰어난 인재를 영입하고, 필요하다면 인사는 수시로 이뤄져야 한다\"고 강조한 바 있다. 실제 삼성전자는 디자인 경쟁력 강화를 위해 세계적인 디자이너인 마우로 포르치니를 DX부문 최고디자인책임자(CDO)로 영입하는 방안도 유력하게 검토하며, 외부 인력 수혈에도 적극적으로 나설 것으로 전망된다. 업계에서는 디자인 조직의 전환 배치가 일회성 조치에 그치지 않고 브랜드 전략, 제품 기획, UX 등 관련 기능의 통합 및 재조정으로 이어질 가능성이 높다고 보고 있다. 중장기적 관점에서 디자인 체질 개선과 글로벌 경쟁력 제고를 동시에 노린 조치로 해석된다. 업계 관계자는 \"전환 배치 이후에도 DX 각 사업부 내 디자인 조직의 역할 조정이나 기능 분화가 이어질 것으로 보인다\"며 \"디자인이 중요한 DX 부문에서 승부수를 띄우려는 작업은 계속될 것\"이라고 말했다. #삼성전자 #스마트폰 #갤럭시 #워치 #디자인 #이건희 #비스포크",
+    "img": "https://imgnews.pstatic.net/image/014/2025/03/30/0005328348_001_20250330145311046.jpg?type=w860",
+    "views": 1
+  };
+
+  const publishedDate = new Date(newsDetailData.published);
+
+  const updateDay = `${publishedDate.getFullYear()}.${
+    String(publishedDate.getMonth() + 1).padStart(2, '0')
+  }.${
+    String(publishedDate.getDate()).padStart(2, '0')
+  }`;
+
+  const beforReadingTips = '뉴스를 보기 전 알면 좋을 꿀팁!'
+
 
 
   return (
@@ -67,8 +93,9 @@ export default function DetailPage() {
 
         {/* content */}
         <div className='mt-5'>
-          <div className='font-extrabold text-xl sm:text-3xl'> {title} </div>
-          <div className='mt-2 text-[#757575]'> {updateDay} | {reporterName} </div>
+          <div className='font-extrabold text-xl sm:text-3xl'> {newsDetailData.title} </div>
+          <div className='mt-2 text-[#757575]'> 업데이트: {updateDay} | 
+            <a href={newsDetailData.link}  target="_blank" rel="noopener noreferrer"> 기사 원문</a></div>
           <div className="flex items-center mx-4 mt-4">
             <img src="https://newkiz.s3.ap-northeast-2.amazonaws.com/dinos/nico.png" alt="character_nico" className='w-20 m-1 '/>
             <div className="relative w-full">
@@ -92,15 +119,29 @@ export default function DetailPage() {
             </div>
           </div>
           {/* 뉴스 이미지 */}
-          <div className='m-3'>
-            <img src="/newsImage3.png" alt="" className='w-full'/>
+          <div className='m-5'>
+            <img src={newsDetailData.img} alt="" className='w-full rounded-lg'/>
           </div>
           {/* 뉴스 내용 */}
           <div className='text-xl m-3'>
-            안녕하세요. 여기에는 뉴스 내용이 들어 갈겁니다.
-            근데 아 이제 살짝 지겨운데 속도를 내보려하는데 이거 이거 사전기능 언제 구현할까요?
-            제가 할 수 있을까요...? 이제 버겁네여..^^
-          </div>
+          {(() => {
+            const parts = newsDetailData.article.split('#'); 
+            const firstPart = parts[0]; // 본문(해시태그 제외)
+            const hashtags = parts.slice(1); // 해시태그
+
+            return (
+              <>
+                <div>{firstPart}</div>
+                {hashtags.length > 0 && <br />} 
+                <div className="flex flex-wrap gap-2 mt-2">
+                  {hashtags.map((hashtag, index) => (
+                    <span key={index} className="text-[#0070F3]">#{hashtag.split(' ')[0]}</span>
+                  ))}
+                </div>
+              </>
+            );
+          })()}
+        </div>
         </div>
 
         <div className="h-1.5 w-full bg-[#F5F6FA]"></div>
@@ -113,25 +154,29 @@ export default function DetailPage() {
             <div className='bg-[#F8D460] p-5 w-35 h-35 rounded-[20px] flex flex-col justify-center items-center shadow-[4px_4px_3px_rgba(0,0,0,0.13)]'>
               <img src="https://newkiz.s3.ap-northeast-2.amazonaws.com/assets/ai_news_summary.png" alt="ai_news_summary_icon" 
                 className='h-[80px]'
-                onClick={handleClick}
+                onClick={handleNewsSummary}
               />
               <p className='text-white font-semibold text-2xl'>뉴스 요약</p>
             </div>
 
             {/* 퀴즈 도전 */}
-            <div className='bg-[#FF5C5C] p-5 w-35 h-35 rounded-[20px] flex flex-col justify-center items-center shadow-[4px_4px_3px_rgba(0,0,0,0.13)]'>
-              <img src="https://newkiz.s3.ap-northeast-2.amazonaws.com/assets/quiz.png" alt="quiz_icon" 
-                className='h-[90px]'
-                />
+            <div className='bg-[#FF5C5C] p-5 w-35 h-35 rounded-[20px] flex flex-col justify-center items-center shadow-[4px_4px_3px_rgba(0,0,0,0.13)]'
+              onClick={()=>{setIsModalOpen(true)}}
+            >
+              <img src="https://newkiz.s3.ap-northeast-2.amazonaws.com/assets/quiz.png" 
+                alt="quiz_icon" 
+                className='h-[90px]'/>
               <p className='text-white font-semibold text-2xl'>퀴즈 도전</p>
             </div>
+            <Modal isOpen={isModalOpen} onRequestClose={() => setIsModalOpen(false)} className="modal my-info-modal" overlayClassName="modal-overlay" shouldCloseOnOverlayClick={true}>
+              <QuizModal closeModal={() => setIsModalOpen(false)} />
+            </Modal>
           </div>
         </div>
 
         <div className="h-1.5 w-full bg-[#F5F6FA]"></div>
         <div>
           <p className='m-5 text-2xl font-semibold'>이런 기사도 있어요!</p>
-
         </div>
       </div>
   );

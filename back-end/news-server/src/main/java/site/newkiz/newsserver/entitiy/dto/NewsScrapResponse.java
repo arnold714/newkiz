@@ -6,5 +6,6 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class NewsScrapResponse {
+
   private Boolean isSrcapped;
 }

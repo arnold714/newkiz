@@ -8,6 +8,7 @@ import site.newkiz.newsserver.entitiy.NewsDocument;
 @Getter
 @AllArgsConstructor
 public class NewsListDto {
+
   private List<NewsDocument> newsList;
   private String cursor;
 }

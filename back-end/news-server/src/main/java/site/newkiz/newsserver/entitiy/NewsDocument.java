@@ -12,9 +12,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document(collection = "articles_test")
 //@Document(collection = "articles")
 public class NewsDocument {
+
   @Id
   private String id;
-
   private String title;
   private String link;
   private LocalDateTime published;

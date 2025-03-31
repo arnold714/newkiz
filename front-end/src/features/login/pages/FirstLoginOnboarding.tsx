@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import FirstLoginInfo from "@/features/login/components/FirstLoginInfo";
 import FirstInterestSelection from "@/features/login/components/FirstInterestSelection";
 import FirstCharacterSelection from "@/features/login/components/FirstCharacterSelection";

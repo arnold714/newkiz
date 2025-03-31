@@ -1,4 +1,3 @@
-import React from "react";
 import { LuChevronRight } from "react-icons/lu";
 
 interface SearchResult {

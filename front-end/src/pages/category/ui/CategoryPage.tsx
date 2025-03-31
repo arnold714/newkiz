@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Layout from '@/shared/ui/Layout';
 import { useParams, useNavigate } from 'react-router-dom';
 

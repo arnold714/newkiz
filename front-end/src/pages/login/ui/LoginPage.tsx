@@ -1,4 +1,3 @@
-import React from "react";
 import { handleLogin, checkUserExists } from "@/pages/login/api/LoginApi";
 
 export default function LoginPage() {

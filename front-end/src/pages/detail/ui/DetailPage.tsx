@@ -1,4 +1,4 @@
-import { LuChevronLeft, LuBookmark, LuChevronDown, LuChevronUp, LuBookmarkCheck } from "react-icons/lu";
+import { LuChevronLeft, LuBookmark, LuChevronDown, LuChevronUp, LuBookmarkCheck, LuX } from "react-icons/lu";
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { NewsDetail } from "@/features/detail/model/types";
@@ -6,6 +6,7 @@ import Modal from 'react-modal';
 import "../styles/Detail.css"
 import { QuizModal } from "@/widgets/detail";
 import { Popover } from 'react-tiny-popover';
+import "@shared/styles/CustomScroll.css"
 
 
 Modal.setAppElement('#root');
@@ -15,10 +16,10 @@ export default function DetailPage() {
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [activeButton, setActiveButton] = useState('상'); 
-  const [isAccordionOpen, setIsAccordionOpen] = useState(false);
-  const [isBookmarkClicked, setIsBookmarkClicked] = useState(false);
-  // popover로 표시할 경우 tooltipData를 사용하여 어떤 단어에 대해 popover를 열지 제어합니다.
-  const [popoverData, setPopoverData] = useState<{ word: string, definition: string } | null>(null);
+  const [isAccordionOpen, setIsAccordionOpen] = useState<boolean>(false);
+  const [isNewsScrapped, setIsNewsScrapped] = useState<boolean>(false);
+  const [isWordScrapped, setIsWordScrapped] = useState<boolean>(false);
+  const [popoverData, setPopoverData] = useState<{ word: string; definition: string; index: number; } | null>(null);
 
   const handleNewsSummary = () => {
     navigate('/newssummary');
@@ -61,220 +62,240 @@ export default function DetailPage() {
 
   const beforReadingTips = '뉴스를 보기 전 알면 좋을 꿀팁!';
 
-  const handleWordClick = (word: string) => {
+  //단어 클릭시 popover 동작 함수
+  const handleWordClick = (word: string, index: number ) => {
     const found = newsDetailData.textList.find(item => item.text === word);
     if (found) {
       setPopoverData({
         word: found.text,
         definition: found.content,
+        index,
       });
+    } else {
+      setPopoverData(null); 
     }
   };
 
   return (
-    <div className="bg-white w-[calc(100%-70px)] mx-auto my-5 p-5 rounded-xl overflow-y-auto pb-18 max-h-[calc(100vh-100px)]">
-      <div className="flex justify-between items-center">
-        {/* 뒤로 가기 아이콘 */}
-        <LuChevronLeft size={25} />
+    <div className="overflow-y-auto max-h-[calc(100vh-100px)] ">
+      <div className="bg-white p-5 mx-7 mt-7 rounded-xl pb-18">
+        <div className="flex justify-between items-center">
+          {/* 뒤로 가기 아이콘 */}
+          <LuChevronLeft size={25} />
 
-        {/* 버튼 그룹 */}
-        <div className="flex items-center gap-2">
-          <div className='bg-[#F5F6FA] rounded-md px-3 py-1'>
-            {['상', '중', '하'].map((label) => (
+          {/* 버튼 그룹 */}
+          <div className="flex items-center gap-2">
+            <div className='bg-[#F5F6FA] rounded-md px-3 py-1'>
+              {['상', '중', '하'].map((label) => (
+                <button
+                  key={label}
+                  onClick={() => setActiveButton(label)}
+                  className={`w-10 h-7 text-center rounded-md text-ms ${
+                    activeButton === label ? 'bg-[#7CBA36] text-white' : ''
+                  }`}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+
+            {/* 북마크 아이콘 */}
+            {isNewsScrapped ? (
+              <LuBookmarkCheck
+                size={25}
+                onClick={() => setIsNewsScrapped(!isNewsScrapped)}
+                className="cursor-pointer text-black"
+              />
+            ) : (
+              <LuBookmark
+                size={25}
+                onClick={() => setIsNewsScrapped(!isNewsScrapped)}
+                className="cursor-pointer text-black"
+              />
+            )}
+          </div>
+        </div>
+
+        {/* content */}
+        <div className='mt-5'>
+          <div className='font-extrabold text-xl sm:text-3xl'>{newsDetailData.title}</div>
+          <div className='mt-2 text-[#757575]'>
+            업데이트: {updateDay} | 
+            <a href={newsDetailData.link} target="_blank" rel="noopener noreferrer"> 기사 원문</a>
+          </div>
+          <div className="flex items-center mx-4 mt-4">
+            <img src="https://newkiz.s3.ap-northeast-2.amazonaws.com/dinos/nico.png" alt="character_nico" className='w-20 m-1' />
+            <div className="relative w-full">
               <button
-                key={label}
-                onClick={() => setActiveButton(label)}
-                className={`w-10 h-7 text-center rounded-md text-ms ${
-                  activeButton === label ? 'bg-[#7CBA36] text-white' : ''
-                }`}
+                onClick={() => setIsAccordionOpen(!isAccordionOpen)}
+                className="border-2 border-[#D9D9D9] p-2 rounded-ms bg-[#F4F4F8] text-[#757575] w-full flex flex-col items-start"
               >
-                {label}
-              </button>
-            ))}
-          </div>
-
-          {/* 북마크 아이콘 */}
-          {isBookmarkClicked ? (
-            <LuBookmarkCheck
-              size={25}
-              onClick={() => setIsBookmarkClicked(!isBookmarkClicked)}
-              className="cursor-pointer text-black"
-            />
-          ) : (
-            <LuBookmark
-              size={25}
-              onClick={() => setIsBookmarkClicked(!isBookmarkClicked)}
-              className="cursor-pointer text-black"
-            />
-          )}
-        </div>
-      </div>
-
-      {/* content */}
-      <div className='mt-5'>
-        <div className='font-extrabold text-xl sm:text-3xl'>{newsDetailData.title}</div>
-        <div className='mt-2 text-[#757575]'>
-          업데이트: {updateDay} | 
-          <a href={newsDetailData.link} target="_blank" rel="noopener noreferrer"> 기사 원문</a>
-        </div>
-        <div className="flex items-center mx-4 mt-4">
-          <img src="https://newkiz.s3.ap-northeast-2.amazonaws.com/dinos/nico.png" alt="character_nico" className='w-20 m-1' />
-          <div className="relative w-full">
-            <button
-              onClick={() => setIsAccordionOpen(!isAccordionOpen)}
-              className="border-2 border-[#D9D9D9] p-2 rounded-ms bg-[#F4F4F8] text-[#757575] w-full flex flex-col items-start"
-            >
-              {/* 아코디언 버튼 */}
-              <div className="flex justify-between w-full text-xl p-2">
-                <span>기사를 보기 전에 보면 좋을 거 같아요!</span>
-                <span>{isAccordionOpen ? <LuChevronUp size={25}/> : <LuChevronDown size={25}/>}</span>
-              </div>
-              
-              {/* 기사 보기 전 내용 */}
-              {isAccordionOpen && (
-                <div className="absolute top-[95%] left-0 bg-[#F4F4F8] border-2 border-[#D9D9D9] text-[#202020] p-3 w-full text-left rounded-b-md text-ms z-10 m-0">
-                  {beforReadingTips}
+                {/* 아코디언 버튼 */}
+                <div className="flex justify-between w-full text-xl p-2">
+                  <span>기사를 보기 전에 보면 좋을 거 같아요!</span>
+                  <span>{isAccordionOpen ? <LuChevronUp size={25}/> : <LuChevronDown size={25}/>}</span>
                 </div>
-              )}
-            </button>
-          </div>
-        </div>
-        {/* 뉴스 이미지 */}
-        <div className='m-5'>
-          <img src={newsDetailData.img} alt="" className='w-full rounded-lg' />
-        </div>
-        {/* 뉴스 내용 */}
-        <div className="text-xl m-3">
-          {(() => {
-            // 본문을 해시태그 기준으로 분리
-            const parts = newsDetailData.article.split('#');
-            const firstPart = parts[0]; // 일반 텍스트
-            const hashtags = parts.slice(1); // 해시태그들
-
-            return (
-              <>
-                {/* 일반 텍스트 */}
-                <div>
-                  {firstPart.split(' ').map((word, index) => {
-                    const matchingItem = newsDetailData.textList.find(item => item.text === word);
-                    const isMatch = Boolean(matchingItem);
-                    return (
-                      <Popover
-                        key={index}
-                        isOpen={popoverData?.word === word}
-                        positions={['top', 'bottom', 'left', 'right']}  // 원하는 위치 지정
-                        content={
-                          <div className="bg-white border border-gray-300 p-2.5 rounded max-w-[300px] shadow-[0_2px_8px_rgba(0,0,0,0.15)] relative">
-                            <button
-                              onClick={() => setPopoverData(null)}
-                              className="absolute top-1 right-1 bg-transparent border-0 text-[16px] cursor-pointer"
-                            >
-                              &times;
-                            </button>
-                            <h4 className="m-0 mb-1">{popoverData?.word}</h4>
-                            <p className="m-0">{popoverData?.definition}</p>
-                          </div>
-                        }
-                      >
-                        <span
-                          onClick={() => isMatch && handleWordClick(word)}
-                          className={isMatch ? "text-blue-500 underline cursor-pointer" : ""}
-                        >
-                          {word}{" "}
-                        </span>
-                      </Popover>
-                    );
-                  })}
-                </div>
-
-                {/* 해시태그 */}
-                {hashtags.length > 0 && (
-                  <>
-                    <br />
-                    <div className="flex flex-wrap gap-2 mt-2">
-                      {hashtags.map((hashtag, index) => {
-                        const hashtagText = hashtag.split(' ')[0];
-                        return (
-                          <Popover
-                            key={index}
-                            isOpen={popoverData?.word === hashtagText}
-                            positions={['top']}
-                            content={
-                              <div className="bg-white border border-gray-300 p-2.5 rounded max-w-[300px] shadow-[0_2px_8px_rgba(0,0,0,0.15)] relative">
-                                <button
-                                  onClick={() => setPopoverData(null)}
-                                  className="absolute top-1 right-1 bg-transparent border-0 text-[16px] cursor-pointer"
-                                >
-                                  &times;
-                                </button>
-                                <h4 className="m-0 mb-1">{popoverData?.word}</h4>
-                                <p className="m-0">{popoverData?.definition}</p>
-                              </div>
-                            }
-                          >
-                            <span
-                              onClick={() => handleWordClick(hashtagText)}
-                              className="text-[#0070F3] cursor-pointer"
-                            >
-                              #{hashtagText}
-                            </span>
-                          </Popover>
-                        );
-                      })}
-                    </div>
-                  </>
+                
+                {/* 기사 보기 전 내용 */}
+                {isAccordionOpen && (
+                  <div className="absolute top-[95%] left-0 bg-[#F4F4F8] border-2 border-[#D9D9D9] text-[#202020] p-3 w-full text-left rounded-b-md text-ms z-10 m-0">
+                    {beforReadingTips}
+                  </div>
                 )}
-              </>
-            );
-          })()}
-        </div>
-      </div>
-
-      <div className="h-1.5 w-full bg-[#F5F6FA]"></div>
-
-      {/* 참여 컨텐츠 */}
-      <div>
-        <p className='m-5 text-2xl font-bold'>함께 참여해 볼까요?</p>
-        <div className='flex justify-center items-center gap-10 m-5'>
-          {/* 뉴스 요약 */}
-          <div className='bg-[#F8D460] p-5 w-35 h-35 rounded-[20px] flex flex-col justify-center items-center shadow-[4px_4px_3px_rgba(0,0,0,0.13)]'>
-            <img
-              src="https://newkiz.s3.ap-northeast-2.amazonaws.com/assets/ai_news_summary.png"
-              alt="ai_news_summary_icon"
-              className='h-[80px]'
-              onClick={handleNewsSummary}
-            />
-            <p className='text-white font-semibold text-2xl'>뉴스 요약</p>
+              </button>
+            </div>
           </div>
-
-          {/* 퀴즈 도전 */}
-          <div
-            className='bg-[#FF5C5C] p-5 w-35 h-35 rounded-[20px] flex flex-col justify-center items-center shadow-[4px_4px_3px_rgba(0,0,0,0.13)]'
-            onClick={() => { setIsModalOpen(true) }}
-          >
-            <img
-              src="https://newkiz.s3.ap-northeast-2.amazonaws.com/assets/quiz.png"
-              alt="quiz_icon"
-              className='h-[90px]'
-            />
-            <p className='text-white font-semibold text-2xl'>퀴즈 도전</p>
+          {/* 뉴스 이미지 */}
+          <div className='m-5'>
+            <img src={newsDetailData.img} alt="" className='w-full rounded-lg' />
           </div>
-          <Modal
-            isOpen={isModalOpen}
-            onRequestClose={() => setIsModalOpen(false)}
-            className="modal my-info-modal"
-            overlayClassName="modal-overlay"
-            shouldCloseOnOverlayClick={true}
-          >
-            <QuizModal closeModal={() => setIsModalOpen(false)} />
-          </Modal>
-        </div>
-      </div>
+          {/* 뉴스 내용 */}
+          <div className="text-xl m-3">
+            {(() => {
+              // 본문을 해시태그와 분리
+              const parts = newsDetailData.article.split('#');
+              const firstPart = parts[0]; // 일반 텍스트
+              const hashtags = parts.slice(1); // 해시태그들
 
-      <div className="h-1.5 w-full bg-[#F5F6FA]"></div>
-      <div>
-        <p className='m-5 text-2xl font-semibold'>이런 기사도 있어요!</p>
+              return (
+                <>
+                  {/* 본문(해시태그 제외) */}
+                  <div>
+                    {firstPart.split(' ').map((word, index) => {
+                      const matchingItem = newsDetailData.textList.find(item => item.text === word);
+                      const isMatch = Boolean(matchingItem);
+                      return (
+                        <Popover
+                          key={index}
+                          isOpen={popoverData?.word === word && popoverData?.index === index} 
+                          positions={['top', 'bottom', 'left', 'right']}  
+                          content={
+                            <div className="bg-white border border-gray-300 p-2.5 rounded min-w-[200px] shadow-[0_2px_8px_rgba(0,0,0,0.15)] relative">
+                              <div className="flex items-center justify-between relative mb-2">
+                                {isWordScrapped ? (
+                                  <LuBookmarkCheck
+                                    size={25}
+                                    onClick={() => setIsWordScrapped(!isWordScrapped)}
+                                    className="cursor-pointer text-black"
+                                  />
+                                ) : (
+                                  <LuBookmark
+                                    size={25}
+                                    onClick={() => setIsWordScrapped(!isWordScrapped)}
+                                    className="cursor-pointer text-black"
+                                  />
+                                )}
+                                <LuX
+                                  size={25}
+                                  onClick={() => setPopoverData(null)}
+                                  className="cursor-pointer"
+                                />
+                              </div>
+                              <h4 className="text-2xl font-semibold m-0 mb-1">{popoverData?.word}</h4>
+                              <p className="text-xl m-0">{popoverData?.definition}</p>
+                            </div>
+                          }
+                        >
+                          <span
+                            onClick={() => isMatch && handleWordClick(word, index)}
+                            className={isMatch ? "text-blue-500 underline cursor-pointer" : ""}
+                          >
+                            {word}{" "}
+                          </span>
+                        </Popover>
+                      );
+                    })}
+                  </div>
+
+                  {/* 해시태그 */}
+                  {hashtags.length > 0 && (
+                    <>
+                      <br />
+                      <div className="flex flex-wrap gap-2 mt-2">
+                        {hashtags.map((hashtag, index) => {
+                          const hashtagText = hashtag.split(' ')[0];
+                          return (
+                            <Popover
+                              key={index}
+                              isOpen={popoverData?.word === hashtagText && popoverData?.index === index}
+                              positions={['top']}
+                              content={
+                                <div className="bg-white border border-gray-300 p-2.5 rounded max-w-[300px] shadow-[0_2px_8px_rgba(0,0,0,0.15)] relative">
+                                  <LuX
+                                    onClick={() => setPopoverData(null)}
+                                    className="absolute top-1 right-1 bg-transparent border-0 text-[16px] cursor-pointer"
+                                  />
+                                  
+                                  <h4 className="m-0 mb-1">{popoverData?.word}</h4>
+                                  <p className="m-0">{popoverData?.definition}</p>
+                                </div>
+                              }
+                            >
+                              <span
+                                onClick={() => handleWordClick(hashtagText,index)}
+                                className="text-[#0070F3] cursor-pointer"
+                              >
+                                #{hashtagText}
+                              </span>
+                            </Popover>
+                          );
+                        })}
+                      </div>
+                    </>
+                  )}
+                </>
+              );
+            })()}
+          </div>
+        </div>
+
+        <div className="h-1.5 w-full bg-[#F5F6FA]"></div>
+
+        {/* 참여 컨텐츠 */}
+        <div>
+          <p className='m-5 text-2xl font-bold'>함께 참여해 볼까요?</p>
+          <div className='flex justify-center items-center gap-10 m-5'>
+            {/* 뉴스 요약 */}
+            <div className='bg-[#F8D460] p-5 w-35 h-35 rounded-[20px] flex flex-col justify-center items-center shadow-[4px_4px_3px_rgba(0,0,0,0.13)]'>
+              <img
+                src="https://newkiz.s3.ap-northeast-2.amazonaws.com/assets/ai_news_summary.png"
+                alt="ai_news_summary_icon"
+                className='h-[80px]'
+                onClick={handleNewsSummary}
+              />
+              <p className='text-white font-semibold text-2xl'>뉴스 요약</p>
+            </div>
+
+            {/* 퀴즈 도전 */}
+            <div
+              className='bg-[#FF5C5C] p-5 w-35 h-35 rounded-[20px] flex flex-col justify-center items-center shadow-[4px_4px_3px_rgba(0,0,0,0.13)]'
+              onClick={() => { setIsModalOpen(true) }}
+            >
+              <img
+                src="https://newkiz.s3.ap-northeast-2.amazonaws.com/assets/quiz.png"
+                alt="quiz_icon"
+                className='h-[90px]'
+              />
+              <p className='text-white font-semibold text-2xl'>퀴즈 도전</p>
+            </div>
+            <Modal
+              isOpen={isModalOpen}
+              onRequestClose={() => setIsModalOpen(false)}
+              className="modal my-info-modal"
+              overlayClassName="modal-overlay"
+              shouldCloseOnOverlayClick={true}
+            >
+              <QuizModal closeModal={() => setIsModalOpen(false)} />
+            </Modal>
+          </div>
+        </div>
+
+        <div className="h-1.5 w-full bg-[#F5F6FA]"></div>
+        <div>
+          <p className='m-5 text-2xl font-semibold'>이런 기사도 있어요!</p>
+        </div>
       </div>
     </div>
+    
   );
 }

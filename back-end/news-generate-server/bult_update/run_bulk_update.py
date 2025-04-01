@@ -155,7 +155,7 @@ async def generate_quiz_from_llm(article_text: str, keyword_list: list[str]) -> 
     try:
         quiz_data = json.loads(raw)
     except Exception as e:
-        print("⚠️ 퀴즈 JSON 파싱 실패:", e)
+        print("⚠️ 퀴즈 JSON 파싱 실패:", e, flush=True)
         quiz_data = {
             "ox_quiz": {"question": "", "answer": ""},
             "multiple_choice_quiz": {"question": "", "options": [], "answer": ""}
@@ -176,13 +176,13 @@ async def update_item_context_and_words(item_id: ObjectId, context_list, keyword
     return result
 
 async def run_bulk_update():
-    items_cursor = collection.find({}).sort("published", -1)
+    items_cursor = await collection.find({}).sort("published", -1).to_list(length=1000)
     updated = 0
     skipped = 0
 
-    print("✅ start")
+    print("✅ start", flush=True)
 
-    async for item in items_cursor:
+    for item in items_cursor:
         item_id = item["_id"]
         article_text = get_original_text(item)
         if not article_text:
@@ -195,18 +195,19 @@ async def run_bulk_update():
             quiz_data = await generate_quiz_from_llm(article_text, keywords)
 
             result = await update_item_context_and_words(item_id, context_list, keywords, quiz_data)
+            print(f"[INFO] ID {item_id}: {result}", flush=True)
             if result.modified_count > 0:
                 updated += 1
             else:
                 skipped += 1
 
         except Exception as e:
-            print(f"[ERROR] ID {item_id}: {e}")
+            print(f"[ERROR] ID {item_id}: {e}", flush=True)
             skipped += 1
 
-    print("✅ Bulk update complete!")
-    print(f"▶ Updated: {updated}")
-    print(f"▶ Skipped: {skipped}")
+    print("✅ Bulk update complete!", flush=True)
+    print(f"▶ Updated: {updated}", flush=True)
+    print(f"▶ Skipped: {skipped}", flush=True)
 
 if __name__ == "__main__":
     asyncio.run(run_bulk_update())

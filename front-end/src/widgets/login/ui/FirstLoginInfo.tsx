@@ -1,6 +1,9 @@
 import React, { ChangeEvent, useState } from "react";
 import SchoolSearchModal from "@/widgets/login/ui/SchoolSearchModal";
 import { LuChevronLeft } from "react-icons/lu";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { ko } from "date-fns/locale";
 
 interface BasicInfo {
   nickname: string;
@@ -43,6 +46,10 @@ export default function FirstLoginInfo({
     // 유효성 검사 후
     nextStep();
   };
+
+  const [birthdateObj, setBirthdateObj] = useState<Date | null>(
+    basicInfo.birthdate ? new Date(basicInfo.birthdate) : null
+  );
 
   return (
     <div className="bg-white shadow-[0px_0px_20px_rgba(0,0,0,0.15)] rounded-[15px] w-full h-full max-h-[90vh] flex flex-col relative">
@@ -87,13 +94,24 @@ export default function FirstLoginInfo({
           <label className="block text-[#1C1C1C] font-semibold text-lg mb-1">
             생년월일
           </label>
-          <input
-            type="date" 
-            name="birthdate"
-            placeholder="연도-월-일"
-            value={basicInfo.birthdate}
-            onChange={handleChange}
-            className="w-full bg-[#FAFAFA] border border-[#EFEFEF] rounded-lg px-3 py-3 text-md"
+          <DatePicker
+            selected={birthdateObj}
+            onChange={(date: Date | null) => {
+              setBirthdateObj(date);
+              setBasicInfo((prev) => ({
+                ...prev,
+                birthdate: date ? date.toISOString().split("T")[0] : "",
+              }));
+            }}
+            locale={ko}
+            placeholderText="연도-월-일"
+            dateFormat="yyyy-MM-dd"
+            maxDate={new Date()}
+            showYearDropdown
+            scrollableYearDropdown
+            yearDropdownItemNumber={100}
+            className="w-full bg-[#FAFAFA] border border-[#EFEFEF] rounded-lg px-3 py-3 text-base"
+            popperPlacement="bottom-start"
           />
         </div>
 

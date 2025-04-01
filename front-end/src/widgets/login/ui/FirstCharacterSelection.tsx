@@ -51,10 +51,10 @@ export default function FirstCharacterSelection({
   };
 
   return (
-    <div className="w-full h-full">
-      {/* 상대 포지셔닝을 위한 컨테이너 */}
-      <div className="absolute inset-0 rounded-[15px] shadow-[0px_0px_20px_rgba(0,0,0,0.15)] flex flex-col overflow-hidden">
-        {/* 배경 장식 요소 */}
+    <div className="w-full h-full max-w-[600px] mx-auto relative">
+      {/* 컨테이너를 max-width로 제한하고 중앙 정렬 */}
+      <div className="w-full h-full max-h-[90vh] rounded-[15px] shadow-[0px_0px_20px_rgba(0,0,0,0.15)] flex flex-col overflow-hidden bg-white">
+        {/* 배경 장식 요소 - 원래 그대로 유지 */}
         <div className="absolute top-0 left-0 right-0 h-43 bg-gradient-to-r from-blue-100 via-purple-100 to-pink-100 opacity-60" />
         
         {/* 고정 헤더 부분 - 상단에 고정 */}
@@ -100,7 +100,7 @@ export default function FirstCharacterSelection({
         </div>
         
         {/* 스크롤 영역 - 고정 헤더 아래 배치, 화면 끝까지 확장 */}
-        <div className="relative z-10 flex-1 px-6 overflow-y-auto" style={{ height: 'calc(100% - 180px)' }}>
+        <div className="relative z-10 flex-1 px-6 overflow-y-auto">
           {/* 회색 구분선 */}
           <div className="w-full border-t border-gray-200 mb-3" />
 
@@ -130,21 +130,21 @@ export default function FirstCharacterSelection({
               </button>
             ))}
           </div>
+        </div>
 
-          {/* 다음 버튼 */}
-          <div className="sticky bottom-4 mt-2 mb-4">
-            <button
-              onClick={selectedCharacter ? handleNext : undefined}
-              disabled={!selectedCharacter}
-              className={`w-full font-semibold text-lg py-3 rounded-lg transition-all duration-300 transform
-                ${selectedCharacter 
-                  ? "bg-gradient-to-r from-indigo-500 to-blue-500 text-white cursor-pointer hover:from-indigo-600 hover:to-blue-600 hover:shadow-lg" 
-                  : "bg-[#F5F6FA] text-[#BDBDBD] cursor-not-allowed"
-                }`}
-            >
-              {selectedCharacter ? "뉴스 보러가기" : "뉴스 보러가기"}
-            </button>
-          </div>
+        {/* 다음 버튼 - 하단에 고정, 흰색 배경 추가 */}
+        <div className="sticky bottom-0 left-0 right-0 z-20 px-6 py-4 bg-white border-t border-gray-100 shadow-[0_-4px_10px_rgba(0,0,0,0.03)]">
+          <button
+            onClick={selectedCharacter ? handleNext : undefined}
+            disabled={!selectedCharacter}
+            className={`w-full font-semibold text-lg py-3 rounded-lg transition-all duration-300 transform
+              ${selectedCharacter 
+                ? "bg-gradient-to-r from-indigo-500 to-blue-500 text-white cursor-pointer hover:from-indigo-600 hover:to-blue-600 hover:shadow-lg" 
+                : "bg-[#F5F6FA] text-[#BDBDBD] cursor-not-allowed"
+              }`}
+          >
+            {selectedCharacter ? "뉴스 보러가기" : "뉴스 보러가기"}
+          </button>
         </div>
       </div>
     </div>

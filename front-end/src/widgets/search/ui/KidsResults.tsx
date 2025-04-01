@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { LuChevronRight, LuHeart, LuBookmark } from "react-icons/lu";
-import { FaHeart, FaBookmark } from "react-icons/fa";
+import { LuChevronRight } from "react-icons/lu";
+import { FaHeart, FaBookmark, FaRegBookmark, FaRegHeart } from "react-icons/fa6";
 
 interface SearchResult {
   id: number;
@@ -98,7 +98,7 @@ export function KidsResults({ results, isFilterView = false, onSeeMore }: KidsRe
                       {likedItems[item.id] ? (
                         <FaHeart size={22} className="text-red-500" />
                       ) : (
-                        <LuHeart size={22} className="text-gray-600" />
+                        <FaRegHeart size={22} className="text-gray-600" />
                       )}
                     </button>
                     <button 
@@ -108,7 +108,7 @@ export function KidsResults({ results, isFilterView = false, onSeeMore }: KidsRe
                       {bookmarkedItems[item.id] ? (
                         <FaBookmark size={22} className="text-blue-500" />
                       ) : (
-                        <LuBookmark size={22} className="text-gray-600" />
+                        <FaRegBookmark size={22} className="text-gray-600" />
                       )}
                     </button>
                   </div>

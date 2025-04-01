@@ -30,8 +30,6 @@ const SearchResultsPage = lazy(() => import("@pages/search").then((module) => ({
 const NotFoundPage = lazy(() => import("@pages/notfound").then((module) => ({ default: module.NotFoundPage })))
 // 첫 로그인 정보 입력 페이지
 const FirstLoginOnboarding = lazy(() => import("@pages/login").then((module) => ({ default: module.FirstLoginOnboarding })))
-// 알림 페이지
-const NotificationPage = lazy(() => import("@pages/notification").then((module) => ({ default: module.NotificationPage })))
 // 챗봇 페이지
 const ChatbotPage = lazy(() => import("../../pages/chatbot").then((module) => ({ default: module.ChatbotPage })))
 // ai뉴스 요약 페이지
@@ -181,14 +179,6 @@ const routes: RouteObject[] = [
     element: (
       <Suspense fallback={Loading}>
         <FirstLoginOnboarding />
-      </Suspense>
-    ),
-  },
-  {
-    path: "/notification",
-    element: (
-      <Suspense fallback={Loading}>
-        <NotificationPage />
       </Suspense>
     ),
   },

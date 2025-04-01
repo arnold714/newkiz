@@ -1,8 +1,8 @@
 import { useState } from "react";
-import FirstLoginInfo from "@/features/login/components/FirstLoginInfo";
-import FirstInterestSelection from "@/features/login/components/FirstInterestSelection";
-import FirstCharacterSelection from "@/features/login/components/FirstCharacterSelection";
-import FinalConfirm from "@/features/login/components/FinalConfirm";
+import FirstLoginInfo from "@/widgets/login/ui/FirstLoginInfo";
+import FirstInterestSelection from "@/widgets/login/ui/FirstInterestSelection";
+import FirstCharacterSelection from "@/widgets/login/ui/FirstCharacterSelection";
+import FinalConfirm from "@/widgets/login/ui/FinalConfirm";
 
 export default function FirstLoginOnboarding() {
   const [step, setStep] = useState(1);
@@ -56,28 +56,9 @@ export default function FirstLoginOnboarding() {
     }
   };
 
-  // Style for full viewport background
-  const containerStyle = {
-    width: '100%',
-    minHeight: '100vh',
-    backgroundColor: '#FFFFFF',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: '1rem'
-  };
-
-  // Style for content container (max 600px)
-  const contentStyle = {
-    width: '100%',
-    maxWidth: '600px',
-    margin: '0 auto'
-  };
-
   return (
-    // Use inline styles for critical layout to avoid any CSS conflicts
-    <div style={containerStyle}>
-      <div style={contentStyle}>
+    <div className="w-full min-h-screen bg-white flex items-center justify-center p-4">
+      <div className="w-full max-w-[600px] mx-auto">
         {renderStep()}
       </div>
     </div>

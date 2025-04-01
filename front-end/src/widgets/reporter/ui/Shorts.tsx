@@ -38,8 +38,8 @@ export const Shorts = () => {
                     dots={false}
                 >
                 {shortsData.map((item) => (
-                    <div key={item.id} className="bg-white w-[10px] h-[120px] p-2 rounded-lg shadow-[4px_4px_3px_rgba(0,0,0,0.13)]">
-                        <div className="">
+                    <div key={item.id} className="bg-white w-[10px] h-[150px] p-2 rounded-lg shadow-[4px_4px_3px_rgba(0,0,0,0.13)]">
+                        <div className="font-semibold">
                             {item.title}
                         </div>
                     </div>

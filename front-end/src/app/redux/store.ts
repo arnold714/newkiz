@@ -1,9 +1,9 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { mypageReducer } from "@features/mypage";
+import { categoryReducer } from "@/shared/model/categorySlice";
 
 export const store = configureStore({
   reducer: {
-    mypage: mypageReducer,
+    category: categoryReducer,
   },
 });
 

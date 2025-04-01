@@ -1,12 +1,9 @@
 import React, { useState } from 'react';
 import { LuX } from 'react-icons/lu';
-import Header from '@/shared/ui/Header';
-import NavBar from '@/shared/ui/NavBar';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { closeCategoryModal } from '@shared/model/categorySlice';
 
-interface MenuModalProps {
-  onClose: () => void;
-}
 
 interface Category {
   id: string;
@@ -15,9 +12,14 @@ interface Category {
   color: string;
 }
 
-export default function MenuModal({ onClose }: MenuModalProps) {
-  const navigate = useNavigate();
+export const CategoryModal = () => {
   const [selectedCategory, setSelectedCategory] = useState('news');
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const handleCloseModal = () => {
+    dispatch(closeCategoryModal());
+  };
 
   const categories = [
     { id: 'news', name: '뉴키즈 뉴스' },
@@ -45,41 +47,36 @@ export default function MenuModal({ onClose }: MenuModalProps) {
   const handleCategoryClick = (categoryId: string) => {
     setSelectedCategory(categoryId);
     navigate('/category');
-    onClose();
+    handleCloseModal();
   };
 
   const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target === e.currentTarget) {
-      onClose();
+      handleCloseModal();
     }
   };
 
   return (
-    <div 
-      className="fixed inset-0 bg-[#BFD46F] bg-opacity-50 z-50 flex flex-col"
+    <div
+      className="inset-0 bg-[#BFD46F] bg-opacity-50 z-50 flex flex-col"
       onClick={handleBackdropClick}
     >
-      <div>
-        <Header />
-      </div>
-
       <div className="bg-gray-100 px-6 py-3 flex justify-between items-center border-b border-gray-100">
-        <h2 className="text-3xl font-bold">카테고리 메뉴</h2>
-        <LuX size={30} onClick={onClose} className="cursor-pointer" />
+        <h2 className="text-2xl font-bold">카테고리</h2>
+        <LuX size={30} onClick={handleCloseModal} className="cursor-pointer" />
       </div>
 
       <div className="flex flex-1 overflow-hidden">
         <div className="w-1/3 bg-gray-100 overflow-y-auto">
           {categories.map((category) => (
-            <div 
+            <div
               key={category.id}
               className={`py-4 px-4 hover:bg-gray-200 cursor-pointer border-b border-gray-200 
                           ${selectedCategory === category.id ? 'bg-white font-bold' : ''}`}
               onClick={() => setSelectedCategory(category.id)}
             >
-              <span className={`text-xl font-semibold ${
-                selectedCategory === category.id ? 'text-green-500' : 'text-gray-700'
-              }`}>{category.name}</span>
+              <span className={`text-lg font-semibold ${selectedCategory === category.id ? 'text-green-500' : 'text-gray-700'
+                }`}>{category.name}</span>
             </div>
           ))}
         </div>
@@ -89,7 +86,7 @@ export default function MenuModal({ onClose }: MenuModalProps) {
             <h3 className="text-xl font-medium">
               {categories.find(cat => cat.id === selectedCategory)?.name || '뉴키즈 뉴스'}
             </h3>
-            <span 
+            <span
               className="text-lg text-gray-500 cursor-pointer"
               onClick={() => handleCategoryClick(selectedCategory)}
             >
@@ -99,15 +96,15 @@ export default function MenuModal({ onClose }: MenuModalProps) {
 
           <div className="grid grid-cols-3 gap-4 mb-4">
             {popularCategories.map((category) => (
-              <div 
-                key={category.id} 
+              <div
+                key={category.id}
                 className="cursor-pointer"
                 onClick={() => handleCategoryClick(`sports/${category.id}`)}
               >
                 <div className={`rounded-lg overflow-hidden shadow-sm ${category.color} aspect-square flex flex-col`}>
                   <div className="flex-grow flex items-center justify-center">
-                    <img 
-                      src={getIconUrl(category.iconName)} 
+                    <img
+                      src={getIconUrl(category.iconName)}
                       alt={category.name}
                       className="w-1/2 h-1/2 object-contain"
                     />
@@ -120,10 +117,6 @@ export default function MenuModal({ onClose }: MenuModalProps) {
             ))}
           </div>
         </div>
-      </div>
-
-      <div className="mt-auto">
-        <NavBar />
       </div>
     </div>
   );

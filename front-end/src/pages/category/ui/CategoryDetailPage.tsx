@@ -24,7 +24,7 @@ interface NewsItem {
   description: string;
 }
 
-export default function CategoryPage() {
+export default function CategoryDetailPage() {
   const { categoryId } = useParams<{ categoryId?: string }>();
   const navigate = useNavigate();
   

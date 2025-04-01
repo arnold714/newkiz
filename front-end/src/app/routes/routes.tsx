@@ -1,4 +1,4 @@
-import { NoHeaderLayout, Layout } from "@/shared"
+import { Layout } from "@/shared"
 import { Suspense, lazy } from "react"
 import { createBrowserRouter, RouteObject } from "react-router-dom"
 
@@ -37,7 +37,7 @@ const ChatbotPage = lazy(() => import("../../pages/chatbot").then((module) => ({
 // ai뉴스 요약 페이지
 const NewsSummaryPage = lazy(() => import("../../pages/newssummary").then((module) => ({ default: module.NewsSummaryPage })))
 // 카테고리 페이지
-const CategoryPage = lazy(() => import("../../pages/category").then((module) => ({ default: module.CategoryPage })))
+const CategoryDetailPage = lazy(() => import("../../pages/category").then((module) => ({ default: module.CategoryDetailPage })))
 
 const routes: RouteObject[] = [
   {
@@ -80,9 +80,9 @@ const routes: RouteObject[] = [
     path: "/mypage",
     element: (
       <Suspense fallback={Loading}>
-        <NoHeaderLayout>
+        <Layout>
           <MyPage />
-        </NoHeaderLayout>
+        </Layout>
       </Suspense>
     ),
     children: [
@@ -151,7 +151,9 @@ const routes: RouteObject[] = [
     path: "/search",
     element: (
       <Suspense fallback={Loading}>
-        <SearchPage />
+        <Layout>
+          <SearchPage />
+        </Layout>
       </Suspense>
     ),
   },
@@ -209,7 +211,7 @@ const routes: RouteObject[] = [
     path: "/category",
     element: (
       <Suspense fallback={Loading}>
-          <CategoryPage />
+          <CategoryDetailPage />
       </Suspense>
     ),
   }

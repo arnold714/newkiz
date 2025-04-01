@@ -43,7 +43,23 @@ export default function FirstLoginInfo({
   };
 
   const handleNext = () => {
-    // 유효성 검사 후
+    if (!basicInfo.nickname) {
+      alert("닉네임을 입력해주세요.");
+      return;
+    }
+    if (!basicInfo.birthdate) {
+      alert("생년월일을 입력해주세요.");
+      return;
+    }
+    if (!basicInfo.school) {
+      alert("출신 학교를 선택해주세요.");
+      return;
+    }
+    if (!basicInfo.gender) {
+      alert("성별을 선택해주세요.");
+      return;
+    }
+  
     nextStep();
   };
 

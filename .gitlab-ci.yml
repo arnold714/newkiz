@@ -36,6 +36,7 @@ build_vite:
     - cat .env
 
     - npm install    # 의존성 설치
+    - npm install -g typescript
     - npm run build  # vite 빌드 실행
   artifacts:
     paths:

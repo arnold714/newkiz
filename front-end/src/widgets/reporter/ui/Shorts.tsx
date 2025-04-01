@@ -22,7 +22,7 @@ const shortsData:ShortsItem[] = [
         title: '이것이 진짜 소식',
         description: '알아두면 좋은 정보'
       },
-]
+];
 
 export const Shorts = () => {
 

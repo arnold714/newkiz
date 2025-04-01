@@ -367,11 +367,6 @@ export default function SearchResultsPage() {
           )}
         </div>
       </div>
-
-      {/* 하단 NavBar 고정 */}
-      <div className="sticky bottom-0 z-10 bg-white">
-        <NavBar />
-      </div>
     </div>
   );
 }

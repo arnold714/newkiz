@@ -1,4 +1,4 @@
-import { NoHeaderLayout, Layout } from "@/shared"
+import { Layout } from "@/shared"
 import { Suspense, lazy } from "react"
 import { createBrowserRouter, RouteObject } from "react-router-dom"
 
@@ -16,7 +16,9 @@ const MainPage = lazy(() => import("@pages/main").then((module) => ({ default: m
 const MyPage = lazy(() => import("@pages/mypage").then((module) => ({ default: module.MyPage })))
 const ModifyInfoPage = lazy(() => import("@pages/mypage").then((module) => ({ default: module.ModifyInfoPage })))
 const ScrapPage = lazy(() => import("@pages/mypage").then((module) => ({ default: module.ScrapPage })))
-const Summary = lazy(() => import("@pages/mypage").then((module) => ({ default: module.Summary })))
+const ScrappedNewsPage = lazy(() => import("@pages/mypage").then((module) => ({ default: module.ScrappedNewsPage })))
+const ScrappedWordsPage = lazy(() => import("@pages/mypage").then((module) => ({ default: module.ScrappedWordsPage })))
+const SummaryPage = lazy(() => import("@pages/mypage").then((module) => ({ default: module.SummaryPage })))
 const WrongAnswerPage = lazy(() => import("@pages/mypage").then((module) => ({ default: module.WrongAnswerPage })))
 // 리포터 페이지
 const ReporterPage = lazy(() => import("@pages/reporter").then((module) => ({ default: module.ReporterPage })))
@@ -33,7 +35,8 @@ const ChatbotPage = lazy(() => import("../../pages/chatbot").then((module) => ({
 // ai뉴스 요약 페이지
 const NewsSummaryPage = lazy(() => import("../../pages/newssummary").then((module) => ({ default: module.NewsSummaryPage })))
 // 카테고리 페이지
-const CategoryPage = lazy(() => import("../../pages/category").then((module) => ({ default: module.CategoryPage })))
+const CategoryPage = lazy(() => import("@pages/category").then((module) => ({ default: module.CategoryPage })))
+const CategoryDetailPage = lazy(() => import("../../pages/category").then((module) => ({ default: module.CategoryDetailPage })))
 
 const routes: RouteObject[] = [
   {
@@ -76,9 +79,9 @@ const routes: RouteObject[] = [
     path: "/mypage",
     element: (
       <Suspense fallback={Loading}>
-        <NoHeaderLayout>
+        <Layout>
           <MyPage />
-        </NoHeaderLayout>
+        </Layout>
       </Suspense>
     ),
     children: [
@@ -97,12 +100,31 @@ const routes: RouteObject[] = [
             <ScrapPage />
           </Suspense>
         ),
+        children: [
+          {
+            path: "news",
+            element: (
+              <Suspense fallback={Loading}>
+                <ScrappedNewsPage />
+              </Suspense>
+            
+            )
+          },
+          {
+            path: "words",
+            element: (
+              <Suspense fallback={Loading}>
+                <ScrappedWordsPage />
+              </Suspense>
+            )
+          }
+        ]
       },
       {
         path: "summary",
         element: (
           <Suspense fallback={Loading}>
-            <Summary />
+            <SummaryPage />
           </Suspense>
         ),
       },
@@ -120,7 +142,9 @@ const routes: RouteObject[] = [
     path: "/reporter",
     element: (
       <Suspense fallback={Loading}>
-        <ReporterPage />
+        <Layout>
+          <ReporterPage />
+        </Layout>
       </Suspense>
     ),
   },
@@ -128,7 +152,9 @@ const routes: RouteObject[] = [
     path: "/search",
     element: (
       <Suspense fallback={Loading}>
-        <SearchPage />
+        <Layout>
+          <SearchPage />
+        </Layout>
       </Suspense>
     ),
   },
@@ -178,9 +204,23 @@ const routes: RouteObject[] = [
     path: "/category",
     element: (
       <Suspense fallback={Loading}>
-          <CategoryPage />
+          <Layout>
+            <CategoryPage />
+          </Layout>
       </Suspense>
     ),
+    children: [
+      {
+        path:"detail",
+        element: (
+          <Suspense fallback={Loading}>
+            <Layout>
+              <CategoryDetailPage />
+            </Layout>
+          </Suspense>
+        )
+      }
+    ]
   }
 ];
 

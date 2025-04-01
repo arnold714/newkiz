@@ -1,15 +1,12 @@
 import axios from "axios";
 
-// 카카오 로그인 API 호출 함수
-export const handleLogin = async () => {
+const API_URL = import.meta.env.VITE_API_URL;
+
+// 카카오 로그인 호출 함수
+export const handleLogin = () => {
   try {
-    // 백엔드의 카카오 로그인 엔드포인트로 리다이렉트
-    const response = await axios.post("/oauth2/authorization/kakao");
-    if (response.status === 200) {
-      console.log("카카오 로그인 성공:", response.data);
-    } else {
-      console.error("카카오 로그인 실패:", response);
-    }
+    // 카카오 로그인 URL로 리다이렉트
+    window.location.href = `${API_URL}/oauth2/authorization/kakao`;
   } catch (error) {
     console.error("카카오 로그인 중 오류 발생:", error);
   }
@@ -19,7 +16,7 @@ export const handleLogin = async () => {
 export const refreshToken = async (refreshToken: string) => {
   try {
     const response = await axios.post(
-      "/api/auth/refresh",
+      `${API_URL}/api/auth/refresh`,
       {},
       {
         headers: {

@@ -1,4 +1,5 @@
 import { Shorts, ReporterNews } from "@/widgets/reporter"
+import "@shared/styles/CustomScroll.css"
 
 export default function ReporterPage() {
   return (
@@ -6,7 +7,7 @@ export default function ReporterPage() {
         <div className="my-5">
            <Shorts />
         </div>
-        <div className="bg-white/65">
+        <div className="bg-white/75">
             <ReporterNews />
         </div>
     </div>

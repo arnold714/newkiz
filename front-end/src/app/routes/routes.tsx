@@ -37,6 +37,7 @@ const ChatbotPage = lazy(() => import("../../pages/chatbot").then((module) => ({
 // ai뉴스 요약 페이지
 const NewsSummaryPage = lazy(() => import("../../pages/newssummary").then((module) => ({ default: module.NewsSummaryPage })))
 // 카테고리 페이지
+const CategoryPage = lazy(() => import("@pages/category").then((module) => ({ default: module.CategoryPage })))
 const CategoryDetailPage = lazy(() => import("../../pages/category").then((module) => ({ default: module.CategoryDetailPage })))
 
 const routes: RouteObject[] = [
@@ -143,7 +144,9 @@ const routes: RouteObject[] = [
     path: "/reporter",
     element: (
       <Suspense fallback={Loading}>
-        <ReporterPage />
+        <Layout>
+          <ReporterPage />
+        </Layout>
       </Suspense>
     ),
   },
@@ -211,9 +214,23 @@ const routes: RouteObject[] = [
     path: "/category",
     element: (
       <Suspense fallback={Loading}>
-          <CategoryDetailPage />
+          <Layout>
+            <CategoryPage />
+          </Layout>
       </Suspense>
     ),
+    children: [
+      {
+        path:"detail",
+        element: (
+          <Suspense fallback={Loading}>
+            <Layout>
+              <CategoryDetailPage />
+            </Layout>
+          </Suspense>
+        )
+      }
+    ]
   }
 ];
 

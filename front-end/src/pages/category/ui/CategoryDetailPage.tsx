@@ -82,7 +82,7 @@ export default function CategoryDetailPage() {
       subCategory: 'soccer',
       imageUrl: '/newsImage3.png',
       description: 'AI를 통해 한줄 요약 내용'
-    },
+    }, 
     {
       id: '4',
       title: '경제 회복세 전망...',

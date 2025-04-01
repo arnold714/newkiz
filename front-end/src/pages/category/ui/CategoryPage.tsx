@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { LuX } from 'react-icons/lu';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { closeCategoryModal } from '@shared/model/categorySlice';
@@ -12,7 +11,7 @@ interface Category {
   color: string;
 }
 
-export const CategoryModal = () => {
+export const CategoryPage = () => {
   const [selectedCategory, setSelectedCategory] = useState('news');
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -63,7 +62,6 @@ export const CategoryModal = () => {
     >
       <div className="bg-gray-100 px-6 py-3 flex justify-between items-center border-b border-gray-100">
         <h2 className="text-2xl font-bold">카테고리</h2>
-        <LuX size={30} onClick={handleCloseModal} className="cursor-pointer" />
       </div>
 
       <div className="flex flex-1 overflow-hidden">

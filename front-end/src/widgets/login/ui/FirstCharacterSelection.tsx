@@ -51,9 +51,9 @@ export default function FirstCharacterSelection({
   };
 
   return (
-    <div className="w-full h-full">
-      {/* 상대 포지셔닝을 위한 컨테이너 */}
-      <div className="absolute inset-0 rounded-[15px] shadow-[0px_0px_20px_rgba(0,0,0,0.15)] flex flex-col overflow-hidden">
+    <div className="w-full h-full max-w-[600px] mx-auto relative">
+      {/* 컨테이너를 max-width로 제한하고 중앙 정렬 */}
+      <div className="w-full h-[650px] rounded-[15px] shadow-[0px_0px_20px_rgba(0,0,0,0.15)] flex flex-col overflow-hidden bg-white">
         {/* 배경 장식 요소 */}
         <div className="absolute top-0 left-0 right-0 h-43 bg-gradient-to-r from-blue-100 via-purple-100 to-pink-100 opacity-60" />
         
@@ -100,7 +100,7 @@ export default function FirstCharacterSelection({
         </div>
         
         {/* 스크롤 영역 - 고정 헤더 아래 배치, 화면 끝까지 확장 */}
-        <div className="relative z-10 flex-1 px-6 overflow-y-auto" style={{ height: 'calc(100% - 180px)' }}>
+        <div className="relative z-10 flex-1 px-6 overflow-y-auto">
           {/* 회색 구분선 */}
           <div className="w-full border-t border-gray-200 mb-3" />
 

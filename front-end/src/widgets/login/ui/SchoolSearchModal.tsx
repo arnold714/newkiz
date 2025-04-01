@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { searchPlaces } from "../../api/KakaoApi";
+import { searchPlaces } from "../../../pages/login/api/KakaoApi";
 import { LuSearch, LuX } from "react-icons/lu";
 interface SchoolSearchModalProps {
   isOpen: boolean;

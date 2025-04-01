@@ -1,1 +1,1 @@
-export { default as NotificationPage } from './ui/NotificationPage';
+export { default as NotificationModal } from './ui/NotificationModal';

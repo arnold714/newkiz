@@ -1,4 +1,4 @@
-import { Direction } from "@/shared/types/common"
+import { JoystickData } from "@/shared/types/joystick"
 
 export interface SpriteAnimationProps {
   texturePath: string
@@ -6,12 +6,12 @@ export interface SpriteAnimationProps {
   totalWidth: number
   frameCount: number
   frameTime: number
-  direction: Direction
+  direction: number
 }
 
 export interface CharacterSpriteProps {
   characterName: string
-  position?: [number, number, number]
-  isMoving: boolean
-  direction: Direction
+  joystickData: JoystickData
+  tileMapSize: { width: number; height: number }
+  initialPosition: [number, number, number]
 }

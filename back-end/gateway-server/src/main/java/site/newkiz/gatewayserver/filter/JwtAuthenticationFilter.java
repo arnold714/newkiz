@@ -1,8 +1,6 @@
 package site.newkiz.gatewayserver.filter;
 
-import java.net.URI;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -54,8 +52,11 @@ public class JwtAuthenticationFilter implements WebFilter {
   }
 
   private Mono<Void> redirectToProfileSetup(ServerHttpResponse response) {
-    response.setStatusCode(HttpStatus.SEE_OTHER);
-    response.getHeaders().setLocation(URI.create("http://" + applicationConfig.getDomain() + "/userinfo"));
+    if (!response.isCommitted()) {
+      response.setStatusCode(HttpStatus.SEE_OTHER);
+      response.getHeaders()
+          .add("Location", "http://" + applicationConfig.getDomain() + "/userinfo");
+    }
     return response.setComplete();
   }
 }

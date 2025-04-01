@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import { LuSearch, LuChevronLeft } from "react-icons/lu";
-import NavBar from "@/shared/ui/NavBar";
 import { SearchFilterButtons } from "@/features/search/components/SearchFilterButtons";
 import { NewsResults } from "@/features/search/components/NewsResults";
 import { ShortsResults } from "@/features/search/components/ShortsResults";
@@ -366,11 +365,6 @@ export default function SearchResultsPage() {
             />
           )}
         </div>
-      </div>
-
-      {/* 하단 NavBar 고정 */}
-      <div className="sticky bottom-0 z-10 bg-white">
-        <NavBar />
       </div>
     </div>
   );

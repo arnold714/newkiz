@@ -7,3 +7,4 @@ export { UserActivity } from "./ui/UserActivity"
 export { MyInfoModal } from "./ui/MyInfoModal"
 export { WrongAnswerModal } from './ui/WrongAnswerModal';
 export { ScrappedWordModal } from './ui/ScrappedWordModal';
+export { SelectCharacterModal } from './ui/SelectCharacterModal';

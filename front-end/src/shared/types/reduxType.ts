@@ -18,3 +18,9 @@ export interface DetailState {
         isOpen: boolean;
     };
 }
+
+export interface CategoryState {
+    categoryModal: {
+        isOpen: boolean;
+    };
+}

@@ -1,1 +1,2 @@
-export { default as CategoryPage } from './ui/CategoryPage';
+export { default as CategoryDetailPage } from './ui/CategoryDetailPage';
+export { CategoryPage } from './ui/CategoryPage';

@@ -24,17 +24,24 @@ export default function FinalConfirm({
   };
 
   return (
-    <div className="bg-white shadow-[0px_0px_20px_rgba(0,0,0,0.15)] rounded-[15px] w-full h-[610px] flex flex-col justify-center relative overflow-hidden">
-      {/* 배경 장식 요소 - 상단 파스텔 무지개 그라데이션 */}
-      <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-r from-blue-100 via-purple-100 to-pink-100 opacity-60" />
+    <div className="bg-white shadow-[0px_0px_20px_rgba(0,0,0,0.15)] rounded-[15px] w-full max-h-[90vh] overflow-y-auto">
+      {/* 그라데이션 배경과 텍스트를 포함하는 상단 영역 */}
+      <div className="relative w-full">
+        {/* 배경 장식 요소 - 상단 파스텔 무지개 그라데이션 */}
+        <div className="w-full h-32 bg-gradient-to-r from-blue-100 via-purple-100 to-pink-100 opacity-60" />
+        
+        {/* 배경 위에 텍스트 배치 */}
+        <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center">
+          <h2 className="text-4xl font-bold text-indigo-800">
+            안녕하세요 {basicInfo.nickname}님
+          </h2>
+        </div>
+      </div>
 
       {/* 메인 콘텐츠 */}
-      <div className="relative z-10 px-6 flex flex-col items-center">
-        <div className="text-center w-full flex flex-col items-center gap-3 mb-8">
-            <h2 className="text-4xl font-bold text-indigo-800">
-              안녕하세요 {basicInfo.nickname}님
-            </h2>
-          <p className="text-2xl mt-8">
+      <div className="px-6 py-6 flex flex-col items-center">
+        <div className="text-center w-full mb-8">
+          <p className="text-2xl">
             우리 함께 <span className="text-blue-500 font-semibold">세상</span>을 알아봐요
           </p>
         </div>
@@ -52,7 +59,7 @@ export default function FinalConfirm({
           </div>
         </div>
 
-        <div className="w-full px-4">
+        <div className="w-full px-4 mb-6">
           <button
             onClick={handleConfirm}
             className="w-full bg-gradient-to-r from-indigo-500 to-blue-500 text-lg text-white py-3 rounded-lg font-semibold shadow-md transition-all duration-300 hover:from-indigo-600 hover:to-blue-600 hover:shadow-lg transform hover:-translate-y-1"

@@ -61,14 +61,14 @@ export default function SchoolSearchModal({
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 backdrop-blur-sm transition-all duration-300">
-      <div className="bg-white w-[90%] max-w-[450px] h-[80%] rounded-lg shadow-xl p-6 relative overflow-hidden flex flex-col">
+      <div className="bg-white w-[90%] max-w-[450px] h-[80%] rounded-lg shadow-xl p-4 sm:p-6 relative overflow-hidden flex flex-col">
         {/* 헤더 영역 */}
         <div className="flex justify-between items-center mb-4 pb-3 border-b">
           <h2 className="text-xl font-bold text-gray-800">학교 검색</h2>
           {/* 닫기 버튼 */}
           <LuX
             onClick={onClose}
-            className="rounded-full w-8 h-8 flex items-center justify-center text-gray-500 hover:bg-gray-100 transition-colors"
+            className="rounded-full w-8 h-8 flex items-center justify-center text-gray-500 hover:bg-gray-100 transition-colors cursor-pointer"
           />
         </div>
 
@@ -80,11 +80,11 @@ export default function SchoolSearchModal({
             onChange={(e) => setKeyword(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="학교 이름을 검색하세요"
-            className="p-3 flex-1 focus:outline-none"
+            className="p-2 sm:p-3 flex-1 focus:outline-none text-sm sm:text-base"
           />
           <button
             onClick={handleSearchClick}
-            className="bg-blue-500 text-white px-5 hover:bg-blue-600 transition-colors flex items-center justify-center"
+            className="bg-blue-500 text-white px-3 sm:px-5 whitespace-nowrap hover:bg-blue-600 transition-colors flex items-center justify-center text-sm sm:text-base"
           >
             검색
           </button>

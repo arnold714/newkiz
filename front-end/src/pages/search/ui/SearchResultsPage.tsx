@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import { LuSearch, LuChevronLeft } from "react-icons/lu";
-import { SearchFilterButtons } from "@/features/search/components/SearchFilterButtons";
-import { NewsResults } from "@/features/search/components/NewsResults";
-import { ShortsResults } from "@/features/search/components/ShortsResults";
-import { KidsResults } from "@/features/search/components/KidsResults";
+import NavBar from "@/shared/ui/NavBar";
+import { SearchFilterButtons } from "@/widgets/search/ui/SearchFilterButtons";
+import { NewsResults } from "@/widgets/search/ui/NewsResults";
+import { ShortsResults } from "@/widgets/search/ui/ShortsResults";
+import { KidsResults } from "@/widgets/search/ui/KidsResults";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
@@ -281,7 +282,7 @@ export default function SearchResultsPage() {
           </form>
 
           {/* Filter Buttons */}
-          <div className="flex space-x-4 -mt-3 -mb-8">
+          <div className="flex space-x-4 -mt-1 -mb-3 ml-15">
             <SearchFilterButtons
               selectedFilter={selectedFilter}
               onFilterChange={handleFilterChange}

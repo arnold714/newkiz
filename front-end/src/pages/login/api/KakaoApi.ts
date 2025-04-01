@@ -1,4 +1,3 @@
-// src/services/kakaoAPI.ts
 export function searchPlaces(keyword: string): Promise<any[]> {
     return new Promise((resolve, reject) => {
       const kakao = (window as any).kakao;

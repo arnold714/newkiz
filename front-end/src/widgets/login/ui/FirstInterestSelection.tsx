@@ -41,10 +41,11 @@ export default function FirstInterestSelection({
   };
 
   return (
-    <div className="bg-white shadow-[0px_0px_20px_rgba(0,0,0,0.15)] rounded-[15px] w-full h-[610px] flex flex-col">
-      <div className="py-6 px-6">
+    <div className="bg-white shadow-[0px_0px_20px_rgba(0,0,0,0.15)] rounded-[15px] w-full h-full max-h-[90vh] flex flex-col">
+      {/* 네비게이션 요소 - 상단에 고정 */}
+      <div className="py-4 px-6 sticky top-0 bg-white rounded-t-[15px] z-10">
         {/* 뒤로가기 버튼과 페이지 인디케이터를 포함하는 row */}
-        <div className="flex items-center w-full mb-2">
+        <div className="flex items-center w-full">
           {/* 뒤로가기 버튼 왼쪽에 고정 */}
           <button onClick={prevStep} className="p-1">
             <LuChevronLeft size={24} />
@@ -59,16 +60,15 @@ export default function FirstInterestSelection({
             </div>
           </div>
         </div>
-
-        {/* 제목 */}
-        <h2 className="text-4xl font-bold text-center mb-1">
-          현재 가장 관심있는 분야가<br />무엇인가요?
-        </h2>
       </div>
 
       {/* 관심사 선택 - 스크롤 영역 */}
       <div className="px-6 overflow-y-auto flex-1">
-        <div className="space-y-3">
+        {/* 제목 */}
+        <h2 className="text-4xl font-bold text-center mb-6 pt-2">
+          현재 가장 관심있는 분야가<br />무엇인가요?
+        </h2>
+        <div className="space-y-3 mb-6">
           {possibleInterests.map((item) => (
             <button
               key={item.id}
@@ -98,8 +98,8 @@ export default function FirstInterestSelection({
         </div>
       </div>
 
-      {/* 다음 버튼 - 고정 위치 */}
-      <div className="py-6 px-6">
+      {/* 다음 버튼 - 하단에 고정 */}
+      <div className="py-4 px-6 sticky bottom-0 bg-white rounded-b-[15px] z-10">
         <button
           onClick={handleNext}
           className="w-full bg-[#748BFF] text-lg text-white font-semibold py-3 rounded-lg"

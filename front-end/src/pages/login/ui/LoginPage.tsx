@@ -1,21 +1,14 @@
-import { handleLogin, checkUserExists } from "@/pages/login/api/LoginApi";
+import { handleLogin } from "@/pages/login/api/LoginApi";
 
 export default function LoginPage() {
-  const handleKakaoLogin = async () => {
-    await handleLogin(); // 카카오 인증 진행
-    const kakaoToken = "카카오에서 받은 토큰"; // 실제 토큰 값을 받아옴
-    const userExists = await checkUserExists(kakaoToken); // 회원가입 여부 확인을 위해서
-
-    if (!userExists) { // 회원가입을 안했으면 회원가입 페이지로
-      window.location.href = "/signup"; // 회원가입 페이지로 이동
-    } else { // 회원가입을 했으면 메인페에지로
-      window.location.href = "/"; // 메인 페이지로 이동
-    }
+  const handleKakaoLogin = () => {
+    handleLogin(); // 카카오 로그인 페이지로 리다이렉트
   };
+
   return (
     <div className="flex flex-col justify-center items-center h-screen bg-white relative">
       {/* 로고 */}
-      <div className="text-center h-[270px]">
+      <div className="text-center h-[250px]">
         <img
           src="https://newkiz.s3.ap-northeast-2.amazonaws.com/assets/Logo.png"
           alt="Logo"
@@ -26,7 +19,7 @@ export default function LoginPage() {
       </div>
 
       {/* 뉴스 이미지 */}
-      <img src="https://newkiz.s3.ap-northeast-2.amazonaws.com/assets/news.png" alt="News" className="w-40 h-auto my-8" />
+      <img src="https://newkiz.s3.ap-northeast-2.amazonaws.com/assets/news.png" alt="News" className="w-70 h-auto mb-15" />
 
       {/* 카카오톡 로그인 버튼 */}
       <button

@@ -1,6 +1,7 @@
 import ProgressGraph from './ProgressGraph';
 import HotTopicNews from './HotTopicNews';
 import RecommendedNews from './RecommendedNews';
+import "@shared/styles/CustomScroll.css"
 
 export default function MainPage() {
   return (

@@ -122,7 +122,9 @@ const routes: RouteObject[] = [
     path: "/reporter",
     element: (
       <Suspense fallback={Loading}>
-        <ReporterPage />
+        <Layout>
+          <ReporterPage />
+        </Layout>
       </Suspense>
     ),
   },

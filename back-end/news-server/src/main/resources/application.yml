@@ -1,0 +1,14 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: news-server
+  data:
+    mongodb:
+      uri: mongodb://admin:Rkskek123!@218.49.207.146:31240/?authSource=admin&authMechanism=SCRAM-SHA-1
+      database: newkiz
+article:
+  limit: 20
+  today: 5
+  db: articles_test

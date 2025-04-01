@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { LuSearch, LuChevronLeft, LuX } from "react-icons/lu";
 import WordCloud from "@/widgets/search/ui/WordCloud";
 
@@ -15,6 +15,22 @@ export default function SearchPage() {
     "챗 지피티",
     "야구",
   ]);
+
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [containerWidth, setContainerWidth] = useState<number>(0);
+
+  useEffect(() => {
+    const observer = new ResizeObserver((entries) => {
+      if (entries[0]) {
+        const width = entries[0].contentRect.width;
+        setContainerWidth(width);
+      }
+    });
+
+    if (containerRef.current) observer.observe(containerRef.current);
+
+    return () => observer.disconnect();
+  }, []);
 
   // 인기 키워드 데이터 (예시)
   const [popularKeywords] = useState<PopularKeyword[]>([
@@ -114,13 +130,15 @@ export default function SearchPage() {
         {/* 인기 키워드 워드 클라우드 */}
         <div>
           <h2 className="font-semibold text-xl mb-5">인기있는 키워드</h2>
-          <div className="p-4 bg-white rounded-xl">
-            <WordCloud
-              keywords={popularKeywords}
-              onKeywordClick={handleKeywordClick}
-              width={550}
-              height={350}
-            />
+          <div ref={containerRef} className="p-4 bg-white rounded-xl w-full">
+            {containerWidth > 0 && (
+              <WordCloud
+                keywords={popularKeywords}
+                onKeywordClick={handleKeywordClick}
+                width={containerWidth}
+                height={350}
+              />
+            )}
           </div>
         </div>
       </div>

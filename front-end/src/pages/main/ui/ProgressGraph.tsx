@@ -26,15 +26,20 @@ const ProgressGraph: React.FC = () => {
         dataLabels: {
           show: true,
           name: {
-            offsetY: -10,
+            offsetY: -7,
             show: true,
             color: '#202020',
-           fontSize: windowWidth < 640 ? '10px' : '18px',
+           fontSize: windowWidth < 640 ? '12px' : '18px',
+           fontFamily: 'Pretendard',
+           fontWeight: 'bold'
           },
           value: {
             color: '#202020',
+            offsetY: windowWidth < 640 ? 2 : 15,
             fontSize: windowWidth < 640 ? '18px' : '30px',
             show: true,
+            fontFamily: 'Pretendard',
+            fontWeight: 'bold'
           },
         },
         track: {
@@ -54,10 +59,7 @@ const ProgressGraph: React.FC = () => {
   const series = [50]; // 진행률 (퍼센트)
 
   return (
-    <div className="bg-white/90 shadow-m rounded-[15px] mr-10
-                    w-35 h-35
-                    sm:w-60 sm:h-60
-                    ">
+    <div className="bg-white/90 shadow-m rounded-[15px] shadow-[4px_4px_3px_rgba(0,0,0,0.13)] w-40 h-40 m-3 sm:w-60 sm:h-60">
       <ReactApexChart options={options} series={series} type="radialBar" height="100%" />
     </div>
   );

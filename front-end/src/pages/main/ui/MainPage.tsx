@@ -1,5 +1,5 @@
 import ProgressGraph from './ProgressGraph';
-import RecommendedNews from './RecommendedNews';
+import RecommendedNews from '@/widgets/main/ui/RecommendedNews';
 import { HotTopic } from '@/widgets/main';
 
 import "@shared/styles/CustomScroll.css"
@@ -7,18 +7,24 @@ import "@shared/styles/CustomScroll.css"
 export default function MainPage() {
   return (
       <div className="h-screen flex flex-col overflow-auto scroll">
-        <div className='my-5 flex justify-center gap-18 items-center '>
-          <div>
-            <img src="https://newkiz.s3.ap-northeast-2.amazonaws.com/dinos/nico.png" alt="character_nico" className='w-40 m-3 '/>
+        <div className='my-5 flex justify-center min-gap-2 gap-[10vw]  items-center'>
+          <div className='flex justify-center'>
+            <img src="https://newkiz.s3.ap-northeast-2.amazonaws.com/dinos/nico.png" alt="character_nico" className='w-[60%] min-w-25 sm:w-35'/>
           </div>
-          <div className='flex justify-end'>
+          <div className='flex justify-center'>
           <ProgressGraph />
           </div>
         </div>
         <div className='bg-white/60 h-auto p-2'>
+          <div className="text-2xl font-bold text-center m-3">
+            Today's TOP 10
+          </div>
           <HotTopic />
         </div>
         <div className='mt-5'>
+          <div className="text-2xl font-bold text-center m-3">
+            zi재형zon 님을 위한 추천 뉴스
+          </div>
           <RecommendedNews />
         </div>
       </div>

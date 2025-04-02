@@ -1,43 +1,36 @@
-/* HotTopic 모듈 CSS */
-
-/* 중앙 카드 강조 */
-.hot-topic-carousel .slick-center {
-    transform: scale(1.1);
-    transition: all 300ms ease;
-    opacity: 1;
-    z-index: 10;
-    margin-left: 10px;  /* 중앙 카드 왼쪽 마진 추가 */
-    margin-right: 10px; /* 중앙 카드 오른쪽 마진 추가 */
+/* Swiper 기본 설정 */
+.swiper {
+    padding-bottom: 40px;
   }
   
-  /* 중앙이 아닌 카드에 대한 스타일 */
-  .hot-topic-carousel .slick-slide:not(.slick-center) {
-    transform: scale(0.85);
-    opacity: 0.6;
-    transition: all 300ms ease;
-    margin-left: 10px;  /* 좌우 간격 */
-    margin-right: 10px; /* 좌우 간격 */
+  /* Swiper Pagination Bullet 스타일 */
+  .swiper-pagination-bullet {
+    background-color: var(--placeholder-color); /* 기본 도트 색상 */
+    opacity: 0.6; /* 도트의 투명도 */
   }
   
-  /* 각 카드 간의 간격 */
-  .hot-topic-carousel .slick-slide {
-    width: auto;
-    padding: 0 15px; /* 카드 간의 좌우 간격 */
+  .swiper-pagination-bullet-active {
+    background-color: var(--primary-color); /* 활성화된 도트 색상 */
+    opacity: 1; /* 활성화된 도트의 투명도 */
   }
   
-  /* 화살표 스타일링 */
-  .hot-topic-carousel .slick-prev,
-  .hot-topic-carousel .slick-next {
-    width: 40px;
-    height: 40px;
-    z-index: 20;
+  /* Swiper Slide 스타일 */
+  .swiper-slide {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--card-background-color);
+    border-radius: 0.5rem;
+    backdrop-filter: blur(4px);
+    box-shadow: var(--small-shadow);
+    transition: all 0.3s ease;
+    opacity: 0.5; /* 기본적으로 모든 슬라이드를 연하게 설정 */
+    transform: scale(0.9); /* 기본적으로 모든 슬라이드를 약간 축소 */
   }
   
-  .hot-topic-carousel .slick-prev {
-    left: 10px;
+  /* Swiper Slide 커스텀 효과 */
+  .swiper .swiper-slide::after {
+    position: absolute;
+    top: 0;
+    left: 0;
   }
-  
-  .hot-topic-carousel .slick-next {
-    right: 10px;
-  }
-  

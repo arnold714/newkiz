@@ -1,8 +1,15 @@
-import BaseCarousel from "@/shared/ui/BaseCarousel";
+import { Swiper, SwiperSlide } from "swiper/react";
+import 'swiper/css/bundle';
+import { EffectCoverflow, Pagination } from "swiper/modules";
 import { HotTopicArticle } from "@/features/main/model/types";
 import "../styles/HotTopic.css"
+import { useMediaQuery } from "react-responsive";
 
 export const HotTopic = () => {
+
+    const isTablet = useMediaQuery({ query: "(min-width: 768px) and (max-width: 1279px)" });
+  const slidesPerView = isTablet ? 1 : 1.5;
+  
 
     const hotTopicNewsList: HotTopicArticle[] = [
         {
@@ -63,22 +70,26 @@ export const HotTopic = () => {
                 주목해야 할 오늘의 뉴스🔥
             </div>
             <div>
-                <BaseCarousel 
-                    slidesToShow={3}
-                    infinite={true}
-                    centerMode={true}
-                    centerPadding="20px"
-                    arrows={false}
-                    className="hot-topic=carousel"
-                    dots={true}
-                >
-                {hotTopicNewsList.map((news) => (
-                    <div key={news.id} className="bg-white w-[10px] h-[150px] p-2 rounded-lg shadow-[4px_4px_3px_rgba(0,0,0,0.13)]">
-                         <h3 className="text-lg font-semibold mt-2">{news.title}</h3>
-                    </div>
-                ))}
-                </BaseCarousel>
-                
+                <Swiper
+                    loop={true}
+                    effect={"coverflow"} // coverflow 효과 적용 (기본 slide 효과 대신 사용)
+                    grabCursor={true}
+                    centeredSlides={true}
+                    slidesPerView={slidesPerView}
+                    spaceBetween={-50} // 음수 값을 주어 슬라이드가 겹치도록 설정
+                    speed={500}
+                    pagination={isTablet ? false : { clickable: true }}
+                    modules={[EffectCoverflow, Pagination]}
+                    className="mySwiper"
+                    >
+                    {hotTopicNewsList.map((news) => (
+                        <SwiperSlide key={news.id}>
+                            <div className="news-slide">
+                                <h3 className="news-title">{news.title}</h3>
+                            </div>
+                        </SwiperSlide>
+                    ))}
+                </Swiper>    
             </div>
         </div>
     );

@@ -1,8 +1,5 @@
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { closeCategoryModal } from '@shared/model/categorySlice';
-
 
 interface Category {
   id: string;
@@ -14,11 +11,6 @@ interface Category {
 export const CategoryPage = () => {
   const [selectedCategory, setSelectedCategory] = useState('news');
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-
-  const handleCloseModal = () => {
-    dispatch(closeCategoryModal());
-  };
 
   const categories = [
     { id: 'news', name: '뉴키즈 뉴스' },
@@ -45,27 +37,17 @@ export const CategoryPage = () => {
 
   const handleCategoryClick = (categoryId: string) => {
     setSelectedCategory(categoryId);
-    navigate('/category');
-    handleCloseModal();
-  };
-
-  const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (e.target === e.currentTarget) {
-      handleCloseModal();
-    }
+    navigate('/category/details');
   };
 
   return (
-    <div
-      className="inset-0 bg-[#BFD46F] bg-opacity-50 z-50 flex flex-col"
-      onClick={handleBackdropClick}
-    >
+    <div className="w-full h-screen flex flex-col pb-20 overflow-auto scroll">
       <div className="bg-gray-100 px-6 py-3 flex justify-between items-center border-b border-gray-100">
         <h2 className="text-2xl font-bold">카테고리</h2>
       </div>
 
-      <div className="flex flex-1 overflow-hidden">
-        <div className="w-1/3 bg-gray-100 overflow-y-auto">
+      <div className="flex flex-1 bg-gray-100 overflow-hidden pb-20">
+        <div className="w-1/3 overflow-y-auto">
           {categories.map((category) => (
             <div
               key={category.id}
@@ -84,12 +66,12 @@ export const CategoryPage = () => {
             <h3 className="text-xl font-medium">
               {categories.find(cat => cat.id === selectedCategory)?.name || '뉴키즈 뉴스'}
             </h3>
-            <span
+            <div
               className="text-lg text-gray-500 cursor-pointer"
-              onClick={() => handleCategoryClick(selectedCategory)}
+              onClick={()=>{handleCategoryClick(selectedCategory)}}
             >
               전체보기 &gt;
-            </span>
+            </div>
           </div>
 
           <div className="grid grid-cols-3 gap-4 mb-4">

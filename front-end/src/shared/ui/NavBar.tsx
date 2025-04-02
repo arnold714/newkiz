@@ -1,16 +1,19 @@
-import { useState } from 'react';
 import { LuMenu, LuCircleUserRound, LuSearch, LuHouse, LuNewspaper } from "react-icons/lu";
 import { Link, useLocation } from "react-router-dom";
 
 const NavBar = () => {
-    const [isSelected, setIsSelected] = useState<string>("/");
     const location = useLocation();
+    const currentPath = location.pathname;
+    
+    // 경로가 특정 문자열로 시작하는지 확인하는 함수
+    const isPathStartsWith = (path: string): boolean => {
+        return currentPath === path || currentPath.startsWith(`${path}/`);
+    };
 
     return (
-        <div className="fixed bottom-0 bg-white w-screen max-w-[var(--max-width)] min-w-[var(--min-width)] h-18 shadow-md flex justify-between items-center px-6 pb-4">
+        <div className="fixed bottom-0 bg-white w-screen max-w-[var(--max-width)] min-w-[var(--min-width)] h-18 shadow-md flex justify-between items-center px-6 pb-1">
             <Link
-                className={`flex flex-col items-center cursor-pointer ${isSelected === 'category' ? 'text-blue-400' : ''}`}
-                onClick={() => { setIsSelected('category'); }}
+                className={`flex flex-col items-center cursor-pointer ${isPathStartsWith('/category') ? 'text-blue-400' : ''}`}
                 to="/category"
             >
                 <div className="h-7 flex items-center justify-center">
@@ -20,8 +23,7 @@ const NavBar = () => {
             </Link>
 
             <Link
-                className={`flex flex-col items-center cursor-pointer ${isSelected === 'reporter' && location.pathname === '/reporter' ? 'text-blue-400' : ''}`}
-                onClick={() => { setIsSelected('reporter') }}
+                className={`flex flex-col items-center cursor-pointer ${isPathStartsWith('/reporter') ? 'text-blue-400' : ''}`}
                 to="/reporter"
             >
                 <div className="h-7 flex items-center justify-center">
@@ -31,8 +33,7 @@ const NavBar = () => {
             </Link>
 
             <Link
-                className={`flex flex-col items-center cursor-pointer ${isSelected === '/' && location.pathname === '/' ? 'text-blue-400' : ''}`}
-                onClick={() => { setIsSelected('/') }}
+                className={`flex flex-col items-center cursor-pointer ${currentPath === '/' ? 'text-blue-400' : ''}`}
                 to="/"
             >
                 <div className="h-7 flex items-center justify-center">
@@ -42,8 +43,7 @@ const NavBar = () => {
             </Link>
 
             <Link
-                className={`flex flex-col items-center cursor-pointer ${isSelected === 'search' && location.pathname === '/search' ? 'text-blue-400' : ''}`}
-                onClick={() => { setIsSelected('search') }}
+                className={`flex flex-col items-center cursor-pointer ${isPathStartsWith('/search') ? 'text-blue-400' : ''}`}
                 to="/search"
             >
                 <div className="h-7 flex items-center justify-center">
@@ -53,8 +53,7 @@ const NavBar = () => {
             </Link>
 
             <Link
-                className={`flex flex-col items-center cursor-pointer pr-2 ${isSelected === 'mypage' && location.pathname === '/mypage' ? 'text-blue-400' : ''}`}
-                onClick={() => { setIsSelected('mypage') }}
+                className={`flex flex-col items-center cursor-pointer pr-2 ${isPathStartsWith('/mypage') ? 'text-blue-400' : ''}`}
                 to="/mypage"
             >
                 <div className="h-7 flex items-center justify-center">

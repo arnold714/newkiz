@@ -7,7 +7,7 @@ import { useMediaQuery } from "react-responsive";
 
 export const HotTopic = () => {
 
-    const isTablet = useMediaQuery({ query: "(min-width: 768px) and (max-width: 1279px)" });
+    const isTablet = useMediaQuery({ query: "(min-width: 1279px) and (max-width: 1279px)" });
     const slidesPerView = isTablet ? 1 : 1.5;
   
 
@@ -67,7 +67,7 @@ export const HotTopic = () => {
     return (
         <div>
             <div className="text-2xl font-bold text-center m-3">
-                주목해야 할 오늘의 뉴스🔥
+                Today's TOP 10
             </div>
             <div>
                 <Swiper

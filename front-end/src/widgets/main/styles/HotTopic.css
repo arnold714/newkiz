@@ -2,11 +2,12 @@
 .swiper {
     padding-bottom: 40px;
     height: 250px;
+    
 }
 
 /* 비활성 도트 */
 .swiper-pagination-bullet {
-    background-color: var(--placeholder-color); /* 기본 도트 색상 */
+    background-color: #D9D9D9; /* 기본 도트 색상 */
     opacity: 0.6; /* 도트의 투명도 */
 }
 

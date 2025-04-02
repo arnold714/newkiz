@@ -15,7 +15,7 @@ export default function MainPage() {
           <ProgressGraph />
           </div>
         </div>
-        <div className='bg-white h-70 opacity-75 p-2'>
+        <div className='bg-white/60 h-auto p-2'>
           <HotTopic />
         </div>
         <div className='mt-5'>

@@ -1,3 +1,5 @@
+import "@shared/styles/CustomScroll.css"
+
 interface BasicInfo {
   nickname: string;
   birthdate: string;
@@ -24,7 +26,7 @@ export default function FinalConfirm({
   };
 
   return (
-    <div className="bg-white shadow-[0px_0px_20px_rgba(0,0,0,0.15)] rounded-[15px] w-full max-h-[90vh] overflow-y-auto">
+    <div className="bg-white shadow-[0px_0px_20px_rgba(0,0,0,0.15)] rounded-[15px] w-full max-h-[90vh] overflow-y-auto scroll">
       {/* 그라데이션 배경과 텍스트를 포함하는 상단 영역 */}
       <div className="relative w-full">
         {/* 배경 장식 요소 - 상단 파스텔 무지개 그라데이션 */}

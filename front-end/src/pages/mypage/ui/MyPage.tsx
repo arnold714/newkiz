@@ -10,7 +10,7 @@ export default function MyPage() {
   const location = useLocation()
 
   return (
-    <div className="h-screen w-full flex flex-col items-center overflow-auto scroll">
+    <div className="h-screen w-full flex flex-col items-center overflow-auto scroll pb-20">
       {location.pathname === "/mypage" ? (
         <>
           <div className="w-[90%] h-16 flex flex-row justify-start items-center mx-auto my-5">

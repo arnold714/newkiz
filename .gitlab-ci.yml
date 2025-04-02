@@ -23,7 +23,8 @@ build_vite:
     - client/develop
   script:
     - cd front-end  # front-end 폴더로 이동
-
+    - rm package-lock.json
+    
     - | # 브랜치별 환경변수 설정
       if [ "$CI_COMMIT_BRANCH" == "client/master" ]; then
         echo "$FRONTEND_PROD_ENV" > .env

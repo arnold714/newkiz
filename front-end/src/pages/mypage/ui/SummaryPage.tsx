@@ -15,7 +15,6 @@ interface Summary {
 
 export const SummaryPage = () => {
     const navigate = useNavigate();
-    // 토글 상태를 관리하는 state
     const [openSummaries, setOpenSummaries] = useState<OpenSummaries>({});
 
     const summaries: Summary[] = [

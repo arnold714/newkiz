@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import Layout from '@/shared/ui/Layout';
 import { useParams, useNavigate } from 'react-router-dom';
 
 interface Category {
@@ -27,7 +26,7 @@ interface NewsItem {
 export default function CategoryDetailPage() {
   const { categoryId } = useParams<{ categoryId?: string }>();
   const navigate = useNavigate();
-  
+
   // 기본값은 '전체'로 설정
   const [selectedCategory, setSelectedCategory] = useState<string>(categoryId || 'all');
   const [selectedSportCategory, setSelectedSportCategory] = useState<string>('');
@@ -82,7 +81,7 @@ export default function CategoryDetailPage() {
       subCategory: 'soccer',
       imageUrl: '/newsImage3.png',
       description: 'AI를 통해 한줄 요약 내용'
-    }, 
+    },
     {
       id: '4',
       title: '경제 회복세 전망...',
@@ -121,118 +120,113 @@ export default function CategoryDetailPage() {
   });
 
   return (
-    <Layout>
-      {/* 전체 컨테이너를 flex로 구성하여 고정 영역과 스크롤 영역 분리 */}
-      <div className="flex flex-col h-full">
-        {/* 고정 영역 - 상단 여백, 카테고리 탭, 서브 카테고리 */}
-        <div className="flex-shrink-0">
-          {/* 상단 여백 */}
-          <div className="h-6"></div>
-          
-          {/* 카테고리 탭 바 */}
-          <div className="z-10 bg-[#F2F6E2]">
-            <div className="flex overflow-x-auto py-3 px-4 shadow-sm">
-              {categories.map((category) => (
-                <div
-                  key={category.id}
-                  className={`px-4 py-1 mx-1 cursor-pointer whitespace-nowrap ${
-                    selectedCategory === category.id
-                      ? 'font-bold text-lg text-black'
-                      : 'font-bold text-lg text-gray-400'
+    <div className="flex flex-col h-full">
+      {/* 고정 영역 - 상단 여백, 카테고리 탭, 서브 카테고리 */}
+      <div className="flex-shrink-0">
+        {/* 상단 여백 */}
+        <div className="h-6"></div>
+
+        {/* 카테고리 탭 바 */}
+        <div className="z-10 bg-[#F2F6E2]">
+          <div className="flex overflow-x-auto py-3 px-4 shadow-sm">
+            {categories.map((category) => (
+              <div
+                key={category.id}
+                className={`px-4 py-1 mx-1 cursor-pointer whitespace-nowrap ${selectedCategory === category.id
+                    ? 'font-bold text-lg text-black'
+                    : 'font-bold text-lg text-gray-400'
                   }`}
-                  onClick={() => handleCategoryClick(category.id)}
-                >
-                  {category.name}
-                </div>
-              ))}
-            </div>
-            
-            {/* 스포츠 카테고리가 선택된 경우 서브 카테고리 표시 */}
-            {selectedCategory === 'sports' && (
-              <div className="bg-[#F2F6E2] px-4 pt-2 pb-4">
-                <div className="grid grid-cols-8 gap-2 mb-2">
-                  {sportCategories.map((sport) => (
-                    <div
-                      key={sport.id}
-                      className="cursor-pointer"
-                      onClick={() => handleSportCategoryClick(sport.id)}
-                    >
-                      <div className={`${sport.color} rounded-lg overflow-hidden shadow-sm aspect-square flex flex-col ${
-                        selectedSportCategory === sport.id ? 'ring-2 ring-white' : ''
+                onClick={() => handleCategoryClick(category.id)}
+              >
+                {category.name}
+              </div>
+            ))}
+          </div>
+
+          {/* 스포츠 카테고리가 선택된 경우 서브 카테고리 표시 */}
+          {selectedCategory === 'sports' && (
+            <div className="bg-[#F2F6E2] px-4 pt-2 pb-4">
+              <div className="grid grid-cols-8 gap-2 mb-2">
+                {sportCategories.map((sport) => (
+                  <div
+                    key={sport.id}
+                    className="cursor-pointer"
+                    onClick={() => handleSportCategoryClick(sport.id)}
+                  >
+                    <div className={`${sport.color} rounded-lg overflow-hidden shadow-sm aspect-square flex flex-col ${selectedSportCategory === sport.id ? 'ring-2 ring-white' : ''
                       }`}>
-                        <div className="flex-grow flex items-center justify-center">
-                          <img
-                            src={getIconUrl(sport.iconName)}
-                            alt={sport.name}
-                            className="w-1/2 h-1/2 object-contain"
-                          />
-                        </div>
-                        <div className="pb-2 text-center text-sm text-white font-medium">
-                          {sport.name}
-                        </div>
+                      <div className="flex-grow flex items-center justify-center">
+                        <img
+                          src={getIconUrl(sport.iconName)}
+                          alt={sport.name}
+                          className="w-1/2 h-1/2 object-contain"
+                        />
+                      </div>
+                      <div className="pb-2 text-center text-sm text-white font-medium">
+                        {sport.name}
                       </div>
                     </div>
-                  ))}
-                </div>
-                
-                {/* 선택된 스포츠 서브 카테고리 표시 */}
-                {selectedSportCategory && (
-                  <div className="flex items-center mt-3">
-                    <h2 className="text-lg font-medium">
-                      스포츠/{sportCategories.find(s => s.id === selectedSportCategory)?.name}
-                    </h2>
                   </div>
-                )}
+                ))}
+              </div>
+
+              {/* 선택된 스포츠 서브 카테고리 표시 */}
+              {selectedSportCategory && (
+                <div className="flex items-center mt-3">
+                  <h2 className="text-lg font-medium">
+                    스포츠/{sportCategories.find(s => s.id === selectedSportCategory)?.name}
+                  </h2>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* 스크롤 가능한 콘텐츠 영역 */}
+      <div className="flex-grow overflow-y-auto">
+        <div className="p-4">
+          {/* 타이틀 영역 */}
+          <div className="mb-4">
+            <h1 className="ml-5 text-2xl font-bold text-white">
+              {selectedCategory === 'all'
+                ? '뉴키즈 뉴스'
+                : categories.find(c => c.id === selectedCategory)?.name}
+            </h1>
+          </div>
+
+          {/* 뉴스 목록 */}
+          <div className="space-y-4">
+            {filteredNews.length > 0 ? (
+              filteredNews.map((news) => (
+                <div
+                  key={news.id}
+                  className="bg-white rounded-lg overflow-hidden shadow-md cursor-pointer"
+                  onClick={() => handleNewsClick(news.id)}
+                >
+                  <div className="flex p-4">
+                    <div className="w-24 h-24 rounded overflow-hidden mr-4 flex-shrink-0">
+                      <img
+                        src={news.imageUrl}
+                        alt={news.title}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-lg font-medium mb-1 line-clamp-2">{news.title}</h3>
+                      <p className="text-sm text-gray-600">{news.description}</p>
+                    </div>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className="text-center py-8 text-gray-500 bg-white rounded-lg">
+                <p>해당 카테고리에 뉴스가 없습니다.</p>
               </div>
             )}
           </div>
         </div>
-
-        {/* 스크롤 가능한 콘텐츠 영역 */}
-        <div className="flex-grow overflow-y-auto">
-          <div className="p-4">
-            {/* 타이틀 영역 */}
-            <div className="mb-4">
-              <h1 className="ml-5 text-2xl font-bold text-white">
-                {selectedCategory === 'all' 
-                  ? '뉴키즈 뉴스' 
-                  : categories.find(c => c.id === selectedCategory)?.name}
-              </h1>
-            </div>
-
-            {/* 뉴스 목록 */}
-            <div className="space-y-4">
-              {filteredNews.length > 0 ? (
-                filteredNews.map((news) => (
-                  <div 
-                    key={news.id} 
-                    className="bg-white rounded-lg overflow-hidden shadow-md cursor-pointer"
-                    onClick={() => handleNewsClick(news.id)}
-                  >
-                    <div className="flex p-4">
-                      <div className="w-24 h-24 rounded overflow-hidden mr-4 flex-shrink-0">
-                        <img 
-                          src={news.imageUrl} 
-                          alt={news.title} 
-                          className="w-full h-full object-cover" 
-                        />
-                      </div>
-                      <div className="flex-1">
-                        <h3 className="text-lg font-medium mb-1 line-clamp-2">{news.title}</h3>
-                        <p className="text-sm text-gray-600">{news.description}</p>
-                      </div>
-                    </div>
-                  </div>
-                ))
-              ) : (
-                <div className="text-center py-8 text-gray-500 bg-white rounded-lg">
-                  <p>해당 카테고리에 뉴스가 없습니다.</p>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
       </div>
-    </Layout>
+    </div>
   );
 }

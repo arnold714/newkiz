@@ -6,7 +6,7 @@ spring:
     gateway:
       routes:
         - id: news-service
-          uri: http://news-service.${K8S_NAMESPACE}.svc.cluster.local
+          uri: http://news-service.${K8S_NAMESPACE}.svc.cluster.local:80
           predicates:
             - Path=/api/news/**
 #          filters:

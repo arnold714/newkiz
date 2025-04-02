@@ -1,9 +1,15 @@
 application:
   domain: ${APPLICATION_DOMAIN}
 
+server:
+  forward-headers-strategy: framework
+
 spring:
   cloud:
     gateway:
+      forwarded:
+        enabled: true  # X-Forwarded-* 헤더를 활용하도록 설정 
+      
       routes:
         - id: news-service
           uri: http://news-service

@@ -120,7 +120,7 @@ async def generate_quiz_from_llm(article_text: str, keyword_list: list[str]) -> 
     다음 뉴스 기사를 바탕으로 퀴즈 2개를 만들어 주세요:
 
     1. OX 퀴즈:
-    - 뉴스 내용과 관련된 사실 여부를 묻는 질문 1개
+    - 뉴스 내용과 관련된 사실 여부를 O, X로 대답할 수 있게 묻는 질문 1개
     - 형식: "질문", "정답(O 또는 X)"
 
     2. 객관식 퀴즈:
@@ -128,7 +128,7 @@ async def generate_quiz_from_llm(article_text: str, keyword_list: list[str]) -> 
     - 보기 4개 중 정답 1개
     - 형식: "질문", "보기 리스트", "정답"
 
-    아래 JSON 형식으로만 출력해 주세요:
+    아래 JSON 형식으로만 출력하고 JSON 이외의 내용은 포함하지 마세요:
     {{
       "ox_quiz": {{
         "question": "...",

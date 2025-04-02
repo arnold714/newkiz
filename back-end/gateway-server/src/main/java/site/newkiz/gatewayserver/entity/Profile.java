@@ -24,7 +24,7 @@ public class Profile {
   private Integer userId;
   private String nickname;
   private LocalDate birthday ;
-  private String school;
+  private int schoolId;
   private Gender gender;
 
 }

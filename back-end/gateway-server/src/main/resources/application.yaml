@@ -1,3 +1,6 @@
+application:
+  domain: ${APPLICATION_DOMAIN}
+
 spring:
   cloud:
     gateway:
@@ -39,4 +42,38 @@ spring:
     username: ${MYSQL_USER}
     password: ${MYSQL_PASSWORD}
 
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            clientId: ${OAUTH2_GOOGLE_CLIENT_ID}
+            clientSecret: ${OAUTH2_GOOGLE_CLIENT_SECRET}
+            redirect-uri: ${OAUTH2_REDIRECT_DOMAIN}/login/oauth2/code/google
+            scope:
+              - email
+              - profile
+          kakao:
+            client-authentication-method: client_secret_post
+            client-name: kakao
+            client-id: ${OAUTH2_KAKAO_CLIENT_ID}
+            client-secret: ${OAUTH2_KAKAO_CLIENT_SECRET}
+            authorization-grant-type: authorization_code
+            provider: kakao
+            redirect-uri: ${OAUTH2_REDIRECT_DOMAIN}/login/oauth2/code/kakao
+            scope:
+        provider:
+          kakao:
+            authorization-uri: https://kauth.kakao.com/oauth/authorize
+            token-uri: https://kauth.kakao.com/oauth/token
+            user-info-uri: https://kapi.kakao.com/v2/user/me
+            user-name-attribute: id
+  config:
+    activate:
+      on-profile:
 
+jwt:
+  token:
+    secret-key: ${JWT_SECRET}
+    access-expire-time: ${JWT_ACCESS_EXPIRE_TIME}  # 액세스 토큰 만료 시간 (30분, 밀리초 단위)
+    refresh-expire-time: ${JWT_REFRESH_EXPIRE_TIME}  # 리프레시 토큰 만료 시간 (14일, 밀리초 단위)

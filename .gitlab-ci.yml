@@ -22,7 +22,7 @@ docker-build:
     - gateway-server/develop
   script:
     - echo "Docker 이미지 빌드 시작!"
-    - docker build -t $ECR_REPOSITORY_URI/newkiz:$DOCKER_IMAGE_TAG back-end/
+    - docker build -t $ECR_REPOSITORY_URI/newkiz:$DOCKER_IMAGE_TAG back-end/gateway-server
   artifacts:
     reports:
       dotenv: variables.env  # 다음 단계에서 변수 사용 가능하게 설정

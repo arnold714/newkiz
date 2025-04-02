@@ -1,5 +1,5 @@
 import { Swiper, SwiperSlide } from "swiper/react";
-import 'swiper/css/bundle';
+import "swiper/swiper-bundle.css";
 import { EffectCoverflow, Pagination } from "swiper/modules";
 import { HotTopicArticle } from "@/features/main/model/types";
 import "../styles/HotTopic.css"
@@ -8,7 +8,7 @@ import { useMediaQuery } from "react-responsive";
 export const HotTopic = () => {
 
     const isTablet = useMediaQuery({ query: "(min-width: 768px) and (max-width: 1279px)" });
-  const slidesPerView = isTablet ? 1 : 1.5;
+    const slidesPerView = isTablet ? 1 : 1.5;
   
 
     const hotTopicNewsList: HotTopicArticle[] = [
@@ -72,13 +72,13 @@ export const HotTopic = () => {
             <div>
                 <Swiper
                     loop={true}
-                    effect={"coverflow"} // coverflow 효과 적용 (기본 slide 효과 대신 사용)
+                    effect={"slide"} // coverflow 효과 적용 (기본 slide 효과 대신 사용)
                     grabCursor={true}
                     centeredSlides={true}
                     slidesPerView={slidesPerView}
                     spaceBetween={-50} // 음수 값을 주어 슬라이드가 겹치도록 설정
                     speed={500}
-                    pagination={isTablet ? false : { clickable: true }}
+                    pagination={isTablet ? false :{ clickable: true }}
                     modules={[EffectCoverflow, Pagination]}
                     className="mySwiper"
                     >

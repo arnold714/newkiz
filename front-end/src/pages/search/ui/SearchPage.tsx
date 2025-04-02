@@ -76,7 +76,7 @@ export default function SearchPage() {
   };
 
   return (
-    <div className="flex flex-col h-screen">
+    <div className="flex flex-col h-screen pb-15">
       {/* 고정 헤더 부분 */}
       <div className="flex-none p-4">
         <div className="flex items-center">

@@ -18,7 +18,7 @@ export default function ChatbotPage () {
   };
 
   const handleCloseChat = () => {
-    window.location.href = "/";  // 창 닫기 시 '/'로 리디렉션
+    window.history.back();
   };
 
   // 엔터 키를 눌렀을 때 메시지 전송

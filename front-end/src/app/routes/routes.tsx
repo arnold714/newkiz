@@ -1,8 +1,7 @@
 import { Layout } from "@/shared"
 import { Suspense, lazy } from "react"
 import { createBrowserRouter, RouteObject } from "react-router-dom"
-
-const Loading = <div>로딩중입니다...</div>
+import { LoadingComponent } from "@/shared"
 
 // 디테일 페이지
 const DetailPage = lazy(() => import("@pages/detail").then((module) => ({ default: module.DetailPage })))
@@ -23,6 +22,7 @@ const WrongAnswerPage = lazy(() => import("@pages/mypage").then((module) => ({ d
 // 리포터 페이지
 const ReporterPage = lazy(() => import("@pages/reporter").then((module) => ({ default: module.ReporterPage })))
 const CreateArticlePage = lazy(() => import("@pages/reporter").then((module) => ({ default: module.CreateArticlePage })))
+const ArticlePreviewPage = lazy(() => import("@pages/reporter").then((module) => ({ default: module.ArticlePreviewPage })))
 // 검색 페이지
 const SearchPage = lazy(() => import("@pages/search").then((module) => ({ default: module.SearchPage })))
 // 검색 결과 페이지
@@ -32,18 +32,18 @@ const NotFoundPage = lazy(() => import("@pages/notfound").then((module) => ({ de
 // 첫 로그인 정보 입력 페이지
 const FirstLoginOnboarding = lazy(() => import("@pages/login").then((module) => ({ default: module.FirstLoginOnboarding })))
 // 챗봇 페이지
-const ChatbotPage = lazy(() => import("../../pages/chatbot").then((module) => ({ default: module.ChatbotPage })))
+const ChatbotPage = lazy(() => import("@pages/chatbot").then((module) => ({ default: module.ChatbotPage })))
 // ai뉴스 요약 페이지
-const NewsSummaryPage = lazy(() => import("../../pages/newssummary").then((module) => ({ default: module.NewsSummaryPage })))
+const NewsSummaryPage = lazy(() => import("@pages/newssummary").then((module) => ({ default: module.NewsSummaryPage })))
 // 카테고리 페이지
 const CategoryPage = lazy(() => import("@pages/category").then((module) => ({ default: module.CategoryPage })))
-const CategoryDetailPage = lazy(() => import("../../pages/category").then((module) => ({ default: module.CategoryDetailPage })))
+const CategoryDetailPage = lazy(() => import("@pages/category").then((module) => ({ default: module.CategoryDetailPage })))
 
 const routes: RouteObject[] = [
   {
     path: "/",
     element: (
-      <Suspense fallback={Loading}>
+      <Suspense fallback={<LoadingComponent />}>
         <Layout>
           <MainPage />
         </Layout>
@@ -53,7 +53,7 @@ const routes: RouteObject[] = [
   {
     path: "/detail",
     element: (
-      <Suspense fallback={Loading}>
+      <Suspense fallback={<LoadingComponent />}>
         <Layout>
           <DetailPage />
         </Layout>
@@ -63,7 +63,7 @@ const routes: RouteObject[] = [
   {
     path: "/game",
     element: (
-      <Suspense fallback={Loading}>
+      <Suspense fallback={<LoadingComponent />}>
         <GamePage />
       </Suspense>
     ),
@@ -71,7 +71,7 @@ const routes: RouteObject[] = [
   {
     path: "/login",
     element: (
-      <Suspense fallback={Loading}>
+      <Suspense fallback={<LoadingComponent />}>
         <LoginPage />
       </Suspense>
     ),
@@ -79,7 +79,7 @@ const routes: RouteObject[] = [
   {
     path: "/mypage",
     element: (
-      <Suspense fallback={Loading}>
+      <Suspense fallback={<LoadingComponent />}>
         <Layout>
           <MyPage />
         </Layout>
@@ -89,7 +89,7 @@ const routes: RouteObject[] = [
       {
         path: "info",
         element: (
-          <Suspense fallback={Loading}>
+          <Suspense fallback={<LoadingComponent />}>
             <ModifyInfoPage />
           </Suspense>
         ),
@@ -97,7 +97,7 @@ const routes: RouteObject[] = [
       {
         path: "scrap",
         element: (
-          <Suspense fallback={Loading}>
+          <Suspense fallback={<LoadingComponent />}>
             <ScrapPage />
           </Suspense>
         ),
@@ -105,7 +105,7 @@ const routes: RouteObject[] = [
           {
             path: "news",
             element: (
-              <Suspense fallback={Loading}>
+              <Suspense fallback={<LoadingComponent />}>
                 <ScrappedNewsPage />
               </Suspense>
             
@@ -114,7 +114,7 @@ const routes: RouteObject[] = [
           {
             path: "words",
             element: (
-              <Suspense fallback={Loading}>
+              <Suspense fallback={<LoadingComponent />}>
                 <ScrappedWordsPage />
               </Suspense>
             )
@@ -124,7 +124,7 @@ const routes: RouteObject[] = [
       {
         path: "summary",
         element: (
-          <Suspense fallback={Loading}>
+          <Suspense fallback={<LoadingComponent />}>
             <SummaryPage />
           </Suspense>
         ),
@@ -132,7 +132,7 @@ const routes: RouteObject[] = [
       {
         path: "wronganswer",
         element: (
-          <Suspense fallback={Loading}>
+          <Suspense fallback={<LoadingComponent />}>
             <WrongAnswerPage />
           </Suspense>
         ),
@@ -142,7 +142,7 @@ const routes: RouteObject[] = [
   {
     path: "/reporter",
     element: (
-      <Suspense fallback={Loading}>
+      <Suspense fallback={<LoadingComponent />}>
         <Layout>
           <ReporterPage />
         </Layout>
@@ -152,8 +152,16 @@ const routes: RouteObject[] = [
       {
         path: "create",
         element: (
-          <Suspense fallback={Loading}>
+          <Suspense fallback={<LoadingComponent />}>
             <CreateArticlePage />
+          </Suspense>
+        ),
+      },
+      {
+        path: "preview",
+        element: (
+          <Suspense fallback={<LoadingComponent />}>
+            <ArticlePreviewPage />
           </Suspense>
         ),
       },
@@ -162,7 +170,7 @@ const routes: RouteObject[] = [
   {
     path: "/search",
     element: (
-      <Suspense fallback={Loading}>
+      <Suspense fallback={<LoadingComponent />}>
         <Layout>
           <SearchPage />
         </Layout>
@@ -172,7 +180,7 @@ const routes: RouteObject[] = [
   {
     path: "/search/result",
     element: (
-      <Suspense fallback={Loading}>
+      <Suspense fallback={<LoadingComponent />}>
         <SearchResultsPage />
       </Suspense>
     ),
@@ -180,7 +188,7 @@ const routes: RouteObject[] = [
   {
     path: "*",
     element: (
-      <Suspense fallback={Loading}>
+      <Suspense fallback={<LoadingComponent />}>
         <NotFoundPage />
       </Suspense>
     ),
@@ -188,7 +196,7 @@ const routes: RouteObject[] = [
   {
     path: "/userinfo",
     element: (
-      <Suspense fallback={Loading}>
+      <Suspense fallback={<LoadingComponent />}>
         <FirstLoginOnboarding />
       </Suspense>
     ),
@@ -196,7 +204,7 @@ const routes: RouteObject[] = [
   {
     path: "/chatbot",
     element: (
-      <Suspense fallback={Loading}>
+      <Suspense fallback={<LoadingComponent />}>
         <ChatbotPage />
       </Suspense>
     ),
@@ -204,7 +212,7 @@ const routes: RouteObject[] = [
   {
     path: "/newssummary",
     element: (
-      <Suspense fallback={Loading}>
+      <Suspense fallback={<LoadingComponent />}>
         <Layout>
           <NewsSummaryPage />
         </Layout>
@@ -214,7 +222,7 @@ const routes: RouteObject[] = [
   {
     path: "/category",
     element: (
-      <Suspense fallback={Loading}>
+      <Suspense fallback={<LoadingComponent />}>
           <Layout>
             <CategoryPage />
           </Layout>
@@ -222,12 +230,10 @@ const routes: RouteObject[] = [
     ),
     children: [
       {
-        path:"detail",
+        path:"details/:categoryId",
         element: (
-          <Suspense fallback={Loading}>
-            <Layout>
+          <Suspense fallback={<LoadingComponent />}>
               <CategoryDetailPage />
-            </Layout>
           </Suspense>
         )
       }

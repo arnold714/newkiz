@@ -4,6 +4,7 @@ import { LuChevronLeft } from "react-icons/lu";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { ko } from "date-fns/locale";
+import "@shared/styles/CustomScroll.css"
 
 interface BasicInfo {
   nickname: string;
@@ -87,7 +88,7 @@ export default function FirstLoginInfo({
       </div>
 
       {/* 스크롤 가능한 컨텐츠 */}
-      <div className="overflow-y-auto px-5 pb-6 flex-1">
+      <div className="overflow-y-auto px-5 pb-6 flex-1 scroll">
         <h2 className="text-black font-bold text-4xl text-center mb-8 pt-2">기본 정보</h2>
 
         {/* 닉네임 */}

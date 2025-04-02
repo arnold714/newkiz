@@ -22,6 +22,7 @@ const SummaryPage = lazy(() => import("@pages/mypage").then((module) => ({ defau
 const WrongAnswerPage = lazy(() => import("@pages/mypage").then((module) => ({ default: module.WrongAnswerPage })))
 // 리포터 페이지
 const ReporterPage = lazy(() => import("@pages/reporter").then((module) => ({ default: module.ReporterPage })))
+const CreateArticlePage = lazy(() => import("@pages/reporter").then((module) => ({ default: module.CreateArticlePage })))
 // 검색 페이지
 const SearchPage = lazy(() => import("@pages/search").then((module) => ({ default: module.SearchPage })))
 // 검색 결과 페이지
@@ -147,6 +148,16 @@ const routes: RouteObject[] = [
         </Layout>
       </Suspense>
     ),
+    children: [
+      {
+        path: "create",
+        element: (
+          <Suspense fallback={Loading}>
+            <CreateArticlePage />
+          </Suspense>
+        ),
+      },
+    ]
   },
   {
     path: "/search",

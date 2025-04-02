@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { LuSend, LuX } from "react-icons/lu";
+import "@shared/styles/CustomScroll.css"
 
 export default function ChatbotPage () {
   const [message, setMessage] = useState<string>(""); // 사용자가 입력하는 메시지
@@ -52,7 +53,7 @@ export default function ChatbotPage () {
       </div>
 
       {/* 대화 내용 */}
-      <div className="chatbot-messages p-4 flex-grow overflow-y-auto">
+      <div className="chatbot-messages p-4 flex-grow overflow-y-auto scroll">
         {messages.map((msg, index) => (
           <div key={index} className={`message ${msg.type === "user" ? "text-right" : "text-left"}`}>
             {msg.type === "bot" && (

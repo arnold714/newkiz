@@ -96,7 +96,7 @@ html, body {
   max-width: var(--max-width); /* CSS 변수로 최대 너비 적용 */
   min-width: var(--min-width);
   margin: 0 auto; /* 중앙 정렬 */
-  overflow: hidden;
+  overflow: hidden !important;
 }
 
 body {

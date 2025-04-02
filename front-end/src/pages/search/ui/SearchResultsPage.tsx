@@ -367,6 +367,7 @@ export default function SearchResultsPage() {
           )}
         </div>
       </div>
+      <NavBar />
     </div>
   );
 }

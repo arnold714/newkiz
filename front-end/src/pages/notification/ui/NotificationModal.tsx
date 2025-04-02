@@ -4,6 +4,7 @@ import NotificationIcon from '@/pages/notification/ui/NotificationIcon';
 import TabButton from '@/pages/notification/ui/TabButton';
 import { LuChevronLeft, LuX } from "react-icons/lu";
 import '@/pages/notification/styles/Notification.css';
+import "@shared/styles/CustomScroll.css"
 
 interface NotificationModalProps {
   isOpen: boolean;
@@ -114,7 +115,7 @@ export default function NotificationModal({ isOpen, onClose }: NotificationModal
 
           {/* 알림 목록 */}
           {hasNotifications ? (
-            <div className="notification-scroll-area w-full">
+            <div className="notification-scroll-area w-full scroll">
               {notifications[activeTab].map((notification) => (
                 <div key={notification.id} className="flex items-start p-3 w-full overflow-hidden">
                   <NotificationIcon type={notification.type} />

@@ -1,5 +1,6 @@
 import React from "react";
 import { LuChevronLeft } from "react-icons/lu";
+import "@shared/styles/CustomScroll.css"
 
 interface FirstInterestSelectionProps {
   interests: string[];
@@ -63,7 +64,7 @@ export default function FirstInterestSelection({
       </div>
 
       {/* 관심사 선택 - 스크롤 영역 */}
-      <div className="px-6 overflow-y-auto flex-1">
+      <div className="px-6 overflow-y-auto flex-1 scroll">
         {/* 제목 */}
         <h2 className="text-4xl font-bold text-center mb-6 pt-2">
           현재 가장 관심있는 분야가<br />무엇인가요?

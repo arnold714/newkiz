@@ -7,6 +7,7 @@ import { ShortsResults } from "@/widgets/search/ui/ShortsResults";
 import { KidsResults } from "@/widgets/search/ui/KidsResults";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import "@shared/styles/CustomScroll.css"
 
 interface SearchResult {
   id: number;
@@ -292,7 +293,7 @@ export default function SearchResultsPage() {
       </div>
 
       {/* 가운데 영역: 검색 결과 리스트 */}
-      <div className="flex-1 overflow-y-auto bg-white px-4 pb-18">
+      <div className="flex-1 overflow-y-auto bg-white px-4 pb-18 scroll">
         {/* 회색 구분선 */}
         <hr className="border-b-3 border-gray-100 -mx-4 mb-2" />
         

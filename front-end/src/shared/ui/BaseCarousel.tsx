@@ -13,6 +13,8 @@ export type BaseCarouselProps = {
     arrows?:boolean;
     dots?:boolean;
     afterChange?: (index: number) => void;
+    centerMode?: boolean;
+    centerPadding?: string;
 };
 
 export default function BaseCarousel({
@@ -24,6 +26,8 @@ export default function BaseCarousel({
     arrows=false,
     dots=false,
     afterChange,
+    centerMode = false,
+    centerPadding = "60px",
     
 }:BaseCarouselProps) {
     const settings = {
@@ -34,6 +38,8 @@ export default function BaseCarousel({
         arrows,
         dots,
         afterChange,
+        centerMode,
+        centerPadding,
     };
     return (
         <div className="w-auto overflow-hidden">

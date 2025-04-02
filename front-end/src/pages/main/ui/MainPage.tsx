@@ -1,12 +1,13 @@
 import ProgressGraph from './ProgressGraph';
-import HotTopicNews from './HotTopicNews';
 import RecommendedNews from './RecommendedNews';
+import { HotTopic } from '@/widgets/main';
+
 import "@shared/styles/CustomScroll.css"
 
 export default function MainPage() {
   return (
-      <div className="h-screen">
-        <div className='my-5 flex justify-center gap-18 items-center'>
+      <div className="h-screen flex flex-col overflow-auto scroll">
+        <div className='my-5 flex justify-center gap-18 items-center '>
           <div>
             <img src="https://newkiz.s3.ap-northeast-2.amazonaws.com/dinos/nico.png" alt="character_nico" className='w-40 m-3 '/>
           </div>
@@ -15,7 +16,7 @@ export default function MainPage() {
           </div>
         </div>
         <div className='bg-white h-70 opacity-75 p-2'>
-          <HotTopicNews />
+          <HotTopic />
         </div>
         <div className='mt-5'>
           <RecommendedNews />

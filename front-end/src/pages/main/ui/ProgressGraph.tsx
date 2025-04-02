@@ -54,7 +54,7 @@ const ProgressGraph: React.FC = () => {
   const series = [50]; // 진행률 (퍼센트)
 
   return (
-    <div className="bg-white shadow-m rounded-[15px] opacity-90 mr-10
+    <div className="bg-white/90 shadow-m rounded-[15px] mr-10
                     w-35 h-35
                     sm:w-60 sm:h-60
                     ">

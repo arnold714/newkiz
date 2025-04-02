@@ -4,6 +4,7 @@ import { useThree, useFrame } from "@react-three/fiber"
 import { CharacterSpriteProps } from "../model/types"
 import * as THREE from "three"
 import { calculateCharacterBoundaries } from "@/entities/character"
+import { Html } from "@react-three/drei"
 
 export const CharacterSprite: React.FC<CharacterSpriteProps> = ({ characterName, joystickData, tileMapSize, initialPosition = [0, 0, 0] }) => {
   const [position, setPosition] = useState<[number, number, number]>(initialPosition)
@@ -91,6 +92,13 @@ export const CharacterSprite: React.FC<CharacterSpriteProps> = ({ characterName,
         <>
           {!isMoving && <SpriteAnimation texturePath={textureIdlePath} frameWidth={24} totalWidth={72} frameCount={3} frameTime={200} direction={direction} />}
           {isMoving && <SpriteAnimation texturePath={textureMovePath} frameWidth={24} totalWidth={144} frameCount={6} frameTime={100} direction={direction} />}
+          
+          {/* 닉네임 표시 - Html 컴포넌트 사용 */}
+          <Html position={[0, -0.6, 0]} center>
+            <div style={{ color: 'white', background: 'rgba(0,0,0,0.5)', padding: '2px 5px', borderRadius: '3px', whiteSpace: 'nowrap' }}>
+              닉네임
+            </div>
+          </Html>
         </>
       )}
     </group>

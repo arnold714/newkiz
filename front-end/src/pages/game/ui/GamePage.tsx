@@ -92,7 +92,6 @@ export const GamePage: React.FC = () => {
             {/* 캐릭터 이동 로직 - Canvas 내부에서 실행(Canvas 외부에서 작동하면 에러 뜸)*/}
           </React.Suspense>
         </Canvas>
-
         <JoystickController onMove={handleJoystickMove} onStop={handleJoystickStop} />
       </div>
     </div>

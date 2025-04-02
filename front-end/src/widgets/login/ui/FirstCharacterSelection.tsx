@@ -1,5 +1,6 @@
 import React from "react";
 import { LuChevronLeft } from "react-icons/lu";
+import "@shared/styles/CustomScroll.css"
 
 interface BasicInfo {
   nickname: string;
@@ -100,7 +101,7 @@ export default function FirstCharacterSelection({
         </div>
         
         {/* 스크롤 영역 - 고정 헤더 아래 배치, 화면 끝까지 확장 */}
-        <div className="relative z-10 flex-1 px-6 overflow-y-auto">
+        <div className="relative z-10 flex-1 px-6 overflow-y-auto scroll">
           {/* 회색 구분선 */}
           <div className="w-full border-t border-gray-200 mb-3" />
 

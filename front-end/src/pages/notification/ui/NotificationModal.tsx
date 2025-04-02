@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { TabType, Notification } from '@/pages/notification/model/NotificationModel';
 import NotificationIcon from '@/pages/notification/ui/NotificationIcon';
 import TabButton from '@/pages/notification/ui/TabButton';

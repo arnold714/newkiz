@@ -55,7 +55,7 @@ public class JwtAuthenticationFilter implements WebFilter {
     if (!response.isCommitted()) {
       response.setStatusCode(HttpStatus.SEE_OTHER);
       response.getHeaders()
-          .add("Location", "http://" + applicationConfig.getDomain() + "/userinfo");
+          .add("Location", applicationConfig.getDomain() + "/userinfo");
     }
     return response.setComplete();
   }

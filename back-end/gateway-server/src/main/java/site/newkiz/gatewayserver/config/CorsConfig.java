@@ -19,7 +19,7 @@ public class CorsConfig {
   @Bean
   public CorsWebFilter corsWebFilter() {
     CorsConfiguration config = new CorsConfiguration();
-    config.setAllowedOrigins(List.of("http://localhost:3000", "http://" + domain)); // 허용할 출처
+    config.setAllowedOrigins(List.of(domain)); // 허용할 출처
     config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS")); // 허용할 HTTP 메서드
     config.setAllowedHeaders(List.of("*")); // 모든 헤더 허용
     config.setAllowCredentials(true); // 쿠키 허용

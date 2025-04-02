@@ -49,7 +49,7 @@ spring:
           google:
             clientId: ${OAUTH2_GOOGLE_CLIENT_ID}
             clientSecret: ${OAUTH2_GOOGLE_CLIENT_SECRET}
-            redirect-uri: http://${OAUTH2_REDIRECT_DOMAIN}/login/oauth2/code/google
+            redirect-uri: ${OAUTH2_REDIRECT_DOMAIN}/login/oauth2/code/google
             scope:
               - email
               - profile
@@ -60,7 +60,7 @@ spring:
             client-secret: ${OAUTH2_KAKAO_CLIENT_SECRET}
             authorization-grant-type: authorization_code
             provider: kakao
-            redirect-uri: http://${OAUTH2_REDIRECT_DOMAIN}/login/oauth2/code/kakao
+            redirect-uri: ${OAUTH2_REDIRECT_DOMAIN}/login/oauth2/code/kakao
             scope:
         provider:
           kakao:

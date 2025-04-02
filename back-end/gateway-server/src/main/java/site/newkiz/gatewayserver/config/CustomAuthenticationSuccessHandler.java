@@ -48,8 +48,8 @@ public class CustomAuthenticationSuccessHandler implements ServerAuthenticationS
 
           // 5. 프로필 존재 여부 확인 후 리다이렉트 결정
           return profileRepository.findByUserId(user.getId())
-              .map(profile -> "http://" + applicationConfig.getDomain()) // 프로필이 존재하면 메인 페이지로
-              .defaultIfEmpty("http://" + applicationConfig.getDomain() + "/userinfo") // 없으면 유저 정보 입력 페이지로
+              .map(profile -> applicationConfig.getDomain()) // 프로필이 존재하면 메인 페이지로
+              .defaultIfEmpty(applicationConfig.getDomain() + "/userinfo") // 없으면 유저 정보 입력 페이지로
               .flatMap(redirectUrl -> {
                 response.setStatusCode(HttpStatus.SEE_OTHER);
                 response.getHeaders().setLocation(URI.create(redirectUrl));

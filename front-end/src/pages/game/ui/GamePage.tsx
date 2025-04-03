@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react"
 import { Canvas } from "@react-three/fiber"
-import { OrthographicCamera } from "@react-three/drei"
+import { Html, OrthographicCamera } from "@react-three/drei"
 import { CharacterSprite } from "@entities/character"
 import { TileMap, grassMapData, waterMapData, biomeData, newMapData } from "@entities/tilemap"
 import { JoystickController } from "@entities/joystick"
@@ -21,7 +21,7 @@ export const GamePage: React.FC = () => {
   const userId = 1;
 
   // WebSocket 연결
-  const { connected, gameInfo, allPlayers, currentQuiz, quizResult } = useWebSocket(userId);
+  const { connected, gameInfo, allPlayers, currentQuiz, quizResult, sendMove } = useWebSocket(userId);
 
   // 조이스틱 데이터 처리
   const handleJoystickMove = (event: any) => {
@@ -89,11 +89,11 @@ export const GamePage: React.FC = () => {
           </div>
         ) : null}
         {
-          gameInfo && gameInfo.state === "FINISHED" ?(
+          gameInfo && gameInfo.state === "FINISHED" ? (
             <div className="absolute w-[70%] top-10 z-99 flex flex-col justify-center items-center">
               게임이 종료되었습니다.
             </div>
-          ):null
+          ) : null
         }
 
         <Canvas className="w-full">
@@ -114,18 +114,25 @@ export const GamePage: React.FC = () => {
               color={"#97d258"}
             />
             <TileMap tilesetPath={`${tileMapUrl}assets/Basic_Grass_Biom_things.png`} tileSize={16} mapWidth={16} mapHeight={10} tileData={biomeData} scale={0.5} wScale={wScale} />
-            <CharacterSprite characterName="kuro" joystickData={joystickData} tileMapSize={tileMapSize} initialPosition={[0, 0, 5]} userId={userId} nickname={"타락파워전사"} />
+            <CharacterSprite characterName="kuro" joystickData={joystickData} tileMapSize={tileMapSize} initialPosition={[0, 0, 5]} userId={userId} nickname={"타락파워전사"} sendMove={sendMove}/>
             {connected && allPlayers && Object.values(allPlayers)
               .filter(player => player.id !== userId) // 현재 사용자 제외
               .map(player => (
-                <CharacterSprite
-                  key={player.id}
-                  characterName={player.characterName}
-                  joystickData={{ x: 0, y: 0, isMoving: false }} // 다른 플레이어는 로컬 조이스틱 사용 안함
-                  tileMapSize={tileMapSize}
-                  initialPosition={[player.position.x, player.position.y, 0]}
-                  userId={player.id}
-                />
+                <>
+                  <CharacterSprite
+                    key={player.id}
+                    characterName={player.characterName}
+                    joystickData={{ x: 0, y: 0, isMoving: false }} // 다른 플레이어는 로컬 조이스틱 사용 안함
+                    tileMapSize={tileMapSize}
+                    initialPosition={[player.position.x, player.position.y, 0]}
+                    userId={player.id}
+                  />
+                  <Html position={[0, -0.6, 0]} center>
+                    <div style={{ color: 'white', background: 'rgba(0,0,0,0.5)', padding: '2px 5px', borderRadius: '3px', whiteSpace: 'nowrap' }}>
+                      {player.nickname}
+                    </div>
+                  </Html>
+                </>
               ))
             }
           </React.Suspense>

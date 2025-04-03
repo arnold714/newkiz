@@ -7,7 +7,7 @@ import { calculateCharacterBoundaries } from "@/entities/character"
 import { Html } from "@react-three/drei"
 import { Position } from "@/features/game/model/types"
 
-export const CharacterSprite: React.FC<CharacterSpriteProps> = ({ characterName, joystickData, tileMapSize, initialPosition, userId, sendMove, nickname }) => {
+export const CharacterSprite: React.FC<CharacterSpriteProps> = ({ characterName, joystickData, tileMapSize, initialPosition, userId, sendMove, nickname, setMapBoundaries }) => {
   const [position, setPosition] = useState<[number, number, number]>(initialPosition)
   const [isMoving, setIsMoving] = useState<boolean>(false)
   const [direction, setDirection] = useState<number>(1)
@@ -26,10 +26,21 @@ export const CharacterSprite: React.FC<CharacterSpriteProps> = ({ characterName,
   const textureIdlePath = `https://newkiz.s3.ap-northeast-2.amazonaws.com/dinoset/${characterName}/base/idle.png`
   const textureMovePath = `https://newkiz.s3.ap-northeast-2.amazonaws.com/dinoset/${characterName}/base/move.png`
 
-  // 캐릭터가 움직일 수 있는 공간 계산
+  // 경계값 계산 후 WebSocket 훅에 전달
   const boundaries = React.useMemo(() => {
-    return calculateCharacterBoundaries(viewport, characterSize, tileMapSize)
-  }, [viewport.width, viewport.height, characterSize.width, characterSize.height, tileMapSize.width, tileMapSize.height])
+    const calculatedBoundaries = calculateCharacterBoundaries(
+      viewport, 
+      characterSize, 
+      tileMapSize
+    );
+    
+    // 계산된 경계값을 WebSocket 훅에 전달
+    if (setMapBoundaries) {
+      setMapBoundaries(calculatedBoundaries);
+    }
+    
+    return calculatedBoundaries;
+  }, [viewport.width, viewport.height, characterSize.width, characterSize.height, tileMapSize.width, tileMapSize.height, setMapBoundaries]);
 
   // 조이스틱 데이터 변경 시 캐릭터 상태 업데이트
   useEffect(() => {

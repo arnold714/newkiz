@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react"
 import { Canvas } from "@react-three/fiber"
-import { Html, OrthographicCamera } from "@react-three/drei"
+import { OrthographicCamera } from "@react-three/drei"
 import { CharacterSprite } from "@entities/character"
 import { TileMap, grassMapData, waterMapData, biomeData, newMapData } from "@entities/tilemap"
 import { JoystickController } from "@entities/joystick"
@@ -21,7 +21,7 @@ export const GamePage: React.FC = () => {
   const userId = 1;
 
   // WebSocket 연결
-  const { connected, gameInfo, allPlayers, currentQuiz, quizResult, sendMove } = useWebSocket(userId);
+  const { connected, gameInfo, allPlayers, currentQuiz, quizResult, sendMove, setMapBoundaries  } = useWebSocket(userId);
 
   // 조이스틱 데이터 처리
   const handleJoystickMove = (event: any) => {
@@ -114,7 +114,7 @@ export const GamePage: React.FC = () => {
               color={"#97d258"}
             />
             <TileMap tilesetPath={`${tileMapUrl}assets/Basic_Grass_Biom_things.png`} tileSize={16} mapWidth={16} mapHeight={10} tileData={biomeData} scale={0.5} wScale={wScale} />
-            <CharacterSprite characterName="kuro" joystickData={joystickData} tileMapSize={tileMapSize} initialPosition={[0, 0, 5]} userId={userId} nickname={"타락파워전사"} sendMove={sendMove}/>
+            <CharacterSprite characterName={"kuro"} joystickData={joystickData} tileMapSize={tileMapSize} initialPosition={[0, 0, 5]} userId={userId} nickname={"타락파워전사"} sendMove={sendMove} setMapBoundaries ={setMapBoundaries}/>
             {connected && allPlayers && Object.values(allPlayers)
               .filter(player => player.id !== userId) // 현재 사용자 제외
               .map(player => (
@@ -126,12 +126,8 @@ export const GamePage: React.FC = () => {
                     tileMapSize={tileMapSize}
                     initialPosition={[player.position.x, player.position.y, 0]}
                     userId={player.id}
+                    nickname={player.nickname}
                   />
-                  <Html position={[0, -0.6, 0]} center>
-                    <div style={{ color: 'white', background: 'rgba(0,0,0,0.5)', padding: '2px 5px', borderRadius: '3px', whiteSpace: 'nowrap' }}>
-                      {player.nickname}
-                    </div>
-                  </Html>
                 </>
               ))
             }

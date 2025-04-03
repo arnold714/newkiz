@@ -1,4 +1,5 @@
 import { Position } from "@/features/game/model/types"
+import { Boundaries } from "@/shared/types/common"
 import { JoystickData } from "@/shared/types/joystick"
 
 export interface SpriteAnimationProps {
@@ -18,4 +19,5 @@ export interface CharacterSpriteProps {
   userId?: number;
   sendMove?: (characterName: string, position: Position) => void;
   nickname?: string;
+  setMapBoundaries?: (newBoundaries: Boundaries) => void;
 }

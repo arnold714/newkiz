@@ -1,7 +1,9 @@
+import { normalizePosition } from "@entities/character/model/nomalizationPosition";
 import { Client, IMessage } from "@stomp/stompjs";
 import SockJS from "sockjs-client";
 import { Position, WebSocketCallbacks } from "./types";
 import { useRef } from "react";
+import { Boundaries } from "@/shared/types/common";
 
 // 웹 소켓 연결 캡슐화 (useWebSocket으로 호출해서 사용)
 export const createWebSocketService = (baseUrl: string) => {
@@ -29,7 +31,7 @@ export const createWebSocketService = (baseUrl: string) => {
 
           // 최초 연결 시 userId 전송
           client.current?.publish({
-            destination: `/pub/connect/users/${userId}`
+            destination: `/pub/connect/users/${userId}`,
           });
 
           // 연결 성공 후 상태에 따라 처리
@@ -92,17 +94,21 @@ export const createWebSocketService = (baseUrl: string) => {
   const sendMoveMessage = (
     userId: number,
     characterName: string,
-    position: Position
+    position: Position,
+    boundaries: Boundaries
   ) => {
     if (!client.current || !client.current.connected) {
       console.log("웹 소켓이 연결되어 있지 않음");
       return;
     }
-    const payload = { id: userId, characterName, position };
+    // 위치 데이터 정규화
+    const normalizedPosition = normalizePosition(position, boundaries);
+    const payload = { id: userId, characterName, position: normalizedPosition };
     client.current.publish({
       destination: "pub/move",
       body: JSON.stringify(payload),
     });
+    console.log("정규화 position: ", payload.position)
   };
 
   return { connect, disconnect, sendMoveMessage };

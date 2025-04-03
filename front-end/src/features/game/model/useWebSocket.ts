@@ -1,6 +1,8 @@
 import { useState, useEffect, useCallback } from "react";
 import { createWebSocketService } from "./WebSocketService";
 import { GameInfo, QuizInfo, QuizResult, Position, Player } from "./types";
+import { denormalizePosition } from "@entities/character/model/nomalizationPosition";
+import { Boundaries } from "@/shared/types/common";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -10,8 +12,13 @@ export const useWebSocket = (userId?: number) => {
   const [allPlayers, setAllPlayers] = useState<Record<number, Player>>({});
   const [currentQuiz, setCurrentQuiz] = useState<QuizInfo | null>(null);
   const [quizResult, setQuizResult] = useState<QuizResult | null>(null);
+  const [boundaries, setBoundaries] = useState<Boundaries | null>(null);
   
   const webSocketService = createWebSocketService(API_URL);
+
+  const setMapBoundaries = useCallback((newBoundaries: Boundaries) => {
+    setBoundaries(newBoundaries);
+  }, []);
 
   useEffect(() => {
     if (!userId) return;
@@ -27,10 +34,20 @@ export const useWebSocket = (userId?: number) => {
           setAllPlayers(playersMap);
         },
         onMove(moveInfo: Player) {
-          setAllPlayers((prev) => ({
-            ...prev,
-            [moveInfo.id]: moveInfo,
-          }));
+            if (boundaries) {
+                const denormalizedPosition = denormalizePosition(
+                  moveInfo.position, 
+                  boundaries
+                );
+                
+                setAllPlayers((prev) => ({
+                  ...prev,
+                  [moveInfo.id]: {
+                    ...moveInfo,
+                    position: denormalizedPosition
+                  },
+                }));
+              }
         },
         onQuizInfo(quizInfo: QuizInfo) {
           setCurrentQuiz(quizInfo);
@@ -47,11 +64,11 @@ export const useWebSocket = (userId?: number) => {
 
   const sendMove = useCallback(
     (characterName: string, position: Position) => {
-      if (!userId) return;
-      webSocketService.sendMoveMessage(userId, characterName, position);
+      if (!userId || !boundaries) return;
+      webSocketService.sendMoveMessage(userId, characterName, position, boundaries);
     },
     [userId, webSocketService]
   );
 
-  return { connected, gameInfo, allPlayers, currentQuiz, quizResult, sendMove };
+  return { connected, gameInfo, allPlayers, currentQuiz, quizResult, sendMove, setMapBoundaries };
 };

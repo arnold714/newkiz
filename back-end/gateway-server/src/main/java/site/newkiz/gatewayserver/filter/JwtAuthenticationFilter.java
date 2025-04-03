@@ -42,7 +42,7 @@ public class JwtAuthenticationFilter implements WebFilter {
               return chain.filter(mutatedExchange)
                   .contextWrite(ReactiveSecurityContextHolder.withAuthentication(authentication));
             })
-            .switchIfEmpty(redirectToProfileSetup(exchange.getResponse()));
+            .switchIfEmpty(Mono.defer(() -> redirectToProfileSetup(exchange.getResponse())));
       }
     } catch (Exception e) {
       throw new RuntimeException(e);

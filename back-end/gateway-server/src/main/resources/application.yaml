@@ -12,7 +12,7 @@ spring:
       
       routes:
         - id: news-service
-          uri: ${NEWS_SERVICE_URI}
+          uri: http://news-service
           predicates:
             - Path=/api/news/**
 #          filters:

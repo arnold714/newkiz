@@ -17,3 +17,4 @@ export interface News {
 }
 
 export type NewsCategory = '전체' | '스포츠' | '정치' | '경제' | '사회' | 'IT/과학' | '세계' | '연예' | '생활/문화'
+

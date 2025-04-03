@@ -1,7 +1,4 @@
-import ProgressGraph from './ProgressGraph';
-import RecommendedNews from '@/widgets/main/ui/RecommendedNews';
-import { HotTopic } from '@/widgets/main';
-
+import { HotTopic, ProgressGraph, RecommendedNews } from '@/widgets/main';
 import "@shared/styles/CustomScroll.css"
 
 export default function MainPage() {

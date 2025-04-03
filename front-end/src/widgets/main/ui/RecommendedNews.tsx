@@ -2,7 +2,7 @@ import { useState } from "react";
 import Button from "@/shared/ui/Button";
 import { News, NewsCategory } from "@/features/main/model/types";
 
-const RecommendedNews = () => {
+export const RecommendedNews = () => {
 
     //하드 코딩한 뉴스 데이터
     const newsData: News[] = [
@@ -32,7 +32,7 @@ const RecommendedNews = () => {
         }
     
 
-    ]
+    ];
 
     const [selectedCategory, setSelectedCategory] = useState<NewsCategory>('전체');
     
@@ -55,12 +55,12 @@ const RecommendedNews = () => {
             <div className="flex justify-center gap-3">
                 {categories.map((category) => [
                     <Button
-                    key={category.label}
-                    label={category.label}
-                    selected={selectedCategory === category.label}
-                    onClick={() => setSelectedCategory(category.label)}
-                    className="text-xl  rounded-xl shadow-[4px_4px_3px_rgba(0,0,0,0.13)]"
-                  />
+                        key={category.label}
+                        label={category.label}
+                        selected={selectedCategory === category.label}
+                        // onClick={() => setSelectedCategory(category.label)}
+                        className="text-xl  rounded-xl shadow-[4px_4px_3px_rgba(0,0,0,0.13)]"
+                    />
                 ])}
             </div>
 
@@ -89,4 +89,3 @@ const RecommendedNews = () => {
         </div>
     );
 };
-export default RecommendedNews;

@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react"
 import { Canvas } from "@react-three/fiber"
-import { OrthographicCamera } from "@react-three/drei"
+import { Html, OrthographicCamera } from "@react-three/drei"
 import { CharacterSprite } from "@entities/character"
 import { TileMap, grassMapData, waterMapData, biomeData, newMapData } from "@entities/tilemap"
 import { JoystickController } from "@entities/joystick"
 import { calculateWScale } from "@/features/game"
 import { JoystickData } from "@/shared/types/joystick"
-// import { WaitingPage, QuestionComponent } from "@/entities/game"
+import { useWebSocket } from "@/features/game/model/useWebSocket"
+import { WaitingPage, QuestionComponent } from "@/entities/game"
 
 export const GamePage: React.FC = () => {
   const [joystickData, setJoystickData] = useState<JoystickData>({
@@ -15,6 +16,12 @@ export const GamePage: React.FC = () => {
     isMoving: false,
   })
   const [wScale, setWScale] = useState(1)
+
+  // 임시 userId
+  const userId = 1;
+
+  // WebSocket 연결
+  const { connected, gameInfo, allPlayers, currentQuiz, quizResult, sendMove } = useWebSocket(userId);
 
   // 조이스틱 데이터 처리
   const handleJoystickMove = (event: any) => {
@@ -64,12 +71,31 @@ export const GamePage: React.FC = () => {
   return (
     <div className="flex justify-center items-center w-full h-screen">
       <div className="flex justify-center items-center w-full h-full relative">
-        {/* <div className="absolute w-[70%] top-15 z-99 flex justify-center">
-          <WaitingPage />
-        </div> */}
-        {/* <div className="absolute w-[70%] top-10 z-99 flex flex-col justify-center items-center">
-          <QuestionComponent questionNo={1} question={question} />
-        </div> */}
+        {
+          gameInfo && gameInfo.state === "WAITING" ?
+            <div className="absolute w-[70%] top-15 z-99 flex justify-center">
+              <WaitingPage />
+            </div> : null
+
+        }
+        {gameInfo && gameInfo.state === "PLAYING" ? (
+          <div className="absolute w-[70%] top-10 z-99 flex flex-col justify-center items-center">
+            <QuestionComponent
+              questionNo={currentQuiz?.quizNumber}
+              question={currentQuiz?.question}
+              timeLeft={currentQuiz?.timeLeft}
+              quizResult={quizResult}
+            />
+          </div>
+        ) : null}
+        {
+          gameInfo && gameInfo.state === "FINISHED" ? (
+            <div className="absolute w-[70%] top-10 z-99 flex flex-col justify-center items-center">
+              게임이 종료되었습니다.
+            </div>
+          ) : null
+        }
+
         <Canvas className="w-full">
           <OrthographicCamera makeDefault position={[0, 0, 5]} zoom={70} />
           <ambientLight intensity={1} />
@@ -88,11 +114,29 @@ export const GamePage: React.FC = () => {
               color={"#97d258"}
             />
             <TileMap tilesetPath={`${tileMapUrl}assets/Basic_Grass_Biom_things.png`} tileSize={16} mapWidth={16} mapHeight={10} tileData={biomeData} scale={0.5} wScale={wScale} />
-            <CharacterSprite characterName="kuro" joystickData={joystickData} tileMapSize={tileMapSize} initialPosition={[0, 0, 0]} />
-            {/* 캐릭터 이동 로직 - Canvas 내부에서 실행(Canvas 외부에서 작동하면 에러 뜸)*/}
+            <CharacterSprite characterName="kuro" joystickData={joystickData} tileMapSize={tileMapSize} initialPosition={[0, 0, 5]} userId={userId} nickname={"타락파워전사"} sendMove={sendMove}/>
+            {connected && allPlayers && Object.values(allPlayers)
+              .filter(player => player.id !== userId) // 현재 사용자 제외
+              .map(player => (
+                <>
+                  <CharacterSprite
+                    key={player.id}
+                    characterName={player.characterName}
+                    joystickData={{ x: 0, y: 0, isMoving: false }} // 다른 플레이어는 로컬 조이스틱 사용 안함
+                    tileMapSize={tileMapSize}
+                    initialPosition={[player.position.x, player.position.y, 0]}
+                    userId={player.id}
+                  />
+                  <Html position={[0, -0.6, 0]} center>
+                    <div style={{ color: 'white', background: 'rgba(0,0,0,0.5)', padding: '2px 5px', borderRadius: '3px', whiteSpace: 'nowrap' }}>
+                      {player.nickname}
+                    </div>
+                  </Html>
+                </>
+              ))
+            }
           </React.Suspense>
         </Canvas>
-
         <JoystickController onMove={handleJoystickMove} onStop={handleJoystickStop} />
       </div>
     </div>

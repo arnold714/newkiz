@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import { LuSearch, LuChevronLeft, LuX } from "react-icons/lu";
 import WordCloud from "@/widgets/search/ui/WordCloud";
+import "@shared/styles/CustomScroll.css"
 
 // 인기 키워드 타입 정의
 interface PopularKeyword {
@@ -75,7 +76,7 @@ export default function SearchPage() {
   };
 
   return (
-    <div className="flex flex-col h-screen">
+    <div className="flex flex-col h-screen pb-15">
       {/* 고정 헤더 부분 */}
       <div className="flex-none p-4">
         <div className="flex items-center">
@@ -102,7 +103,7 @@ export default function SearchPage() {
       </div>
 
       {/* 스크롤 가능한 컨텐츠 부분 */}
-      <div className="flex-1 overflow-y-auto p-4">
+      <div className="flex-1 overflow-y-auto p-4 scroll">
         {/* 회색 구분선 */}
         <hr className="border-b-5 border-gray-100 -mx-4 mb-6" />
 

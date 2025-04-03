@@ -32,12 +32,16 @@ export default function SchoolSearchModal({
     if (!keyword.trim()) return;
     try {
       const data = await searchPlaces(keyword);
-      setSearchResults(data);
+      const filtered = data.filter((place: any) =>
+        place.place_name.includes("초등학교")
+      );
+      setSearchResults(filtered);
     } catch (error) {
       console.error("카카오맵 검색 에러:", error);
       setSearchResults([]);
     }
   };
+  
 
   // 검색 버튼 클릭 시
   const handleSearchClick = () => {

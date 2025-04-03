@@ -1,9 +1,8 @@
 import { useState } from 'react';
-import { FaRegBookmark, FaBookmark, FaHeart, FaRegHeart, FaRegComment } from "react-icons/fa6";
+import { FaHeart, FaRegHeart, FaRegComment } from "react-icons/fa6";
 import { ReporterArticle } from '@/features/reporter/model/types';
 
 export const ReporterNews = () => {
-    const [isReporterNewsScrapped, setIsReporterNewsScrapped] = useState<boolean>(false);
     const [isLiked, setIsLiked] = useState<boolean>(false);
 
     const reporterNewsList: ReporterArticle[] = [
@@ -72,21 +71,6 @@ export const ReporterNews = () => {
                                     size={25}
                                 />
                             </div>
-                        </div>
-                        <div>
-                            {isReporterNewsScrapped ? (
-                                <FaBookmark 
-                                    size={25}
-                                    onClick={() => setIsReporterNewsScrapped(!isReporterNewsScrapped)}
-                                    className="cursor-pointer text-black"
-                                />
-                            ) : (
-                                <FaRegBookmark 
-                                    size={25}
-                                    onClick={() => setIsReporterNewsScrapped(!isReporterNewsScrapped)}
-                                    className="cursor-pointer text-black"
-                                />
-                            )}
                         </div>
                     </div>
                     <div className="mx-2">

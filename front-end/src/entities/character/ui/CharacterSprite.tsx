@@ -13,6 +13,11 @@ export const CharacterSprite: React.FC<CharacterSpriteProps> = ({ characterName,
   const [direction, setDirection] = useState<number>(1)
   const [texturesLoaded, setTexturesLoaded] = useState<boolean>(false)
   const characterRef = useRef<THREE.Group>(null)
+  const frameCount = useRef(0);
+  const FRAME_INTERVAL = 4;
+  const lastSentPosition = useRef<[number, number]>([0, 0]);
+  const lastJoystickState = useRef(false);
+  const THRESHOLD = 0.1;
 
   const { viewport } = useThree()
   const SPEED = 5
@@ -36,28 +41,48 @@ export const CharacterSprite: React.FC<CharacterSpriteProps> = ({ characterName,
 
   // 프레임 별 처리
   useFrame((_, delta) => {
+    let [x, y, z] = position;
+  
     if (joystickData.isMoving) {
-      let [x, y, z] = position
-
-      x += joystickData.x * SPEED * delta
-      y += joystickData.y * SPEED * delta
-
-      x = Math.max(boundaries.minX, Math.min(x, boundaries.maxX))
-      y = Math.max(boundaries.minY, Math.min(y, boundaries.maxY))
-
-      setPosition([x, y, z])
-
-      // 웹소켓을 통해 이동 정보 전송
-      if (sendMove && userId) {
+      x += joystickData.x * SPEED * delta;
+      y += joystickData.y * SPEED * delta;
+  
+      x = Math.max(boundaries.minX, Math.min(x, boundaries.maxX));
+      y = Math.max(boundaries.minY, Math.min(y, boundaries.maxY));
+  
+      setPosition([x, y, z]);
+  
+      frameCount.current++;
+      const [lastX, lastY] = lastSentPosition.current;
+  
+      if (
+        sendMove && userId && frameCount.current % FRAME_INTERVAL === 0 &&
+        (Math.abs(x - lastX) > THRESHOLD || Math.abs(y - lastY) > THRESHOLD)
+      ) {
+        lastSentPosition.current = [x, y];
+  
         const positionData: Position = {
           direction,
           x,
           y
-        }
-        sendMove(characterName, positionData)
+        };
+        sendMove(characterName, positionData);
       }
+  
+      lastJoystickState.current = true; // 움직이고 있음
+    } else {
+      // 이전 프레임에서 움직였는데, 이번 프레임에서 멈췄다면 마지막 좌표 전송
+      if (sendMove && userId && lastJoystickState.current) {
+        const positionData: Position = {
+          direction,
+          x,
+          y
+        };
+        sendMove(characterName, positionData);
+      }
+      lastJoystickState.current = false; // 멈춘 상태 기록
     }
-  })
+  });
 
   // 스프라이트 이미지 프리로딩 처리(재렌더링 방지)
   useEffect(() => {
@@ -103,7 +128,7 @@ export const CharacterSprite: React.FC<CharacterSpriteProps> = ({ characterName,
         <>
           {!isMoving && <SpriteAnimation texturePath={textureIdlePath} frameWidth={24} totalWidth={72} frameCount={3} frameTime={200} direction={direction} />}
           {isMoving && <SpriteAnimation texturePath={textureMovePath} frameWidth={24} totalWidth={144} frameCount={6} frameTime={100} direction={direction} />}
-          
+
           {/* 닉네임 표시 - Html 컴포넌트 사용 */}
           <Html position={[0, -0.6, 0]} center>
             <div style={{ color: 'white', background: 'rgba(0,0,0,0.5)', padding: '2px 5px', borderRadius: '3px', whiteSpace: 'nowrap' }}>

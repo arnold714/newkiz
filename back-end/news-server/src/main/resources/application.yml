@@ -13,3 +13,7 @@ article:
   limit: 20
   today: 5
   db: ${ARTICLE_DATABASE}
+
+logging:
+  level:
+    reactor.netty: DEBUG

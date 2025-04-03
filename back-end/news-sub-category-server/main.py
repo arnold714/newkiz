@@ -1,36 +1,32 @@
-from fastapi import FastAPI
+# fastapi_app.py
+
+from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-from transformers import BertTokenizer, BertForSequenceClassification
-import torch
-import json
+import joblib
 
-# ✅ 모델 및 토크나이저 로딩
-MODEL_PATH = "news_category_model"
-model = BertForSequenceClassification.from_pretrained(MODEL_PATH)
-tokenizer = BertTokenizer.from_pretrained(MODEL_PATH)
-model.eval()
-
-# ✅ 라벨 디코더 로딩
-with open("./news_category_model/label_map.json", "r", encoding="utf-8") as f:
-    label_map = json.load(f)
-
-id2label = {v: k for k, v in label_map.items()}
-
-# ✅ FastAPI 앱 정의
 app = FastAPI()
 
+# 학습된 카테고리별 모델 불러오기
+models = joblib.load("category_models.joblib")
+
 class NewsInput(BaseModel):
-    category: str
     title: str
     article: str
+    category: str
 
 @app.post("/predict")
 def predict(news: NewsInput):
-    input_text = f"{news.category} [SEP] {news.title} [SEP] {news.article}"
-    inputs = tokenizer(input_text, return_tensors="pt", truncation=True, padding=True, max_length=512)
-    with torch.no_grad():
-        outputs = model(**inputs)
-        pred = torch.argmax(outputs.logits, dim=1).item()
-    print(f"Predicted sub-category: {pred}")
-    print(f"Predicted sub-category: {id2label[pred]}")
-    return {"sub_category": id2label[pred]}
+    # 입력받은 category가 모델에 존재하는지 확인
+    if news.category not in models:
+        raise HTTPException(status_code=400, detail="지원하지 않는 category입니다.")
+    
+    # title과 article을 합쳐 텍스트 생성
+    text = news.title + " " + news.article
+    
+    # 해당 category 모델로 예측
+    pred = models[news.category].predict([text])[0]
+    
+    return {"sub_category": pred}
+
+# uvicorn을 이용해 실행할 수 있음:
+# uvicorn fastapi_app:app --reload

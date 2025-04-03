@@ -35,7 +35,7 @@ export const CategoryPage = () => {
   ];
 
   const getIconUrl = (iconName: string) => {
-    return `https://newkiz.s3.ap-northeast-2.amazonaws.com/categories/${iconName}.png`;
+    return `https://newkiz.s3.ap-northeast-2.amazonaws.com/categories/${iconName}.svg`;
   };
 
   // 카테고리 클릭 시 상태만 업데이트
@@ -91,15 +91,15 @@ export const CategoryPage = () => {
                     className="cursor-pointer"
                     onClick={handleViewAll}  // 카테고리 클릭 시 디테일 페이지로 이동
                   >
-                    <div className={`rounded-lg overflow-hidden shadow-sm ${category.color} aspect-square flex flex-col`}>
+                    <div className={`rounded-lg overflow-hidden shadow-lg ${category.color} aspect-square flex flex-col`}>
                       <div className="flex-grow flex items-center justify-center">
                         <img
                           src={getIconUrl(category.iconName)}
                           alt={category.name}
-                          className="w-1/2 h-1/2 object-contain"
+                          className="w-2/3 h-2/3 object-contain"
                         />
                       </div>
-                      <div className="pb-4 text-center text-md text-white font-medium">
+                      <div className="pb-4 text-center text-xl text-white font-bold">
                         {category.name}
                       </div>
                     </div>

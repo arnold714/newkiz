@@ -105,7 +105,7 @@ export default function CategoryDetailPage() {
 
           {/* 스포츠 카테고리 서브 카테고리 */}
           {categoryId === 'sports' && (
-            <div className="bg-[#F2F6E2] px-4 pt-2 pb-4">
+            <div className="bg-[#F2F6E2] px-4 pt-2 pb-2">
               <div className="grid grid-cols-8 gap-2 mb-2">
                 {sportCategories.map((sport) => (
                   <div
@@ -113,15 +113,15 @@ export default function CategoryDetailPage() {
                     className="cursor-pointer"
                     onClick={() => handleSportCategoryClick(sport.id)}
                   >
-                    <div className={`${sport.color} rounded-lg overflow-hidden shadow-sm aspect-square flex flex-col`}>
+                    <div className={`${sport.color} rounded-lg overflow-hidden shadow-lg aspect-square flex flex-col`}>
                       <div className="flex-grow flex items-center justify-center">
                         <img
-                          src={`https://newkiz.s3.ap-northeast-2.amazonaws.com/categories/${sport.iconName}.png`}
+                          src={`https://newkiz.s3.ap-northeast-2.amazonaws.com/categories/${sport.iconName}.svg`}
                           alt={sport.name}
-                          className="w-1/2 h-1/2 object-contain"
+                          className="w-2/3 h-2/3 object-contain"
                         />
                       </div>
-                      <div className="pb-2 text-center text-sm text-white font-medium">
+                      <div className="text-center pb-2 text-md text-white font-bold">
                         {sport.name}
                       </div>
                     </div>

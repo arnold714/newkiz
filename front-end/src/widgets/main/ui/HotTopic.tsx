@@ -66,9 +66,6 @@ export const HotTopic = () => {
 
     return (
         <div>
-            <div className="text-2xl font-bold text-center m-3">
-                Today's TOP 10
-            </div>
             <div>
                 <Swiper
                     loop={true}

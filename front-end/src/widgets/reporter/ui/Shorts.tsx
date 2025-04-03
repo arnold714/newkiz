@@ -1,6 +1,8 @@
+import { useState } from "react";
 import SwipeCarousel from "@/shared/ui/SwipeCarousel";
 import "../styles/Shorts.css"
-interface ShortsItem {
+import ShortsDetailModal from "@/widgets/reporter/ui/ShortsDetailModal";
+export interface ShortsItem {
     id: number;
     title: string;
     description: string;
@@ -25,28 +27,47 @@ const shortsData:ShortsItem[] = [
 ];
 
 export const Shorts = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedShorts, setSelectedShorts] = useState<ShortsItem | null>(null);
 
+  const openModal = (shorts: ShortsItem) => {
+    setSelectedShorts(shorts);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedShorts(null);
+  };
     return (
         <div>
-            <div className="mt-3">
-                <SwipeCarousel
-                    slidesToShow ={3.5}
-                    infinite={true}
-                    className="shorts-carousel"
-                    swipeToSlide={true}
-                    arrows={false}
-                    dots={false}
-                >
-                {shortsData.map((item) => (
-                    <div key={item.id} className="bg-white w-[10px] h-[150px] p-2 rounded-lg shadow-[4px_4px_3px_rgba(0,0,0,0.13)]">
-                        <div className="font-semibold">
-                            {item.title}
-                        </div>
-                    </div>
-                ))}    
-                </SwipeCarousel>
+      <div className="mt-3">
+        <SwipeCarousel
+          slidesToShow={3.5}
+          infinite={true}
+          className="shorts-carousel"
+          swipeToSlide={true}
+          arrows={false}
+          dots={false}
+        >
+          {shortsData.map((item) => (
+            <div
+              key={item.id}
+              className="bg-white w-[10px] h-[150px] p-2 rounded-lg shadow-[4px_4px_3px_rgba(0,0,0,0.13)] cursor-pointer"
+              onClick={() => openModal(item)}
+            >
+              <div className="font-semibold">{item.title}</div>
             </div>
-            
-        </div>
-    );
+          ))}
+        </SwipeCarousel>
+      </div>
+
+      {/* 모달 */}
+      <ShortsDetailModal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        shorts={selectedShorts}
+      />
+    </div>
+  );
 };

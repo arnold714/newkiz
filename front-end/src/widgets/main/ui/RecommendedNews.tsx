@@ -58,7 +58,7 @@ export const RecommendedNews = () => {
                         key={category.label}
                         label={category.label}
                         selected={selectedCategory === category.label}
-                        onClick={() => setSelectedCategory(category.label)}
+                        onClick={() => setSelectedCategory(category.label as NewsCategory)}
                         className="text-xl  rounded-xl shadow-[4px_4px_3px_rgba(0,0,0,0.13)]"
                     />
                 ])}

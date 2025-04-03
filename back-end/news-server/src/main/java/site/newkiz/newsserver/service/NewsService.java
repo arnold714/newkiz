@@ -15,6 +15,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import site.newkiz.newsserver.entitiy.CategoryScore;
 import site.newkiz.newsserver.entitiy.NewsScrap;
 import site.newkiz.newsserver.entitiy.NewsSummary;
 import site.newkiz.newsserver.entitiy.NewsDocument;
@@ -65,6 +66,7 @@ public class NewsService {
     }
   }
 
+  @Transactional
   public NewsDocument getNewsById(String newsId, String userId) {
     NewsDocument newsDocument = newsRepository.findById(newsId)
         .orElseThrow(() -> new NotFoundException("News not found"));
@@ -80,6 +82,11 @@ public class NewsService {
           NewsDocument.class
       );
 
+      mongoTemplate.updateFirst(
+          Query.query(Criteria.where("_id").is(Integer.parseInt(userId))),
+          new Update().inc(NewsCategory.fromKoreanName(newsDocument.getCategory()).toString(), 1),
+          "category_score"
+      );
       // 로컬 객체에도 증가 반영
       newsDocument.setViews(newsDocument.getViews() + 1);
 
@@ -90,7 +97,6 @@ public class NewsService {
           .build();
       newsViewLogRepository.save(viewLog);
     }
-
 
     return newsDocument;
   }
@@ -175,6 +181,7 @@ public class NewsService {
 
   @Transactional
   public NewsScrap scrapNews(String newsId, String userId) {
+    NewsDocument newsDocument = newsRepository.findById(newsId).orElseThrow(() -> new NotFoundException("뉴스가 존재하지 않습니다."));
     boolean alreadyScrapped = newsScrapRepository.existsByUserIdAndNewsId(userId, newsId);
 
     if (alreadyScrapped) {
@@ -184,6 +191,12 @@ public class NewsService {
     Query query = new Query(Criteria.where("_id").is(newsId));
     Update update = new Update().inc("scrap", 1);
     mongoTemplate.updateFirst(query, update, ARTICLE_DB);
+
+    mongoTemplate.updateFirst(
+        Query.query(Criteria.where("_id").is(Integer.parseInt(userId))),
+        new Update().inc(NewsCategory.fromKoreanName(newsDocument.getCategory()).toString(), 3),
+        "category_score"
+    );
 
     NewsScrap scrap = NewsScrap.builder()
         .userId(userId)
@@ -195,12 +208,19 @@ public class NewsService {
 
   @Transactional
   public void deleteScrappedNews(String newsId, String userId) {
+    NewsDocument newsDocument = newsRepository.findById(newsId).orElseThrow(() -> new NotFoundException("뉴스가 존재하지 않습니다."));
     boolean alreadyScrapped = newsScrapRepository.existsByUserIdAndNewsId(userId, newsId);
 
     if (!alreadyScrapped) {
       throw new BadRequestException("스크랩 되지 않은 뉴스입니다.");
     }
     newsScrapRepository.deleteByUserIdAndNewsId(userId, newsId).orElseThrow(() -> new NotFoundException("스크랩 정보가 존재하지 않습니다."));
+
+    mongoTemplate.updateFirst(
+        Query.query(Criteria.where("_id").is(Integer.parseInt(userId))),
+        new Update().inc(NewsCategory.fromKoreanName(newsDocument.getCategory()).toString(), -3),
+        "category_score"
+    );
 
     // 2. scrap 수 -1 처리 (음수 방지는 별도 처리 가능)
     Query query = new Query(Criteria.where("_id").is(newsId));

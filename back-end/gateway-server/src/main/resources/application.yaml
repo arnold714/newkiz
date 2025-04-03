@@ -17,6 +17,8 @@ spring:
             - Path=/api/news/**
 #          filters:
 #            - RewritePath=/api/news/(?<segment>.*), /$\{segment}
+          filters:
+            - PreserveHostHeader
 
         - id: mypage-service
           uri: http://mypage-service.${K8S_NAMESPACE}.svc.cluster.local

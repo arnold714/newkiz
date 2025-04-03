@@ -3,10 +3,11 @@ import "@shared/styles/CustomScroll.css"
 
 export default function MainPage() {
   return (
-      <div className="h-screen flex flex-col overflow-auto scroll">
+      <div className="h-screen flex flex-col overflow-auto scroll pb-20">
         <div className='my-5 flex justify-center min-gap-2 gap-[10vw]  items-center'>
-          <div className='flex justify-center'>
-            <img src="https://newkiz.s3.ap-northeast-2.amazonaws.com/dinos/nico.png" alt="character_nico" className='w-[60%] min-w-25 sm:w-35'/>
+          <div className='flex flex-col justify-center items-center'>
+            <p className='text-[#7CBA36] text-[20px] font-extrabold text-stroke-1 mb-0'>zi재형zon</p>
+            <img src="https://newkiz.s3.ap-northeast-2.amazonaws.com/dinos/nico.png" alt="character_nico" className='w-[60%] min-w-25 sm:w-35 mt-0'/>
           </div>
           <div className='flex justify-center'>
           <ProgressGraph />

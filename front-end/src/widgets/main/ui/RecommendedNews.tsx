@@ -58,17 +58,17 @@ export const RecommendedNews = () => {
                         key={category.label}
                         label={category.label}
                         selected={selectedCategory === category.label}
-                        // onClick={() => setSelectedCategory(category.label)}
+                        onClick={() => setSelectedCategory(category.label)}
                         className="text-xl  rounded-xl shadow-[4px_4px_3px_rgba(0,0,0,0.13)]"
                     />
                 ])}
             </div>
 
             {/* 해당 카테고리의 뉴스 카드 */}
-            <div className="mt-5 space-y-4">
+            <div className="mt-5 space-y-4 pb-20">
                 {filteredNews.length > 0 ? (
                     filteredNews.map((news) => (
-                        <div className="flex items-start p-4 bg-white rounded-[10px] mx-10 shadow-[0px_3px_6px_rgba(32,32,32,0.23)]">
+                        <div className="flex items-start p-4 bg-white rounded-[10px] mx-10 shadow-[0px_3px_6px_rgba(32,32,32,0.23)] transform transition-transform duration-200 hover:scale-105 focus:scale-105">
                             <img
                             src={news.imageUrl}
                             alt={news.title}

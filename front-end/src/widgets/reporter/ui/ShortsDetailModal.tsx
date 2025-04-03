@@ -1,4 +1,4 @@
-import { FaHeart, FaRegHeart, FaRegComment, FaComment } from "react-icons/fa6"; // 아이콘 임포트
+import { FaRegHeart, FaRegComment } from "react-icons/fa6"; // 아이콘 임포트
 import { LuX } from "react-icons/lu"; // LuX 아이콘 임포트
 import { ShortsItem } from "@/widgets/reporter/ui/Shorts"; // ShortsItem 타입을 임포트
 import "@shared/styles/CustomScroll.css"

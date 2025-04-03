@@ -127,3 +127,12 @@ button {
     --max-width: 100%;
   }
 }
+
+/* 기존 CSS 코드 끝부분 (이미지에 보이는 녹색 텍스트 "zi재형zon"과 같은 효과를 위한 클래스) */
+
+@layer utilities {
+  .text-stroke-1 {
+    -webkit-text-stroke-width: 0.3px;
+    -webkit-text-stroke-color: white;
+  }
+}

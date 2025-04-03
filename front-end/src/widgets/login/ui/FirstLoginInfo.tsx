@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState, useEffect } from "react";
+import React, { ChangeEvent, useState } from "react";
 import SchoolSearchModal from "@/widgets/login/ui/SchoolSearchModal";
 import { LuChevronLeft } from "react-icons/lu";
 import DatePicker from "react-datepicker";

@@ -1,11 +1,11 @@
-import Button from "@/shared/ui/Button";
-import NewsCard from "@/shared/ui/NewsCard";
 import { useState } from "react";
+import Button from "@/shared/ui/Button";
+import { News, NewsCategory } from "@/features/main/model/types";
 
-const RecommendedNews = () => {
+export const RecommendedNews = () => {
 
     //하드 코딩한 뉴스 데이터
-    const newsData = [
+    const newsData: News[] = [
         {
              title: '손흥민 시즌 12호 도움최고인데어디까지...',
              content: 'ai를 통해 한줄 요약',
@@ -32,9 +32,9 @@ const RecommendedNews = () => {
         }
     
 
-    ]
+    ];
 
-    const [selectedCategory, setSelectedCategory] = useState<string>('전체');
+    const [selectedCategory, setSelectedCategory] = useState<NewsCategory>('전체');
     
     //카테고리 
     const categories = [
@@ -51,34 +51,34 @@ const RecommendedNews = () => {
 
     return (
         <div>
-            <div className="text-2xl font-bold text-center m-3">
-                zi재형zon 님을 위한 추천 뉴스
-            </div>
-
             {/* 카테고리 버튼 리스트 */}
-            <div className="flex justify-center gap-2">
+            <div className="flex justify-center gap-3">
                 {categories.map((category) => [
                     <Button
-                    key={category.label}
-                    label={category.label}
-                    selected={selectedCategory === category.label}
-                    onClick={() => setSelectedCategory(category.label)}
-                    className="text-xl  rounded-xl"
-                  />
+                        key={category.label}
+                        label={category.label}
+                        selected={selectedCategory === category.label}
+                        onClick={() => setSelectedCategory(category.label as NewsCategory)}
+                        className="text-xl  rounded-xl shadow-[4px_4px_3px_rgba(0,0,0,0.13)]"
+                    />
                 ])}
             </div>
 
             {/* 해당 카테고리의 뉴스 카드 */}
-            <div className="mt-5 space-y-4">
+            <div className="mt-5 space-y-4 pb-20">
                 {filteredNews.length > 0 ? (
-                    filteredNews.map((news, index) => (
-                        <NewsCard
-                        key={index}
-                        title={news.title}
-                        content={news.content}
-                        imageUrl={news.imageUrl}
-                        category={news.category}
-                        />
+                    filteredNews.map((news) => (
+                        <div className="flex items-start p-4 bg-white rounded-[10px] mx-10 shadow-[0px_3px_6px_rgba(32,32,32,0.23)] transform transition-transform duration-200 hover:scale-105 focus:scale-105">
+                            <img
+                            src={news.imageUrl}
+                            alt={news.title}
+                            className="w-35 h-35 rounded-lg"
+                            />
+                            <div className="ml-4 flex flex-col justify-start">
+                            <h3 className="text-2xl font-bold text-[#202020] ">{news.title}</h3>
+                            <p className="text-xl text-gray-600 ">{news.content}</p>
+                            </div>
+                        </div>
                     ))
                     ) : (
                     <div className="text-center text-gray-500 text-lg">
@@ -89,4 +89,3 @@ const RecommendedNews = () => {
         </div>
     );
 };
-export default RecommendedNews;

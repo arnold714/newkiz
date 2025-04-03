@@ -16,7 +16,7 @@ const Layout = ({ children }: LayoutProps) => {
       bg-[url(https://newkiz.s3.ap-northeast-2.amazonaws.com/assets/background.png)]
       bg-repeat bg-cover bg-center
       max-w-[var(--max-width)] min-w-[var(--min-width)] mx-auto
-    ` : ''}`}>
+    ` : ''} h-screen flex flex-col`}>
       <Header /> 
       <div>
         {children}

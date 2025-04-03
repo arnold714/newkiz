@@ -5,8 +5,9 @@ import { CharacterSpriteProps } from "../model/types"
 import * as THREE from "three"
 import { calculateCharacterBoundaries } from "@/entities/character"
 import { Html } from "@react-three/drei"
+import { Position } from "@/features/game/model/types"
 
-export const CharacterSprite: React.FC<CharacterSpriteProps> = ({ characterName, joystickData, tileMapSize, initialPosition = [0, 0, 0] }) => {
+export const CharacterSprite: React.FC<CharacterSpriteProps> = ({ characterName, joystickData, tileMapSize, initialPosition, userId, sendMove, nickname }) => {
   const [position, setPosition] = useState<[number, number, number]>(initialPosition)
   const [isMoving, setIsMoving] = useState<boolean>(false)
   const [direction, setDirection] = useState<number>(1)
@@ -45,6 +46,16 @@ export const CharacterSprite: React.FC<CharacterSpriteProps> = ({ characterName,
       y = Math.max(boundaries.minY, Math.min(y, boundaries.maxY))
 
       setPosition([x, y, z])
+
+      // 웹소켓을 통해 이동 정보 전송
+      if (sendMove && userId) {
+        const positionData: Position = {
+          direction,
+          x,
+          y
+        }
+        sendMove(characterName, positionData)
+      }
     }
   })
 
@@ -96,7 +107,7 @@ export const CharacterSprite: React.FC<CharacterSpriteProps> = ({ characterName,
           {/* 닉네임 표시 - Html 컴포넌트 사용 */}
           <Html position={[0, -0.6, 0]} center>
             <div style={{ color: 'white', background: 'rgba(0,0,0,0.5)', padding: '2px 5px', borderRadius: '3px', whiteSpace: 'nowrap' }}>
-              닉네임
+              {nickname}
             </div>
           </Html>
         </>

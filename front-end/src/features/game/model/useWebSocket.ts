@@ -1,36 +1,43 @@
 import { useState, useEffect, useCallback } from "react";
 import { createWebSocketService } from "./WebSocketService";
-import { GameInfo, MoveInfo, QuizInfo, QuizResult, Position, Player } from "./types";
+import { GameInfo, QuizInfo, QuizResult, Position, Player } from "./types";
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";
+const API_URL = import.meta.env.VITE_API_URL;
 
 export const useWebSocket = (userId?: number) => {
   const [connected, setConnected] = useState(false);
   const [gameInfo, setGameInfo] = useState<GameInfo | null>(null);
-  const [allPlayers, setAllPlayers] = useState<Player[]>([]);
+  const [allPlayers, setAllPlayers] = useState<Record<number, Player>>({});
   const [currentQuiz, setCurrentQuiz] = useState<QuizInfo | null>(null);
   const [quizResult, setQuizResult] = useState<QuizResult | null>(null);
-
-  const webSocketService = createWebSocketService(API_BASE_URL);
+  
+  const webSocketService = createWebSocketService(API_URL);
 
   useEffect(() => {
     if (!userId) return;
-
+    
     webSocketService
       .connect(userId, {
-        onGameInfo(info) {
+        onGameInfo(info: GameInfo) {
           setGameInfo(info);
-          const playersMap = info.players.reduce((acc, player) => ({ ...acc, [player.id]: player }), {});
+          const playersMap = info.players.reduce(
+            (acc, player) => ({ ...acc, [player.id]: player }), 
+            {}
+          );
           setAllPlayers(playersMap);
         },
-        onMove(moveInfo) {
+        onMove(moveInfo: Player) {
           setAllPlayers((prev) => ({
             ...prev,
-            [moveInfo.player.id]: moveInfo.player,
+            [moveInfo.id]: moveInfo,
           }));
         },
-        onQuizInfo(setCurrentQuiz),
-        onQuizResult(setQuizResult),
+        onQuizInfo(quizInfo: QuizInfo) {
+          setCurrentQuiz(quizInfo);
+        },
+        onQuizResult(result: QuizResult) {
+          setQuizResult(result);
+        },
       })
       .then(() => setConnected(true))
       .catch((err) => console.error("Failed to connect:", err));
@@ -43,7 +50,7 @@ export const useWebSocket = (userId?: number) => {
       if (!userId) return;
       webSocketService.sendMoveMessage(userId, characterName, position);
     },
-    [userId]
+    [userId, webSocketService]
   );
 
   return { connected, gameInfo, allPlayers, currentQuiz, quizResult, sendMove };

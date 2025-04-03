@@ -24,8 +24,7 @@ export interface Player {
   id: number;
   nickname: string;
   characterName: string;
-  x: number;
-  y: number;
+  position: Position;
 }
 
 export interface MoveInfo {
@@ -57,7 +56,7 @@ export interface QuizResult {
 
 export interface WebSocketCallbacks {
   onGameInfo?: (gameInfo: GameInfo) => void;
-  onMove?: (moveInfo: MoveInfo) => void;
+  onMove?: (moveInfo: Player) => void;
   onQuizInfo?: (quizInfo: QuizInfo) => void;
   onQuizResult?: (quizResult: QuizResult) => void;
 }

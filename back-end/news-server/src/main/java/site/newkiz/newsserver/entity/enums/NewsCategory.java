@@ -1,4 +1,4 @@
-package site.newkiz.newsserver.entitiy.enums;
+package site.newkiz.newsserver.entity.enums;
 
 import lombok.Getter;
 

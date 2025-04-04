@@ -1,4 +1,4 @@
-package site.newkiz.newsserver.entitiy;
+package site.newkiz.newsserver.entity;
 
 import lombok.Builder;
 import lombok.Getter;

@@ -1,40 +1,72 @@
 import { QuestionProps } from "../model/type"
 import { useEffect, useState } from "react"
+import { FaRegCircle } from 'react-icons/fa';
+import { IoClose } from "react-icons/io5";
 
 export const QuestionComponent = ({ questionNo, question, timeLeft, quizResult }: QuestionProps) => {
   const [time, setTime] = useState<number | undefined>(timeLeft);
+  const [resultTime, setResultTime] = useState<number | undefined>(undefined);
 
   useEffect(() => {
-    // timeLeft가 변경되면 time 상태 업데이트
     setTime(timeLeft);
+    setResultTime(undefined);
   }, [timeLeft]);
 
   useEffect(() => {
     if (!time) return;
 
-    // 1초마다 시간 감소
     const timer = setInterval(() => {
-      setTime((prevTime) => {
-        if (prevTime && prevTime > 0) {
-          return prevTime - 1;
-        }
-        return 0;
-      });
+      setTime((prevTime) => (prevTime && prevTime > 0 ? prevTime - 1 : 0));
     }, 1000);
 
-    // 컴포넌트 언마운트 시 타이머 정리
     return () => clearInterval(timer);
   }, [time]);
 
+  useEffect(() => {
+    if (time === 0 && resultTime === undefined) {
+      setResultTime(5); // Start resultTime countdown from 5 seconds
+    }
+  }, [time, resultTime]);
+
+  useEffect(() => {
+    if (resultTime === undefined || resultTime <= 0) return;
+
+    const timer = setInterval(() => {
+      setResultTime((prevResultTime) =>
+        prevResultTime && prevResultTime > 0 ? prevResultTime - 1 : 0
+      );
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [resultTime]);
 
   return (
-    <div className="h-full w-full flex flex-col items-center bg-white opacity-70 rounded-xl relative">
-      <div className="font-bold text-4xl absolute right-5">남은 시간 : {time}</div>
-      <p className="mt-5 text-3xl font-bold text-[#7CBA36]">Q{questionNo}.</p>
-      <div className="w-[90%] mt-3 font-bold text-lg mb-10">
-        <p>{question}</p>
-        <p>{quizResult?.explanation}</p>
+    <div className="flex flex-col items-center h-full w-full bg-white bg-opacity-50 rounded-xl p-6 relative px-4 z-999">
+      {/* Timer */}
+      <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 text-black text-2xl font-bold">
+        {time && time > 0
+          ? `남은 시간: ${time}`
+          : resultTime && resultTime > 0
+          ? `다음 문제까지: ${resultTime}`
+          : "시간 종료"}
       </div>
+
+      {/* Question */}
+      <div className="text-center">
+        <p className="text-3xl font-bold text-green-600">Q{questionNo}.</p>
+        <p className="mt-4 text-xl font-semibold">{question}</p>
+      </div>
+
+      {/* Explanation */}
+      {time === 0 && (
+        <div className="flex flex-col mt-6 text-center">
+          <div className="flex flex-row justify-center items-center gap-2">
+            <p className="text-lg font-semibold">정답은</p>
+            {quizResult?.answer ? (<FaRegCircle className="text-3xl text-blue-600" strokeWidth={10} />):(<IoClose className="text-3xl text-red-600" strokeWidth={10} />)}
+          </div>
+          <p className="text-lg font-semibold text-gray-600">{quizResult?.explanation}</p>
+        </div>
+      )}
     </div>
-  )
-}
+  );
+};

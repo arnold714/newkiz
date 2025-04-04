@@ -21,3 +21,11 @@ export interface CharacterSpriteProps {
   nickname?: string;
   setMapBoundaries?: (newBoundaries: Boundaries) => void;
 }
+
+export interface GameResult {
+  rank: number
+  nickname: string
+  score: number
+  totalScore: number
+  rankChange: number
+}

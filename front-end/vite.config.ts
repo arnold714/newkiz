@@ -111,8 +111,11 @@ export default defineConfig({
       },
     }),
   ],
-  server: {
-    host: 'fe.dev.newkiz.site',
-    port: 5173
+  // server: {
+  //   host: 'fe.dev.newkiz.site',
+  //   port: 5173
+  // },
+  define: {
+    global: 'window',
   },
 })

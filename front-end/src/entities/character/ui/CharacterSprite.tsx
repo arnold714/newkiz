@@ -141,8 +141,8 @@ export const CharacterSprite: React.FC<CharacterSpriteProps> = ({ characterName,
           {isMoving && <SpriteAnimation texturePath={textureMovePath} frameWidth={24} totalWidth={144} frameCount={6} frameTime={100} direction={direction} />}
 
           {/* 닉네임 표시 - Html 컴포넌트 사용 */}
-          <Html position={[0, -0.6, 0]} center>
-            <div style={{ color: 'white', background: 'rgba(0,0,0,0.5)', padding: '2px 5px', borderRadius: '3px', whiteSpace: 'nowrap' }}>
+          <Html position={[0, -0.6, 0]} center style={{userSelect: 'none', zIndex: 1, position:'relative'}}>
+            <div style={{ color: 'white', background: 'rgba(0,0,0,0.5)', padding: '2px 5px', borderRadius: '3px', whiteSpace: 'nowrap', zIndex:'50' }}>
               {nickname}
             </div>
           </Html>

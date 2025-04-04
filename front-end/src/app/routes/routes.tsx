@@ -66,7 +66,7 @@ const routes: RouteObject[] = [
         ),
       },
       {
-        path: "/detail",
+        path: "/detail/:id",
         element: (
           <Suspense fallback={<LoadingComponent />}>
             <Layout>

@@ -3,3 +3,21 @@ spring:
     redis:
       host: ${REDIS_HOST}
       port: ${REDIS_PORT}
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${MYSQL_HOST}/${MYSQL_DATABASE}?serverTimezone=Asia/Seoul
+    username: ${MYSQL_USER}
+    password: ${MYSQL_PASSWORD}
+
+  jpa:
+    database: mysql
+    show-sql: false
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+
+server:
+  port: 8082

@@ -14,6 +14,7 @@ import site.newkiz.gameserver.entity.Position;
 import site.newkiz.gameserver.entity.Quiz;
 import site.newkiz.gameserver.entity.dto.ConnectGameInfo;
 import site.newkiz.gameserver.entity.dto.QuizInfo;
+import site.newkiz.gameserver.entity.dto.QuizResult;
 import site.newkiz.gameserver.entity.enums.Direction;
 import site.newkiz.gameserver.entity.enums.State;
 
@@ -40,14 +41,14 @@ public class GameService {
     List<Quiz> quizList = new ArrayList<>();
     // todo 임의 퀴즈 세팅
     for (int i = 1; i <= 10; i++) {
-      quizList.add(new Quiz("퀴즈 질문", true, "해설"));
+      quizList.add(new Quiz("Q" + i + ". 퀴즈 질문", true, "해설"));
     }
     return quizList;
   }
 
   public void joinGame(Integer userId) {
     // 유저 정보 조회 - 닉네임, 캐릭 정보
-    Position position = new Position(Direction.EAST, 0, 0);
+    Position position = new Position(Direction.EAST.getValue(), 0, 0);
     Player player = new Player(userId, "nickname", "characterName", position);
 
     // 플레이어 리스트에 유저 등록
@@ -74,6 +75,7 @@ public class GameService {
     game.setState(State.PLAYING);
 
     // todo 게임 시작 메시지 send
+    messagingTemplate.convertAndSend("/sub/game-info", new ConnectGameInfo(game));
 
     // 게임의 퀴즈 수 만큼 진행
     for (int currentQuizNumber = 1; currentQuizNumber <= game.quizCount(); currentQuizNumber++) {
@@ -85,12 +87,13 @@ public class GameService {
       // 현재 문제 정보 send
       sendQuizInfo(currentQuizNumber, quiz);
 
-      // todo 퀴즈 시간 만큼 대기
+      // 퀴즈 시간 만큼 대기
       Thread.sleep(10000);
       // todo 플레이어들 정답 판정, 오답자 스코어 정보 제공 및 나가기 or 관전 선택
 
       log.info(currentQuizNumber + " 번 문제 정답: " + quiz.getQuestion());
-      // todo 정답 판정 보여주는 시간만큼 대기
+      // todo 정답 판정 보여주는 시간만큼 대기 / 오답자 커넥션 끊어야하는데
+      judgeAnswer(currentQuizNumber, quiz);
       Thread.sleep(3000);
 
       // todo 오답자 커넥션 끊어야하는데
@@ -100,6 +103,9 @@ public class GameService {
     }
 
     // todo 퀴즈 종료 스코어
+    log.info("퀴즈 게임 종료");
+
+
   }
 
   public void sendQuizInfo(int quizNumber, Quiz quiz) {
@@ -108,11 +114,27 @@ public class GameService {
         new QuizInfo(quizNumber, quiz.getQuestion(), quiz.getTimeLeft()));
   }
 
-  public void judgeAnswer(boolean answer, Game game) {
+  public void judgeAnswer(int quizNumber, Quiz quiz) {
     Map<Integer, Player> players = game.getPlayers();
     for (Player player : players.values()) {
+      QuizResult quizResult = QuizResult.builder()
+          .quizNumber(quizNumber)
+          .question(quiz.getQuestion())
+          .answer(quiz.isAnswer())
+          .explanation(quiz.getExplanation())
+          .build();
 
-      messagingTemplate.convertAndSend("/sub/users/" + player.getId() + "/quiz-result", answer);
+      if ((quiz.isAnswer() && player.getPosition().getX() < 0)
+          || (!quiz.isAnswer() && player.getPosition().getX() >= 0)) {
+        player.addScore();
+        quizResult.setScore(player.getScore());
+        quizResult.setResult(true);
+      } else {
+        quizResult.setScore(player.getScore());
+        quizResult.setResult(false);
+      }
+
+      messagingTemplate.convertAndSend("/sub/users/" + player.getId() + "/quiz-result", quizResult);
     }
   }
 

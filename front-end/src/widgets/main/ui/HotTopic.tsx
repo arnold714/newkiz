@@ -37,7 +37,7 @@ export const HotTopic = () => {
                         <SwiperSlide key={news.id}>
                             <div className="news-slide">
                                 <img src={news.img} alt={news.title}/>
-                                <h3 className="news-title">{news.title}</h3>
+                                <h3 className="news-title line-clamp-2">{news.title}</h3>
                             </div>
                         </SwiperSlide>
                     ))}

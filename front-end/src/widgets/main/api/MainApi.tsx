@@ -8,7 +8,7 @@ export const GetTodayNews = () => {
     return useQuery<NewsTodayItem[], Error>({
         queryKey: ['todayNews'],
         queryFn: async () => {
-            const response = await axios.get<ApiResponse>(`${API_URL}/news/today`);
+            const response = await axios.get<ApiResponse>(`${API_URL}/api/news/today`);
             console.log("API response:", response.data);
             console.log("VITE_API_URL:", API_URL);
             return response.data.data;

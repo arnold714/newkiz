@@ -10,40 +10,26 @@ spring:
       forwarded:
         enabled: true  # X-Forwarded-* 헤더를 활용하도록 설정 
       
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials
+
       routes:
         - id: news-service
           uri: http://news-service
           predicates:
             - Path=/api/news/**
-#          filters:
-#            - RewritePath=/api/news/(?<segment>.*), /$\{segment}
           filters:
             - PreserveHostHeader
 
         - id: mypage-service
-          uri: http://mypage-service.${K8S_NAMESPACE}.svc.cluster.local
+          uri: http://mypage-service
           predicates:
             - Path=/api/mypage/**
 
-        - id: records-service
-          uri: http://records-service.${K8S_NAMESPACE}.svc.cluster.local
-          predicates:
-            - Path=/api/records/**
-
-        - id: shorts-service
-          uri: http://shorts-service.${K8S_NAMESPACE}.svc.cluster.local
-          predicates:
-            - Path=/api/shorts/**
-
-        - id: kidsnews-service
-          uri: http://kidsnews-service.${K8S_NAMESPACE}.svc.cluster.local
-          predicates:
-            - Path=/api/kidsnews/**
-
         - id: game-service
-          uri: http://game-service.${K8S_NAMESPACE}.svc.cluster.local
+          uri: http://game-service
           predicates:
-            - Path=/api/game/**
+            - Path=/ws/**
 
   r2dbc:
     url: r2dbc:pool:mysql://${MYSQL_HOST}/${MYSQL_DATABASE}?serverTimezone=Asia/Seoul

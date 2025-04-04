@@ -6,6 +6,4 @@ export const categoryMap: Record<string, string> = {
     '생활/문화': 'culture',
     '세계': 'world',
     '스포츠': 'sports',
-    '연예': 'entertainment',
   };
-  

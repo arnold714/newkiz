@@ -5,7 +5,7 @@ import Modal from "react-modal";
 import "@pages/mypage/styles/MyPage.css"
 import { ScrappedWordModal } from "@/widgets/mypage"
 import { fetchScrappedNews, fetchScrappedWords } from "@/pages/mypage";
-import { NewsItem, VocaItem } from "@/features/mypage/model/types";
+import { NewsItem } from "@/features/mypage/model/types";
 
 Modal.setAppElement("#root")
 

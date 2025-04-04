@@ -183,7 +183,7 @@ export const ModifyInfoPage = () => {
         <SchoolSearchModal
           isOpen={isSchoolModalOpen}
           onClose={() => setIsSchoolModalOpen(false)}
-          onSelectSchool={(schoolId, name, address) => {
+          onSelectSchool={(_schoolId, name, _address) => {
             setSchoolName(name);
             setIsSchoolModalOpen(false);
           }}

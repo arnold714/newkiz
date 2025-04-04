@@ -1,115 +1,138 @@
 import { useState } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { categories } from '../model/categories';
+import { Category, SubCategory } from '../model/types';
 
-interface Category {
-  id: string;
-  name: string;
-  iconName: string;
-  color: string;
-}
-
-export const CategoryPage = () => {
-  const [selectedCategory, setSelectedCategory] = useState('it_science');
+export const CategoryPage: React.FC = () => {
+  // 기본 선택 카테고리
+  const [selectedCategoryId, setSelectedCategoryId] = useState('it_science');
   const location = useLocation();
   const navigate = useNavigate();
 
   const isBaseRoute = location.pathname === '/category';
 
-  const categories = [
-    { id: 'it_science', name: 'IT/과학' },
-    { id: 'society', name: '사회' },
-    { id: 'world', name: '세계' },
-    { id: 'economy', name: '경제' },
-    { id: 'politics', name: '정치' },
-    { id: 'culture', name: '생활/문화' },
-    { id: 'sports', name: '스포츠' },
-    { id: 'entertainment', name: '연예' },
+  // 현재 선택된 카테고리 정보
+  const selectedCategory: Category | undefined = categories.find(
+    (cat) => cat.id === selectedCategoryId
+  );
+
+  // 빨주노초파남보 순서로 Tailwind 색상 클래스를 미리 정의
+  const colorSequence = [
+    'bg-red-500',
+    'bg-orange-400',
+    'bg-yellow-400',
+    'bg-green-400',
+    'bg-blue-400',
+    'bg-indigo-400',
+    'bg-purple-400',
   ];
 
-  const subCategories: Category[] = [
-    { id: 'soccer', name: '축구', iconName: 'soccer', color: 'bg-red-500' },
-    { id: 'baseball', name: '야구', iconName: 'baseball', color: 'bg-orange-400' },
-    { id: 'basketball', name: '농구', iconName: 'basketball', color: 'bg-yellow-400' },
-    { id: 'volleyball', name: '배구', iconName: 'volleyball', color: 'bg-green-400' },
-    { id: 'e-sports', name: 'e스포츠', iconName: 'e-sports', color: 'bg-blue-400' },
-  ];
+  /** 왼쪽 카테고리 클릭 시 */
+  const handleCategorySelect = (categoryId: string) => {
+    setSelectedCategoryId(categoryId);
+  };
 
-  const getIconUrl = (iconName: string) => {
+  /** 전체보기 클릭 시 */
+  const handleViewAll = () => {
+    navigate(`/category/details/${selectedCategoryId}`);
+  };
+
+  /** 서브 카테고리 컬러 가져오기 */
+  const getSubCategoryColor = (index: number) => {
+    // 예: 0 -> 빨강, 1 -> 주황, 2 -> 노랑, 3 -> 초록, ...
+    return colorSequence[index % colorSequence.length];
+  };
+
+  /** 서브 카테고리 아이콘 URL */
+  const getIconUrl = (iconName?: string) => {
+    if (!iconName) return '';
     return `https://newkiz.s3.ap-northeast-2.amazonaws.com/categories/${iconName}.svg`;
   };
 
-  // 카테고리 클릭 시 상태만 업데이트
-  const handleCategorySelect = (categoryId: string) => {
-    setSelectedCategory(categoryId);
-  };
-
-  // 전체보기 버튼 클릭 시에만 navigate 호출
-  const handleViewAll = () => {
-    navigate(`/category/details/${selectedCategory}`);
-  };
-
   return (
-    <div className="w-full h-screen flex flex-col pb-20 overflow-auto scroll">
+    <div className="w-full h-screen flex flex-col pb-20 overflow-auto">
       {isBaseRoute && (
         <>
+          {/* 상단 헤더 */}
           <div className="bg-gray-100 px-6 py-3 flex justify-between items-center border-b border-gray-100">
             <h2 className="text-2xl font-bold">카테고리</h2>
           </div>
 
           <div className="flex flex-1 bg-gray-100 overflow-hidden pb-20">
-            <div className="w-1/3 overflow-y-auto">
+            {/* 왼쪽 카테고리 목록 */}
+            <div className="w-1/3 overflow-y-auto border-r border-gray-200">
               {categories.map((category) => (
                 <div
                   key={category.id}
-                  className={`py-4 px-4 hover:bg-gray-200 cursor-pointer border-b border-gray-200 
-                              ${selectedCategory === category.id ? 'bg-white font-bold' : ''}`}
-                  onClick={() => handleCategorySelect(category.id)} 
+                  className={`py-4 px-4 hover:bg-gray-200 cursor-pointer 
+                    border-b border-gray-200 ${
+                      selectedCategoryId === category.id ? 'bg-white font-bold' : ''
+                    }`}
+                  onClick={() => handleCategorySelect(category.id)}
                 >
-                  <span className={`text-lg font-semibold ${selectedCategory === category.id ? 'text-green-500' : 'text-gray-700'
-                    }`}>{category.name}</span>
+                  <span
+                    className={`text-lg font-semibold ${
+                      selectedCategoryId === category.id ? 'text-green-500' : 'text-gray-700'
+                    }`}
+                  >
+                    {category.name}
+                  </span>
                 </div>
               ))}
             </div>
 
+            {/* 오른쪽 서브 카테고리 목록 */}
             <div className="w-2/3 bg-white p-4 overflow-y-auto">
+              {/* 헤더 영역 */}
               <div className="flex justify-between items-center mb-4">
                 <h3 className="text-xl font-medium">
-                  {categories.find(cat => cat.id === selectedCategory)?.name || '카테고리 선택'}
+                  {selectedCategory?.name || '카테고리 선택'}
                 </h3>
                 <div
                   className="text-lg text-gray-500 cursor-pointer"
-                  onClick={handleViewAll}  // 전체보기 클릭 시 디테일 페이지로 이동
+                  onClick={handleViewAll}
                 >
                   전체보기 &gt;
                 </div>
               </div>
 
-              <div className="grid grid-cols-3 gap-4 mb-4">
-                {subCategories.map((category) => (
-                  <div
-                    key={category.id}
-                    className="cursor-pointer"
-                    onClick={handleViewAll}  // 카테고리 클릭 시 디테일 페이지로 이동
-                  >
-                    <div className={`rounded-lg overflow-hidden shadow-lg ${category.color} aspect-square flex flex-col`}>
-                      <div className="flex-grow flex items-center justify-center">
-                        <img
-                          src={getIconUrl(category.iconName)}
-                          alt={category.name}
-                          className="w-2/3 h-2/3 object-contain"
-                        />
+              {/* 서브 카테고리 그리드 */}
+              <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 gap-4">
+                {selectedCategory?.subCategories.map(
+                  (subCategory: SubCategory, index: number) => {
+                    const colorClass = getSubCategoryColor(index);
+                    return (
+                      <div
+                        key={subCategory.id}
+                        className="cursor-pointer"
+                        onClick={handleViewAll}
+                      >
+                        <div
+                          className={`rounded-lg overflow-hidden shadow-lg ${colorClass} aspect-square flex flex-col`}
+                        >
+                          <div className="flex-grow flex items-center justify-center">
+                            {subCategory.iconName && (
+                              <img
+                                src={getIconUrl(subCategory.iconName)}
+                                alt={subCategory.name}
+                                className="w-2/3 h-2/3 object-contain"
+                              />
+                            )}
+                          </div>
+                          <div className="pb-4 text-center text-white font-bold">
+                            {subCategory.name}
+                          </div>
+                        </div>
                       </div>
-                      <div className="pb-4 text-center text-xl text-white font-bold">
-                        {category.name}
-                      </div>
-                    </div>
-                  </div>
-              ))}
+                    );
+                  }
+                )}
               </div>
-            </div>  
+            </div>
           </div>
-        </>    
-      )}  
+        </>
+      )}
+      {/* Outlet - 하위 라우트(디테일 페이지) 표시용 */}
       <Outlet />
     </div>
   );

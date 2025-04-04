@@ -8,7 +8,7 @@ app = FastAPI()
 @app.post("/init_news")
 def init_news(news: NewsInput):
     text = f"제목: {news.title}\n본문: {news.body}\n키워드: {', '.join(news.keywords)}"
-    create_vectorstore(news.session_id, text)
+    create_vectorstore(news.user_id + news.news_id, text)
     return {"message": f"뉴스 세션 생성 완료: {news.session_id}"}
 
 @app.post("/chat")

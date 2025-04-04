@@ -4,6 +4,24 @@ import { EffectCoverflow, Pagination } from "swiper/modules";
 import "../styles/HotTopic.css"
 import { useMediaQuery } from "react-responsive";
 import { GetTodayNews } from "../api/MainApi";
+import { Link } from "react-router-dom";
+
+const NewsSlide:React.FC<{ image: string, title: string, article: string }> = ({image, title, article}) => (
+    <>
+        <div className="w-full h-full relative">
+            <img 
+                loading="lazy"
+                src={image} 
+                alt={title}
+                className="w-full h-full object-top object-cover rounded-lg"
+                />
+            <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2  w-[90%] p-4 rounded-lg bg-white/70  duration-300 mb-4">
+                <div className="title mb-2 text-xl font-bold leading-tight truncate">{title}</div>
+                <div className="content text-base leading-snug truncate">{article}</div>
+            </div>
+        </div>
+    </>
+)
 
 export const HotTopic = () => {
 
@@ -35,11 +53,14 @@ export const HotTopic = () => {
                     >
                     {todayNews.map((news) => (
                         <SwiperSlide key={news.id}>
-                            <div className="news-slide">
-                                <img src={news.img} alt={news.title}/>
-                                <h3 className="news-title line-clamp-2">{news.title}</h3>
-                            </div>
-                        </SwiperSlide>
+                            <Link to={`detail/${news.id}`}>
+                                <NewsSlide
+                                    image={news.img} 
+                                    title={news.title}
+                                    article={news.article} 
+                                />
+                            </Link>
+                      </SwiperSlide>
                     ))}
                 </Swiper>    
             </div>

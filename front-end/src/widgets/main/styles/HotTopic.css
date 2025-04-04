@@ -1,7 +1,7 @@
 /* 전체 Swiper 컨테이너 */
 .swiper {
     padding-bottom: 40px;
-    height: 250px;
+
     
 }
 .mySwiper {
@@ -22,6 +22,7 @@
 
 /* Swiper Slide 스타일 */
 .swiper-slide {
+    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -71,3 +72,7 @@
 .swiper-slide-next {
     z-index: 1; /* 슬라이드가 앞에 나타날 수 있도록 */
 }
+.news-slide {
+    position: relative; /* 자식 요소의 절대 위치 기준 */
+    overflow: hidden;   /* 텍스트가 이미지 밖으로 나가지 않게 */
+  }

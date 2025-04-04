@@ -10,7 +10,6 @@ export const GetTodayNews = () => {
         queryFn: async () => {
             const response = await axios.get<ApiResponse>(`${API_URL}/api/news/today`);
             console.log("API response:", response.data);
-            console.log("VITE_API_URL:", API_URL);
             return response.data.data;
         },
         initialData: [],

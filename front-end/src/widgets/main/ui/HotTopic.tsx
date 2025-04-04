@@ -36,6 +36,7 @@ export const HotTopic = () => {
                     {todayNews.map((news) => (
                         <SwiperSlide key={news.id}>
                             <div className="news-slide">
+                                <img src={news.img} alt={news.title}/>
                                 <h3 className="news-title">{news.title}</h3>
                             </div>
                         </SwiperSlide>

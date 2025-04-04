@@ -27,7 +27,7 @@
     backdrop-filter: blur(4px); /* 배경 블러 효과 */
     box-shadow: var(--small-shadow); /* 작은 그림자 */
     transition: all 0.3s ease;
-    opacity: 0.5; /* 기본적으로 모든 슬라이드를 연하게 설정 */
+    opacity: 0.3; /* 기본적으로 모든 슬라이드를 연하게 설정 */
     transform: scale(0.9); /* 기본적으로 모든 슬라이드를 약간 축소 */
 }
 

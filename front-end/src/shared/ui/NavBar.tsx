@@ -11,7 +11,7 @@ const NavBar = () => {
     };
 
     return (
-        <div className="fixed bottom-0 bg-white w-screen max-w-[var(--max-width)] min-w-[var(--min-width)] h-18 shadow-md flex justify-between items-center px-6 pb-1">
+        <div className="fixed bottom-0 bg-white w-screen max-w-[var(--max-width)] min-w-[var(--min-width)] h-18 shadow-md flex justify-between items-center px-6 pb-1 z-10">
             <Link
                 className={`flex flex-col items-center cursor-pointer ${isPathStartsWith('/category') ? 'text-blue-400' : ''}`}
                 to="/category"

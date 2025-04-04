@@ -1,9 +1,12 @@
 /* 전체 Swiper 컨테이너 */
 .swiper {
     padding-bottom: 40px;
-    height: 250px;
+
     
 }
+.mySwiper {
+    position: relative; /* 도트가 swiper 내에서 겹치지 않게 하기 위해 */
+  }
 
 /* 비활성 도트 */
 .swiper-pagination-bullet {
@@ -19,11 +22,12 @@
 
 /* Swiper Slide 스타일 */
 .swiper-slide {
+    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
     background-color: var(--card-background-color); /* 배경색 */
-    border-radius: 0.5rem;
+    border-radius: 10px;
     backdrop-filter: blur(4px); /* 배경 블러 효과 */
     box-shadow: var(--small-shadow); /* 작은 그림자 */
     transition: all 0.3s ease;
@@ -60,6 +64,7 @@
     opacity: 1;
     transform: scale(1);
     z-index: 2; /* 활성 슬라이드를 다른 슬라이드 위로 */
+    border-radius: 10px; 
 }
 
 /* 이전 및 다음 슬라이드 스타일 */
@@ -67,3 +72,7 @@
 .swiper-slide-next {
     z-index: 1; /* 슬라이드가 앞에 나타날 수 있도록 */
 }
+.news-slide {
+    position: relative; /* 자식 요소의 절대 위치 기준 */
+    overflow: hidden;   /* 텍스트가 이미지 밖으로 나가지 않게 */
+  }

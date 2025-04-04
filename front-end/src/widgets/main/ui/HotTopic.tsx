@@ -33,7 +33,7 @@ export const HotTopic = () => {
                     modules={[EffectCoverflow, Pagination]}
                     className="mySwiper"
                     >
-                    {todayNews?.map((news) => (
+                    {todayNews.map((news) => (
                         <SwiperSlide key={news.id}>
                             <div className="news-slide">
                                 <h3 className="news-title">{news.title}</h3>

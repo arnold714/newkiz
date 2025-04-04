@@ -111,4 +111,7 @@ export default defineConfig({
       },
     }),
   ],
+//   server: {
+//     host: ' fe.dev.newkiz.site'
+//   },
 })

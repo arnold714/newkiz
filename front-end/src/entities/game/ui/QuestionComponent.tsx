@@ -24,7 +24,7 @@ export const QuestionComponent = ({ questionNo, question, timeLeft, quizResult }
 
   useEffect(() => {
     if (time === 0 && resultTime === undefined) {
-      setResultTime(5); // Start resultTime countdown from 5 seconds
+      setResultTime(3); // Start resultTime countdown from 5 seconds
     }
   }, [time, resultTime]);
 

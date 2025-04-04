@@ -8,7 +8,7 @@ import { calculateWScale } from "@/features/game"
 import { JoystickData } from "@/shared/types/joystick"
 import { useWebSocket } from "@/features/game/model/useWebSocket"
 import { WaitingPage, QuestionComponent, GameResultComponent } from "@/entities/game"
-import { GameResult } from "@/entities/character/model/types"
+// import { GameResult } from "@/entities/character/model/types"
 
 export const GamePage: React.FC = () => {
   const [joystickData, setJoystickData] = useState<JoystickData>({
@@ -18,45 +18,45 @@ export const GamePage: React.FC = () => {
   })
   const [wScale, setWScale] = useState<number>(1)
 
-  const connected = true
+  // const connected = true
 
-  const gameInfo = {
-    state: "FINISHED",
-    // "WAITING" "PLAYING" "FINISHED"
-  }
+  // const gameInfo = {
+  //   state: "FINISHED",
+  //   // "WAITING" "PLAYING" "FINISHED"
+  // }
 
-  const currentQuiz = {
-    quizNumber: 1,
-    question: "프랑스의 수도는 파리이다.",
-    timeLeft: 3,
-  }
+  // const currentQuiz = {
+  //   quizNumber: 1,
+  //   question: "프랑스의 수도는 파리이다.",
+  //   timeLeft: 3,
+  // }
 
-  const quizResult = {
-    quizNumber: 1,
-    question: "프랑스의 수도는 파리이다.",
-    answer: false,
-    explanation: "프랑스의 수도는 파리입니다.",
-    result: true,
-    score: 4,
-  }
+  // const quizResult = {
+  //   quizNumber: 1,
+  //   question: "프랑스의 수도는 파리이다.",
+  //   answer: false,
+  //   explanation: "프랑스의 수도는 파리입니다.",
+  //   result: true,
+  //   score: 4,
+  // }
 
-  const allPlayers = [
-    { id: 2, characterName: "nico", position: { direction: 1, x: -1, y: -1 }, nickname: "Player1" },
-    { id: 3, characterName: "kuro", position: { direction: -1, x: 2, y: -2 }, nickname: "Player2" },
-  ]
+  // const allPlayers = [
+  //   { id: 2, characterName: "nico", position: { direction: 1, x: -1, y: -1 }, nickname: "Player1" },
+  //   { id: 3, characterName: "kuro", position: { direction: -1, x: 2, y: -2 }, nickname: "Player2" },
+  // ]
 
-  const rowData: GameResult[] = [
-    { rank: 1, nickname: '타락파워전사', score: 120, totalScore: 450, rankChange: 2 },
-    { rank: 2, nickname: '게임왕', score: 100, totalScore: 380, rankChange: -1 },
-    { rank: 3, nickname: '실버맨', score: 90, totalScore: 320, rankChange: 0 },
-    // 더 많은 데이터...
-  ];
+  // const rowData: GameResult[] = [
+  //   { rank: 1, nickname: '타락파워전사', score: 120, totalScore: 450, rankChange: 2 },
+  //   { rank: 2, nickname: '게임왕', score: 100, totalScore: 380, rankChange: -1 },
+  //   { rank: 3, nickname: '실버맨', score: 90, totalScore: 320, rankChange: 0 },
+  //   // 더 많은 데이터...
+  // ];
 
-  // 임시 userId
-  const userId = 1
+  // // 임시 userId
+  const userId = 3
 
   // WebSocket 연결
-  const { sendMove } = useWebSocket(userId)
+  const { connected, gameInfo, allPlayers, currentQuiz, quizResult,sendMove } = useWebSocket(userId)
   // connected, gameInfo, allPlayers, currentQuiz, quizResult,
   // 조이스틱 데이터 처리
   const handleJoystickMove = (event: any) => {
@@ -118,7 +118,7 @@ export const GamePage: React.FC = () => {
         ) : null}
         {gameInfo && gameInfo.state === "FINISHED" ? (
           <div className="absolute w-[80%] top-10 z-[1000] flex flex-col justify-center items-center select-none">
-            <GameResultComponent results={rowData} />
+            <GameResultComponent />
           </div>
         ) : null}
 

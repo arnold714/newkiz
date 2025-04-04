@@ -111,7 +111,8 @@ export default defineConfig({
       },
     }),
   ],
-//   server: {
-//     host: ' fe.dev.newkiz.site'
-//   },
+  server: {
+    host: 'fe.dev.newkiz.site',
+    port: 5173
+  },
 })

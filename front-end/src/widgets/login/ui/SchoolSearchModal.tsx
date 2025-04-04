@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { searchPlaces } from "../../../pages/login/api/KakaoApi";
+import { getSchoolList } from "@/pages/login/api/SchoolApi";
 import { LuSearch, LuX } from "react-icons/lu";
 interface SchoolSearchModalProps {
   isOpen: boolean;
@@ -27,17 +27,15 @@ export default function SchoolSearchModal({
     }
   }, [isOpen]);
 
-  // 실제 검색 수행
-  const handleSearch = async () => {
+   // 실제 학교 목록 검색 수행
+   const handleSearch = async () => {
     if (!keyword.trim()) return;
     try {
-      const data = await searchPlaces(keyword);
-      const filtered = data.filter((place: any) =>
-        place.place_name.includes("초등학교")
-      );
-      setSearchResults(filtered);
+      const data = await getSchoolList(keyword);
+      // API에서 받은 데이터 그대로 사용
+      setSearchResults(data);
     } catch (error) {
-      console.error("카카오맵 검색 에러:", error);
+      console.error("학교 목록 검색 에러:", error);
       setSearchResults([]);
     }
   };
@@ -55,9 +53,8 @@ export default function SchoolSearchModal({
   };
 
   // 목록에서 항목 선택 시
-  const handleSelect = (place: any) => {
-    // place.place_name, place.road_address_name 등
-    onSelectSchool(place.place_name);
+  const handleSelect = (school: any) => {
+    onSelectSchool(school.name);
     onClose();
   };
 
@@ -98,22 +95,22 @@ export default function SchoolSearchModal({
         <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar">
           {searchResults.length === 0 ? (
             <div className="text-gray-500 text-center py-10 flex flex-col items-center">
-              <LuSearch size={48}/>
+              <LuSearch size={48} />
               {keyword.trim() ? "검색 결과가 없습니다." : "학교 이름을 검색해 주세요."}
             </div>
           ) : (
             <ul className="divide-y">
-              {searchResults.map((place) => (
+              {searchResults.map((school) => (
                 <li
-                  key={place.id}
+                  key={school.id}
                   className="py-3 hover:bg-gray-50 transition-colors px-2 cursor-pointer"
-                  onClick={() => handleSelect(place)}
+                  onClick={() => handleSelect(school)}
                 >
                   <div className="flex justify-between items-center">
                     <div className="flex-1">
-                      <div className="font-medium text-gray-800">{place.place_name}</div>
+                      <div className="font-medium text-gray-800">{school.name}</div>
                       <div className="text-sm text-gray-500 mt-1">
-                        {place.road_address_name || place.address_name}
+                        {school.address}
                       </div>
                     </div>
                     <button className="bg-gray-100 text-sm px-3 py-1.5 rounded-full border text-gray-700 hover:bg-blue-50 hover:text-blue-600 hover:border-blue-300 transition-colors ml-2">

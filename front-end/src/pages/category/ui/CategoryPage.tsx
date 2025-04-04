@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { categories } from '../model/categories';
 import { Category, SubCategory } from '../model/types';
+import { LuX } from 'react-icons/lu';
 
 export const CategoryPage: React.FC = () => {
   // 기본 선택 카테고리
@@ -16,15 +17,14 @@ export const CategoryPage: React.FC = () => {
     (cat) => cat.id === selectedCategoryId
   );
 
-  // 빨주노초파남보 순서로 Tailwind 색상 클래스를 미리 정의
   const colorSequence = [
-    'bg-red-500',
-    'bg-orange-400',
-    'bg-yellow-400',
-    'bg-green-400',
-    'bg-blue-400',
-    'bg-indigo-400',
-    'bg-purple-400',
+    'bg-[#F86060]',
+    'bg-[#FBB76F]',
+    'bg-[#F8D460]',
+    'bg-[#A5E75A]',
+    'bg-[#8DBDFF]',
+    'bg-[#AE9DF5]',
+    'bg-[#FFC2DE]',
   ];
 
   /** 왼쪽 카테고리 클릭 시 */
@@ -49,18 +49,27 @@ export const CategoryPage: React.FC = () => {
     return `https://newkiz.s3.ap-northeast-2.amazonaws.com/categories/${iconName}.svg`;
   };
 
+  const handleBackClick = () => {
+    navigate(-1); // 뒤로가기
+  };
+
   return (
-    <div className="w-full h-screen flex flex-col pb-20 overflow-auto">
+    <div className="w-full h-screen flex flex-col pb-10 overflow-auto">
       {isBaseRoute && (
         <>
           {/* 상단 헤더 */}
           <div className="bg-gray-100 px-6 py-3 flex justify-between items-center border-b border-gray-100">
             <h2 className="text-2xl font-bold">카테고리</h2>
+            {/* X 버튼 - 뒤로 가기 */}
+            <LuX
+              onClick={handleBackClick}
+              size={24}
+            />
           </div>
 
           <div className="flex flex-1 bg-gray-100 overflow-hidden pb-20">
             {/* 왼쪽 카테고리 목록 */}
-            <div className="w-1/3 overflow-y-auto border-r border-gray-200">
+            <div className="w-1/3 overflow-y-auto border-r border-gray-200 ">
               {categories.map((category) => (
                 <div
                   key={category.id}

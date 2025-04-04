@@ -72,13 +72,18 @@ const CategoryDetailPage: React.FC = () => {
       observer.observe(observerRef.current);
     }
 
-    // cleanup
     return () => {
       if (observerRef.current) {
         observer.unobserve(observerRef.current);
       }
     };
   }, [displayedList, newsList]);
+
+  const formatDate = (dateString: string): string => {
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) return dateString;
+    return date.toISOString().slice(0, 10);
+  };
 
   // 현재 선택된 카테고리 객체 (UI 표시에 사용)
   const currentCategory = categories.find((cat) => cat.id === categoryId);
@@ -90,7 +95,7 @@ const CategoryDetailPage: React.FC = () => {
         <div className="h-6"></div>
 
         <div className="z-10 bg-[#F2F6E2]">
-          <div className="flex overflow-x-auto py-3 px-4 shadow-sm">
+          <div className="flex overflow-x-auto py-3 -px-5 shadow-sm">
             {categories.map((cat) => (
               <div
                 key={cat.id}
@@ -104,13 +109,13 @@ const CategoryDetailPage: React.FC = () => {
               </div>
             ))}
           </div>
-
-      {/* 뉴스 항목 */}
+        </div>
+        {/* 뉴스 항목 */}
       <div className="flex-grow overflow-y-auto">
-        <div className="p-4">
+        <div className="p-3">
           <div className="mb-4">
-            <h1 className="ml-5 text-2xl font-bold text-white">
-              {currentCategory?.name} 뉴스
+            <h1 className="ml-1 text-ms font-bold text-white">
+              {currentCategory?.name}
             </h1>
           </div>
 
@@ -139,7 +144,7 @@ const CategoryDetailPage: React.FC = () => {
                       {news.article}
                     </p>
                     <p className="text-xs text-gray-400">
-                      발행일: {news.published} | 조회수: {news.views} | 스크랩: {news.scrap}
+                      발행일: {formatDate(news.published)} | 조회수: {news.views}
                     </p>
                   </div>
                 </div>
@@ -152,7 +157,6 @@ const CategoryDetailPage: React.FC = () => {
             )}
             </div>
           </div>
-        </div>
       </div>
     </div>
   );

@@ -87,5 +87,5 @@ const refreshToken = async (refreshToken: string): Promise<void> => {
 };
 
 const customAxios = createAxiosInstance(VITE_API_URL);
+export default customAxios;
 
-export { customAxios };

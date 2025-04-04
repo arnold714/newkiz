@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { getSchoolList } from "@/pages/login/api/SchoolApi";
+import { getSchoolList } from "@/widgets/login/api/SchoolApi";
 import { LuSearch, LuX } from "react-icons/lu";
+import "@shared/styles/CustomScroll.css"
 interface SchoolSearchModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -14,30 +15,46 @@ export default function SchoolSearchModal({
 }: SchoolSearchModalProps) {
   // 검색어
   const [keyword, setKeyword] = useState("");
-  // 검색 결과
+  // 전체 학교 목록
+  const [allSchools, setAllSchools] = useState<any[]>([]);
+  // 필터링 결과
   const [searchResults, setSearchResults] = useState<any[]>([]);
 
   useEffect(() => {
-    // 모달이 열릴 때 기본 검색 실행
     if (isOpen) {
-      handleSearch();
+      fetchAllSchools();
     } else {
-      // 모달이 닫힐 때는 기존 결과 초기화
       setSearchResults([]);
+      setAllSchools([]);
+      setKeyword("");
     }
   }, [isOpen]);
 
-   // 실제 학교 목록 검색 수행
-   const handleSearch = async () => {
-    if (!keyword.trim()) return;
+  // 모달이 열릴 때 전체 목록을 불러옴
+  const fetchAllSchools = async () => {
     try {
-      const data = await getSchoolList(keyword);
-      // API에서 받은 데이터 그대로 사용
-      setSearchResults(data);
+      // 여기서는 query에 빈 문자열을 보내거나 API 수정 후 query 없이 전체 데이터를 받아올 수도 있음
+      const data = await getSchoolList("");
+      setAllSchools(data);
+      setSearchResults(data); // 초기에는 전체 목록 표시
     } catch (error) {
-      console.error("학교 목록 검색 에러:", error);
+      console.error("학교 목록 불러오기 에러:", error);
+      setAllSchools([]);
       setSearchResults([]);
     }
+  };
+
+   // 클라이언트에서 검색어로 필터링
+  const handleSearch = () => {
+    if (!keyword.trim()) {
+      // 검색어가 없으면 전체 목록을 보여줌
+      setSearchResults(allSchools);
+      return;
+    }
+    const filteredResults = allSchools.filter((school) =>
+      school.name.toLowerCase().includes(keyword.trim().toLowerCase())
+    );
+    setSearchResults(filteredResults);
   };
   
 
@@ -92,7 +109,7 @@ export default function SchoolSearchModal({
         </div>
 
         {/* 검색 결과 리스트 */}
-        <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar">
+        <div className="flex-1 overflow-y-auto pr-2 scroll">
           {searchResults.length === 0 ? (
             <div className="text-gray-500 text-center py-10 flex flex-col items-center">
               <LuSearch size={48} />

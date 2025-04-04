@@ -1,4 +1,10 @@
-export interface HotTopicArticle {
+export interface ApiResponse {
+    success: boolean;
+    data: NewsTodayItem[]; // ✅ 실제 데이터는 data 필드 안에 있음
+    error: string | null;
+  }
+
+export interface NewsTodayItem {
     id: string;
     title: string;
     link: string;
@@ -7,6 +13,7 @@ export interface HotTopicArticle {
     article: string;
     img: string;
     views: number;
+    scrap: number;
 }
 
 export interface News {

@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { searchPlaces } from "../../../pages/login/api/KakaoApi";
+import { getSchoolList } from "@/widgets/login";
 import { LuSearch, LuX } from "react-icons/lu";
+import "@shared/styles/CustomScroll.css"
 interface SchoolSearchModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSelectSchool: (schoolName: string) => void;
+  onSelectSchool: (schoolId: number, name: string, address: string) => void;
 }
 
 export default function SchoolSearchModal({
@@ -12,34 +13,45 @@ export default function SchoolSearchModal({
   onClose,
   onSelectSchool,
 }: SchoolSearchModalProps) {
-  // 검색어
   const [keyword, setKeyword] = useState("");
-  // 검색 결과
+  const [allSchools, setAllSchools] = useState<any[]>([]);
   const [searchResults, setSearchResults] = useState<any[]>([]);
 
   useEffect(() => {
-    // 모달이 열릴 때 기본 검색 실행
     if (isOpen) {
-      handleSearch();
+      fetchAllSchools();
     } else {
-      // 모달이 닫힐 때는 기존 결과 초기화
       setSearchResults([]);
+      setAllSchools([]);
+      setKeyword("");
     }
   }, [isOpen]);
 
-  // 실제 검색 수행
-  const handleSearch = async () => {
-    if (!keyword.trim()) return;
+  // 모달이 열릴 때 전체 목록을 불러옴
+  const fetchAllSchools = async () => {
     try {
-      const data = await searchPlaces(keyword);
-      const filtered = data.filter((place: any) =>
-        place.place_name.includes("초등학교")
-      );
-      setSearchResults(filtered);
+      // 여기서는 query에 빈 문자열을 보내거나 API 수정 후 query 없이 전체 데이터를 받아올 수도 있음
+      const data = await getSchoolList("");
+      setAllSchools(data);
+      setSearchResults(data); // 초기에는 전체 목록 표시
     } catch (error) {
-      console.error("카카오맵 검색 에러:", error);
+      console.error("학교 목록 불러오기 에러:", error);
+      setAllSchools([]);
       setSearchResults([]);
     }
+  };
+
+   // 클라이언트에서 검색어로 필터링
+  const handleSearch = () => {
+    if (!keyword.trim()) {
+      // 검색어가 없으면 전체 목록을 보여줌
+      setSearchResults(allSchools);
+      return;
+    }
+    const filteredResults = allSchools.filter((school) =>
+      school.name.toLowerCase().includes(keyword.trim().toLowerCase())
+    );
+    setSearchResults(filteredResults);
   };
   
 
@@ -55,9 +67,9 @@ export default function SchoolSearchModal({
   };
 
   // 목록에서 항목 선택 시
-  const handleSelect = (place: any) => {
-    // place.place_name, place.road_address_name 등
-    onSelectSchool(place.place_name);
+  const handleSelect = (school: any) => {
+    // 학교 ID, 이름, 주소를 함께 전달
+    onSelectSchool(school.id, school.name, school.address);
     onClose();
   };
 
@@ -95,25 +107,25 @@ export default function SchoolSearchModal({
         </div>
 
         {/* 검색 결과 리스트 */}
-        <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar">
+        <div className="flex-1 overflow-y-auto pr-2 scroll">
           {searchResults.length === 0 ? (
             <div className="text-gray-500 text-center py-10 flex flex-col items-center">
-              <LuSearch size={48}/>
+              <LuSearch size={48} />
               {keyword.trim() ? "검색 결과가 없습니다." : "학교 이름을 검색해 주세요."}
             </div>
           ) : (
             <ul className="divide-y">
-              {searchResults.map((place) => (
+              {searchResults.map((school) => (
                 <li
-                  key={place.id}
+                  key={school.id}
                   className="py-3 hover:bg-gray-50 transition-colors px-2 cursor-pointer"
-                  onClick={() => handleSelect(place)}
+                  onClick={() => handleSelect(school)}
                 >
                   <div className="flex justify-between items-center">
                     <div className="flex-1">
-                      <div className="font-medium text-gray-800">{place.place_name}</div>
+                      <div className="font-medium text-gray-800">{school.name}</div>
                       <div className="text-sm text-gray-500 mt-1">
-                        {place.road_address_name || place.address_name}
+                        {school.address}
                       </div>
                     </div>
                     <button className="bg-gray-100 text-sm px-3 py-1.5 rounded-full border text-gray-700 hover:bg-blue-50 hover:text-blue-600 hover:border-blue-300 transition-colors ml-2">

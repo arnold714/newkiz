@@ -1,25 +1,37 @@
 import { useState, useEffect, useCallback } from "react";
 import { createWebSocketService } from "./WebSocketService";
-import { GameInfo, QuizInfo, QuizResult, Position, Player } from "./types";
+import { QuizInfo, QuizResult, Position, Player, WaitingInfo, GameState, NewWaitingInfo, State } from "./types";
+import { denormalizePosition } from "@entities/character/model/nomalizationPosition";
+import { Boundaries } from "@/shared/types/common";
 
-const API_URL = import.meta.env.VITE_API_URL;
+const API_URL = import.meta.env.VITE_TEST_API_URL;
 
 export const useWebSocket = (userId?: number) => {
   const [connected, setConnected] = useState(false);
-  const [gameInfo, setGameInfo] = useState<GameInfo | null>(null);
+  const [waitingInfo, setWaitingInfo] = useState<NewWaitingInfo | null>(null);
   const [allPlayers, setAllPlayers] = useState<Record<number, Player>>({});
   const [currentQuiz, setCurrentQuiz] = useState<QuizInfo | null>(null);
   const [quizResult, setQuizResult] = useState<QuizResult | null>(null);
+  const [boundaries, setBoundaries] = useState<Boundaries | null>(null);
+  const [gameState, setGameState] = useState<State>("WAITING");
   
   const webSocketService = createWebSocketService(API_URL);
+
+  const setMapBoundaries = useCallback((newBoundaries: Boundaries) => {
+    setBoundaries(newBoundaries);
+  }, []);
 
   useEffect(() => {
     if (!userId) return;
     
     webSocketService
       .connect(userId, {
-        onGameInfo(info: GameInfo) {
-          setGameInfo(info);
+        onWaitingInfo(info: WaitingInfo) {
+          const newWaitingInfo: NewWaitingInfo = {
+            state: info.state,
+            timeLeft: info.timeLeft,
+          }
+          setWaitingInfo(newWaitingInfo);
           const playersMap = info.players.reduce(
             (acc, player) => ({ ...acc, [player.id]: player }), 
             {}
@@ -27,10 +39,20 @@ export const useWebSocket = (userId?: number) => {
           setAllPlayers(playersMap);
         },
         onMove(moveInfo: Player) {
-          setAllPlayers((prev) => ({
-            ...prev,
-            [moveInfo.id]: moveInfo,
-          }));
+            if (boundaries) {
+                const denormalizedPosition = denormalizePosition(
+                  moveInfo.position, 
+                  boundaries
+                );
+                
+                setAllPlayers((prev) => ({
+                  ...prev,
+                  [moveInfo.id]: {
+                    ...moveInfo,
+                    position: denormalizedPosition
+                  },
+                }));
+              }
         },
         onQuizInfo(quizInfo: QuizInfo) {
           setCurrentQuiz(quizInfo);
@@ -38,6 +60,9 @@ export const useWebSocket = (userId?: number) => {
         onQuizResult(result: QuizResult) {
           setQuizResult(result);
         },
+        onGameState(result: GameState) {
+          setGameState(result.state);
+        }
       })
       .then(() => setConnected(true))
       .catch((err) => console.error("Failed to connect:", err));
@@ -46,12 +71,13 @@ export const useWebSocket = (userId?: number) => {
   }, [userId]);
 
   const sendMove = useCallback(
-    (characterName: string, position: Position) => {
-      if (!userId) return;
-      webSocketService.sendMoveMessage(userId, characterName, position);
+    (userId:number, characterName: string, position: Position) => {
+      if (!userId || !boundaries) return;
+      webSocketService.sendMoveMessage(userId, characterName, position, boundaries);
+      console.log("sendMove Position: ", position.x, ", ", position.y)
     },
     [userId, webSocketService]
   );
 
-  return { connected, gameInfo, allPlayers, currentQuiz, quizResult, sendMove };
+  return { connected, waitingInfo, allPlayers, currentQuiz, quizResult, gameState, sendMove, setMapBoundaries };
 };

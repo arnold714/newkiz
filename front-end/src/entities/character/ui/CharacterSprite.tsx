@@ -7,7 +7,7 @@ import { calculateCharacterBoundaries } from "@/entities/character"
 import { Html } from "@react-three/drei"
 import { Position } from "@/features/game/model/types"
 
-export const CharacterSprite: React.FC<CharacterSpriteProps> = ({ characterName, joystickData, tileMapSize, initialPosition, userId, sendMove, nickname }) => {
+export const CharacterSprite: React.FC<CharacterSpriteProps> = ({ characterName, joystickData, tileMapSize, initialPosition, userId, sendMove, nickname, setMapBoundaries }) => {
   const [position, setPosition] = useState<[number, number, number]>(initialPosition)
   const [isMoving, setIsMoving] = useState<boolean>(false)
   const [direction, setDirection] = useState<number>(1)
@@ -26,23 +26,36 @@ export const CharacterSprite: React.FC<CharacterSpriteProps> = ({ characterName,
   const textureIdlePath = `https://newkiz.s3.ap-northeast-2.amazonaws.com/dinoset/${characterName}/base/idle.png`
   const textureMovePath = `https://newkiz.s3.ap-northeast-2.amazonaws.com/dinoset/${characterName}/base/move.png`
 
-  // 캐릭터가 움직일 수 있는 공간 계산
+  // 경계값 계산 후 WebSocket 훅에 전달
   const boundaries = React.useMemo(() => {
-    return calculateCharacterBoundaries(viewport, characterSize, tileMapSize)
-  }, [viewport.width, viewport.height, characterSize.width, characterSize.height, tileMapSize.width, tileMapSize.height])
+    const calculatedBoundaries = calculateCharacterBoundaries(
+      viewport, 
+      characterSize, 
+      tileMapSize
+    );
+    
+    // 계산된 경계값을 WebSocket 훅에 전달
+    if (setMapBoundaries) {
+      setMapBoundaries(calculatedBoundaries);
+    }
+    
+    return calculatedBoundaries;
+  }, [viewport.width, viewport.height, characterSize.width, characterSize.height, tileMapSize.width, tileMapSize.height, setMapBoundaries]);
 
   // 조이스틱 데이터 변경 시 캐릭터 상태 업데이트
   useEffect(() => {
+    if(!joystickData) return;
     setIsMoving(joystickData.isMoving)
     if (joystickData.isMoving && joystickData.x !== 0) {
       setDirection(joystickData.x < 0 ? -1 : 1)
     }
-  }, [joystickData.isMoving, joystickData.x])
+  }, [joystickData?.isMoving, joystickData?.x])
 
   // 프레임 별 처리
   useFrame((_, delta) => {
     let [x, y, z] = position;
   
+    if(!joystickData) return;
     if (joystickData.isMoving) {
       x += joystickData.x * SPEED * delta;
       y += joystickData.y * SPEED * delta;
@@ -66,7 +79,8 @@ export const CharacterSprite: React.FC<CharacterSpriteProps> = ({ characterName,
           x,
           y
         };
-        sendMove(characterName, positionData);
+        // console.log("4프레임 마다 전송, frame 수: ", frameCount.current, "Position:", positionData);
+        sendMove(userId, characterName, positionData);
       }
   
       lastJoystickState.current = true; // 움직이고 있음
@@ -78,7 +92,8 @@ export const CharacterSprite: React.FC<CharacterSpriteProps> = ({ characterName,
           x,
           y
         };
-        sendMove(characterName, positionData);
+        // console.log("움직임이 멈추면 전송 - Frame 수:", frameCount.current, "Position:", positionData);
+        sendMove(userId, characterName, positionData);
       }
       lastJoystickState.current = false; // 멈춘 상태 기록
     }
@@ -110,17 +125,16 @@ export const CharacterSprite: React.FC<CharacterSpriteProps> = ({ characterName,
   }, [textureIdlePath, textureMovePath])
 
   // 디버깅용 로그
+  // useEffect(() => {
+  //   console.log("boundaries minX: ", boundaries.minX, "\n boundaries maxX: ", boundaries.maxX)
+  // }, [boundaries])
 
-  useEffect(() => {
-    console.log("boundaries minX: ", boundaries.minX, "\n boundaries maxX: ", boundaries.maxX)
-  }, [boundaries])
-
-  useEffect(() => {
-    if (isMoving) {
-      console.log(new Date())
-      console.log("x: ", position[0], "\n y: ", position[1])
-    }
-  }, [position])
+  // useEffect(() => {
+  //   if (isMoving) {
+  //     console.log(new Date())
+  //     console.log("isMoving 변화 \n x: ", position[0], "\n y: ", position[1])
+  //   }
+  // }, [position])
 
   return (
     <group ref={characterRef} position={position}>
@@ -130,8 +144,8 @@ export const CharacterSprite: React.FC<CharacterSpriteProps> = ({ characterName,
           {isMoving && <SpriteAnimation texturePath={textureMovePath} frameWidth={24} totalWidth={144} frameCount={6} frameTime={100} direction={direction} />}
 
           {/* 닉네임 표시 - Html 컴포넌트 사용 */}
-          <Html position={[0, -0.6, 0]} center>
-            <div style={{ color: 'white', background: 'rgba(0,0,0,0.5)', padding: '2px 5px', borderRadius: '3px', whiteSpace: 'nowrap' }}>
+          <Html position={[0, -0.6, 0]} center style={{userSelect: 'none', zIndex: 1, position:'relative'}}>
+            <div style={{ color: 'white', background: 'rgba(0,0,0,0.5)', padding: '2px 5px', borderRadius: '3px', whiteSpace: 'nowrap', zIndex:'50' }}>
               {nickname}
             </div>
           </Html>

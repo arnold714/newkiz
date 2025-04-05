@@ -5,13 +5,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { ko } from "date-fns/locale";
 import "@shared/styles/CustomScroll.css"
-
-interface BasicInfo {
-  nickname: string;
-  birthdate: string;
-  school: string;
-  gender: string;
-}
+import { BasicInfo } from "@/features/login/model/types";
 
 interface FirstLoginInfoProps {
   basicInfo: BasicInfo;
@@ -25,22 +19,33 @@ export default function FirstLoginInfo({
   nextStep,
 }: FirstLoginInfoProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [birthdateObj, setBirthdateObj] = useState<Date | null>(
+    basicInfo.birthdate ? new Date(basicInfo.birthdate) : null
+  );
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
     setBasicInfo((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleOpenModal = () => {
-    setIsModalOpen(true);
-  };
+  // 학교 검색 모달 열기/닫기
+  const handleOpenModal = () => setIsModalOpen(true);
+  const handleCloseModal = () => setIsModalOpen(false);
 
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-  };
-
-  const handleSelectSchool = (schoolName: string) => {
-    setBasicInfo((prev) => ({ ...prev, school: schoolName }));
+  // 학교 선택 시, id/name/address를 모두 저장
+  const handleSelectSchool = (
+    schoolId: number,
+    schoolName: string,
+    schoolAddress: string
+  ) => {
+    setBasicInfo((prev) => ({
+      ...prev,
+      schoolId,
+      schoolName,
+      schoolAddress,
+    }));
   };
 
   const handleNext = () => {
@@ -52,7 +57,7 @@ export default function FirstLoginInfo({
       alert("생년월일을 입력해주세요.");
       return;
     }
-    if (!basicInfo.school) {
+    if (!basicInfo.schoolName) {
       alert("출신 학교를 선택해주세요.");
       return;
     }
@@ -60,13 +65,8 @@ export default function FirstLoginInfo({
       alert("성별을 선택해주세요.");
       return;
     }
-  
     nextStep();
   };
-
-  const [birthdateObj, setBirthdateObj] = useState<Date | null>(
-    basicInfo.birthdate ? new Date(basicInfo.birthdate) : null
-  );
 
   return (
     <div className="bg-white shadow-[0px_0px_20px_rgba(0,0,0,0.15)] rounded-[15px] w-full h-full max-h-[90vh] flex flex-col relative">
@@ -102,7 +102,7 @@ export default function FirstLoginInfo({
             placeholder="닉네임을 입력해주세요"
             value={basicInfo.nickname}
             onChange={handleChange}
-            className="w-full bg-[#FAFAFA] border border-[#EFEFEF] rounded-lg px-3 py-3 text-md"
+            className="w-full bg-[#FAFAFA] border border-[#EFEFEF] rounded-lg px-3 py-3 text-base"
           />
         </div>
 
@@ -127,7 +127,7 @@ export default function FirstLoginInfo({
             showYearDropdown
             scrollableYearDropdown
             yearDropdownItemNumber={100}
-            className="w-full bg-[#FAFAFA] border border-[#EFEFEF] rounded-lg px-3 py-3 text-base"
+            className="block w-full bg-[#FAFAFA] border border-[#EFEFEF] rounded-lg px-3 py-3 text-base"
             popperPlacement="bottom-start"
           />
         </div>
@@ -140,8 +140,8 @@ export default function FirstLoginInfo({
           <div className="flex gap-2">
             <input
               type="text"
-              name="school"
-              value={basicInfo.school}
+              name="schoolName"
+              value={basicInfo.schoolName}
               readOnly
               placeholder="학교를 검색해주세요."
               className="w-full bg-[#FAFAFA] border border-[#EFEFEF] rounded-lg px-3 py-3 text-md"
@@ -165,7 +165,7 @@ export default function FirstLoginInfo({
               name="gender"
               value={basicInfo.gender}
               onChange={handleChange}
-              className="w-full appearance-none bg-[#FAFAFA] border border-[#EFEFEF] rounded-lg px-3 py-3 text-md"
+              className="w-full appearance-none bg-[#FAFAFA] border border-[#EFEFEF] rounded-lg px-3 py-3 text-base"
             >
               <option value="">선택해주세요</option>
               <option value="male">남성</option>
@@ -192,7 +192,9 @@ export default function FirstLoginInfo({
       <SchoolSearchModal
         isOpen={isModalOpen}
         onClose={handleCloseModal}
-        onSelectSchool={handleSelectSchool}
+        onSelectSchool={(schoolId, name, address) =>
+          handleSelectSchool(schoolId, name, address)
+        }
       />
     </div>
   );

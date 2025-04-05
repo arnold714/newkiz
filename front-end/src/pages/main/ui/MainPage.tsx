@@ -13,7 +13,7 @@ export default function MainPage() {
           <ProgressGraph />
           </div>
         </div>
-        <div className='bg-white/60 h-auto p-2'>
+        <div className='bg-white/60  p-2'>
           <div className="text-2xl font-bold text-center m-3">
             Today's TOP 10
           </div>

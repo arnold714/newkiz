@@ -63,6 +63,7 @@ public class MypageService {
         .school(school)
         .gender(Gender.valueOf(request.getGender()))
         .difficulty(request.getDifficulty())
+        .characterId(request.getCharacterId())
         .build();
     profileRepository.save(profile);
 
@@ -96,19 +97,19 @@ public class MypageService {
   public MypageResponse updateMypage(Integer userId, MypageUpdateRequest request) {
     School school = schoolRepository.findById(request.getSchool())
         .orElseThrow(() -> new NotFoundException("school not found."));
-    Profile profile = Profile.builder()
-        .userId(userId)
-        .nickname(request.getNickname())
-        .school(school)
-        .difficulty(request.getDifficulty())
-        .build();
-    profileRepository.save(profile);
+    Profile profile = profileRepository.findByUserId(userId)
+        .orElseThrow(() -> new NotFoundException("profile not found."));
+    profile.setNickname(request.getNickname());
+    profile.setSchool(school);
+    profile.setDifficulty(request.getDifficulty());
+    profile.setCharacterId(request.getCharacterId());
 
     List<String> interestNames = request.getInterests();
     List<Interest> interests = interestNames.stream()
         .map(name -> Interest.builder().id(new InterestId(userId, NewsCategory.valueOf(name)))
             .build())
         .collect(Collectors.toList());
+    interestRepository.deleteAllById_UserId(userId);
     interestRepository.saveAll(interests);
 
     return MypageResponse.builder()

@@ -42,4 +42,5 @@ public class Profile {
   private Gender gender;
   private Integer difficulty;
 
+  private Integer characterId;
 }

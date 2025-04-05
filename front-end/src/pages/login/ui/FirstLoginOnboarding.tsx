@@ -1,14 +1,18 @@
 import { useState } from "react";
-import FirstLoginInfo from "@/widgets/login/ui/FirstLoginInfo";
-import FirstInterestSelection from "@/widgets/login/ui/FirstInterestSelection";
-import FirstCharacterSelection from "@/widgets/login/ui/FirstCharacterSelection";
-import FinalConfirm from "@/widgets/login/ui/FinalConfirm";
+import { FirstLoginInfo, FirstInterestSelection, FirstCharacterSelection, FinalConfirm } from "@/widgets/login";
+import { BasicInfo } from "@/features/login/model/types";
 
 export default function FirstLoginOnboarding() {
   const [step, setStep] = useState(1);
 
-  // 예시: 각 단계에서 입력받은 값들을 상위에서 관리
-  const [basicInfo, setBasicInfo] = useState({ nickname: "", birthdate: "", school: "", gender: "" });
+  const [basicInfo, setBasicInfo] = useState<BasicInfo>({
+    nickname: "",
+    birthdate: "",
+    schoolId: null,
+    schoolName: "",
+    schoolAddress: "",
+    gender: "",
+  });
   const [interests, setInterests] = useState<string[]>([]);
   const [selectedCharacter, setSelectedCharacter] = useState<string>("");
 
@@ -48,6 +52,7 @@ export default function FirstLoginOnboarding() {
         return (
           <FinalConfirm
             basicInfo={basicInfo}
+            interests={interests}
             selectedCharacter={selectedCharacter}
           />
         );

@@ -1,32 +1,25 @@
+import { useEffect, useState } from "react";
 import { LuChevronLeft, LuSearch } from "react-icons/lu";
-import { useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom";
+import { fetchScrappedNews } from "@/pages/mypage";
+import { NewsItem } from "@/features/mypage/model/types";
 
 export const ScrappedNewsPage = () => {
 
     const navigate = useNavigate();
+    const [searchTerm, setSearchTerm] = useState("");
+    const [scrappedNews, setScrappedNews] = useState<NewsItem[]>([]);
 
-    const scrappedNews = [
-        {
-            id: 0,
-            title: "'대충격' 20분 뛴 이토, 김민재...",
-            date: "2025/03/14",
-        },
-        {
-            id: 1,
-            title: "'대충격' 한국 요르단에 비겨...",
-            date: "2025/03/15",
-        },
-        {
-            id: 3,
-            title: "'대충격' 그냥 충격...",
-            date: "2025/03/25",
-        },
-        {
-            id: 4,
-            title: "누가 내 커피 훔쳐 마셨냐...",
-            date: "2025/03/28",
-        },
-    ]
+    useEffect(() => {
+        (async () => {
+          const news = await fetchScrappedNews();
+          setScrappedNews(news);
+        })();
+      }, []);
+
+    const filteredNews = scrappedNews.filter((item) =>
+    item.title.toLowerCase().includes(searchTerm.toLowerCase())
+    );
 
     return (
         <div className="w-full h-full flex flex-col mt-5">
@@ -41,16 +34,18 @@ export const ScrappedNewsPage = () => {
                         placeholder="검색하세요"
                         maxLength={30}
                         className="border-1 border-[#919191] px-4 pr-10 w-full h-full rounded-lg"
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
                     />
                     <button className="text-3xl font-bold absolute right-3">
                         <LuSearch />
                     </button>
                 </div>
                 <div className="flex flex-col w-full items-center my-3 mt-5">
-                    {scrappedNews.map((news) => (
+                    {filteredNews.map((news) => (
                         <div key={news.id} className="flex flex-col w-full border-b border-gray-200 pb-3 mb-3">
                             <p className="font-semibold text-[16px]">{news.title}</p>
-                            <p className="text-sm text-[#9E9E9E] mt-1">{news.date}</p>
+                            <p className="text-sm text-[#9E9E9E] mt-1">{news.published}</p>
                         </div>
                     ))}
                 </div>

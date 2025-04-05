@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { getSchoolList } from "@/widgets/login/api/SchoolApi";
+import { getSchoolList } from "@/widgets/login";
 import { LuSearch, LuX } from "react-icons/lu";
 import "@shared/styles/CustomScroll.css"
 interface SchoolSearchModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSelectSchool: (schoolName: string) => void;
+  onSelectSchool: (schoolId: number, name: string, address: string) => void;
 }
 
 export default function SchoolSearchModal({
@@ -13,11 +13,8 @@ export default function SchoolSearchModal({
   onClose,
   onSelectSchool,
 }: SchoolSearchModalProps) {
-  // 검색어
   const [keyword, setKeyword] = useState("");
-  // 전체 학교 목록
   const [allSchools, setAllSchools] = useState<any[]>([]);
-  // 필터링 결과
   const [searchResults, setSearchResults] = useState<any[]>([]);
 
   useEffect(() => {
@@ -71,7 +68,8 @@ export default function SchoolSearchModal({
 
   // 목록에서 항목 선택 시
   const handleSelect = (school: any) => {
-    onSelectSchool(school.name);
+    // 학교 ID, 이름, 주소를 함께 전달
+    onSelectSchool(school.id, school.name, school.address);
     onClose();
   };
 

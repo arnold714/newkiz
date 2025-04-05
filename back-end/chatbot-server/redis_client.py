@@ -1,12 +1,15 @@
-import os
 import redis
+import os
 from dotenv import load_dotenv
 
+# 환경 변수 로드
 load_dotenv()
 
-redis_host = os.getenv("REDIS_HOST", "localhost")
-redis_port = int(os.getenv("REDIS_PORT", 6379))
-redis_db = int(os.getenv("REDIS_DB", 0))
+redis_client = redis.Redis(
+    host=os.getenv("REDIS_HOST", "localhost"),
+    port=int(os.getenv("REDIS_PORT", 6379)),
+    db=int(os.getenv("REDIS_DB", 0)),
+    decode_responses=True
+)
 
-# Redis 클라이언트 인스턴스 반환
-redis_client = redis.Redis(host=redis_host, port=redis_port, db=redis_db)
+REDIS_TTL_SECONDS = int(os.getenv("REDIS_TTL_SECONDS", 3600))  # 기본 1시간

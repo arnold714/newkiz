@@ -1,6 +1,8 @@
 fastapi
-uvicorn
-openai
-langchain
-faiss-cpu
+uvicorn[standard]
+openai>=1.0.0
 python-dotenv
+redis
+sentence-transformers
+faiss-cpu
+numpy

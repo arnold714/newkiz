@@ -1,9 +1,9 @@
 package site.newkiz.gameserver.entity;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import lombok.Data;
 import site.newkiz.gameserver.entity.enums.State;
 
@@ -22,8 +22,11 @@ public class Game {
   // 현재 퀴즈
   private int currentQuizNumber;
 
-  // 플레이어
+  // 참여 플레이어
   private Map<Integer, Player> players;
+
+  // 현재 생존 플레이어
+  private Map<Integer, Player> alivePlayers;
 
 
   public Game() {
@@ -32,7 +35,13 @@ public class Game {
     this.startHour = 18;
     this.quizList = new ArrayList<>();
     this.currentQuizNumber = 0;
-    this.players = new HashMap<>();
+    this.players = new ConcurrentHashMap<>();
+    this.alivePlayers = new ConcurrentHashMap<>();
+  }
+
+  public void registerPlayer(int userId, Player player) {
+    players.put(userId, player);
+    alivePlayers.put(userId, player);
   }
 
   public int quizCount() {
@@ -41,5 +50,9 @@ public class Game {
 
   public Quiz getCurrnetQuiz() {
     return this.quizList.get(this.currentQuizNumber - 1);
+  }
+
+  public static Map<String, Object> toPlayingGameInfo(Game game) {
+    return Map.of("state", game.getState());
   }
 }

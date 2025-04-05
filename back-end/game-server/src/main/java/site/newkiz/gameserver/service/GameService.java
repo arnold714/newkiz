@@ -3,6 +3,8 @@ package site.newkiz.gameserver.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -25,6 +27,8 @@ public class GameService {
 
   private final SimpMessagingTemplate messagingTemplate;
   private Game game;
+  private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+
 
   @Scheduled(cron = "0 55 17 * * ?")
   public void createGame() throws InterruptedException {
@@ -49,18 +53,18 @@ public class GameService {
   public void joinGame(Integer userId) {
     // 유저 정보 조회 - 닉네임, 캐릭 정보
     Position position = new Position(Direction.EAST.getValue(), 0, 0);
-    Player player = new Player(userId, "nickname", "characterName", position);
+    Player player = new Player(userId, "nickname", "KURO", position);
 
     // 플레이어 리스트에 유저 등록
-    game.getPlayers().put(player.getId(), player);
+    game.registerPlayer(player.getId(), player);
 
     // 게임 정보 전송 - 게임 상태 / 남은 대기 시간 / 다른 플레이어들 정보
     messagingTemplate.convertAndSend("/sub/users/" + userId + "/info", new ConnectGameInfo(game));
   }
 
-  public void move(Player player) {
+  public void movePlayer(Player player) {
     // 움직인 유저 좌표 최신화
-    Player movedPlayer = game.getPlayers().get(player.getId());
+    Player movedPlayer = game.getAlivePlayers().get(player.getId());
     movedPlayer.setPosition(player.getPosition());
 
     // 모든 유저에게 공유
@@ -74,8 +78,8 @@ public class GameService {
     // 게임 상태 PLAYING 으로 변경
     game.setState(State.PLAYING);
 
-    // todo 게임 시작 메시지 send
-    messagingTemplate.convertAndSend("/sub/game-info", new ConnectGameInfo(game));
+    // 게임 시작 메시지 send
+    messagingTemplate.convertAndSend("/sub/game-info", Game.toPlayingGameInfo(game));
 
     // 게임의 퀴즈 수 만큼 진행
     for (int currentQuizNumber = 1; currentQuizNumber <= game.quizCount(); currentQuizNumber++) {
@@ -85,15 +89,17 @@ public class GameService {
       Quiz quiz = game.getCurrnetQuiz();
 
       // 현재 문제 정보 send
-      sendQuizInfo(currentQuizNumber, quiz);
+      messagingTemplate.convertAndSend("/sub/quiz-info",
+          new QuizInfo(currentQuizNumber, quiz.getQuestion(), quiz.getTimeLeft()));
 
       // 퀴즈 시간 만큼 대기
-      Thread.sleep(10000);
-      // todo 플레이어들 정답 판정, 오답자 스코어 정보 제공 및 나가기 or 관전 선택
+      Thread.sleep(quiz.getTimeLeft());
 
-      log.info(currentQuizNumber + " 번 문제 정답: " + quiz.getQuestion());
-      // todo 정답 판정 보여주는 시간만큼 대기 / 오답자 커넥션 끊어야하는데
-      judgeAnswer(currentQuizNumber, quiz);
+      // 정답 판정
+      log.info(currentQuizNumber + " 번 문제 정답: ~~~");
+      QuizResult quizResult = checkAnswers();
+      messagingTemplate.convertAndSend("/sub/quiz-result", quizResult);
+
       Thread.sleep(3000);
 
       // todo 오답자 커넥션 끊어야하는데
@@ -108,34 +114,29 @@ public class GameService {
 
   }
 
-  public void sendQuizInfo(int quizNumber, Quiz quiz) {
-    // 퀴즈 번호, 문제 내용, 문제 시간
-    messagingTemplate.convertAndSend("/sub/quiz-info",
-        new QuizInfo(quizNumber, quiz.getQuestion(), quiz.getTimeLeft()));
-  }
+  public QuizResult checkAnswers() {
+    Quiz quiz = game.getCurrnetQuiz();
+    Map<Integer, Player> players = game.getAlivePlayers();
+    List<Integer> correctPlayers = new ArrayList<>();
+    List<Integer> wrongPlayers = new ArrayList<>();
 
-  public void judgeAnswer(int quizNumber, Quiz quiz) {
-    Map<Integer, Player> players = game.getPlayers();
     for (Player player : players.values()) {
-      QuizResult quizResult = QuizResult.builder()
-          .quizNumber(quizNumber)
-          .question(quiz.getQuestion())
-          .answer(quiz.isAnswer())
-          .explanation(quiz.getExplanation())
-          .build();
-
       if ((quiz.isAnswer() && player.getPosition().getX() < 0)
           || (!quiz.isAnswer() && player.getPosition().getX() >= 0)) {
-        player.addScore();
-        quizResult.setScore(player.getScore());
-        quizResult.setResult(true);
+        correctPlayers.add(player.getId());
       } else {
-        quizResult.setScore(player.getScore());
-        quizResult.setResult(false);
+        wrongPlayers.add(player.getId());
+        players.remove(player.getId());
       }
-
-      messagingTemplate.convertAndSend("/sub/users/" + player.getId() + "/quiz-result", quizResult);
     }
-  }
 
+    return QuizResult.builder()
+        .quizNumber(game.getCurrentQuizNumber())
+        .question(quiz.getQuestion())
+        .answer(quiz.isAnswer())
+        .explanation(quiz.getExplanation())
+        .correctPlayers(correctPlayers)
+        .wrongPlayers(wrongPlayers)
+        .build();
+  }
 }

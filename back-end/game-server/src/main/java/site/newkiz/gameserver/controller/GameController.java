@@ -20,6 +20,6 @@ public class GameController {
 
   @MessageMapping("/move")
   public void move(Player player) {
-    gameService.move(player);
+    gameService.movePlayer(player);
   }
 }

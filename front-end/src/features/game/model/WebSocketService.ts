@@ -65,7 +65,7 @@ export const createWebSocketService = (baseUrl: string) => {
           // 퀴즈 결과 받아오기
           if (callbacks.onQuizResult) {
             client.current?.subscribe(
-              `/sub/users/${userId}/quiz-result`,
+              `/sub/quiz-result`,
               (message: IMessage) => {
                 callbacks.onQuizResult!(JSON.parse(message.body));
                 console.log("quizResult: ", JSON.parse(message.body));
@@ -79,7 +79,7 @@ export const createWebSocketService = (baseUrl: string) => {
               `/sub/game-info`,
               (message: IMessage)=>{
                 callbacks.onGameState!(JSON.parse(message.body));
-                console.log("gameState: ", JSON.parse(message.body));
+                // console.log("gameState: ", JSON.parse(message.body));
               }
             )
           }
@@ -119,7 +119,7 @@ export const createWebSocketService = (baseUrl: string) => {
       destination: "/pub/move",
       body: JSON.stringify(payload),
     });
-    console.log("정규화 position: ", payload.position)
+    // console.log("정규화 position: ", payload.position)
   };
 
   return { connect, disconnect, sendMoveMessage };

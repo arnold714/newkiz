@@ -1,4 +1,4 @@
-import { QuizResult, State } from "@/features/game/model/types";
+import { QuizResult } from "@/features/game/model/types";
 
 export type RankType = "school" | "personal";
 
@@ -7,5 +7,4 @@ export interface QuestionProps {
     question: string | undefined
     timeLeft: number | undefined
     quizResult: QuizResult | null
-    gameState: State
 }

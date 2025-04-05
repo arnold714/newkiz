@@ -3,42 +3,34 @@ import { QuestionProps } from "../model/type";
 import { FaRegCircle } from 'react-icons/fa';
 import { IoClose } from "react-icons/io5";
 
-export const QuestionComponent: React.FC<QuestionProps> = ({ questionNo, question, timeLeft, quizResult, gameState }) => {
+export const QuestionComponent: React.FC<QuestionProps> = ({ questionNo, question, timeLeft, quizResult }) => {
   const [time, setTime] = useState<number|undefined>(timeLeft);
   const [showAnswer, setShowAnswer] = useState(false);
 
   useEffect(() => {
-    if (gameState !== "PLAYING") return;
-
     setTime(timeLeft);
     setShowAnswer(false);
 
     const timer = setInterval(() => {
       setTime((prevTime) => {
         if (prevTime === 0) {
-          if (showAnswer) {
-            // 정답 표시 시간 종료
-            setShowAnswer(false);
-            return 10; // 다음 문제로 리셋
-          } else {
-            // 문제 시간 종료, 정답 표시 시작
-            setShowAnswer(true);
-            return 3; // 정답 표시 시간으로 설정
-          }
+          setShowAnswer(true);
+          clearInterval(timer);
+          return 0;
         }
         return (prevTime! - 1);
       });
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [timeLeft, questionNo, gameState]);
-
-  if (gameState !== "PLAYING") return null;
+  }, [questionNo]);
 
   return (
     <div className="flex flex-col items-center h-full w-full bg-white bg-opacity-50 rounded-xl p-6 relative px-4 z-999">
       <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 text-black text-2xl font-bold">
-        남은 시간: {time}
+        {
+          !showAnswer && <>남은 시간: {time}</>
+        }
       </div>
       <div className="text-center">
         <p className="text-3xl font-bold text-green-600">Q{questionNo}.</p>
@@ -48,7 +40,7 @@ export const QuestionComponent: React.FC<QuestionProps> = ({ questionNo, questio
         <div className="flex flex-col mt-6 text-center">
           <div className="flex flex-row justify-center items-center gap-2">
             <p className="text-lg font-semibold">정답은</p>
-            {quizResult?.answer ? (<FaRegCircle className="text-3xl text-blue-600" strokeWidth={10} />):(<IoClose className="text-3xl text-red-600" strokeWidth={10} />)}
+            {quizResult.answer ? (<FaRegCircle className="text-3xl text-blue-600" strokeWidth={10} />):(<IoClose className="text-3xl text-red-600" strokeWidth={10} />)}
           </div>
           <p className="text-lg font-semibold text-gray-600">{quizResult?.explanation}</p>
         </div>

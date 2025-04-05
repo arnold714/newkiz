@@ -1,13 +1,18 @@
 from pydantic import BaseModel
-from typing import List
+from typing import List, Dict
 
-class NewsInput(BaseModel):
-    user_id: str
-    news_id: str
+class ChatHistoryRequest(BaseModel):
+    userId: str
+    newsId: str
     title: str
     body: str
     keywords: List[str]
 
-class QuestionInput(BaseModel):
-    session_id: str
+class ChatRequest(BaseModel):
+    userId: str
+    newsId: str
     question: str
+
+class ChatResponse(BaseModel):
+    sessionId: str
+    chatHistory: List[Dict[str, str]]

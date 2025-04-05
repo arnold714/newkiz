@@ -1,8 +1,7 @@
 import json
 import os
-import httpx
 
-from fastapi import FastAPI, Header, HTTPException
+from fastapi import FastAPI, Header, HTTPException, APIRouter
 from uuid import uuid4
 from openai import OpenAI
 from dotenv import load_dotenv
@@ -12,6 +11,7 @@ from rag_engine import build_faiss_index, chunk_text, retrieve_similar_chunks, V
 from fetch_news_data import fetch_news_data
 
 app = FastAPI()
+router = APIRouter(prefix="/api")
 
 load_dotenv()
 openai_client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
@@ -39,7 +39,7 @@ def ask_openai(question: str, context: str) -> str:
 def make_key(userId: str, newsId: str) -> str:
     return f"{userId}:{newsId}"
 
-@app.post("/chatbot/history", response_model=ChatResponse)
+@router.post("/chatbot/history", response_model=ChatResponse)
 async def get_or_create_chat_history(req: ChatHistoryRequest, user_id: str = Header(..., alias="User-Id")):
     redis_key = make_key(user_id, req.newsId)
 
@@ -61,7 +61,7 @@ async def get_or_create_chat_history(req: ChatHistoryRequest, user_id: str = Hea
     redis_client.setex(redis_key, REDIS_TTL_SECONDS, json.dumps(session_data))
     return ChatResponse(sessionId=session_id, chatHistory=[])
 
-@app.post("/chatbot", response_model=ChatResponse)
+@router.post("/chatbot", response_model=ChatResponse)
 def chat(req: ChatRequest, user_id: str = Header(..., alias="User-Id")):
     redis_key = make_key(user_id, req.newsId)
 
@@ -81,3 +81,5 @@ def chat(req: ChatRequest, user_id: str = Header(..., alias="User-Id")):
     session_data["chatHistory"] = chat_history
     redis_client.set(redis_key, json.dumps(session_data))
     return ChatResponse(sessionId=session_data["sessionId"], chatHistory=chat_history)
+
+app.include_router(router)

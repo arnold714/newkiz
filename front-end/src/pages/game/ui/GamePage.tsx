@@ -8,6 +8,7 @@ import { calculateWScale } from "@/features/game"
 import { JoystickData } from "@/shared/types/joystick"
 import { useWebSocket } from "@/features/game/model/useWebSocket"
 import { WaitingPage, QuestionComponent, GameResultComponent } from "@/entities/game"
+import { GameState } from "@/features/game/model/types"
 // import { GameResult } from "@/entities/character/model/types"
 
 export const GamePage: React.FC = () => {
@@ -16,6 +17,7 @@ export const GamePage: React.FC = () => {
     y: 0,
     isMoving: false,
   })
+  const [currentGameState, setCurrentGameState] = useState<GameState>("WAITING");
   const [wScale, setWScale] = useState<number>(1)
 
   // const connected = true
@@ -24,6 +26,8 @@ export const GamePage: React.FC = () => {
   //   state: "FINISHED",
   //   // "WAITING" "PLAYING" "FINISHED"
   // }
+
+  // const gameState = "WAITING";
 
   // const currentQuiz = {
   //   quizNumber: 1,
@@ -40,10 +44,14 @@ export const GamePage: React.FC = () => {
   //   score: 4,
   // }
 
-  // const allPlayers = [
-  //   { id: 2, characterName: "nico", position: { direction: 1, x: -1, y: -1 }, nickname: "Player1" },
-  //   { id: 3, characterName: "kuro", position: { direction: -1, x: 2, y: -2 }, nickname: "Player2" },
-  // ]
+  const allPlayers = [
+    { id: 2, characterName: "nico", position: { direction: 1, x: -1, y: -1 }, nickname: "Player1" },
+    { id: 4, characterName: "kuro", position: { direction: 1, x: 1, y: -1 }, nickname: "Player2" },
+  ]
+
+  useEffect(()=>{
+    console.log("게임 상태: ", currentGameState);
+  }, [currentGameState])
 
   // const rowData: GameResult[] = [
   //   { rank: 1, nickname: '타락파워전사', score: 120, totalScore: 450, rankChange: 2 },
@@ -52,12 +60,23 @@ export const GamePage: React.FC = () => {
   //   // 더 많은 데이터...
   // ];
 
+  // waitingInfo
+  // const waitingInfo: NewWaitingInfo = {
+  //   state: "WAITING",
+  //   timeLeft: 10,
+  // }
+
   // // 임시 userId
   const userId = 3
 
   // WebSocket 연결
-  const { connected, gameInfo, allPlayers, currentQuiz, quizResult,sendMove } = useWebSocket(userId)
+  const { connected, waitingInfo,  currentQuiz, quizResult, gameState, sendMove } = useWebSocket(userId)
   // connected, gameInfo, allPlayers, currentQuiz, quizResult,
+
+  useEffect(()=>{
+    setCurrentGameState(gameState)
+  }, [gameState])
+
   // 조이스틱 데이터 처리
   const handleJoystickMove = (event: any) => {
     const { x, y } = event
@@ -106,17 +125,17 @@ export const GamePage: React.FC = () => {
   return (
     <div className="flex justify-center items-center w-full h-screen">
       <div className="flex justify-center items-center w-full h-full relative">
-        {gameInfo && gameInfo.state === "WAITING" ? (
+        {connected && waitingInfo && currentGameState === "WAITING" ? (
           <div className="absolute w-[80%] top-15 z-[1000] flex justify-center select-none">
-            <WaitingPage />
+            <WaitingPage waitingInfo={waitingInfo}/>
           </div>
         ) : null}
-        {gameInfo && gameInfo.state === "PLAYING" ? (
+        {connected && currentGameState === "PLAYING" ? (
           <div className="absolute w-[80%] top-10 z-[1000] flex flex-col justify-center items-center opacity-90 select-none">
             <QuestionComponent questionNo={currentQuiz?.quizNumber} question={currentQuiz?.question} timeLeft={currentQuiz?.timeLeft} quizResult={quizResult} />
           </div>
         ) : null}
-        {gameInfo && gameInfo.state === "FINISHED" ? (
+        {connected && currentGameState === "FINISHED" ? (
           <div className="absolute w-[80%] top-10 z-[1000] flex flex-col justify-center items-center select-none">
             <GameResultComponent />
           </div>
@@ -140,7 +159,7 @@ export const GamePage: React.FC = () => {
               color={"#97d258"}
             />
             <TileMap tilesetPath={`${tileMapUrl}assets/Basic_Grass_Biom_things.png`} tileSize={16} mapWidth={16} mapHeight={10} tileData={biomeData} scale={0.5} wScale={wScale} />
-            <CharacterSprite characterName="kuro" joystickData={joystickData} tileMapSize={tileMapSize} initialPosition={[0, 0, 5]} userId={userId} nickname={"타락파워전사"} sendMove={sendMove} />
+            <CharacterSprite characterName="kuro" joystickData={joystickData} tileMapSize={tileMapSize} initialPosition={[0, 0, 1]} userId={userId} nickname={"타락파워전사"} sendMove={sendMove} />
             {connected &&
               allPlayers &&
               Object.values(allPlayers)
@@ -150,7 +169,6 @@ export const GamePage: React.FC = () => {
                     <CharacterSprite
                       key={player.id}
                       characterName={player.characterName}
-                      joystickData={{ x: player.position.x, y: player.position.y, isMoving: false }} // 다른 플레이어는 로컬 조이스틱 사용 안함
                       tileMapSize={tileMapSize}
                       initialPosition={[player.position.x, player.position.y, 0]}
                       userId={player.id}

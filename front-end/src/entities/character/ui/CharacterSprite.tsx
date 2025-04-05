@@ -44,16 +44,18 @@ export const CharacterSprite: React.FC<CharacterSpriteProps> = ({ characterName,
 
   // 조이스틱 데이터 변경 시 캐릭터 상태 업데이트
   useEffect(() => {
+    if(!joystickData) return;
     setIsMoving(joystickData.isMoving)
     if (joystickData.isMoving && joystickData.x !== 0) {
       setDirection(joystickData.x < 0 ? -1 : 1)
     }
-  }, [joystickData.isMoving, joystickData.x])
+  }, [joystickData?.isMoving, joystickData?.x])
 
   // 프레임 별 처리
   useFrame((_, delta) => {
     let [x, y, z] = position;
   
+    if(!joystickData) return;
     if (joystickData.isMoving) {
       x += joystickData.x * SPEED * delta;
       y += joystickData.y * SPEED * delta;
@@ -77,7 +79,8 @@ export const CharacterSprite: React.FC<CharacterSpriteProps> = ({ characterName,
           x,
           y
         };
-        sendMove(characterName, positionData);
+        console.log("4프레임 마다 전송, frame 수: ", frameCount.current, "Position:", positionData);
+        sendMove(userId, characterName, positionData);
       }
   
       lastJoystickState.current = true; // 움직이고 있음
@@ -89,7 +92,8 @@ export const CharacterSprite: React.FC<CharacterSpriteProps> = ({ characterName,
           x,
           y
         };
-        sendMove(characterName, positionData);
+        console.log("움직임이 멈추면 전송 - Frame 수:", frameCount.current, "Position:", positionData);
+        sendMove(userId, characterName, positionData);
       }
       lastJoystickState.current = false; // 멈춘 상태 기록
     }
@@ -129,7 +133,7 @@ export const CharacterSprite: React.FC<CharacterSpriteProps> = ({ characterName,
   useEffect(() => {
     if (isMoving) {
       console.log(new Date())
-      console.log("x: ", position[0], "\n y: ", position[1])
+      console.log("isMoving 변화 \n x: ", position[0], "\n y: ", position[1])
     }
   }, [position])
 

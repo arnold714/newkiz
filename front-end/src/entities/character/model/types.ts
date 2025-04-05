@@ -13,11 +13,11 @@ export interface SpriteAnimationProps {
 
 export interface CharacterSpriteProps {
   characterName: string
-  joystickData: JoystickData
+  joystickData?: JoystickData
   tileMapSize: { width: number; height: number }
   initialPosition: [number, number, number]
   userId?: number;
-  sendMove?: (characterName: string, position: Position) => void;
+  sendMove?: (userId: number, characterName: string, position: Position) => void;
   nickname?: string;
   setMapBoundaries?: (newBoundaries: Boundaries) => void;
 }

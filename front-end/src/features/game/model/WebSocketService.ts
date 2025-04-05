@@ -36,11 +36,11 @@ export const createWebSocketService = (baseUrl: string) => {
 
           // 연결 성공 후 상태에 따라 처리
           // 게임 정보 받아오기
-          if (callbacks.onGameInfo) {
+          if (callbacks.onWaitingInfo) {
             client.current?.subscribe(
               `/sub/users/${userId}/info`,
               (message: IMessage) => {
-                callbacks.onGameInfo!(JSON.parse(message.body));
+                callbacks.onWaitingInfo!(JSON.parse(message.body));
                 console.log("GameInfo: ", JSON.parse(message.body));
               }
             );
@@ -71,6 +71,17 @@ export const createWebSocketService = (baseUrl: string) => {
                 console.log("quizResult: ", JSON.parse(message.body));
               }
             );
+          }
+
+          // 게임 상태 받아오기
+          if(callbacks.onGameState){
+            client.current?.subscribe(
+              `/sub/game-info`,
+              (message: IMessage)=>{
+                callbacks.onGameState!(JSON.parse(message.body));
+                console.log("gameState: ", JSON.parse(message.body));
+              }
+            )
           }
           resolve(true);
         };
@@ -105,7 +116,7 @@ export const createWebSocketService = (baseUrl: string) => {
     const normalizedPosition = normalizePosition(position, boundaries);
     const payload = { id: userId, characterName, position: normalizedPosition };
     client.current.publish({
-      destination: "pub/move",
+      destination: "/pub/move",
       body: JSON.stringify(payload),
     });
     console.log("정규화 position: ", payload.position)

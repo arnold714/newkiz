@@ -33,11 +33,16 @@ export interface MoveInfo {
   position: Position;
 }
 
-export interface GameInfo {
+export interface NewWaitingInfo {
   state: GameState;
   timeLeft: number;
+}
+
+export interface WaitingInfo extends NewWaitingInfo {
   players: Player[];
 }
+
+
 
 export interface QuizInfo {
   quizNumber: number;
@@ -50,15 +55,16 @@ export interface QuizResult {
   question: string;
   answer: boolean;
   explanation: string;
-  result: boolean;
-  score: number;
+  correctPlayers: number[];
+  wrongPlayers: number[];
 }
 
 export interface WebSocketCallbacks {
-  onGameInfo?: (gameInfo: GameInfo) => void;
+  onWaitingInfo?: (waitingInfo: WaitingInfo) => void;
   onMove?: (moveInfo: Player) => void;
   onQuizInfo?: (quizInfo: QuizInfo) => void;
   onQuizResult?: (quizResult: QuizResult) => void;
+  onGameState?: (gameState: GameState) => void;
 }
 
 

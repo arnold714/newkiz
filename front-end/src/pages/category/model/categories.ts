@@ -6,8 +6,8 @@ export const categories: Category[] = [
     name: 'IT/과학',
     subCategories: [
       { id: 'ai_robotics', name: '인공지능과 로봇', iconName: 'ai' },
-      { id: 'digital_internet', name: '디지털 기술과 인터넷' },
-      { id: 'space_natural', name: '우주와 자연 과학' },
+      { id: 'digital_internet', name: '디지털 기술과 인터넷', iconName: 'digital' },
+      { id: 'space_natural', name: '우주와 자연 과학', iconName: 'universe' },
       { id: 'general_it_science', name: 'IT/과학 일반', iconName: 'scientific-knowledge' },
     ],
   },
@@ -15,9 +15,9 @@ export const categories: Category[] = [
     id: 'politics',
     name: '정치',
     subCategories: [
-      { id: 'government_policy', name: '정부와 정책' },
-      { id: 'parliament_law', name: '국회와 법률' },
-      { id: 'election_party', name: '선거와 정당' },
+      { id: 'government_policy', name: '정부와 정책', iconName: 'law' },
+      { id: 'parliament_law', name: '국회와 법률', iconName: 'assembly' },
+      { id: 'election_party', name: '선거와 정당', iconName: 'vote' },
     ],
   },
   {
@@ -32,7 +32,7 @@ export const categories: Category[] = [
     id: 'society',
     name: '사회',
     subCategories: [
-      { id: 'education_school', name: '교육과 학교' },
+      { id: 'education_school', name: '교육과 학교', iconName: 'school' },
       { id: 'environment_disaster', name: '환경과 재해', iconName: 'environment' },
       { id: 'safety_health', name: '안전과 건강', iconName: 'health' },
       { id: 'general_society', name: '사회 일반', iconName: 'society' },
@@ -42,8 +42,8 @@ export const categories: Category[] = [
     id: 'culture',
     name: '생활/문화',
     subCategories: [
-      { id: 'culture_art', name: '문화와 예술' },
-      { id: 'leisure_life', name: '여가와 생활' },
+      { id: 'culture_art', name: '문화와 예술', iconName: 'cultureandart' },
+      { id: 'leisure_life', name: '여가와 생활', iconName: 'everyday' },
     ],
   },
   {
@@ -51,7 +51,7 @@ export const categories: Category[] = [
     name: '세계',
     subCategories: [
       { id: 'global_economy', name: '국제 사회와 글로벌 경제', iconName: 'overseas' },
-      { id: 'world_culture', name: '세계 문화와 생활' },
+      { id: 'world_culture', name: '세계 문화와 생활', iconName: 'worldwide-culture' },
     ],
   },
   {

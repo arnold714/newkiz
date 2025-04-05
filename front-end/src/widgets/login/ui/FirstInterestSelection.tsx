@@ -15,17 +15,9 @@ export default function FirstInterestSelection({
   nextStep,
   prevStep,
 }: FirstInterestSelectionProps) {
-  const possibleInterests = [
-    { id: "경제", icon: "💰" },
-    { id: "정치", icon: "📚" },
-    { id: "사회", icon: "👪" },
-    { id: "스포츠", icon: "🏆" },
-    { id: "연예", icon: "🎬" },
-    { id: "IT", icon: "💻" }
-  ];
+  const possibleInterests = ["경제", "정치", "사회", "스포츠", "생활/문화", "IT/과학", "세계"];
 
   const toggleInterest = (interest: string) => {
-    // 최대 3개까지만 선택
     if (interests.includes(interest)) {
       setInterests(interests.filter((i) => i !== interest));
     } else if (interests.length < 3) {
@@ -72,19 +64,19 @@ export default function FirstInterestSelection({
         <div className="space-y-3 mb-6">
           {possibleInterests.map((item) => (
             <button
-              key={item.id}
-              onClick={() => toggleInterest(item.id)}
+              key={item}
+              onClick={() => toggleInterest(item)}
               className={`w-full flex items-center justify-between px-4 py-3 rounded-lg ${
-                interests.includes(item.id)
+                interests.includes(item)
                   ? "bg-[#748BFF]/10 border-2 border-[#748BFF]"
                   : "bg-white border-2 border-gray-300"
               }`}
             >
               <div className="flex items-center">
-                <span className="mr-3 text-3xl">{item.icon}</span>
-                <span className="font-medium text-xl">{item.id}</span>
+                {/* <span className="mr-3 text-3xl">{item.icon}</span> */}
+                <span className="font-medium text-xl">{item}</span>
               </div>
-              {interests.includes(item.id) ? (
+              {interests.includes(item) ? (
                 <div className="w-6 h-6 rounded-full bg-[#748BFF] flex items-center justify-center">
                   <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M11.6668 3.5L5.25016 9.91667L2.3335 7" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>

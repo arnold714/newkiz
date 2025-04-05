@@ -1,28 +1,59 @@
 import "@shared/styles/CustomScroll.css"
-
-interface BasicInfo {
-  nickname: string;
-  birthdate: string;
-  school: string;
-  gender: string;
-}
+import { BasicInfo, MyPageRequest } from "@/features/login/model/types";
+import { interestMap } from "@/features/login";
+import { postFirstLogin } from "@/widgets/login";
 
 interface FinalConfirmProps {
   basicInfo: BasicInfo;
+  interests: string[];
   selectedCharacter: string;
 }
 
 export default function FinalConfirm({
   basicInfo,
+  interests,
   selectedCharacter,
 }: FinalConfirmProps) {
-  const handleConfirm = () => {
-    window.location.href = "/"; 
-  };
-
-  // 캐릭터 이미지 경로 가져오기
   const getCharacterImage = () => {
     return `https://newkiz.s3.ap-northeast-2.amazonaws.com/dinos/${selectedCharacter}.png`;
+  };
+
+  const handleConfirm = async () => {
+    try {
+      // gender 변환
+      const mappedGender =
+        basicInfo.gender === "male" ? "MALE" : "FEMALE";
+
+      // 관심사 한글 → 영문
+      const mappedInterests = interests.map(
+        (i) => interestMap[i] || i.toUpperCase()
+      );
+
+      const requestData: MyPageRequest = {
+        profile: {
+          nickname: basicInfo.nickname,
+          birthday: basicInfo.birthdate,
+          school: {
+            id: basicInfo.schoolId || null,
+            name: basicInfo.schoolName,
+            address: basicInfo.schoolAddress,
+          },
+          gender: mappedGender,
+          // 캐릭터 필드가 백엔드에 생기면 추가
+          // characterId: selectedCharacter,
+        },
+        interests: mappedInterests,
+      };
+
+      await postFirstLogin(requestData);
+      alert("정보가 성공적으로 등록되었습니다!");
+
+      // 등록 완료 후 메인 페이지 등으로 이동
+      window.location.href = "/";
+    } catch (error) {
+      console.error("정보 등록 실패:", error);
+      alert("등록에 실패했습니다. 다시 시도해주세요.");
+    }
   };
 
   return (
@@ -51,11 +82,15 @@ export default function FinalConfirm({
         <div className="mb-10 text-center">
           <div className="bg-gradient-to-b from-blue-50 to-purple-50 p-6 rounded-xl shadow-md">
             <div className="bg-white rounded-full p-3 shadow-md inline-block">
-              <img 
-                src={getCharacterImage()} 
-                alt="Selected character" 
-                className="w-28 h-28 mx-auto rounded-full"
-              />
+            {selectedCharacter ? (
+                <img
+                  src={getCharacterImage()}
+                  alt="Selected character"
+                  className="w-28 h-28 mx-auto rounded-full"
+                />
+              ) : (
+                <div className="w-28 h-28 mx-auto rounded-full bg-gray-200" />
+              )}
             </div>
             <p className="mt-4 text-indigo-600 font-semibold">{basicInfo.nickname}</p>
           </div>

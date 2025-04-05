@@ -224,7 +224,7 @@ const routes: RouteObject[] = [
         ),
       },
       {
-        path: "/newssummary",
+        path: "/newssummary/:id",
         element: (
           <Suspense fallback={<LoadingComponent />}>
             <Layout>

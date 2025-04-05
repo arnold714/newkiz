@@ -1,0 +1,68 @@
+image: docker:latest
+
+stages:
+  - docker-build
+  - push-ecr
+  - update-kustomize
+
+before_script:
+  - echo "GitLab CI/CD 시작!"
+  - docker --version
+  - apk add --no-cache python3 py3-pip git aws-cli
+  - aws --version
+  - export BRANCH_NAME=$(echo $CI_COMMIT_REF_NAME | sed 's/\//-/g')  # 브랜치명 슬래시 제거
+  - export SHORT_COMMIT=$(echo $CI_COMMIT_SHORT_SHA)  # 커밋 SHA (7자리)
+  - export DOCKER_IMAGE_TAG="$BRANCH_NAME-$SHORT_COMMIT"  # 최종 태그
+  - echo "DOCKER_IMAGE_TAG=$DOCKER_IMAGE_TAG" >> variables.env  # 변수 저장
+
+docker-build:
+  stage: docker-build
+  only:
+    - mypage-server/master
+    - mypage-server/develop
+  script:
+    - echo "Docker 이미지 빌드 시작!"
+    - docker build -t $ECR_REPOSITORY_URI/newkiz:$DOCKER_IMAGE_TAG back-end/mypage-server
+  artifacts:
+    reports:
+      dotenv: variables.env  # 다음 단계에서 변수 사용 가능하게 설정
+
+push-ecr:
+  stage: push-ecr
+  only:
+    - mypage-server/master
+    - mypage-server/develop
+  script:
+    - echo "AWS ECR 로그인!"
+    - aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin $ECR_REPOSITORY_URI
+    - echo "ECR에 Docker 이미지 푸시"
+    - docker push $ECR_REPOSITORY_URI/newkiz:$DOCKER_IMAGE_TAG
+  dependencies:
+    - docker-build
+
+update-kustomize:
+  stage: update-kustomize
+  only:
+    - mypage-server/master
+    - mypage-server/develop
+  script:
+    - echo "Kustomize로 배포 파일 업데이트 시작!"
+    - git clone https://$KUSTOMIZE_REPO_ACCESS_TOKEN_KEY:$KUSTOMIZE_REPO_ACCESS_TOKEN_VALUE@lab.ssafy.com/jjoonior97/newkiz-kustomize.git
+    - cd newkiz-kustomize
+    
+    - | # 브랜치별 환경변수 설정
+      if [ "$CI_COMMIT_BRANCH" == "mypage-server/master" ]; then
+        sed -i "s/newkiz:.*/newkiz:$DOCKER_IMAGE_TAG/" overlays/prod/mypage-server.yaml
+      elif [ "$CI_COMMIT_BRANCH" == "mypage-server/develop" ]; then
+        sed -i "s/newkiz:.*/newkiz:$DOCKER_IMAGE_TAG/" overlays/dev/mypage-server.yaml
+      else
+        echo "브랜치가 master 또는 develop 가 아닙니다."
+      fi
+
+    - git config --global user.email "jjoonior97@gmail.com"
+    - git config --global user.name "InJoo"
+    - git add .
+    - git commit -m "Automated code modification"
+    - git push
+  dependencies:
+    - push-ecr

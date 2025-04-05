@@ -79,7 +79,7 @@ export const CharacterSprite: React.FC<CharacterSpriteProps> = ({ characterName,
           x,
           y
         };
-        console.log("4프레임 마다 전송, frame 수: ", frameCount.current, "Position:", positionData);
+        // console.log("4프레임 마다 전송, frame 수: ", frameCount.current, "Position:", positionData);
         sendMove(userId, characterName, positionData);
       }
   
@@ -92,7 +92,7 @@ export const CharacterSprite: React.FC<CharacterSpriteProps> = ({ characterName,
           x,
           y
         };
-        console.log("움직임이 멈추면 전송 - Frame 수:", frameCount.current, "Position:", positionData);
+        // console.log("움직임이 멈추면 전송 - Frame 수:", frameCount.current, "Position:", positionData);
         sendMove(userId, characterName, positionData);
       }
       lastJoystickState.current = false; // 멈춘 상태 기록
@@ -125,17 +125,16 @@ export const CharacterSprite: React.FC<CharacterSpriteProps> = ({ characterName,
   }, [textureIdlePath, textureMovePath])
 
   // 디버깅용 로그
+  // useEffect(() => {
+  //   console.log("boundaries minX: ", boundaries.minX, "\n boundaries maxX: ", boundaries.maxX)
+  // }, [boundaries])
 
-  useEffect(() => {
-    console.log("boundaries minX: ", boundaries.minX, "\n boundaries maxX: ", boundaries.maxX)
-  }, [boundaries])
-
-  useEffect(() => {
-    if (isMoving) {
-      console.log(new Date())
-      console.log("isMoving 변화 \n x: ", position[0], "\n y: ", position[1])
-    }
-  }, [position])
+  // useEffect(() => {
+  //   if (isMoving) {
+  //     console.log(new Date())
+  //     console.log("isMoving 변화 \n x: ", position[0], "\n y: ", position[1])
+  //   }
+  // }, [position])
 
   return (
     <group ref={characterRef} position={position}>

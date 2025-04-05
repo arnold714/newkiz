@@ -8,7 +8,7 @@ import { calculateWScale } from "@/features/game"
 import { JoystickData } from "@/shared/types/joystick"
 import { useWebSocket } from "@/features/game/model/useWebSocket"
 import { WaitingPage, QuestionComponent, GameResultComponent } from "@/entities/game"
-import { GameState } from "@/features/game/model/types"
+import { State } from "@/features/game/model/types"
 // import { GameResult } from "@/entities/character/model/types"
 
 export const GamePage: React.FC = () => {
@@ -17,7 +17,7 @@ export const GamePage: React.FC = () => {
     y: 0,
     isMoving: false,
   })
-  const [currentGameState, setCurrentGameState] = useState<GameState>("WAITING");
+  const [currentGameState, setCurrentGameState] = useState<State>("WAITING");
   const [wScale, setWScale] = useState<number>(1)
 
   // const connected = true
@@ -44,10 +44,10 @@ export const GamePage: React.FC = () => {
   //   score: 4,
   // }
 
-  const allPlayers = [
-    { id: 2, characterName: "nico", position: { direction: 1, x: -1, y: -1 }, nickname: "Player1" },
-    { id: 4, characterName: "kuro", position: { direction: 1, x: 1, y: -1 }, nickname: "Player2" },
-  ]
+  // const allPlayers = [
+  //   { id: 2, characterName: "nico", position: { direction: 1, x: -1, y: -1 }, nickname: "Player1" },
+  //   { id: 4, characterName: "kuro", position: { direction: 1, x: 1, y: -1 }, nickname: "Player2" },
+  // ]
 
   useEffect(()=>{
     console.log("게임 상태: ", currentGameState);
@@ -70,7 +70,7 @@ export const GamePage: React.FC = () => {
   const userId = 3
 
   // WebSocket 연결
-  const { connected, waitingInfo,  currentQuiz, quizResult, gameState, sendMove } = useWebSocket(userId)
+  const { connected, allPlayers, waitingInfo,  currentQuiz, quizResult, gameState, sendMove, setMapBoundaries } = useWebSocket(userId)
   // connected, gameInfo, allPlayers, currentQuiz, quizResult,
 
   useEffect(()=>{
@@ -132,7 +132,7 @@ export const GamePage: React.FC = () => {
         ) : null}
         {connected && currentGameState === "PLAYING" ? (
           <div className="absolute w-[80%] top-10 z-[1000] flex flex-col justify-center items-center opacity-90 select-none">
-            <QuestionComponent questionNo={currentQuiz?.quizNumber} question={currentQuiz?.question} timeLeft={currentQuiz?.timeLeft} quizResult={quizResult} />
+            <QuestionComponent questionNo={currentQuiz?.quizNumber} question={currentQuiz?.question} timeLeft={currentQuiz?.timeLeft} quizResult={quizResult} gameState={gameState}/>
           </div>
         ) : null}
         {connected && currentGameState === "FINISHED" ? (
@@ -159,7 +159,16 @@ export const GamePage: React.FC = () => {
               color={"#97d258"}
             />
             <TileMap tilesetPath={`${tileMapUrl}assets/Basic_Grass_Biom_things.png`} tileSize={16} mapWidth={16} mapHeight={10} tileData={biomeData} scale={0.5} wScale={wScale} />
-            <CharacterSprite characterName="kuro" joystickData={joystickData} tileMapSize={tileMapSize} initialPosition={[0, 0, 1]} userId={userId} nickname={"타락파워전사"} sendMove={sendMove} />
+            <CharacterSprite 
+              characterName="kuro" 
+              joystickData={joystickData} 
+              tileMapSize={tileMapSize} 
+              initialPosition={[0, 0, 1]} 
+              userId={userId} 
+              nickname={"타락파워전사"} 
+              sendMove={sendMove}
+              setMapBoundaries={setMapBoundaries}
+            />
             {connected &&
               allPlayers &&
               Object.values(allPlayers)

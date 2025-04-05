@@ -12,7 +12,11 @@ export interface CharacterMovementResult {
   handleJoystickStop: () => void;
 }
 
-export type GameState = "WAITING" | "PLAYING" | "FINISHED"
+export type State = "WAITING" | "PLAYING" | "FINISHED"
+
+export interface GameState {
+  state: State;
+}
 
 export interface Position {
   direction: number;

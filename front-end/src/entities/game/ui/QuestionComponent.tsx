@@ -1,64 +1,50 @@
-import { QuestionProps } from "../model/type"
-import { useEffect, useState } from "react"
+import React, { useEffect, useState } from "react";
+import { QuestionProps } from "../model/type";
 import { FaRegCircle } from 'react-icons/fa';
 import { IoClose } from "react-icons/io5";
 
-export const QuestionComponent = ({ questionNo, question, timeLeft, quizResult }: QuestionProps) => {
-  const [time, setTime] = useState<number | undefined>(timeLeft);
-  const [resultTime, setResultTime] = useState<number | undefined>(undefined);
+export const QuestionComponent: React.FC<QuestionProps> = ({ questionNo, question, timeLeft, quizResult, gameState }) => {
+  const [time, setTime] = useState<number|undefined>(timeLeft);
+  const [showAnswer, setShowAnswer] = useState(false);
 
   useEffect(() => {
+    if (gameState !== "PLAYING") return;
+
     setTime(timeLeft);
-    setResultTime(undefined);
-  }, [timeLeft]);
-
-  useEffect(() => {
-    if (!time) return;
+    setShowAnswer(false);
 
     const timer = setInterval(() => {
-      setTime((prevTime) => (prevTime && prevTime > 0 ? prevTime - 1 : 0));
+      setTime((prevTime) => {
+        if (prevTime === 0) {
+          if (showAnswer) {
+            // 정답 표시 시간 종료
+            setShowAnswer(false);
+            return 10; // 다음 문제로 리셋
+          } else {
+            // 문제 시간 종료, 정답 표시 시작
+            setShowAnswer(true);
+            return 3; // 정답 표시 시간으로 설정
+          }
+        }
+        return (prevTime! - 1);
+      });
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [time]);
+  }, [timeLeft, questionNo, gameState]);
 
-  useEffect(() => {
-    if (time === 0 && resultTime === undefined) {
-      setResultTime(3); // Start resultTime countdown from 5 seconds
-    }
-  }, [time, resultTime]);
-
-  useEffect(() => {
-    if (resultTime === undefined || resultTime <= 0) return;
-
-    const timer = setInterval(() => {
-      setResultTime((prevResultTime) =>
-        prevResultTime && prevResultTime > 0 ? prevResultTime - 1 : 0
-      );
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, [resultTime]);
+  if (gameState !== "PLAYING") return null;
 
   return (
     <div className="flex flex-col items-center h-full w-full bg-white bg-opacity-50 rounded-xl p-6 relative px-4 z-999">
-      {/* Timer */}
       <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 text-black text-2xl font-bold">
-        {time && time > 0
-          ? `남은 시간: ${time}`
-          : resultTime && resultTime > 0
-          ? `다음 문제까지: ${resultTime}`
-          : "시간 종료"}
+        남은 시간: {time}
       </div>
-
-      {/* Question */}
       <div className="text-center">
         <p className="text-3xl font-bold text-green-600">Q{questionNo}.</p>
         <p className="mt-4 text-xl font-semibold">{question}</p>
       </div>
-
-      {/* Explanation */}
-      {time === 0 && (
+      {showAnswer && quizResult && (
         <div className="flex flex-col mt-6 text-center">
           <div className="flex flex-row justify-center items-center gap-2">
             <p className="text-lg font-semibold">정답은</p>

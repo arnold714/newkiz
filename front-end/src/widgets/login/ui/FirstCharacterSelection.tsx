@@ -1,16 +1,10 @@
 import React from "react";
 import { LuChevronLeft } from "react-icons/lu";
 import "@shared/styles/CustomScroll.css"
-
-interface BasicInfo {
-  nickname: string;
-  birthdate: string;
-  school: string;
-  gender: string;
-}
+import { BasicInfo } from "@/features/login/model/types";
 
 interface FirstCharacterSelectionProps {
-  basicInfo?: BasicInfo; // Optional BasicInfo prop
+  basicInfo?: BasicInfo;
   selectedCharacter: string;
   setSelectedCharacter: React.Dispatch<React.SetStateAction<string>>;
   nextStep: () => void;

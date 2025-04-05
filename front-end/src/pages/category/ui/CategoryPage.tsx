@@ -107,36 +107,36 @@ export const CategoryPage: React.FC = () => {
 
               {/* 서브 카테고리 그리드 */}
               <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 gap-4">
-                {selectedCategory?.subCategories.map(
-                  (subCategory: SubCategory, index: number) => {
-                    const colorClass = getSubCategoryColor(index);
-                    return (
-                      <div
-                        key={subCategory.id}
-                        className="cursor-pointer"
-                        onClick={handleViewAll}
-                      >
-                        <div
-                          className={`rounded-lg overflow-hidden shadow-lg ${colorClass} aspect-square flex flex-col`}
-                        >
-                          <div className="flex-grow flex items-center justify-center">
-                            {subCategory.iconName && (
-                              <img
-                                src={getIconUrl(subCategory.iconName)}
-                                alt={subCategory.name}
-                                className="w-2/3 h-2/3 object-contain"
-                              />
-                            )}
-                          </div>
-                          <div className="pb-4 text-center text-white font-bold">
-                            {subCategory.name}
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  }
-                )}
-              </div>
+  {selectedCategory?.subCategories.map(
+    (subCategory: SubCategory, index: number) => {
+      const colorClass = getSubCategoryColor(index);
+      return (
+        <div
+          key={subCategory.id}
+          className="cursor-pointer"
+          onClick={handleViewAll}
+        >
+          <div
+            className={`rounded-lg overflow-hidden shadow-lg ${colorClass} aspect-square flex flex-col`}
+          >
+            <div className="flex-grow flex items-center justify-center">
+              {subCategory.iconName && (
+                <img
+                  src={getIconUrl(subCategory.iconName)}
+                  alt={subCategory.name}
+                  className="w-3/5 h-3/5 object-contain"
+                />
+              )}
+            </div>
+            <div className="px-1 pb-2 text-center text-white font-medium text-sm leading-tight h-12 flex items-center justify-center">
+              <span className="line-clamp-2">{subCategory.name}</span>
+            </div>
+          </div>
+        </div>
+      );
+    }
+  )}
+</div>
             </div>
           </div>
         </>

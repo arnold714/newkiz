@@ -26,3 +26,12 @@
   max-width: 35rem;
   height: 90%;
 }
+
+@media (max-width: 400px) {
+  .text-responsive {
+    font-size: 22px; /* text-lg equivalent */
+  }
+  .gap-responsive {
+    gap: 15px;
+  }
+}

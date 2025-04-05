@@ -1,31 +1,38 @@
 import { LuX } from "react-icons/lu";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { QuizData } from "@/features/detail/model/types";
 import { QuizResult } from "./QuizResult";
+import { GetNewsQuiz } from "../api/DetailApi";
 import Swal from "sweetalert2";  
 
 interface QuizModalProps {
   closeModal: () => void;
+  id?: string;
 }
 
-export const QuizModal = ({ closeModal }: QuizModalProps) => {
+export const QuizModal = ({ closeModal, id }: QuizModalProps) => {
+  const [newsQuizData, setNewsQuizData] = useState<QuizData|null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [selectedChoice, setSelectedChoice] = useState<number | null>(null);
   const [isAnswerSubmitted, setIsAnswerSubmitted] = useState(false);
 
-
-  //일단 퀴즈 데이터 하드 코딩
-  const quizData: QuizData = {
-    id: 1,
-    question: "대한민국의 수도는 어디인가?",
-    correct_choice_id: 2,
-    choices: [
-      { id: 1, number: 1, content: "부산" },
-      { id: 2, number: 2, content: "서울" },
-      { id: 3, number: 3, content: "대구" },
-      { id: 4, number: 4, content: "인천" },
-    ],
-  };
-  
+  useEffect(() => {
+    if (!id) {
+      setErrorMessage("올바른 뉴스 id가 제공되지 않았습니다.");
+      return;
+    }
+    GetNewsQuiz(id)
+    .then((data) => {
+      if(data) {
+        setNewsQuizData(data);
+      }
+    })
+    .catch((error) => {
+      console.log('퀴즈 불러오기 실패:', error);
+    });
+  },[id]);
+  if (errorMessage) return <div>Error: {errorMessage}</div>;
+  if (!newsQuizData) return <div>Loading...</div>;
   // 답 클릭
   const handleChoiceClick = (choiceId: number) => {
     setSelectedChoice(choiceId)
@@ -46,7 +53,7 @@ export const QuizModal = ({ closeModal }: QuizModalProps) => {
   };
 
   //정답확인 
-  const isCorrect = selectedChoice === quizData.correct_choice_id;
+  const isCorrect = selectedChoice === newsQuizData?.quiz.multipleChoiceQuiz.options.indexOf(newsQuizData?.quiz.multipleChoiceQuiz.answer);
   
   return (
     <div>
@@ -57,22 +64,28 @@ export const QuizModal = ({ closeModal }: QuizModalProps) => {
           </div>
           <div className="m-5">
             <p>퀴즈 | 다음 문제를 읽고 답을 고르시오.</p>
-            <h2 className="text-3xl font-bold">{quizData.question}</h2>
-            <div className="flex flex-col justify-center items-center">
-              {quizData.choices.map((choice) => (
-                <button
-                  key={choice.id}
-                  onClick={() => handleChoiceClick(choice.id)}
-                  className={`min-w-[200px] w-auto font-bold text-2xl border-[#BDBDBD] rounded-lg shadow-[4px_4px_5px_2px_rgba(0,0,0,0.1)] mt-5 p-3 hover:scale-105 hover:bg-[#7CBA36] hover:text-white ${
-                    selectedChoice === choice.id 
-                      ? "bg-[#7CBA36] text-white" 
-                      : "bg-white text-[#202020]"
-                  }`}
-                >
-                  {choice.id}. {choice.content}
-                </button>
-              ))}
-            </div>
+            {newsQuizData ? (
+              <>
+                <h2 className="text-3xl font-bold">{newsQuizData.quiz.multipleChoiceQuiz.question}</h2>
+                <div className="flex flex-col justify-center items-center">
+                  {newsQuizData.quiz.multipleChoiceQuiz.options.map((choice, index) => (
+                    <button
+                      key={index}
+                      onClick={() => handleChoiceClick(index)}
+                      className={`min-w-[200px] w-auto font-bold text-2xl border-[#BDBDBD] rounded-lg shadow-[4px_4px_5px_2px_rgba(0,0,0,0.1)] mt-5 p-3 hover:scale-105 hover:bg-[#7CBA36] hover:text-white ${
+                        selectedChoice === index
+                          ? "bg-[#7CBA36] text-white"
+                          : "bg-white text-[#202020]"
+                      }`}
+                    >
+                      {index + 1}. {choice}
+                    </button>
+                  ))}
+                </div>
+              </>
+            ) : (
+              <div>퀴즈 데이터를 불러오는 중...</div>
+            )}
             <div className="flex justify-center">
               <button
                 className="mt-[30px] h-[60px] w-[200px] text-3xl text-white font-bold bg-[#B6D88F] hover:bg-[#7CBA36] rounded-lg hover:scale-105 transition duration-300"

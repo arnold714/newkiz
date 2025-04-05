@@ -1,0 +1,1 @@
+export type { NewsDetail } from './model/types';

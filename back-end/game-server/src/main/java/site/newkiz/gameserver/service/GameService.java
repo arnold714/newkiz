@@ -93,14 +93,14 @@ public class GameService {
           new QuizInfo(currentQuizNumber, quiz.getQuestion(), quiz.getTimeLeft()));
 
       // 퀴즈 시간 만큼 대기
-      Thread.sleep(quiz.getTimeLeft());
+      Thread.sleep(quiz.getTimeLeft() * 1000);
 
       // 정답 판정
       log.info(currentQuizNumber + " 번 문제 정답: ~~~");
       QuizResult quizResult = checkAnswers();
       messagingTemplate.convertAndSend("/sub/quiz-result", quizResult);
 
-      Thread.sleep(3000);
+      Thread.sleep(5000);
 
       // todo 오답자 커넥션 끊어야하는데
 
@@ -124,6 +124,7 @@ public class GameService {
       if ((quiz.isAnswer() && player.getPosition().getX() < 0)
           || (!quiz.isAnswer() && player.getPosition().getX() >= 0)) {
         correctPlayers.add(player.getId());
+        player.addScore();
       } else {
         wrongPlayers.add(player.getId());
         players.remove(player.getId());

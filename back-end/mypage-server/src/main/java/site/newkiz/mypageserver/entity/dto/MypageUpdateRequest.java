@@ -9,6 +9,6 @@ public class MypageUpdateRequest {
   private String nickname;
   private Integer school;
   private Integer difficulty;
-  private Integer characterId;
+  private String characterId;
   private List<String> interests;
 }

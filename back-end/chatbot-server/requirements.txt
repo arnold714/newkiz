@@ -6,3 +6,4 @@ redis
 sentence-transformers
 faiss-cpu
 numpy
+httpx

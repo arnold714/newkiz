@@ -1,5 +1,5 @@
 import { customAxios } from "@/shared";
-import { ScrapNewsResponse, NewsItem, ScrapVocaResponse, VocaItem } from "../../../features/mypage/model/types";
+import { ScrapNewsResponse, NewsItem, ScrapVocaResponse, VocaItem } from "@/features/mypage";
 
 export async function fetchScrappedNews(): Promise<NewsItem[]> {
   try {

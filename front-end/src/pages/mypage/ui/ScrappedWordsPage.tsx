@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { LuChevronLeft } from "react-icons/lu";
 import { useNavigate } from "react-router-dom";
 import { fetchScrappedWords } from "@/pages/mypage";
-import { VocaItem } from "@/features/mypage/model/types";
+import { VocaItem } from "@/features/mypage";
 
 
 export const ScrappedWordsPage = () => {

@@ -1,7 +1,9 @@
-import { handleLogin } from "@/pages/login/api/LoginApi";
+import { handleLogin } from "@/pages/login";
 import "@shared/styles/CustomScroll.css"
 
 export default function LoginPage() {
+  const imgUrl: string = import.meta.env.VITE_AWS_S3_BASE_URL
+
   const handleKakaoLogin = () => {
     handleLogin();
   };
@@ -12,7 +14,7 @@ export default function LoginPage() {
         {/* 로고 */}
         <div className="text-center mb-10">
           <img
-            src="https://newkiz.s3.ap-northeast-2.amazonaws.com/assets/Logo.png"
+            src={`${imgUrl}assets/Logo.png`}
             alt="Logo"
             className="mx-auto w-auto"
           />
@@ -23,7 +25,7 @@ export default function LoginPage() {
 
         {/* 뉴스 이미지 */}
         <img
-          src="https://newkiz.s3.ap-northeast-2.amazonaws.com/assets/news.png"
+          src={`${imgUrl}assets/news.png`}
           alt="News"
           className="w-full h-auto mb-10"
         />
@@ -35,7 +37,7 @@ export default function LoginPage() {
             className="bg-yellow-400 hover:bg-yellow-500 text-black rounded-full px-6 py-3 shadow-md flex items-center gap-2 text-lg transition-colors duration-300"
           >
             <img
-              src="https://newkiz.s3.ap-northeast-2.amazonaws.com/assets/kakao.png"
+              src={`${imgUrl}assets/kakao.png`}
               alt="KakaoTalk Logo"
               className="w-6 h-6"
             />

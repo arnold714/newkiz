@@ -1,7 +1,7 @@
-import React from "react";
 import { LuChevronLeft } from "react-icons/lu";
 import "@shared/styles/CustomScroll.css"
-import { BasicInfo } from "@/features/login/model/types";
+import { BasicInfo } from "@/features/login";
+import { characters } from "@/shared";
 
 interface FirstCharacterSelectionProps {
   basicInfo?: BasicInfo;
@@ -18,20 +18,6 @@ export default function FirstCharacterSelection({
   nextStep,
   prevStep,
 }: FirstCharacterSelectionProps) {
-  const characters = [
-    { id: "cole", img: "https://newkiz.s3.ap-northeast-2.amazonaws.com/dinos/cole.png" },
-    { id: "doux", img: "https://newkiz.s3.ap-northeast-2.amazonaws.com/dinos/doux.png" },
-    { id: "kira", img: "https://newkiz.s3.ap-northeast-2.amazonaws.com/dinos/kira.png" },
-    { id: "kuro", img: "https://newkiz.s3.ap-northeast-2.amazonaws.com/dinos/kuro.png" },
-    { id: "loki", img: "https://newkiz.s3.ap-northeast-2.amazonaws.com/dinos/loki.png" },
-    { id: "mono", img: "https://newkiz.s3.ap-northeast-2.amazonaws.com/dinos/mono.png" },
-    { id: "mort", img: "https://newkiz.s3.ap-northeast-2.amazonaws.com/dinos/mort.png" },
-    { id: "nico", img: "https://newkiz.s3.ap-northeast-2.amazonaws.com/dinos/nico.png" },
-    { id: "olaf", img: "https://newkiz.s3.ap-northeast-2.amazonaws.com/dinos/olaf.png" },
-    { id: "sena", img: "https://newkiz.s3.ap-northeast-2.amazonaws.com/dinos/sena.png" },
-    { id: "tard", img: "https://newkiz.s3.ap-northeast-2.amazonaws.com/dinos/tard.png" },
-    { id: "vita", img: "https://newkiz.s3.ap-northeast-2.amazonaws.com/dinos/vita.png" },
-  ];
 
   const handleSelect = (id: string) => {
     setSelectedCharacter(id);
@@ -77,7 +63,7 @@ export default function FirstCharacterSelection({
               {selectedCharacter ? (
                 <div className="relative">
                   <img 
-                    src={characters.find(c => c.id === selectedCharacter)?.img || "https://newkiz.s3.ap-northeast-2.amazonaws.com/dinos/kira.png"} 
+                    src={characters.find(c => c.id === selectedCharacter)?.img || ""} 
                     alt="Selected character" 
                     className="w-24 h-24 rounded-full transition-all duration-300 hover:scale-105"
                   />

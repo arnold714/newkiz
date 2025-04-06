@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { LuSend, LuX } from "react-icons/lu";
 import "@shared/styles/CustomScroll.css"
 

@@ -28,7 +28,6 @@ public class JwtAuthenticationFilter implements WebFilter {
     try {
       String accessToken = cookieUtil.getAccessToken(exchange.getRequest());
 
-System.out.println(">>> Incoming Request Method: " + exchange.getRequest().getMethod());
       if (accessToken != null) {
         Integer userId = jwtUtil.getId(accessToken);
         Authentication authentication = new UsernamePasswordAuthenticationToken(userId, "", null);
@@ -43,19 +42,7 @@ System.out.println(">>> Incoming Request Method: " + exchange.getRequest().getMe
               return chain.filter(mutatedExchange)
                   .contextWrite(ReactiveSecurityContextHolder.withAuthentication(authentication));
             })
-            .switchIfEmpty(Mono.defer(() -> {
-              if (exchange.getRequest().getURI().getPath().equals("/api/mypage")) {
-                ServerWebExchange mutatedExchange = exchange.mutate()
-                    .request(exchange.getRequest().mutate()
-                        .header("User-Id", String.valueOf(userId))
-                        .build())
-                    .build();
-                return chain.filter(mutatedExchange)
-                    .contextWrite(ReactiveSecurityContextHolder.withAuthentication(authentication));
-              } else {
-                return redirectToProfileSetup(exchange.getResponse());
-              }
-            }));
+            .switchIfEmpty(Mono.defer(() -> redirectToProfileSetup(exchange.getResponse())));
       }
     } catch (Exception e) {
       throw new RuntimeException(e);

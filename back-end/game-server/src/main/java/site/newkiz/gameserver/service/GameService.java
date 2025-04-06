@@ -121,8 +121,8 @@ public class GameService {
     List<Integer> wrongPlayers = new ArrayList<>();
 
     for (Player player : players.values()) {
-      if ((quiz.isAnswer() && player.getPosition().getX() < 0)
-          || (!quiz.isAnswer() && player.getPosition().getX() >= 0)) {
+      if ((quiz.isAnswer() && player.getPosition().getX() < 0.5)
+          || (!quiz.isAnswer() && player.getPosition().getX() >= 0.5)) {
         correctPlayers.add(player.getId());
         player.addScore();
       } else {

@@ -1,0 +1,21 @@
+/* 방법 1: slick-slide에 margin 적용 */
+.news-carousell .slick-track {
+  display: flex;
+}
+
+.news-carousel .slick-slide {
+  margin: 0 4px;
+}
+
+.news-carousel .slick-list {
+  margin: 0 -8px;
+  overflow: hidden;
+}
+
+.news-carousel .slick-slide > div {
+  margin: 0 1px;
+}
+
+.news-carousel .slick-list {
+  margin: 0 -8px;
+}

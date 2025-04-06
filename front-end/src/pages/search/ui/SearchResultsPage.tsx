@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { LuSearch, LuChevronLeft } from "react-icons/lu";
 import NavBar from "@/shared/ui/NavBar";
 import { SearchFilterButtons } from "@/widgets/search/ui/SearchFilterButtons";

@@ -4,3 +4,5 @@ export { categoryReducer, openCategoryModal, closeCategoryModal } from '@/shared
 export { LoadingComponent } from './ui/LoadingComponent'
 export { default as customAxios } from './api/client/customAxios';
 export { default as ProtectedRoute } from './ui/ProtectedRoute';
+export { characters } from './model/characters'
+export type { Character } from "./model/characters";

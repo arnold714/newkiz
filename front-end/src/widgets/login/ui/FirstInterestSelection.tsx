@@ -1,4 +1,3 @@
-import React from "react";
 import { LuChevronLeft } from "react-icons/lu";
 import "@shared/styles/CustomScroll.css"
 

@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect } from "react";
 import { LuSearch, LuChevronLeft, LuX } from "react-icons/lu";
 import WordCloud from "@/widgets/search/ui/WordCloud";
 import "@shared/styles/CustomScroll.css"

@@ -1,5 +1,3 @@
-import React from "react";
-
 interface SearchFilterButtonsProps {
   selectedFilter: string;
   onFilterChange: (filter: string) => void;

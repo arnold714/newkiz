@@ -26,8 +26,7 @@ export interface School {
         address: string;
       };
       gender: "MALE" | "FEMALE";
-      // 캐릭터 저장 필드가 있다면 추가
-      // characterId?: string;
+      characterId: string; 
     };
     interests: string[];
   }

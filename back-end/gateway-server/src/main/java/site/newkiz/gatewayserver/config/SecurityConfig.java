@@ -30,7 +30,7 @@ public class SecurityConfig {
         .csrf(ServerHttpSecurity.CsrfSpec::disable)
         .cors(cors -> {})
         .authorizeExchange(exchanges -> exchanges
-            .pathMatchers("/", "/oauth2/**", "/api/auth/**").permitAll()
+            .pathMatchers(HttpMethod.OPTIONS, "/", "/oauth2/**", "/api/auth/**").permitAll()
             .anyExchange().authenticated()
         )
         .oauth2Login(oauth2 -> oauth2

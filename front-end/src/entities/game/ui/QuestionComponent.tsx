@@ -13,7 +13,7 @@ export const QuestionComponent: React.FC<QuestionProps> = ({ questionNo, questio
 
     const timer = setInterval(() => {
       setTime((prevTime) => {
-        if (prevTime === 0) {
+        if (prevTime === 1) {
           setShowAnswer(true);
           clearInterval(timer);
           return 0;
@@ -33,7 +33,7 @@ export const QuestionComponent: React.FC<QuestionProps> = ({ questionNo, questio
         }
       </div>
       <div className="text-center">
-        <p className="text-3xl font-bold text-green-600">Q{questionNo}.</p>
+          <p className="text-3xl font-bold text-[#7CBA36]">Q{questionNo}.</p>
         <p className="mt-4 text-xl font-semibold">{question}</p>
       </div>
       {showAnswer && quizResult && (

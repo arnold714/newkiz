@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, Suspense } from "react"
 import { Canvas } from "@react-three/fiber"
 import { OrthographicCamera } from "@react-three/drei"
 import { CharacterSprite } from "@entities/character"
@@ -10,7 +10,6 @@ import { useWebSocket } from "@/features/game/model/useWebSocket"
 import { WaitingPage, QuestionComponent, GameResultComponent } from "@/entities/game"
 import { State } from "@/features/game/model/types"
 import { GameResult } from "@/entities/character/model/types"
-// import { GameResult } from "@/entities/character/model/types"
 
 export const GamePage: React.FC = () => {
   const [joystickData, setJoystickData] = useState<JoystickData>({
@@ -22,13 +21,6 @@ export const GamePage: React.FC = () => {
   const [wScale, setWScale] = useState<number>(1)
 
   const connected = true
-
-  // const gameInfo = {
-  //   state: "FINISHED",
-  //   // "WAITING" "PLAYING" "FINISHED"
-  // }
-
-  // const gameState = "WAITING";
 
   // const allPlayers = [
   //   { id: 2, characterName: "nico", position: { direction: 1, x: -1, y: -1 }, nickname: "Player1" },
@@ -56,10 +48,9 @@ export const GamePage: React.FC = () => {
   const userId = 3
 
   // WebSocket 연결
-  const { allPlayers, waitingInfo,  currentQuiz, quizResult, sendMove, setMapBoundaries } = useWebSocket(userId)
+  const { allPlayers, gameState, waitingInfo,  currentQuiz, quizResult, sendMove, setMapBoundaries } = useWebSocket(userId)
   // connected, gameInfo, allPlayers, currentQuiz, quizResult,
   
-  const gameState = "FINISHED";
   useEffect(()=>{
     setCurrentGameState(gameState)
   }, [gameState])
@@ -107,8 +98,6 @@ export const GamePage: React.FC = () => {
     height: grassMapSize - 0.5,
   }
 
-  // const question = " 마라톤은 42.195 Km를 달린다. 이 거리는 제1회 아테네 올림픽부터 채택된 것이다."
-
   return (
     <div className="flex justify-center items-center w-full h-screen">
       <div className="flex justify-center items-center w-full h-full relative">
@@ -131,7 +120,7 @@ export const GamePage: React.FC = () => {
         <Canvas className="w-full z-10 relative">
           <OrthographicCamera makeDefault position={[0, 0, 5]} zoom={70} />
           <ambientLight intensity={1} />
-          <React.Suspense fallback={null}>
+          <Suspense fallback={null}>
             <TileMap tilesetPath={`${tileMapUrl}assets/Water.png`} tileSize={16} mapWidth={10} mapHeight={14} tileData={waterMapData} scale={1} wScale={wScale} />
             <TileMap tilesetPath={`${tileMapUrl}assets/Grass.png`} tileSize={16} mapWidth={grassMapSize} mapHeight={grassMapSize} tileData={grassMapData} scale={1} wScale={wScale} />
             <TileMap
@@ -172,7 +161,7 @@ export const GamePage: React.FC = () => {
                     />
                   </>
                 ))}
-          </React.Suspense>
+          </Suspense>
         </Canvas>
         <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 z-20">
           <JoystickController onMove={handleJoystickMove} onStop={handleJoystickStop} />

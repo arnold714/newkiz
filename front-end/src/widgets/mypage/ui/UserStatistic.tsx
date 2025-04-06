@@ -10,7 +10,7 @@ import {
     Legend,
 } from "chart.js";
 import { fetchUserGraph } from "@/widgets/mypage";
-import { GraphData } from "@/features/mypage/model/types";
+import { GraphData } from "@/features/mypage";
 
 ChartJS.register(RadialLinearScale, PointElement, LineElement, Filler, Tooltip, Legend);
 

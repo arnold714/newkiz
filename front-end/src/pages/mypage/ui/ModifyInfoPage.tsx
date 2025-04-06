@@ -12,7 +12,7 @@ import { SchoolSearchModal } from "@/widgets/login";
 Modal.setAppElement("#root")
 
 export const ModifyInfoPage = () => {
-  const [isCharacterMoalOpen, setIsCharacterMoalOpen] = useState<boolean>(false);
+  const [isCharacterMoalOpen, setIsCharacterModalOpen] = useState<boolean>(false);
   const [isSchoolModalOpen, setIsSchoolModalOpen] = useState<boolean>(false);
 
   const navigate = useNavigate()
@@ -24,9 +24,10 @@ export const ModifyInfoPage = () => {
   const [nickname, setNickname] = useState("");
   const [birthday, setBirthday] = useState("");
   const [schoolName, setSchoolName] = useState("");
-  const [gender, setGender] = useState("남자"); // "남자" | "여자" 로 구분
+  const [gender, setGender] = useState<"남자" | "여자">("남자");
+  const [characterId, setCharacter] = useState<string>("");
 
-  const interests = ["경제", "정치", "사회", "스포츠/연예", "세계", "문화"]
+  const interests = ["경제", "정치", "사회", "스포츠", "세계", "생활/문화", "IT/과학"]
 
    // 마이페이지 조회 API 호출
    useEffect(() => {
@@ -35,12 +36,18 @@ export const ModifyInfoPage = () => {
         const data = await fetchMyPage();
         if (data.success) {
           const { profile, interests } = data.data;
+
           setNickname(profile.nickname);
           setBirthday(profile.birthday);
           setSchoolName(profile.school.name);
           setGender(profile.gender === "MALE" ? "남자" : "여자");
 
-          // 서버의 대문자 interests를 UI 한글로 매핑
+          // 캐릭터가 있다면 상태에 저장
+          if (profile.characterId) {
+            setCharacter(profile.characterId);
+          }
+
+          // 대문자 interests -> UI 한글 변환
           const mappedInterests = interests
             .map((item) => interestMapReverse[item] || item)
             .filter(Boolean);
@@ -52,7 +59,7 @@ export const ModifyInfoPage = () => {
     })();
   }, []);
 
-  // 관심사 토글 함수
+  // 관심사 토글
   const toggleInterest = (interest: string) => {
     if (selectedInterests.includes(interest)) {
       setSelectedInterests((prev) => prev.filter((item) => item !== interest));
@@ -61,21 +68,24 @@ export const ModifyInfoPage = () => {
     }
   };
 
-  // 저장하기 (PATCH) 요청
+  // 저장하기
   const handleSave = async () => {
     try {
-      // UI 한글 관심사 → 서버 전송용 대문자 관심사
-      const uppercaseInterests = selectedInterests.map((item) => {
-        return interestMap[item] || item.toUpperCase();
-      });
+      // 한글 -> 영문
+      const uppercaseInterests = selectedInterests.map(
+        (item) => interestMap[item] || item.toUpperCase()
+      );
+
+      // "남자" -> "MALE", "여자" -> "FEMALE"
+      const mappedGender = gender === "남자" ? "MALE" : "FEMALE";
 
       const patchData = {
         nickname,
         birthday,
         schoolName,
-        // UI의 "남자"/"여자"를 API에 맞게 "MALE"/"FEMALE"로 변환
-        gender: gender === "남자" ? "MALE" : "FEMALE",
+        gender: mappedGender,
         interests: uppercaseInterests,
+        characterId, // 캐릭터 필드 추가
       };
 
       await updateMyPage(patchData);
@@ -94,8 +104,8 @@ export const ModifyInfoPage = () => {
         <p className="font-bold text-xl">내 정보</p>
       </div>
       <div className="flex flex-col items-center w-full gap-3">
-        <div className="flex flex-row justify-center my-5 cursor-pointer" onClick={()=>{setIsCharacterMoalOpen(true)}}>
-          <img src={`${imgUrl}dinos/nico.png`} alt="user character image" className="h-20" />
+        <div className="flex flex-row justify-center my-5 cursor-pointer" onClick={()=>{setIsCharacterModalOpen(true)}}>
+        <img src={`${imgUrl}dinos/${characterId}.png`} alt="user character image" className="h-20" />
         </div>
         <div className="flex flex-col items-start w-full px-3 gap-2">
           <p className="font-semibold">닉네임</p>
@@ -130,7 +140,7 @@ export const ModifyInfoPage = () => {
           <select
             className="border border-gray-200 w-full h-10 rounded-lg px-3 bg-white focus:outline-none focus:ring-2 focus:ring-[#7CBA36] focus:border-transparent"
             value={gender}
-            onChange={(e) => setGender(e.target.value)}
+            onChange={(e) => setGender(e.target.value as "남자" | "여자")}
           >
             <option value="남자">남자</option>
             <option value="여자">여자</option>
@@ -170,8 +180,15 @@ export const ModifyInfoPage = () => {
           저장하기
         </button>
       </div>
-      <Modal isOpen={isCharacterMoalOpen} onRequestClose={() => setIsCharacterMoalOpen(false)} className="modal ranking-modal" overlayClassName="modal-overlay" shouldCloseOnOverlayClick={true}>
-        <SelectCharacterModal closeModal={() => setIsCharacterMoalOpen(false)} />
+      <Modal isOpen={isCharacterMoalOpen} onRequestClose={() => setIsCharacterModalOpen(false)} className="modal ranking-modal" overlayClassName="modal-overlay" shouldCloseOnOverlayClick={true}>
+      <SelectCharacterModal
+          closeModal={() => setIsCharacterModalOpen(false)}
+          currentCharacter={characterId} // 현재 캐릭터 전달
+          onSelectCharacter={(newChar) => {
+            setCharacter(newChar);
+            setIsCharacterModalOpen(false);
+          }}
+        />
       </Modal>
       <Modal
         isOpen={isSchoolModalOpen}

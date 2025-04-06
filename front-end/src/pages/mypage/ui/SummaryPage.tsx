@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { LuChevronLeft, LuChevronDown, LuChevronUp } from "react-icons/lu";
 import { useNavigate } from "react-router-dom";
 import { fetchSummaries } from "@/pages/mypage";
-import { SummaryItem } from "@/features/mypage/model/types";
+import { SummaryItem } from "@/features/mypage";
 
   interface OpenSummaries {
     [key: string]: boolean;

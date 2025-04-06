@@ -1,13 +1,33 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { RankType } from "../model/type"
 import PersonalRanking from './PersonalRanking'
 import SchoolRanking from "./SchoolRanking"
 import { MdOutlineKeyboardArrowDown, MdOutlineKeyboardArrowUp } from "react-icons/md";
 import '@shared/styles/CustomScroll.css';
+import { NewWaitingInfo } from "@/features/game/model/types";
 
-export const WaitingPage = () => {
+interface WaitingPageProps {
+  waitingInfo: NewWaitingInfo;
+}
+
+export const WaitingPage = ({ waitingInfo }: WaitingPageProps) => {
+  const [time, setTime] = useState<number | null>(null);
   const [selected, setSelected] = useState<RankType>("personal")
   const [isToggleOpen, setIsToggleOpen] = useState<boolean>(false)
+
+  useEffect(()=>{
+    setTime(waitingInfo.timeLeft)
+  }, [waitingInfo.timeLeft])
+
+  useEffect(() => {
+    if (!time) return;
+
+    const timer = setInterval(() => {
+      setTime((prevTime) => (prevTime && prevTime > 0 ? prevTime - 1 : 0));
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [time]);
 
   const onClick = (type: RankType) => {
     setSelected(type)
@@ -23,7 +43,7 @@ export const WaitingPage = () => {
         <div className="flex flex-row w-full justify-center relative">
           <div className="flex flex-col items-center w-full">
             <p>게임 시작까지 남은 시간 : </p>
-            <p>00:11</p>
+            <p>{time}</p>
           </div>
           <div className="absolute -right-3 top-1/2 transform -translate-y-1/2 text-2xl cursor-pointer transition-transform duration-300 ease-in-out" onClick={handleToggle}>
             {

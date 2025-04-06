@@ -12,7 +12,7 @@ export const JoystickController: React.FC<JoystickControllerProps> = ({
   onStop 
 }) => {
   return (
-    <div className="absolute bottom-12 left-1/2 transform -translate-x-1/2">
+    <div className="absolute bottom-25 left-1/2 transform -translate-x-1/2">
       <Joystick 
         size={100} 
         baseColor="rgba(50, 50, 50, 0.5)" 

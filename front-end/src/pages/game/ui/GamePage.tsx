@@ -52,7 +52,8 @@ export const GamePage: React.FC = () => {
   // connected, gameInfo, allPlayers, currentQuiz, quizResult,
   
   useEffect(()=>{
-    setCurrentGameState(gameState)
+    if(!gameState) return;
+    setCurrentGameState(gameState.state)
   }, [gameState])
 
   // 조이스틱 데이터 처리
@@ -108,7 +109,7 @@ export const GamePage: React.FC = () => {
         ) : null}
         {connected && currentGameState === "PLAYING" ? (
           <div className="absolute w-[80%] top-10 z-[1000] flex flex-col justify-center items-center opacity-90 select-none">
-            <QuestionComponent questionNo={currentQuiz?.quizNumber} question={currentQuiz?.question} timeLeft={currentQuiz?.timeLeft} quizResult={quizResult} />
+            <QuestionComponent questionNo={currentQuiz?.quizNumber} question={currentQuiz?.question} timeLeft={currentQuiz?.timeLeft} quizResult={quizResult} gameState={gameState} />
           </div>
         ) : null}
         {connected && currentGameState === "FINISHED" ? (

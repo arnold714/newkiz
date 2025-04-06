@@ -16,6 +16,7 @@ export type State = "WAITING" | "PLAYING" | "FINISHED"
 
 export interface GameState {
   state: State;
+  timeLeft?: number;
 }
 
 export interface Position {

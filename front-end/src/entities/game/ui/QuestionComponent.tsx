@@ -3,9 +3,29 @@ import { QuestionProps } from "../model/type";
 import { FaRegCircle } from 'react-icons/fa';
 import { IoClose } from "react-icons/io5";
 
-export const QuestionComponent: React.FC<QuestionProps> = ({ questionNo, question, timeLeft, quizResult }) => {
+export const QuestionComponent: React.FC<QuestionProps> = ({ questionNo, question, timeLeft, quizResult, gameState }) => {
   const [time, setTime] = useState<number|undefined>(timeLeft);
   const [showAnswer, setShowAnswer] = useState(false);
+  const [startTimer, setStartTimer] = useState<number | undefined>(gameState?.timeLeft);
+
+  // 게임 시작 타이머 처리
+  useEffect(() => {
+    setStartTimer(gameState?.timeLeft);
+    
+    if (gameState?.state === "PLAYING" && gameState?.timeLeft !== undefined) {
+      const startCountdown = setInterval(() => {
+        setStartTimer((prevTime) => {
+          if (prevTime === undefined || prevTime <= 1) {
+            clearInterval(startCountdown);
+            return 0;
+          }
+          return prevTime - 1;
+        });
+      }, 1000);
+
+      return () => clearInterval(startCountdown);
+    }
+  }, [gameState?.timeLeft]);
 
   useEffect(() => {
     setTime(timeLeft);
@@ -27,7 +47,14 @@ export const QuestionComponent: React.FC<QuestionProps> = ({ questionNo, questio
 
   return (
     <div className="flex flex-col items-center h-full w-full bg-white bg-opacity-50 rounded-xl p-6 relative px-4 z-999">
-      <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 text-black text-2xl font-bold">
+      {startTimer && startTimer>0 ? (
+        <div className="flex flex-col items-center justify-center gap-4">
+          <p className="font-bold text-xl">게임이 곧 시작합니다.</p>
+          <p className="font-bold text-6xl text-[#7CBA36]">{startTimer}</p> 
+        </div>
+      ):(
+        <>
+          <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 text-black text-2xl font-bold">
         {
           !showAnswer && <>남은 시간: {time}</>
         }
@@ -44,6 +71,8 @@ export const QuestionComponent: React.FC<QuestionProps> = ({ questionNo, questio
           </div>
           <p className="text-lg font-semibold text-gray-600">{quizResult?.explanation}</p>
         </div>
+      )}
+        </>
       )}
     </div>
   );

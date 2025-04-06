@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { createWebSocketService } from "./WebSocketService";
-import { QuizInfo, QuizResult, Position, Player, WaitingInfo, GameState, NewWaitingInfo, State } from "./types";
+import { QuizInfo, QuizResult, Position, Player, WaitingInfo, GameState, NewWaitingInfo } from "./types";
 import { denormalizePosition } from "@entities/character/model/nomalizationPosition";
 import { Boundaries } from "@/shared/types/common";
 
@@ -13,7 +13,7 @@ export const useWebSocket = (userId?: number) => {
   const [currentQuiz, setCurrentQuiz] = useState<QuizInfo | null>(null);
   const [quizResult, setQuizResult] = useState<QuizResult | null>(null);
   const [boundaries, setBoundaries] = useState<Boundaries | null>(null);
-  const [gameState, setGameState] = useState<State>("WAITING");
+  const [gameState, setGameState] = useState<GameState>({state: "WAITING"});
   
   const webSocketService = createWebSocketService(API_URL);
 
@@ -61,7 +61,7 @@ export const useWebSocket = (userId?: number) => {
           setQuizResult(result);
         },
         onGameState(result: GameState) {
-          setGameState(result.state);
+          setGameState(result);
         }
       })
       .then(() => setConnected(true))

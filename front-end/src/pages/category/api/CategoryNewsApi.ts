@@ -1,5 +1,5 @@
 import { customAxios } from '@/shared';
-import { NewsItem } from '../model/types';
+import { NewsItem } from '@/features/category';
 
 /**
  * 카테고리 ID에 해당하는 뉴스 목록을 가져옵니다.

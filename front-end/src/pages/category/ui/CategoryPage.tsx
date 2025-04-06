@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { categories } from '../model/categories';
-import { Category, SubCategory } from '../model/types';
+import { Category, SubCategory, categories } from '@/features/category';
 import { LuX } from 'react-icons/lu';
 
 export const CategoryPage: React.FC = () => {
@@ -9,6 +8,7 @@ export const CategoryPage: React.FC = () => {
   const [selectedCategoryId, setSelectedCategoryId] = useState('it_science');
   const location = useLocation();
   const navigate = useNavigate();
+  const imgUrl: string = import.meta.env.VITE_AWS_S3_BASE_URL
 
   const isBaseRoute = location.pathname === '/category';
 
@@ -46,7 +46,7 @@ export const CategoryPage: React.FC = () => {
   /** 서브 카테고리 아이콘 URL */
   const getIconUrl = (iconName?: string) => {
     if (!iconName) return '';
-    return `https://newkiz.s3.ap-northeast-2.amazonaws.com/categories/${iconName}.svg`;
+    return `${imgUrl}categories/${iconName}.svg`;
   };
 
   const handleBackClick = () => {
@@ -107,36 +107,36 @@ export const CategoryPage: React.FC = () => {
 
               {/* 서브 카테고리 그리드 */}
               <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 gap-4">
-  {selectedCategory?.subCategories.map(
-    (subCategory: SubCategory, index: number) => {
-      const colorClass = getSubCategoryColor(index);
-      return (
-        <div
-          key={subCategory.id}
-          className="cursor-pointer"
-          onClick={handleViewAll}
-        >
-          <div
-            className={`rounded-lg overflow-hidden shadow-lg ${colorClass} aspect-square flex flex-col`}
-          >
-            <div className="flex-grow flex items-center justify-center">
-              {subCategory.iconName && (
-                <img
-                  src={getIconUrl(subCategory.iconName)}
-                  alt={subCategory.name}
-                  className="w-3/5 h-3/5 object-contain"
-                />
-              )}
-            </div>
-            <div className="px-1 pb-2 text-center text-white font-medium text-sm leading-tight h-12 flex items-center justify-center">
-              <span className="line-clamp-2">{subCategory.name}</span>
-            </div>
-          </div>
-        </div>
-      );
-    }
-  )}
-</div>
+                {selectedCategory?.subCategories.map(
+                  (subCategory: SubCategory, index: number) => {
+                    const colorClass = getSubCategoryColor(index);
+                    return (
+                      <div
+                        key={subCategory.id}
+                        className="cursor-pointer"
+                        onClick={handleViewAll}
+                      >
+                        <div
+                          className={`rounded-lg overflow-hidden shadow-lg ${colorClass} aspect-square flex flex-col`}
+                        >
+                          <div className="flex-grow flex items-center justify-center">
+                            {subCategory.iconName && (
+                              <img
+                                src={getIconUrl(subCategory.iconName)}
+                                alt={subCategory.name}
+                                className="w-3/5 h-3/5 object-contain"
+                              />
+                            )}
+                          </div>
+                          <div className="px-1 pb-2 text-center text-white font-medium text-sm leading-tight h-12 flex items-center justify-center">
+                            <span className="line-clamp-2">{subCategory.name}</span>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  }
+                )}
+              </div>
             </div>
           </div>
         </>

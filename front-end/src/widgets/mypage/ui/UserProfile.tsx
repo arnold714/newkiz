@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { fetchUserProfile } from "@/widgets/mypage";
-import { Profile } from "@/features/mypage/model/types";
+import { Profile } from "@/features/mypage";
 
 export const UserProfile = () => {
     const [profile, setProfile] = useState<Profile | null>(null);
@@ -24,10 +24,12 @@ export const UserProfile = () => {
         return <div>로딩중...</div>;
       }
 
+    const characterId = profile.characterId;
+
     return (
         <div className="h-full w-full flex flex-row justify-center items-center gap-5">
       <div className="flex rounded-full border border-gray-400 bg-white w-[90px] h-[90px] relative overflow-hidden justify-center items-center">
-        <img src={`${imgUrl}dinos/olaf.png`} alt="user character" className="absolute h-[90px]" />
+        <img src={`${imgUrl}dinos/${characterId}.png`} alt="user character" className="absolute h-[90px]" />
       </div>
       <div className="flex flex-col justify-evenly h-2/3">
         <div className="h-1/2 flex flex-col justify-end items-center">

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { LuChevronLeft, LuSearch } from "react-icons/lu";
 import { useNavigate } from "react-router-dom";
 import { fetchScrappedNews } from "@/pages/mypage";
-import { NewsItem } from "@/features/mypage/model/types";
+import { NewsItem } from "@/features/mypage";
 
 export const ScrappedNewsPage = () => {
 

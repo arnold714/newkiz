@@ -1,8 +1,8 @@
-import React, { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { fetchNewsByCategory } from '@/pages/category/api/CategoryNewsApi';
-import { NewsItem } from '@/pages/category/model/types';
-import { categories } from '@/pages/category/model/categories';
+import { fetchNewsByCategory } from '@/pages/category';
+import { NewsItem } from '@/features/category';
+import { categories } from '@/features/category';
 import "@shared/styles/CustomScroll.css"
 
 const ITEMS_PER_PAGE = 5;

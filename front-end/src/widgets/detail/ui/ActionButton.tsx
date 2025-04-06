@@ -4,14 +4,18 @@ import "../styles/ActionButton.css"
 
 const imgUrl: string = import.meta.env.VITE_AWS_S3_BASE_URL
 
-export const ActionButton = () => {
+interface ActionButtonProps {
+  newsId: string;
+}
+
+export const ActionButton = ({ newsId }: ActionButtonProps) => {
   const [offsetX, setOffsetX] = useState(0);
   const navigate = useNavigate();
   const wrapperRef = useRef<HTMLDivElement>(null);
 
 
-  const handleNavigate = (path: string) => {
-    navigate(path);
+  const handleNavigate = () => {
+    navigate(`/chatbot/${newsId}`);
   };
 
   useEffect(() => {
@@ -31,7 +35,7 @@ export const ActionButton = () => {
         className="action-button-wrapper"
         style={{ transform: `translateX(${offsetX}px)` }}
       >
-      <button onClick={() => handleNavigate("/chatbot")} className="fab-item">
+      <button onClick={handleNavigate} className="fab-item">
       <img src={`${imgUrl}dinos/nico.svg`} alt="character_nico" className="w-12"/>
       </button>
     </div>

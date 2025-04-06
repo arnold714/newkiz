@@ -32,6 +32,14 @@ public class JwtAuthenticationFilter implements WebFilter {
         Integer userId = jwtUtil.getId(accessToken);
         Authentication authentication = new UsernamePasswordAuthenticationToken(userId, "", null);
 
+        // 프로필 생성 API 요청은 필터 통과
+        String path = exchange.getRequest().getPath().value();
+        String method = exchange.getRequest().getMethod().name();
+        
+        if (path.equals("/api/mypage") && method.equalsIgnoreCase("POST")) {
+          return chain.filter(exchange);
+        }
+
         return profileRepository.findByUserId(userId)
             .flatMap(profile -> {
               ServerWebExchange mutatedExchange = exchange.mutate()

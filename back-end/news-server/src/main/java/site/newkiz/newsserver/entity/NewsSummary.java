@@ -1,28 +1,28 @@
-package site.newkiz.newsserver.entitiy;
+package site.newkiz.newsserver.entity;
 
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-//@Document(collection = "news_scraps")
-@Document(collection = "news_scraps_test")
+//@Document(collection = "news_summaries")
+@Document(collection = "news_summaries_test")
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class NewsScrap {
-
+public class NewsSummary {
   @Id
   private String id;
 
-  private String userId;
   private String newsId;
+  private String userId;
+  private String summary;
 
-  @CreatedDate
-  private LocalDateTime createdAt;
+  @LastModifiedDate
+  private LocalDateTime updatedAt;
 }

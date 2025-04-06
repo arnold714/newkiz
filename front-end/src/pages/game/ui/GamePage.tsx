@@ -10,6 +10,9 @@ import { useWebSocket } from "@/features/game/model/useWebSocket"
 import { WaitingPage, QuestionComponent, GameResultComponent } from "@/entities/game"
 import { State } from "@/features/game/model/types"
 import { GameResult } from "@/entities/character/model/types"
+import { useAppDispatch, useAppSelector } from "@/app/redux/hooks"
+import { setMovementProhibition } from "@/features/game/model/gameSlice"
+import { IJoystickUpdateEvent } from "react-joystick-component/build/lib/Joystick"
 
 export const GamePage: React.FC = () => {
   const [joystickData, setJoystickData] = useState<JoystickData>({
@@ -17,10 +20,19 @@ export const GamePage: React.FC = () => {
     y: 0,
     isMoving: false,
   })
-  const [currentGameState, setCurrentGameState] = useState<State>("WAITING");
+  const [currentGameState, setCurrentGameState] = useState<State>("WAITING")
   const [wScale, setWScale] = useState<number>(1)
-  const [playersPositions, setPlayersPositions] = useState<Record<number, [number, number, number]>>({});
+  const [playersPositions, setPlayersPositions] = useState<Record<number, [number, number, number]>>({})
 
+  const dispatch = useAppDispatch()
+
+  const movementProhibition = useAppSelector((state) => state.game.movementProhibition)
+
+  useEffect(() => {
+    if (currentGameState === "FINISHED") {
+      dispatch(setMovementProhibition(true))
+    }
+  })
   // const connected = true
 
   // const allPlayers = [
@@ -33,11 +45,11 @@ export const GamePage: React.FC = () => {
   // }, [currentGameState])
 
   const rowData: GameResult[] = [
-    { rank: 1, nickname: '타락파워전사', score: 120, totalScore: 450, rankChange: 2 },
-    { rank: 2, nickname: '게임왕', score: 100, totalScore: 380, rankChange: -1 },
-    { rank: 3, nickname: '실버맨', score: 90, totalScore: 320, rankChange: 0 },
+    { rank: 1, nickname: "타락파워전사", score: 120, totalScore: 450, rankChange: 2 },
+    { rank: 2, nickname: "게임왕", score: 100, totalScore: 380, rankChange: -1 },
+    { rank: 3, nickname: "실버맨", score: 90, totalScore: 320, rankChange: 0 },
     // 더 많은 데이터...
-  ];
+  ]
 
   // waitingInfo
   // const waitingInfo: NewWaitingInfo = {
@@ -49,18 +61,22 @@ export const GamePage: React.FC = () => {
   const userId = 3
 
   // WebSocket 연결
-  const { connected, allPlayers, gameState, waitingInfo,  currentQuiz, quizResult, sendMove, setMapBoundaries } = useWebSocket(userId)
+  const { connected, allPlayers, gameState, waitingInfo, currentQuiz, quizResult, sendMove, setMapBoundaries } = useWebSocket(userId)
   // connected, gameInfo, allPlayers, currentQuiz, quizResult,
-  
+
   // currentGameState 처리
-  useEffect(()=>{
-    if(!gameState) return;
+  useEffect(() => {
+    if (!gameState) return
     setCurrentGameState(gameState.state)
   }, [gameState])
 
   // 조이스틱 데이터 처리
-  const handleJoystickMove = (event: any) => {
+  const handleJoystickMove = (event: IJoystickUpdateEvent) => {
     const { x, y } = event
+    // 움직이면 안 되는 상태
+    if (movementProhibition) {
+      return
+    }
     if (x !== null && y !== null) {
       setJoystickData({
         x,
@@ -80,18 +96,18 @@ export const GamePage: React.FC = () => {
 
   // 다른 유저들 움직임 처리
   useEffect(() => {
-    if (!allPlayers) return;
-    
-    const newPositions: Record<number, [number, number, number]> = {};
-    
+    if (!allPlayers) return
+
+    const newPositions: Record<number, [number, number, number]> = {}
+
     Object.values(allPlayers)
-      .filter(player => player.id !== userId)
-      .forEach(player => {
-        newPositions[player.id] = [player.position.x, player.position.y, 0];
-      });
-    
-    setPlayersPositions(newPositions);
-  }, [allPlayers, userId]);
+      .filter((player) => player.id !== userId)
+      .forEach((player) => {
+        newPositions[player.id] = [player.position.x, player.position.y, 0]
+      })
+
+    setPlayersPositions(newPositions)
+  }, [allPlayers, userId])
 
   // 너비 계산
   useEffect(() => {
@@ -121,7 +137,7 @@ export const GamePage: React.FC = () => {
       <div className="flex justify-center items-center w-full h-full relative">
         {connected && waitingInfo && currentGameState === "WAITING" ? (
           <div className="absolute w-[80%] top-15 z-[1000] flex justify-center select-none">
-            <WaitingPage waitingInfo={waitingInfo}/>
+            <WaitingPage waitingInfo={waitingInfo} />
           </div>
         ) : null}
         {connected && currentGameState === "PLAYING" ? (
@@ -131,7 +147,7 @@ export const GamePage: React.FC = () => {
         ) : null}
         {connected && currentGameState === "FINISHED" ? (
           <div className="absolute w-[80%] h-[60%] top-10 z-[1000] flex flex-col justify-center items-center opacity-90 select-none">
-            <GameResultComponent results={rowData}/>
+            <GameResultComponent results={rowData} />
           </div>
         ) : null}
 
@@ -153,13 +169,13 @@ export const GamePage: React.FC = () => {
               color={"#97d258"}
             />
             <TileMap tilesetPath={`${tileMapUrl}assets/Basic_Grass_Biom_things.png`} tileSize={16} mapWidth={16} mapHeight={10} tileData={biomeData} scale={0.5} wScale={wScale} />
-            <CharacterSprite 
-              characterName="kuro" 
-              joystickData={joystickData} 
-              tileMapSize={tileMapSize} 
-              initialPosition={[0, 0, 1]} 
-              userId={userId} 
-              nickname={"타락파워전사"} 
+            <CharacterSprite
+              characterName="kuro"
+              joystickData={joystickData}
+              tileMapSize={tileMapSize}
+              initialPosition={[0, 0, 1]}
+              userId={userId}
+              nickname={"타락파워전사"}
               sendMove={sendMove}
               setMapBoundaries={setMapBoundaries}
             />

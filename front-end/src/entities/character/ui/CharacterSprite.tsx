@@ -6,6 +6,7 @@ import * as THREE from "three"
 import { calculateCharacterBoundaries } from "@/entities/character"
 import { Html } from "@react-three/drei"
 import { Position } from "@/features/game/model/types"
+import { useAppSelector } from "@/app/redux/hooks"
 
 export const CharacterSprite: React.FC<CharacterSpriteProps> = ({ characterName, joystickData, tileMapSize, initialPosition, userId, sendMove, nickname, setMapBoundaries }) => {
   // state
@@ -19,9 +20,12 @@ export const CharacterSprite: React.FC<CharacterSpriteProps> = ({ characterName,
   const lastSentPosition = useRef<[number, number]>([initialPosition[0], initialPosition[1]])
   const lastMovementTime = useRef<number>(0)
   // constants
-  const FRAME_INTERVAL = 3;
-  const POSITION_THRESHOLD = 0.05;
+  const FRAME_INTERVAL = 3
+  const POSITION_THRESHOLD = 0.05
   const LERP_FACTOR = 0.15
+
+  // 움직임이 금지된 상태인지 확인
+  const movementProhibition = useAppSelector((state) => state.game.movementProhibition)
 
   const isLocalPlayer = Boolean(joystickData)
   const isOtherPlayer = !isLocalPlayer && userId !== undefined
@@ -29,30 +33,26 @@ export const CharacterSprite: React.FC<CharacterSpriteProps> = ({ characterName,
   const SPEED = 5
   const characterSize = { width: 1, height: 1 }
 
-  const imgUrl = import.meta.env.VITE_AWS_S3_BASE_URL;
+  const imgUrl = import.meta.env.VITE_AWS_S3_BASE_URL
 
   const textureIdlePath = `${imgUrl}dinoset/${characterName}/base/idle.png`
   const textureMovePath = `${imgUrl}dinoset/${characterName}/base/move.png`
 
   // 경계값 계산 후 WebSocket 훅에 전달
   const boundaries = React.useMemo(() => {
-    const calculatedBoundaries = calculateCharacterBoundaries(
-      viewport, 
-      characterSize, 
-      tileMapSize
-    );
-    
+    const calculatedBoundaries = calculateCharacterBoundaries(viewport, characterSize, tileMapSize)
+
     // 계산된 경계값을 WebSocket 훅에 전달
     if (setMapBoundaries) {
-      setMapBoundaries(calculatedBoundaries);
+      setMapBoundaries(calculatedBoundaries)
     }
-    
-    return calculatedBoundaries;
-  }, [viewport.width, viewport.height, characterSize.width, characterSize.height, tileMapSize.width, tileMapSize.height, setMapBoundaries]);
+
+    return calculatedBoundaries
+  }, [viewport.width, viewport.height, characterSize.width, characterSize.height, tileMapSize.width, tileMapSize.height, setMapBoundaries])
 
   // 조이스틱 데이터 변경 시 캐릭터 상태 업데이트
   useEffect(() => {
-    if(!joystickData) return;
+    if (!joystickData) return
     setIsMoving(joystickData.isMoving)
     if (joystickData.isMoving && joystickData.x !== 0) {
       setDirection(joystickData.x < 0 ? -1 : 1)
@@ -66,12 +66,12 @@ export const CharacterSprite: React.FC<CharacterSpriteProps> = ({ characterName,
       if (initialPosition[0] !== position[0]) {
         setDirection(initialPosition[0] > position[0] ? -1 : 1)
       }
-      
+
       // 움직인 거리 계산
       const dx = initialPosition[0] - position[0]
       const dy = initialPosition[1] - position[1]
       const distance = Math.sqrt(dx * dx + dy * dy)
-      
+
       // 일정 거리 이상 움직여야 상태 변경
       setIsMoving(distance > 0.01)
     }
@@ -79,57 +79,57 @@ export const CharacterSprite: React.FC<CharacterSpriteProps> = ({ characterName,
 
   // 프레임 별 처리
   useFrame((_, delta) => {
+    if (movementProhibition) {
+      setIsMoving(false)
+      return
+    }
     const currentTime = Date.now()
-    
+
     // 로컬 유저 움직임 처리
     if (isLocalPlayer && joystickData) {
       const [x, y, z] = position
       let newX = x
       let newY = y
-      
+
       if (joystickData.isMoving) {
         // 새로운 좌표
         newX += joystickData.x * SPEED * delta
         newY += joystickData.y * SPEED * delta
-        
+
         // 바운더리 적용
         newX = Math.max(boundaries.minX, Math.min(newX, boundaries.maxX))
         newY = Math.max(boundaries.minY, Math.min(newY, boundaries.maxY))
-        
+
         setPosition([newX, newY, z])
-        
+
         // 쓰로틀링 설정
         frameCount.current++
         const [lastX, lastY] = lastSentPosition.current
         const movedDistance = Math.sqrt(Math.pow(newX - lastX, 2) + Math.pow(newY - lastY, 2))
-        
+
         // 정해진 만큼 이동해야 전송
-        if (sendMove && userId && 
-            (frameCount.current % FRAME_INTERVAL === 0 || 
-             movedDistance > POSITION_THRESHOLD ||
-             currentTime - lastMovementTime.current > 100)) {
-          
+        if (sendMove && userId && (frameCount.current % FRAME_INTERVAL === 0 || movedDistance > POSITION_THRESHOLD || currentTime - lastMovementTime.current > 100)) {
           lastSentPosition.current = [newX, newY]
           lastMovementTime.current = currentTime
-          
+
           const positionData: Position = {
             direction,
             x: newX,
-            y: newY
+            y: newY,
           }
-          
+
           sendMove(userId, characterName, positionData)
         }
-      } 
+      }
       // 움직이다가 멈추면 전송
       else if (isMoving) {
         setIsMoving(false)
-        
+
         if (sendMove && userId) {
           const positionData: Position = {
             direction,
             x: position[0],
-            y: position[1]
+            y: position[1],
           }
           sendMove(userId, characterName, positionData)
         }
@@ -139,11 +139,11 @@ export const CharacterSprite: React.FC<CharacterSpriteProps> = ({ characterName,
     else if (isOtherPlayer) {
       const [x, y, z] = position
       const [targetX, targetY, _] = initialPosition
-      
+
       // 선형 보간법 적용
       const newX = x + (targetX - x) * LERP_FACTOR
       const newY = y + (targetY - y) * LERP_FACTOR
-      
+
       // 일정 거리 이상 움직여야 처리
       if (Math.abs(newX - x) > 0.001 || Math.abs(newY - y) > 0.001) {
         setPosition([newX, newY, z])
@@ -196,10 +196,8 @@ export const CharacterSprite: React.FC<CharacterSpriteProps> = ({ characterName,
           {isMoving && <SpriteAnimation texturePath={textureMovePath} frameWidth={24} totalWidth={144} frameCount={6} frameTime={100} direction={direction} />}
 
           {/* 닉네임 표시 - Html 컴포넌트 사용 */}
-          <Html position={[0, -0.6, 0]} center style={{userSelect: 'none', zIndex: 1, position:'relative'}}>
-            <div style={{ color: 'white', background: 'rgba(0,0,0,0.5)', padding: '2px 5px', borderRadius: '3px', whiteSpace: 'nowrap', zIndex:'50' }}>
-              {nickname}
-            </div>
+          <Html position={[0, -0.6, 0]} center style={{ userSelect: "none", zIndex: 1, position: "relative" }}>
+            <div style={{ color: "white", background: "rgba(0,0,0,0.5)", padding: "2px 5px", borderRadius: "3px", whiteSpace: "nowrap", zIndex: "50" }}>{nickname}</div>
           </Html>
         </>
       )}

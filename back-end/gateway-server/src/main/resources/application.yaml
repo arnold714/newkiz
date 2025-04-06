@@ -31,6 +31,16 @@ spring:
           predicates:
             - Path=/ws/**
 
+        - id: chatbot-service
+          uri: http://chatbot-service
+          predicates:
+            - Path=/api/chatbot/**
+        
+        - id: record-service
+          uri: http://record-service
+          predicates:
+            - Path=/api/record/**
+
   r2dbc:
     url: r2dbc:pool:mysql://${MYSQL_HOST}/${MYSQL_DATABASE}?serverTimezone=Asia/Seoul
     username: ${MYSQL_USER}

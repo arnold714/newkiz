@@ -1,6 +1,7 @@
 package site.newkiz.gatewayserver.filter;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -16,6 +17,7 @@ import site.newkiz.gatewayserver.util.CookieUtil;
 import site.newkiz.gatewayserver.util.JwtUtil;
 
 @RequiredArgsConstructor
+@Slf4j
 public class JwtAuthenticationFilter implements WebFilter {
 
   private final ApplicationConfig applicationConfig;
@@ -27,6 +29,10 @@ public class JwtAuthenticationFilter implements WebFilter {
   public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
     try {
       String accessToken = cookieUtil.getAccessToken(exchange.getRequest());
+
+      log.info("First enter");
+      log.info(exchange.getRequest().getURI().getPath());
+      log.info(exchange.getRequest().getMethod().name());
 
       if (accessToken != null) {
         Integer userId = jwtUtil.getId(accessToken);
@@ -42,7 +48,20 @@ public class JwtAuthenticationFilter implements WebFilter {
               return chain.filter(mutatedExchange)
                   .contextWrite(ReactiveSecurityContextHolder.withAuthentication(authentication));
             })
-            .switchIfEmpty(Mono.defer(() -> redirectToProfileSetup(exchange.getResponse())));
+            .switchIfEmpty(Mono.defer(() -> {
+              if (exchange.getRequest().getURI().getPath().equals("/api/mypage")
+                  && exchange.getRequest().getMethod().name().equalsIgnoreCase("POST")) {
+                ServerWebExchange mutatedExchange = exchange.mutate()
+                    .request(exchange.getRequest().mutate()
+                        .header("User-Id", String.valueOf(userId))
+                        .build())
+                    .build();
+                return chain.filter(mutatedExchange)
+                    .contextWrite(ReactiveSecurityContextHolder.withAuthentication(authentication));
+              } else {
+                return redirectToProfileSetup(exchange.getResponse());
+              }
+            }));
       }
     } catch (Exception e) {
       throw new RuntimeException(e);

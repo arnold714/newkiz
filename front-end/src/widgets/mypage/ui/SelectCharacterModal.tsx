@@ -1,42 +1,39 @@
-import { useState } from 'react';
+import { useState, useEffect } from "react";
 import { LuChevronLeft } from 'react-icons/lu';
 import '@shared/styles/CustomScroll.css';
+import { characters, Character } from "@/shared";
 
 interface SelectCharacterModalProps {
     closeModal: () => void;
-}
+    currentCharacter: string; // 현재 선택된 캐릭터 ID
+    onSelectCharacter: (charId: string) => void; // 최종 선택 콜백
+  }
 
 
-export const SelectCharacterModal = ({ closeModal }: SelectCharacterModalProps) => {
-    const [selectedCharacter, setSelectedCharacter] = useState<string>('');
-
-    const imgUrl: string = import.meta.env.VITE_AWS_S3_BASE_URL;
-
-    const characters = [
-        { id: "cole", img: `${imgUrl}dinos/cole.png` },
-        { id: "doux", img: `${imgUrl}dinos/doux.png` },
-        { id: "kira", img: `${imgUrl}dinos/kira.png` },
-        { id: "kuro", img: `${imgUrl}dinos/kuro.png` },
-        { id: "loki", img: `${imgUrl}dinos/loki.png` },
-        { id: "mono", img: `${imgUrl}dinos/mono.png` },
-        { id: "mort", img: `${imgUrl}dinos/mort.png` },
-        { id: "nico", img: `${imgUrl}dinos/nico.png` },
-        { id: "olaf", img: `${imgUrl}dinos/olaf.png` },
-        { id: "sena", img: `${imgUrl}dinos/sena.png` },
-        { id: "tard", img: `${imgUrl}dinos/tard.png` },
-        { id: "vita", img: `${imgUrl}dinos/vita.png` },
-    ];
-
+  export const SelectCharacterModal = ({
+    closeModal,
+    currentCharacter,
+    onSelectCharacter,
+  }: SelectCharacterModalProps) => {
+    const [selectedCharacter, setSelectedCharacter] = useState<string>("");
+  
+    useEffect(() => {
+      setSelectedCharacter(currentCharacter);
+    }, [currentCharacter]);
+  
+    // 캐릭터 선택
     const handleSelect = (id: string) => {
-        setSelectedCharacter(id);
+      setSelectedCharacter(id);
     };
-
-    const handleNext = () => {
-        if (!selectedCharacter) {
-            alert("캐릭터를 선택해주세요.");
-            return;
-        }
+  
+    const handleConfirm = () => {
+      if (!selectedCharacter) {
+        alert("캐릭터를 선택해주세요.");
+        return;
+      }
+      onSelectCharacter(selectedCharacter);
     };
+  
 
     return (
         <div className="w-full h-full">
@@ -50,7 +47,7 @@ export const SelectCharacterModal = ({ closeModal }: SelectCharacterModalProps) 
                         {selectedCharacter ? (
                             <div className="relative">
                                 <img
-                                    src={characters.find(c => c.id === selectedCharacter)?.img || "https://newkiz.s3.ap-northeast-2.amazonaws.com/dinos/kira.png"}
+                                    src={characters.find(c => c.id === selectedCharacter)?.img}
                                     alt="Selected character"
                                     className="w-24 h-24 rounded-full transition-all duration-300 hover:scale-105"
                                 />
@@ -66,14 +63,15 @@ export const SelectCharacterModal = ({ closeModal }: SelectCharacterModalProps) 
                     </div>
                 </div>
                 <div className="grid grid-cols-3 gap-4 justify-items-center my-4">
-                    {characters.map((char) => (
+                 {characters.map((char: Character) => (
                         <button
                             key={char.id}
                             onClick={() => handleSelect(char.id)}
-                            className={`w-[85px] h-[85px] rounded-full flex items-center justify-center p-1 mb-2
-                  ${selectedCharacter === char.id
-                                    ? "ring-3 ring-blue-500 bg-blue-50 transform scale-105 shadow-lg transition-all duration-300"
-                                    : "bg-white hover:bg-gray-50 shadow hover:shadow-md transition-all duration-200"}`}
+                            className={`w-[85px] h-[85px] rounded-full flex items-center justify-center p-1 mb-2 ${
+                                selectedCharacter === char.id
+                                  ? "ring-3 ring-blue-500 bg-blue-50 transform scale-105 shadow-lg transition-all duration-300"
+                                  : "bg-white hover:bg-gray-50 shadow hover:shadow-md transition-all duration-200"
+                              }`}
                         >
                             <div className="w-full h-full rounded-full overflow-hidden">
                                 <img
@@ -87,7 +85,7 @@ export const SelectCharacterModal = ({ closeModal }: SelectCharacterModalProps) 
                 </div>
                 <div className="sticky bottom-4 mt-2 mb-4">
                     <button
-                        onClick={selectedCharacter ? handleNext : undefined}
+                        onClick={handleConfirm}
                         disabled={!selectedCharacter}
                         className={`w-full font-semibold text-lg py-3 rounded-lg transition-all duration-300 transform
                         ${selectedCharacter

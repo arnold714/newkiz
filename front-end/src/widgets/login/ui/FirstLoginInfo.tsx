@@ -1,11 +1,11 @@
-import React, { ChangeEvent, useState } from "react";
-import SchoolSearchModal from "@/widgets/login/ui/SchoolSearchModal";
+import { ChangeEvent, useState } from "react";
+import {SchoolSearchModal} from "@/widgets/login";
 import { LuChevronLeft } from "react-icons/lu";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { ko } from "date-fns/locale";
 import "@shared/styles/CustomScroll.css"
-import { BasicInfo } from "@/features/login/model/types";
+import { BasicInfo } from "@/features/login";
 
 interface FirstLoginInfoProps {
   basicInfo: BasicInfo;

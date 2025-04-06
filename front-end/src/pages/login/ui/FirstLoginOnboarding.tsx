@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { FirstLoginInfo, FirstInterestSelection, FirstCharacterSelection, FinalConfirm } from "@/widgets/login";
-import { BasicInfo } from "@/features/login/model/types";
+import { BasicInfo } from "@/features/login";
 
 export default function FirstLoginOnboarding() {
   const [step, setStep] = useState(1);

@@ -5,19 +5,20 @@ export interface School {
     address: string;
   }
 // 유저 정보 관련 타입
-  export interface Profile {
-    id: number;
-    userId: number;
-    nickname: string;
-    birthday: string;
-    school: School;
-    gender: 'MALE' | 'FEMALE' | string;
-    difficulty: number;
-  }
+export interface Profile {
+  id: number;
+  userId: number;
+  nickname: string;
+  birthday: string;
+  school: School;
+  gender: "MALE" | "FEMALE" | string;
+  difficulty: number;
+  characterId: string; 
+}
 // 마이페이지 데이터 관련 타입
   export interface MyPageData {
     profile: Profile;
-    interests: any[]; // 추후 관심사 데이터의 타입 정의 가능
+    interests: string[]; // 추후 관심사 데이터의 타입 정의 가능
   }
   
   export interface MyPageResponse {

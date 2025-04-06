@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { LuChevronRight } from "react-icons/lu";
 import { FaHeart, FaBookmark, FaRegBookmark, FaRegHeart } from "react-icons/fa6";
 

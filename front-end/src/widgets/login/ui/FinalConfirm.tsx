@@ -1,5 +1,5 @@
 import "@shared/styles/CustomScroll.css"
-import { BasicInfo, MyPageRequest } from "@/features/login/model/types";
+import { BasicInfo, MyPageRequest } from "@/features/login";
 import { interestMap } from "@/features/login";
 import { postFirstLogin } from "@/widgets/login";
 
@@ -14,8 +14,9 @@ export default function FinalConfirm({
   interests,
   selectedCharacter,
 }: FinalConfirmProps) {
+  const imgUrl: string = import.meta.env.VITE_AWS_S3_BASE_URL
   const getCharacterImage = () => {
-    return `https://newkiz.s3.ap-northeast-2.amazonaws.com/dinos/${selectedCharacter}.png`;
+    return `${imgUrl}dinos/${selectedCharacter}.png`;
   };
 
   const handleConfirm = async () => {
@@ -39,8 +40,7 @@ export default function FinalConfirm({
             address: basicInfo.schoolAddress,
           },
           gender: mappedGender,
-          // 캐릭터 필드가 백엔드에 생기면 추가
-          // characterId: selectedCharacter,
+          characterId: selectedCharacter, // 선택한 캐릭터 추가
         },
         interests: mappedInterests,
       };

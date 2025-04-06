@@ -6,9 +6,9 @@ import { useMediaQuery } from "react-responsive";
 import { GetTodayNews } from "../api/MainApi";
 import { Link } from "react-router-dom";
 
-const NewsSlide:React.FC<{ image: string, title: string, article: string }> = ({image, title, article}) => (
+const NewsSlide:React.FC<{id:string, image: string, title: string, article: string }> = ({id, image, title, article}) => (
     <>
-        <div className="w-full h-full relative">
+        <div className="w-full h-full relative" data-id={id}>
             <img 
                 loading="lazy"
                 src={image} 
@@ -54,6 +54,7 @@ export const HotTopic = () => {
                     <SwiperSlide key={news.id}>
                         <Link to={`detail/${news.id}`}>
                             <NewsSlide
+                                id={news.id}
                                 image={news.img} 
                                 title={news.title}
                                 article={news.article} 

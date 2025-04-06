@@ -51,7 +51,7 @@ public class GameService {
   }
 
   public void joinGame(Integer userId) {
-    // 유저 정보 조회 - 닉네임, 캐릭 정보
+    // todo 유저 정보 조회 - 닉네임, 캐릭 정보
     Position position = new Position(Direction.EAST.getValue(), 0, 0);
     Player player = new Player(userId, "nickname", "KURO", position);
 
@@ -75,11 +75,11 @@ public class GameService {
   public void startGame() throws InterruptedException {
     log.info("게임 시작 - 총 " + game.quizCount() + " 문제");
 
-    // 게임 상태 PLAYING 으로 변경
+    // todo 게임 들어왔다 나갔을 경우 Players 에서 삭제해야함
+    // 게임 상태 PLAYING 으로 변경 및 게임 시작 메시지 send
     game.setState(State.PLAYING);
-
-    // 게임 시작 메시지 send
     messagingTemplate.convertAndSend("/sub/game-info", Game.toPlayingGameInfo(game));
+    Thread.sleep(5000);
 
     // 게임의 퀴즈 수 만큼 진행
     for (int currentQuizNumber = 1; currentQuizNumber <= game.quizCount(); currentQuizNumber++) {

@@ -1,6 +1,7 @@
 package site.newkiz.gameserver.entity;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -53,6 +54,11 @@ public class Game {
   }
 
   public static Map<String, Object> toPlayingGameInfo(Game game) {
-    return Map.of("state", game.getState());
+    Map<String, Object> result = new HashMap<>();
+    result.put("state", game.getState());
+    result.put("timeLeft", 5);
+
+    return result;
   }
+
 }

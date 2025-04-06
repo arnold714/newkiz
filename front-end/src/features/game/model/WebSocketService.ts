@@ -20,7 +20,7 @@ export const createWebSocketService = (baseUrl: string) => {
         const socket = new SockJS(`${baseUrl}/ws`);
         client.current = new Client({
           webSocketFactory: () => socket,
-          debug: (str) => console.log(str),
+          debug: (str: string) => console.log(str),
           reconnectDelay: 5000,
           heartbeatIncoming: 4000,
           heartbeatOutgoing: 4000,

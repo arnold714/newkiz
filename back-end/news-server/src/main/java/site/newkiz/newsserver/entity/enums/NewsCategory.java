@@ -1,6 +1,7 @@
 package site.newkiz.newsserver.entity.enums;
 
 import lombok.Getter;
+import site.newkiz.newsserver.global.exception.BadRequestException;
 
 @Getter
 public enum NewsCategory {
@@ -25,6 +26,6 @@ public enum NewsCategory {
         return category;
       }
     }
-    throw new IllegalArgumentException("No enum constant for korean name: " + koreanName);
+    throw new BadRequestException("No enum constant for korean name: " + koreanName);
   }
 }

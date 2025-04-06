@@ -5,7 +5,7 @@ import org.bson.types.ObjectId;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
-import site.newkiz.newsserver.entitiy.NewsDocument;
+import site.newkiz.newsserver.entity.NewsDocument;
 
 public interface NewsRepository extends MongoRepository<NewsDocument, String> {
 

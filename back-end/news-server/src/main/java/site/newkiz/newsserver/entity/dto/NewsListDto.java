@@ -1,9 +1,9 @@
-package site.newkiz.newsserver.entitiy.dto;
+package site.newkiz.newsserver.entity.dto;
 
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import site.newkiz.newsserver.entitiy.NewsDocument;
+import site.newkiz.newsserver.entity.NewsDocument;
 
 @Getter
 @AllArgsConstructor

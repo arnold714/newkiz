@@ -2,7 +2,7 @@ package site.newkiz.newsserver.repository;
 
 import java.util.Optional;
 import org.springframework.data.mongodb.repository.MongoRepository;
-import site.newkiz.newsserver.entitiy.NewsScrap;
+import site.newkiz.newsserver.entity.NewsScrap;
 
 public interface NewsScrapRepository extends MongoRepository<NewsScrap, String> {
 

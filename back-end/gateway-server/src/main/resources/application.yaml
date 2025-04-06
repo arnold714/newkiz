@@ -39,7 +39,7 @@ spring:
         - id: record-service
           uri: http://record-service
           predicates:
-            - Path=/api/record/**
+            - Path=/api/records/**
 
   r2dbc:
     url: r2dbc:pool:mysql://${MYSQL_HOST}/${MYSQL_DATABASE}?serverTimezone=Asia/Seoul

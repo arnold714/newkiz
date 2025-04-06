@@ -61,4 +61,10 @@ public class Game {
     return result;
   }
 
+  public static Map<String, Object> toFinishedGameInfo(Game game) {
+    Map<String, Object> result = new HashMap<>();
+    result.put("state", game.getState());
+
+    return result;
+  }
 }

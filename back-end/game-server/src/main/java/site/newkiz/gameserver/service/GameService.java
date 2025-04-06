@@ -3,8 +3,6 @@ package site.newkiz.gameserver.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -27,8 +25,6 @@ public class GameService {
 
   private final SimpMessagingTemplate messagingTemplate;
   private Game game;
-  private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-
 
   @Scheduled(cron = "0 55 17 * * ?")
   public void createGame() throws InterruptedException {
@@ -52,7 +48,7 @@ public class GameService {
 
   public void joinGame(Integer userId) {
     // todo 유저 정보 조회 - 닉네임, 캐릭 정보
-    Position position = new Position(Direction.EAST.getValue(), 0, 0);
+    Position position = new Position(Direction.EAST.getValue(), 0.5f, 0);
     Player player = new Player(userId, "nickname", "KURO", position);
 
     // 플레이어 리스트에 유저 등록
@@ -102,14 +98,16 @@ public class GameService {
 
       Thread.sleep(5000);
 
-      // todo 오답자 커넥션 끊어야하는데
-
-      // todo 스코어 랭킹 관리
-
+      // 생존자 없으면 게임 종료
+      if (game.getAlivePlayers().isEmpty()) {
+        break;
+      }
     }
 
-    // todo 퀴즈 종료 스코어
+    // todo 게임 종료 스코어
     log.info("퀴즈 게임 종료");
+    game.setState(State.FINISHED);
+    messagingTemplate.convertAndSend("/sub/game-info", Game.toFinishedGameInfo(game));
 
 
   }

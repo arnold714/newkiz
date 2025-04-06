@@ -10,7 +10,7 @@ export default function MainPage() {
             <img src="https://newkiz.s3.ap-northeast-2.amazonaws.com/dinos/nico.png" alt="character_nico" className='w-[60%] min-w-25 sm:w-35 mt-0'/>
           </div>
           <div className='flex justify-center'>
-          <ProgressGraph />
+            <ProgressGraph />
           </div>
         </div>
         <div className='bg-white/60  p-2'>

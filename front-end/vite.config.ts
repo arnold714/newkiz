@@ -111,4 +111,7 @@ export default defineConfig({
       },
     }),
   ],
+  define: {
+    global: 'window',
+  },
 })

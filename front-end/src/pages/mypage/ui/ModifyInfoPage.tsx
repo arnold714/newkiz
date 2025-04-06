@@ -49,7 +49,7 @@ export const ModifyInfoPage = () => {
 
           // 대문자 interests -> UI 한글 변환
           const mappedInterests = interests
-            .map((item) => interestMapReverse[item] || item)
+            .map((item: string) => interestMapReverse[item] || item)
             .filter(Boolean);
           setSelectedInterests(mappedInterests);
         }

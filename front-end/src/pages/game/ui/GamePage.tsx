@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, Suspense } from "react"
 import { Canvas } from "@react-three/fiber"
 import { OrthographicCamera } from "@react-three/drei"
 import { CharacterSprite } from "@entities/character"
@@ -6,7 +6,10 @@ import { TileMap, grassMapData, waterMapData, biomeData, newMapData } from "@ent
 import { JoystickController } from "@entities/joystick"
 import { calculateWScale } from "@/features/game"
 import { JoystickData } from "@/shared/types/joystick"
-// import { WaitingPage, QuestionComponent } from "@/entities/game"
+import { useWebSocket } from "@/features/game/model/useWebSocket"
+import { WaitingPage, QuestionComponent, GameResultComponent } from "@/entities/game"
+import { State } from "@/features/game/model/types"
+import { GameResult } from "@/entities/character/model/types"
 
 export const GamePage: React.FC = () => {
   const [joystickData, setJoystickData] = useState<JoystickData>({
@@ -14,7 +17,43 @@ export const GamePage: React.FC = () => {
     y: 0,
     isMoving: false,
   })
-  const [wScale, setWScale] = useState(1)
+  const [currentGameState, setCurrentGameState] = useState<State>("WAITING");
+  const [wScale, setWScale] = useState<number>(1)
+
+  const connected = true
+
+  // const allPlayers = [
+  //   { id: 2, characterName: "nico", position: { direction: 1, x: -1, y: -1 }, nickname: "Player1" },
+  //   { id: 4, characterName: "kuro", position: { direction: 1, x: 1, y: -1 }, nickname: "Player2" },
+  // ]
+
+  useEffect(()=>{
+    console.log("게임 상태: ", currentGameState);
+  }, [currentGameState])
+
+  const rowData: GameResult[] = [
+    { rank: 1, nickname: '타락파워전사', score: 120, totalScore: 450, rankChange: 2 },
+    { rank: 2, nickname: '게임왕', score: 100, totalScore: 380, rankChange: -1 },
+    { rank: 3, nickname: '실버맨', score: 90, totalScore: 320, rankChange: 0 },
+    // 더 많은 데이터...
+  ];
+
+  // waitingInfo
+  // const waitingInfo: NewWaitingInfo = {
+  //   state: "WAITING",
+  //   timeLeft: 10,
+  // }
+
+  // // 임시 userId
+  const userId = 3
+
+  // WebSocket 연결
+  const { allPlayers, gameState, waitingInfo,  currentQuiz, quizResult, sendMove, setMapBoundaries } = useWebSocket(userId)
+  // connected, gameInfo, allPlayers, currentQuiz, quizResult,
+  
+  useEffect(()=>{
+    setCurrentGameState(gameState)
+  }, [gameState])
 
   // 조이스틱 데이터 처리
   const handleJoystickMove = (event: any) => {
@@ -59,21 +98,29 @@ export const GamePage: React.FC = () => {
     height: grassMapSize - 0.5,
   }
 
-  // const question = " 마라톤은 42.195 Km를 달린다. 이 거리는 제1회 아테네 올림픽부터 채택된 것이다."
-
   return (
     <div className="flex justify-center items-center w-full h-screen">
       <div className="flex justify-center items-center w-full h-full relative">
-        {/* <div className="absolute w-[70%] top-15 z-99 flex justify-center">
-          <WaitingPage />
-        </div> */}
-        {/* <div className="absolute w-[70%] top-10 z-99 flex flex-col justify-center items-center">
-          <QuestionComponent questionNo={1} question={question} />
-        </div> */}
-        <Canvas className="w-full">
+        {connected && waitingInfo && currentGameState === "WAITING" ? (
+          <div className="absolute w-[80%] top-15 z-[1000] flex justify-center select-none">
+            <WaitingPage waitingInfo={waitingInfo}/>
+          </div>
+        ) : null}
+        {connected && currentGameState === "PLAYING" ? (
+          <div className="absolute w-[80%] top-10 z-[1000] flex flex-col justify-center items-center opacity-90 select-none">
+            <QuestionComponent questionNo={currentQuiz?.quizNumber} question={currentQuiz?.question} timeLeft={currentQuiz?.timeLeft} quizResult={quizResult} />
+          </div>
+        ) : null}
+        {connected && currentGameState === "FINISHED" ? (
+          <div className="absolute w-[80%] h-[60%] top-10 z-[1000] flex flex-col justify-center items-center opacity-90 select-none">
+            <GameResultComponent results={rowData}/>
+          </div>
+        ) : null}
+
+        <Canvas className="w-full z-10 relative">
           <OrthographicCamera makeDefault position={[0, 0, 5]} zoom={70} />
           <ambientLight intensity={1} />
-          <React.Suspense fallback={null}>
+          <Suspense fallback={null}>
             <TileMap tilesetPath={`${tileMapUrl}assets/Water.png`} tileSize={16} mapWidth={10} mapHeight={14} tileData={waterMapData} scale={1} wScale={wScale} />
             <TileMap tilesetPath={`${tileMapUrl}assets/Grass.png`} tileSize={16} mapWidth={grassMapSize} mapHeight={grassMapSize} tileData={grassMapData} scale={1} wScale={wScale} />
             <TileMap
@@ -88,12 +135,37 @@ export const GamePage: React.FC = () => {
               color={"#97d258"}
             />
             <TileMap tilesetPath={`${tileMapUrl}assets/Basic_Grass_Biom_things.png`} tileSize={16} mapWidth={16} mapHeight={10} tileData={biomeData} scale={0.5} wScale={wScale} />
-            <CharacterSprite characterName="kuro" joystickData={joystickData} tileMapSize={tileMapSize} initialPosition={[0, 0, 0]} />
-            {/* 캐릭터 이동 로직 - Canvas 내부에서 실행(Canvas 외부에서 작동하면 에러 뜸)*/}
-          </React.Suspense>
+            <CharacterSprite 
+              characterName="kuro" 
+              joystickData={joystickData} 
+              tileMapSize={tileMapSize} 
+              initialPosition={[0, 0, 1]} 
+              userId={userId} 
+              nickname={"타락파워전사"} 
+              sendMove={sendMove}
+              setMapBoundaries={setMapBoundaries}
+            />
+            {connected &&
+              allPlayers &&
+              Object.values(allPlayers)
+                .filter((player) => player.id !== userId) // 현재 사용자 제외
+                .map((player) => (
+                  <>
+                    <CharacterSprite
+                      key={player.id}
+                      characterName={player.characterName}
+                      tileMapSize={tileMapSize}
+                      initialPosition={[player.position.x, player.position.y, 0]}
+                      userId={player.id}
+                      nickname={player.nickname}
+                    />
+                  </>
+                ))}
+          </Suspense>
         </Canvas>
-
-        <JoystickController onMove={handleJoystickMove} onStop={handleJoystickStop} />
+        <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 z-20">
+          <JoystickController onMove={handleJoystickMove} onStop={handleJoystickStop} />
+        </div>
       </div>
     </div>
   )

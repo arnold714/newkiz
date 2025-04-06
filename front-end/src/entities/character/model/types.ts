@@ -1,3 +1,5 @@
+import { Position } from "@/features/game/model/types"
+import { Boundaries } from "@/shared/types/common"
 import { JoystickData } from "@/shared/types/joystick"
 
 export interface SpriteAnimationProps {
@@ -11,7 +13,19 @@ export interface SpriteAnimationProps {
 
 export interface CharacterSpriteProps {
   characterName: string
-  joystickData: JoystickData
+  joystickData?: JoystickData
   tileMapSize: { width: number; height: number }
   initialPosition: [number, number, number]
+  userId?: number;
+  sendMove?: (userId: number, characterName: string, position: Position) => void;
+  nickname?: string;
+  setMapBoundaries?: (newBoundaries: Boundaries) => void;
+}
+
+export interface GameResult {
+  rank: number
+  nickname: string
+  score: number
+  totalScore: number
+  rankChange: number
 }

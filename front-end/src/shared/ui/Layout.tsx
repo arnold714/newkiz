@@ -8,7 +8,6 @@ const Layout = ({ children }: LayoutProps) => {
 
   const showBackground =
     pathname === "/" ||
-    pathname === "/detail" ||
     pathname.startsWith("/reporter") ||
     pathname.startsWith("/category");
 

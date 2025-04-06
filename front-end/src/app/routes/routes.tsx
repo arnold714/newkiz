@@ -216,7 +216,7 @@ const routes: RouteObject[] = [
         ),
       },
       {
-        path: "/chatbot",
+        path: "/chatbot/:newsId",
         element: (
           <Suspense fallback={<LoadingComponent />}>
             <ChatbotPage />

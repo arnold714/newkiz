@@ -126,7 +126,7 @@ export default function DetailPage() {
         </div>
       </div>
       <div>
-        <ActionButton />
+        <ActionButton newsId={id!}/>
       </div>
     </div>
   );

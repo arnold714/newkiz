@@ -12,6 +12,6 @@ public class MypageRequest {
   private Integer school;
   private String gender;
   private Integer difficulty;
-  private Integer characterId;
+  private String characterId;
   private List<String> interests;
 }

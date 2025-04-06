@@ -32,14 +32,6 @@ public class JwtAuthenticationFilter implements WebFilter {
         Integer userId = jwtUtil.getId(accessToken);
         Authentication authentication = new UsernamePasswordAuthenticationToken(userId, "", null);
 
-        // 프로필 생성 API 요청은 필터 통과
-        String path = exchange.getRequest().getPath().value();
-        String method = exchange.getRequest().getMethod().name();
-        
-        if (path.equals("/api/mypage") && method.equalsIgnoreCase("POST")) {
-          return chain.filter(exchange);
-        }
-
         return profileRepository.findByUserId(userId)
             .flatMap(profile -> {
               ServerWebExchange mutatedExchange = exchange.mutate()
@@ -50,7 +42,20 @@ public class JwtAuthenticationFilter implements WebFilter {
               return chain.filter(mutatedExchange)
                   .contextWrite(ReactiveSecurityContextHolder.withAuthentication(authentication));
             })
-            .switchIfEmpty(Mono.defer(() -> redirectToProfileSetup(exchange.getResponse())));
+            .switchIfEmpty(Mono.defer(() -> {
+              if (exchange.getRequest().getURI().getPath().equals("/api/mypage")
+              && exchange.getRequest().getMethod().name().equalsIgnoreCase("POST")) {
+                ServerWebExchange mutatedExchange = exchange.mutate()
+                    .request(exchange.getRequest().mutate()
+                        .header("User-Id", String.valueOf(userId))
+                        .build())
+                    .build();
+                return chain.filter(mutatedExchange)
+                    .contextWrite(ReactiveSecurityContextHolder.withAuthentication(authentication));
+              } else {
+                return redirectToProfileSetup(exchange.getResponse());
+              }
+            }));
       }
     } catch (Exception e) {
       throw new RuntimeException(e);

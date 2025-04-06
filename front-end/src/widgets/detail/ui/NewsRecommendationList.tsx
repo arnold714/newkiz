@@ -39,7 +39,7 @@ export const NewsRecommendationList = () => {
         {NewsRecommendationData.map((item) => (
           <div
             key={item.id}
-            className="bg-white border-2 border-[#EBEBEB] w-[200px] h-[170px] p-2 rounded-lg cursor-pointer"
+            className="bg-white border-2 border-[#EBEBEB] h-[200px] p-2 rounded-lg cursor-pointer"
           >
             <div className="font-semibold">{item.title}</div>
             <p>더보기...</p>

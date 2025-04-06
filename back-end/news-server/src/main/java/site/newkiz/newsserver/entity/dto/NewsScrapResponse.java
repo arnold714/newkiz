@@ -1,4 +1,4 @@
-package site.newkiz.newsserver.entitiy.dto;
+package site.newkiz.newsserver.entity.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

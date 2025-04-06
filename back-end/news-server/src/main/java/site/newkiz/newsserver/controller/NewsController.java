@@ -11,12 +11,14 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import site.newkiz.newsserver.entitiy.NewsDocument;
-import site.newkiz.newsserver.entitiy.NewsScrap;
-import site.newkiz.newsserver.entitiy.NewsSummary;
-import site.newkiz.newsserver.entitiy.dto.NewsListDto;
-import site.newkiz.newsserver.entitiy.dto.NewsScrapResponse;
-import site.newkiz.newsserver.entitiy.dto.NewsSummaryRequest;
+import site.newkiz.newsserver.entity.NewsDocument;
+import site.newkiz.newsserver.entity.NewsQuizDocument;
+import site.newkiz.newsserver.entity.NewsScrap;
+import site.newkiz.newsserver.entity.NewsSummary;
+import site.newkiz.newsserver.entity.dto.NewsListDto;
+import site.newkiz.newsserver.entity.dto.NewsScrapResponse;
+import site.newkiz.newsserver.entity.dto.NewsSummaryRequest;
+import site.newkiz.newsserver.entity.dto.SolveQuizRequest;
 import site.newkiz.newsserver.global.ApiResponse;
 import site.newkiz.newsserver.service.NewsService;
 
@@ -89,6 +91,40 @@ public class NewsController {
   public ApiResponse<Void> deleteScrappedNews(@PathVariable(value = "newsId") String newsId,
       @RequestHeader(value = "User-Id") String userId) {
     newsService.deleteScrappedNews(newsId, userId);
+    return ApiResponse.success();
+  }
+
+  /*
+  퀴즈 문제 가져오기
+   */
+  @GetMapping("/{newsId}/quiz")
+  public ApiResponse<NewsQuizDocument> getQuiz(@PathVariable(value = "newsId") String newsId) {
+    NewsQuizDocument quiz = newsService.getQuiz(newsId);
+    return ApiResponse.success(quiz);
+  }
+
+  /*
+  문제를 풀었는지 안풀었는지 확인
+  풀었으면 true, 안풀었으면 false
+   */
+  @GetMapping("/{newsId}/quiz/check")
+  public ApiResponse<Boolean> checkQuiz(@PathVariable(value = "newsId") String newsId,
+      @RequestHeader(value = "User-Id") String userId) {
+    boolean isSolved = newsService.checkQuiz(userId, newsId);
+    return ApiResponse.success(isSolved);
+  }
+
+  /*
+  정답인지 아닌지 문제 확인
+   */
+  @PostMapping("/{newsId}/quiz")
+  public ApiResponse<Void> solveQuiz(@PathVariable(value = "newsId") String newsId,
+      @RequestHeader(value = "User-Id") String userId,
+      @RequestBody SolveQuizRequest solveQuizRequest) {
+    newsService.solveQuiz(userId, newsId, solveQuizRequest.getIsCorrect());
+
+    //이곳에 해설 제공
+
     return ApiResponse.success();
   }
 }

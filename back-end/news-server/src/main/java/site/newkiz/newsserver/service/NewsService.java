@@ -1,6 +1,5 @@
 package site.newkiz.newsserver.service;
 
-import java.beans.Transient;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -15,15 +14,17 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import site.newkiz.newsserver.entitiy.CategoryScore;
-import site.newkiz.newsserver.entitiy.NewsScrap;
-import site.newkiz.newsserver.entitiy.NewsSummary;
-import site.newkiz.newsserver.entitiy.NewsDocument;
-import site.newkiz.newsserver.entitiy.NewsViewLog;
-import site.newkiz.newsserver.entitiy.dto.NewsScrapResponse;
-import site.newkiz.newsserver.entitiy.enums.NewsCategory;
+import site.newkiz.newsserver.entity.NewsDocument;
+import site.newkiz.newsserver.entity.NewsQuizDocument;
+import site.newkiz.newsserver.entity.NewsScrap;
+import site.newkiz.newsserver.entity.NewsSummary;
+import site.newkiz.newsserver.entity.NewsViewLog;
+import site.newkiz.newsserver.entity.QuizSolveLog;
+import site.newkiz.newsserver.entity.dto.NewsScrapResponse;
+import site.newkiz.newsserver.entity.enums.NewsCategory;
 import site.newkiz.newsserver.global.exception.BadRequestException;
 import site.newkiz.newsserver.global.exception.NotFoundException;
+import site.newkiz.newsserver.repository.NewsQuizRepository;
 import site.newkiz.newsserver.repository.NewsRepository;
 import site.newkiz.newsserver.repository.NewsScrapRepository;
 import site.newkiz.newsserver.repository.NewsSummaryRepository;
@@ -32,10 +33,12 @@ import site.newkiz.newsserver.repository.NewsViewLogRepository;
 @Service
 @RequiredArgsConstructor
 public class NewsService {
+
   private final NewsRepository newsRepository;
   private final NewsViewLogRepository newsViewLogRepository;
   private final NewsSummaryRepository newsSummaryRepository;
   private final NewsScrapRepository newsScrapRepository;
+  private final NewsQuizRepository newsQuizRepository;
   private final MongoTemplate mongoTemplate;
 
 
@@ -145,7 +148,8 @@ public class NewsService {
     }
 
     // 2. 부족할 경우 어제 뉴스로 대체
-    Query yesterdayQuery = new Query(Criteria.where("published").gte(yesterdayStart).lt(yesterdayEnd))
+    Query yesterdayQuery = new Query(
+        Criteria.where("published").gte(yesterdayStart).lt(yesterdayEnd))
         .with(Sort.by(Sort.Direction.DESC, "views"))
         .limit(TODAY_LIMIT);
 
@@ -173,7 +177,6 @@ public class NewsService {
   }
 
 
-
   public NewsScrapResponse isScrappedNews(String newsId, String userId) {
     boolean isScrapped = newsScrapRepository.existsByUserIdAndNewsId(userId, newsId);
     return new NewsScrapResponse(isScrapped);
@@ -181,7 +184,8 @@ public class NewsService {
 
   @Transactional
   public NewsScrap scrapNews(String newsId, String userId) {
-    NewsDocument newsDocument = newsRepository.findById(newsId).orElseThrow(() -> new NotFoundException("뉴스가 존재하지 않습니다."));
+    NewsDocument newsDocument = newsRepository.findById(newsId)
+        .orElseThrow(() -> new NotFoundException("뉴스가 존재하지 않습니다."));
     boolean alreadyScrapped = newsScrapRepository.existsByUserIdAndNewsId(userId, newsId);
 
     if (alreadyScrapped) {
@@ -208,13 +212,15 @@ public class NewsService {
 
   @Transactional
   public void deleteScrappedNews(String newsId, String userId) {
-    NewsDocument newsDocument = newsRepository.findById(newsId).orElseThrow(() -> new NotFoundException("뉴스가 존재하지 않습니다."));
+    NewsDocument newsDocument = newsRepository.findById(newsId)
+        .orElseThrow(() -> new NotFoundException("뉴스가 존재하지 않습니다."));
     boolean alreadyScrapped = newsScrapRepository.existsByUserIdAndNewsId(userId, newsId);
 
     if (!alreadyScrapped) {
       throw new BadRequestException("스크랩 되지 않은 뉴스입니다.");
     }
-    newsScrapRepository.deleteByUserIdAndNewsId(userId, newsId).orElseThrow(() -> new NotFoundException("스크랩 정보가 존재하지 않습니다."));
+    newsScrapRepository.deleteByUserIdAndNewsId(userId, newsId)
+        .orElseThrow(() -> new NotFoundException("스크랩 정보가 존재하지 않습니다."));
 
     mongoTemplate.updateFirst(
         Query.query(Criteria.where("_id").is(Integer.parseInt(userId))),
@@ -226,5 +232,27 @@ public class NewsService {
     Query query = new Query(Criteria.where("_id").is(newsId));
     Update update = new Update().inc("scrap", -1);
     mongoTemplate.updateFirst(query, update, ARTICLE_DB);
+  }
+
+  public NewsQuizDocument getQuiz(String newsId) {
+    return newsQuizRepository.findById(newsId)
+        .orElseThrow(() -> new NotFoundException("퀴즈가 존재하지 않습니다."));
+  }
+
+  public void solveQuiz(String userId, String newsId, Boolean isCorrect) {
+    mongoTemplate.save(QuizSolveLog.builder()
+        .userId(userId)
+        .newsId(newsId)
+        .isCorrect(isCorrect)
+        .build());
+  }
+
+  public boolean checkQuiz(String userId, String newsId) {
+    QuizSolveLog quizSolveLog = mongoTemplate.findOne(
+        Query.query(Criteria.where("userId").is(userId).and("newsId").is(newsId)),
+        QuizSolveLog.class
+    );
+
+    return quizSolveLog != null;
   }
 }

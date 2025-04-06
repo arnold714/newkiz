@@ -1,4 +1,4 @@
-import axios from "axios";
+import { customAxios } from "@/shared";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -15,20 +15,16 @@ export const handleLogin = () => {
 // JWT 토큰 갱신 API 호출 함수
 export const refreshToken = async (refreshToken: string) => {
   try {
-    const response = await axios.post(
-      `${API_URL}/api/auth/refresh`,
-      {},
-      {
-        headers: {
-          Authorization: `Bearer ${refreshToken}`,
-        },
-      }
-    );
+    const response = await customAxios.post("/api/auth/refresh", {
+      refreshToken,
+    });
 
     if (response.data.success) {
-      const { accessToken, refreshToken } = response.data.data;
-      console.log("토큰 갱신 성공:", { accessToken, refreshToken });
-      // 갱신된 토큰 저장 로직 추가 (예: localStorage)
+      const { accessToken, refreshToken: newRefreshToken } = response.data.data;
+      console.log("토큰 갱신 성공:", { accessToken, newRefreshToken });
+      // 갱신된 토큰 저장 로직 (예: localStorage)
+      localStorage.setItem("accessToken", accessToken);
+      localStorage.setItem("refreshToken", newRefreshToken);
     } else {
       console.error("토큰 갱신 실패:", response.data.error);
     }

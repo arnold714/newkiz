@@ -1,5 +1,5 @@
 import { customAxios } from "@/shared";
-import { GraphResponse, GraphData } from "../../../features/mypage/model/types";
+import { GraphResponse, GraphData } from "@/features/mypage";
 
 export async function fetchUserGraph(): Promise<GraphData> {
     // 기본값 설정: 데이터가 없을 때 모두 0으로 반환

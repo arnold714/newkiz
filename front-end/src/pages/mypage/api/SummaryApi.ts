@@ -1,5 +1,5 @@
 import { customAxios } from "@/shared";
-import { SummaryResponse, SummaryItem } from "../../../features/mypage/model/types";
+import { SummaryResponse, SummaryItem } from "@/features/mypage";
 
 export async function fetchSummaries(): Promise<SummaryItem[]> {
   try {

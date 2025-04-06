@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { getSchoolList } from "@/widgets/login";
 import { LuSearch, LuX } from "react-icons/lu";
 import "@shared/styles/CustomScroll.css"

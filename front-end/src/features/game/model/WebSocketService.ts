@@ -50,7 +50,7 @@ export const createWebSocketService = (baseUrl: string) => {
           if (callbacks.onMove) {
             client.current?.subscribe(`/sub/move`, (message: IMessage) => {
               callbacks.onMove!(JSON.parse(message.body));
-              console.log("moveInfo: ", JSON.parse(message.body));
+              // console.log("moveInfo: ", JSON.parse(message.body));
             });
           }
 

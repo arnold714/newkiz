@@ -74,7 +74,7 @@ export const useWebSocket = (userId?: number) => {
     (userId:number, characterName: string, position: Position) => {
       if (!userId || !boundaries) return;
       webSocketService.sendMoveMessage(userId, characterName, position, boundaries);
-      console.log("sendMove Position: ", position.x, ", ", position.y)
+      // console.log("sendMove Position: ", position.x, ", ", position.y)
     },
     [userId, webSocketService]
   );

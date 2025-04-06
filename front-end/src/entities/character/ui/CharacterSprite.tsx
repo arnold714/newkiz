@@ -8,23 +8,31 @@ import { Html } from "@react-three/drei"
 import { Position } from "@/features/game/model/types"
 
 export const CharacterSprite: React.FC<CharacterSpriteProps> = ({ characterName, joystickData, tileMapSize, initialPosition, userId, sendMove, nickname, setMapBoundaries }) => {
+  // state
   const [position, setPosition] = useState<[number, number, number]>(initialPosition)
   const [isMoving, setIsMoving] = useState<boolean>(false)
   const [direction, setDirection] = useState<number>(1)
   const [texturesLoaded, setTexturesLoaded] = useState<boolean>(false)
+  // ref
   const characterRef = useRef<THREE.Group>(null)
-  const frameCount = useRef(0);
-  const FRAME_INTERVAL = 4;
-  const lastSentPosition = useRef<[number, number]>([0, 0]);
-  const lastJoystickState = useRef(false);
-  const THRESHOLD = 0.1;
+  const frameCount = useRef(0)
+  const lastSentPosition = useRef<[number, number]>([initialPosition[0], initialPosition[1]])
+  const lastMovementTime = useRef<number>(0)
+  // constants
+  const FRAME_INTERVAL = 3;
+  const POSITION_THRESHOLD = 0.05;
+  const LERP_FACTOR = 0.15
 
+  const isLocalPlayer = Boolean(joystickData)
+  const isOtherPlayer = !isLocalPlayer && userId !== undefined
   const { viewport } = useThree()
   const SPEED = 5
   const characterSize = { width: 1, height: 1 }
 
-  const textureIdlePath = `https://newkiz.s3.ap-northeast-2.amazonaws.com/dinoset/${characterName}/base/idle.png`
-  const textureMovePath = `https://newkiz.s3.ap-northeast-2.amazonaws.com/dinoset/${characterName}/base/move.png`
+  const imgUrl = import.meta.env.VITE_AWS_S3_BASE_URL;
+
+  const textureIdlePath = `${imgUrl}dinoset/${characterName}/base/idle.png`
+  const textureMovePath = `${imgUrl}dinoset/${characterName}/base/move.png`
 
   // 경계값 계산 후 WebSocket 훅에 전달
   const boundaries = React.useMemo(() => {
@@ -51,53 +59,97 @@ export const CharacterSprite: React.FC<CharacterSpriteProps> = ({ characterName,
     }
   }, [joystickData?.isMoving, joystickData?.x])
 
+  // 다른 유저들 좌표 변화 탐지
+  useEffect(() => {
+    if (isOtherPlayer && initialPosition) {
+      // 방향감지
+      if (initialPosition[0] !== position[0]) {
+        setDirection(initialPosition[0] > position[0] ? -1 : 1)
+      }
+      
+      // 움직인 거리 계산
+      const dx = initialPosition[0] - position[0]
+      const dy = initialPosition[1] - position[1]
+      const distance = Math.sqrt(dx * dx + dy * dy)
+      
+      // 일정 거리 이상 움직여야 상태 변경
+      setIsMoving(distance > 0.01)
+    }
+  }, [initialPosition, isOtherPlayer, position])
+
   // 프레임 별 처리
   useFrame((_, delta) => {
-    let [x, y, z] = position;
-  
-    if(!joystickData) return;
-    if (joystickData.isMoving) {
-      x += joystickData.x * SPEED * delta;
-      y += joystickData.y * SPEED * delta;
-  
-      x = Math.max(boundaries.minX, Math.min(x, boundaries.maxX));
-      y = Math.max(boundaries.minY, Math.min(y, boundaries.maxY));
-  
-      setPosition([x, y, z]);
-  
-      frameCount.current++;
-      const [lastX, lastY] = lastSentPosition.current;
-  
-      if (
-        sendMove && userId && frameCount.current % FRAME_INTERVAL === 0 &&
-        (Math.abs(x - lastX) > THRESHOLD || Math.abs(y - lastY) > THRESHOLD)
-      ) {
-        lastSentPosition.current = [x, y];
-  
-        const positionData: Position = {
-          direction,
-          x,
-          y
-        };
-        // console.log("4프레임 마다 전송, frame 수: ", frameCount.current, "Position:", positionData);
-        sendMove(userId, characterName, positionData);
+    const currentTime = Date.now()
+    
+    // 로컬 유저 움직임 처리
+    if (isLocalPlayer && joystickData) {
+      const [x, y, z] = position
+      let newX = x
+      let newY = y
+      
+      if (joystickData.isMoving) {
+        // 새로운 좌표
+        newX += joystickData.x * SPEED * delta
+        newY += joystickData.y * SPEED * delta
+        
+        // 바운더리 적용
+        newX = Math.max(boundaries.minX, Math.min(newX, boundaries.maxX))
+        newY = Math.max(boundaries.minY, Math.min(newY, boundaries.maxY))
+        
+        setPosition([newX, newY, z])
+        
+        // 쓰로틀링 설정
+        frameCount.current++
+        const [lastX, lastY] = lastSentPosition.current
+        const movedDistance = Math.sqrt(Math.pow(newX - lastX, 2) + Math.pow(newY - lastY, 2))
+        
+        // 정해진 만큼 이동해야 전송
+        if (sendMove && userId && 
+            (frameCount.current % FRAME_INTERVAL === 0 || 
+             movedDistance > POSITION_THRESHOLD ||
+             currentTime - lastMovementTime.current > 100)) {
+          
+          lastSentPosition.current = [newX, newY]
+          lastMovementTime.current = currentTime
+          
+          const positionData: Position = {
+            direction,
+            x: newX,
+            y: newY
+          }
+          
+          sendMove(userId, characterName, positionData)
+        }
+      } 
+      // 움직이다가 멈추면 전송
+      else if (isMoving) {
+        setIsMoving(false)
+        
+        if (sendMove && userId) {
+          const positionData: Position = {
+            direction,
+            x: position[0],
+            y: position[1]
+          }
+          sendMove(userId, characterName, positionData)
+        }
       }
-  
-      lastJoystickState.current = true; // 움직이고 있음
-    } else {
-      // 이전 프레임에서 움직였는데, 이번 프레임에서 멈췄다면 마지막 좌표 전송
-      if (sendMove && userId && lastJoystickState.current) {
-        const positionData: Position = {
-          direction,
-          x,
-          y
-        };
-        // console.log("움직임이 멈추면 전송 - Frame 수:", frameCount.current, "Position:", positionData);
-        sendMove(userId, characterName, positionData);
-      }
-      lastJoystickState.current = false; // 멈춘 상태 기록
     }
-  });
+    // 다른 유저 움직임 처리
+    else if (isOtherPlayer) {
+      const [x, y, z] = position
+      const [targetX, targetY, _] = initialPosition
+      
+      // 선형 보간법 적용
+      const newX = x + (targetX - x) * LERP_FACTOR
+      const newY = y + (targetY - y) * LERP_FACTOR
+      
+      // 일정 거리 이상 움직여야 처리
+      if (Math.abs(newX - x) > 0.001 || Math.abs(newY - y) > 0.001) {
+        setPosition([newX, newY, z])
+      }
+    }
+  })
 
   // 스프라이트 이미지 프리로딩 처리(재렌더링 방지)
   useEffect(() => {

@@ -19,17 +19,18 @@ export const GamePage: React.FC = () => {
   })
   const [currentGameState, setCurrentGameState] = useState<State>("WAITING");
   const [wScale, setWScale] = useState<number>(1)
+  const [playersPositions, setPlayersPositions] = useState<Record<number, [number, number, number]>>({});
 
-  const connected = true
+  // const connected = true
 
   // const allPlayers = [
   //   { id: 2, characterName: "nico", position: { direction: 1, x: -1, y: -1 }, nickname: "Player1" },
   //   { id: 4, characterName: "kuro", position: { direction: 1, x: 1, y: -1 }, nickname: "Player2" },
   // ]
 
-  useEffect(()=>{
-    console.log("게임 상태: ", currentGameState);
-  }, [currentGameState])
+  // useEffect(()=>{
+  //   console.log("게임 상태: ", currentGameState);
+  // }, [currentGameState])
 
   const rowData: GameResult[] = [
     { rank: 1, nickname: '타락파워전사', score: 120, totalScore: 450, rankChange: 2 },
@@ -48,9 +49,10 @@ export const GamePage: React.FC = () => {
   const userId = 3
 
   // WebSocket 연결
-  const { allPlayers, gameState, waitingInfo,  currentQuiz, quizResult, sendMove, setMapBoundaries } = useWebSocket(userId)
+  const { connected, allPlayers, gameState, waitingInfo,  currentQuiz, quizResult, sendMove, setMapBoundaries } = useWebSocket(userId)
   // connected, gameInfo, allPlayers, currentQuiz, quizResult,
   
+  // currentGameState 처리
   useEffect(()=>{
     if(!gameState) return;
     setCurrentGameState(gameState.state)
@@ -75,6 +77,21 @@ export const GamePage: React.FC = () => {
       isMoving: false,
     })
   }
+
+  // 다른 유저들 움직임 처리
+  useEffect(() => {
+    if (!allPlayers) return;
+    
+    const newPositions: Record<number, [number, number, number]> = {};
+    
+    Object.values(allPlayers)
+      .filter(player => player.id !== userId)
+      .forEach(player => {
+        newPositions[player.id] = [player.position.x, player.position.y, 0];
+      });
+    
+    setPlayersPositions(newPositions);
+  }, [allPlayers, userId]);
 
   // 너비 계산
   useEffect(() => {
@@ -156,7 +173,7 @@ export const GamePage: React.FC = () => {
                       key={player.id}
                       characterName={player.characterName}
                       tileMapSize={tileMapSize}
-                      initialPosition={[player.position.x, player.position.y, 0]}
+                      initialPosition={playersPositions[player.id] || [player.position.x, player.position.y, 0]}
                       userId={player.id}
                       nickname={player.nickname}
                     />

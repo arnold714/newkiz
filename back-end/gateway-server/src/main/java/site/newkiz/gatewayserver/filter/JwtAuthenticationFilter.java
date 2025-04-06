@@ -28,6 +28,7 @@ public class JwtAuthenticationFilter implements WebFilter {
     try {
       String accessToken = cookieUtil.getAccessToken(exchange.getRequest());
 
+System.out.println(">>> Incoming Request Method: " + exchange.getRequest().getMethod());
       if (accessToken != null) {
         Integer userId = jwtUtil.getId(accessToken);
         Authentication authentication = new UsernamePasswordAuthenticationToken(userId, "", null);

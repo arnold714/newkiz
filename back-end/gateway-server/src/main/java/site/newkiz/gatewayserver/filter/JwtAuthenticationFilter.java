@@ -49,8 +49,7 @@ public class JwtAuthenticationFilter implements WebFilter {
                   .contextWrite(ReactiveSecurityContextHolder.withAuthentication(authentication));
             })
             .switchIfEmpty(Mono.defer(() -> {
-              if (exchange.getRequest().getURI().getPath().equals("/api/mypage")
-                  && exchange.getRequest().getMethod().name().equalsIgnoreCase("POST")) {
+              if (exchange.getRequest().getURI().getPath().startsWith("/api/mypage")) {
                 ServerWebExchange mutatedExchange = exchange.mutate()
                     .request(exchange.getRequest().mutate()
                         .header("User-Id", String.valueOf(userId))

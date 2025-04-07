@@ -3,16 +3,12 @@ export interface ChatMessage {
     text: string;
   }
   
-  export interface ChatHistoryRequest {
-    newsId: string;
-  }
-  
   export interface ChatHistoryResponse {
-    success: boolean;
-    data: {
-      messages: ChatMessage[];
-    };
-    error?: string | null;
+    sessionId: string;
+    chatHistory: Array<{
+      user: string;
+      assistant: string;
+    }>;
   }
   
   export interface ChatRequest {
@@ -21,11 +17,9 @@ export interface ChatMessage {
   }
   
   export interface ChatResponse {
-    success: boolean;
-    data: {
-      answer: string;
-      // 만약 API에서 전체 chat history를 다시 주지 않는다면 아래는 생략
-      messages?: ChatMessage[];
-    };
-    error?: string | null;
+    sessionId: string;
+    chatHistory: Array<{
+      user: string;
+      assistant: string;
+    }>;
   }

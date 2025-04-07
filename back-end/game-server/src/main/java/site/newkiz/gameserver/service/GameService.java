@@ -15,6 +15,7 @@ import site.newkiz.gameserver.entity.GameScore;
 import site.newkiz.gameserver.entity.GameUserScore;
 import site.newkiz.gameserver.entity.Player;
 import site.newkiz.gameserver.entity.Position;
+import site.newkiz.gameserver.entity.Profile;
 import site.newkiz.gameserver.entity.Quiz;
 import site.newkiz.gameserver.entity.dto.ConnectGameInfo;
 import site.newkiz.gameserver.entity.dto.QuizInfo;
@@ -22,6 +23,7 @@ import site.newkiz.gameserver.entity.dto.QuizResult;
 import site.newkiz.gameserver.entity.enums.Direction;
 import site.newkiz.gameserver.entity.enums.State;
 import site.newkiz.gameserver.repository.GameUserScoreRepository;
+import site.newkiz.gameserver.repository.ProfileRepository;
 
 @Service
 @RequiredArgsConstructor
@@ -30,6 +32,7 @@ public class GameService {
 
   private final SimpMessagingTemplate messagingTemplate;
   private final GameUserScoreRepository gameUserScoreRepository;
+  private final ProfileRepository profileRepository;
   private Game game;
 
   @Scheduled(cron = "0 55 17 * * ?")
@@ -54,8 +57,9 @@ public class GameService {
 
   public void joinGame(Integer userId) {
     // todo 유저 정보 조회 - 닉네임, 캐릭 정보
+    Profile profile = profileRepository.findByUserId(userId).orElse(null);
     Position position = new Position(Direction.EAST.getValue(), 0.5f, 0);
-    Player player = new Player(userId, "nickname", "KURO", position);
+    Player player = new Player(userId, profile.getNickname(), profile.getCharacterId(), position);
 
     // 플레이어 리스트에 유저 등록
     game.registerPlayer(player.getId(), player);
@@ -129,16 +133,18 @@ public class GameService {
 
     Map<Integer, List<GameScore>> scoreRank = new HashMap<>();
 
-    int rank = 1;
-    scoreRank.put(rank, new ArrayList<>());
-    scoreRank.get(rank).add(gameScoreList.get(0));
+    if (!gameScoreList.isEmpty()) {
+      int rank = 1;
+      scoreRank.put(rank, new ArrayList<>());
+      scoreRank.get(rank).add(gameScoreList.get(0));
 
-    for (int i = 1; i < gameScoreList.size(); i++) {
-      if (scoreRank.get(rank).get(0).getScore() > gameScoreList.get(i).getScore()) {
-        rank++;
-        scoreRank.put(rank, new ArrayList<>());
+      for (int i = 1; i < gameScoreList.size(); i++) {
+        if (scoreRank.get(rank).get(0).getScore() > gameScoreList.get(i).getScore()) {
+          rank++;
+          scoreRank.put(rank, new ArrayList<>());
+        }
+        scoreRank.get(rank).add(gameScoreList.get(i));
       }
-      scoreRank.get(rank).add(gameScoreList.get(i));
     }
 
     messagingTemplate.convertAndSend("/sub/game-info",

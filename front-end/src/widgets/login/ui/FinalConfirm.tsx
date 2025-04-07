@@ -31,22 +31,18 @@ export default function FinalConfirm({
       );
 
       const requestData: MyPageRequest = {
-        profile: {
-          nickname: basicInfo.nickname,
-          birthday: basicInfo.birthdate,
-          school: {
-            id: basicInfo.schoolId || null,
-          },
-          gender: mappedGender,
-          characterId: selectedCharacter, // 선택한 캐릭터 추가
-        },
+        nickname: basicInfo.nickname,
+        birthday: basicInfo.birthdate,
+        school: basicInfo.schoolId || 1,    
+        gender: mappedGender,
+        difficulty: 2,                     // 기본값 2
+        characterId: selectedCharacter,     
         interests: mappedInterests,
       };
 
       await postFirstLogin(requestData);
       alert("정보가 성공적으로 등록되었습니다!");
 
-      // 등록 완료 후 메인 페이지 등으로 이동
       window.location.href = "/";
     } catch (error) {
       console.error("정보 등록 실패:", error);

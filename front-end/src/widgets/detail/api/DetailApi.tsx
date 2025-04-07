@@ -30,7 +30,7 @@ export const GetNewsQuiz =  async (newsId: string): Promise<QuizData | undefined
 
 
 
-//뉴스 스크랩 여부 조회
+//뉴스 스크랩 여부 조회 //
 export const GetNewsScrapStatus = async (newsId:string): Promise<NewsScrapStatus | undefined> => {
   try {
     const response = await customAxios.get(`api/news/${newsId}/scrap`);

@@ -1,1 +1,1 @@
-export type { NewsDetail } from './model/types';
+export type { NewsDetail, NewsScrapStatus, QuizData, context } from './model/types';

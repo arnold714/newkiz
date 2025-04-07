@@ -72,7 +72,7 @@ export const QuizModal = ({ closeModal, id }: QuizModalProps) => {
                     <button
                       key={index}
                       onClick={() => handleChoiceClick(index)}
-                      className={`min-w-[200px] w-auto font-bold text-2xl border-[#BDBDBD] rounded-lg shadow-[4px_4px_5px_2px_rgba(0,0,0,0.1)] mt-5 p-3 hover:scale-105 hover:bg-[#7CBA36] hover:text-white ${
+                      className={`w-fit min-w-[200px] w-auto font-bold text-2xl border-[#BDBDBD] rounded-lg shadow-[4px_4px_5px_2px_rgba(0,0,0,0.1)] mt-5 p-3 hover:scale-105 hover:bg-[#7CBA36] hover:text-white ${
                         selectedChoice === index
                           ? "bg-[#7CBA36] text-white"
                           : "bg-white text-[#202020]"

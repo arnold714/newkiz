@@ -1,5 +1,6 @@
 package site.newkiz.gatewayserver.config;
 
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -29,15 +30,26 @@ public class SecurityConfig {
   public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
     return http
         .csrf(ServerHttpSecurity.CsrfSpec::disable)
-//        .cors(cors -> {})
+        .cors(cors -> cors.configurationSource(exchange -> {
+          var config = new org.springframework.web.cors.CorsConfiguration();
+          config.setAllowedOrigins(List.of(applicationConfig.getDomain()));
+          config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+          config.setAllowedHeaders(List.of("*"));
+          config.setAllowCredentials(true);
+          return config;
+        }))
         .authorizeExchange(exchanges -> exchanges
             .pathMatchers(HttpMethod.OPTIONS, "/", "/oauth2/**", "/api/auth/**").permitAll()
             .anyExchange().authenticated()
         )
         .oauth2Login(oauth2 -> oauth2
-            .authenticationSuccessHandler(new CustomAuthenticationSuccessHandler(applicationConfig, jwtUtil, cookieUtil, userRepository, profileRepository))
+            .authenticationSuccessHandler(
+                new CustomAuthenticationSuccessHandler(applicationConfig, jwtUtil, cookieUtil,
+                    userRepository, profileRepository))
         )
-        .addFilterAt(new JwtAuthenticationFilter(applicationConfig, jwtUtil, cookieUtil, profileRepository), SecurityWebFiltersOrder.AUTHENTICATION)
+        .addFilterAt(
+            new JwtAuthenticationFilter(applicationConfig, jwtUtil, cookieUtil, profileRepository),
+            SecurityWebFiltersOrder.AUTHENTICATION)
         .build();
   }
 }

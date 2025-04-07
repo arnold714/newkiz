@@ -3,7 +3,14 @@ import { FaBookmark, FaRegBookmark } from "react-icons/fa6";
 import { useEffect, useState, useCallback } from 'react'; 
 import { useNavigate, useParams } from 'react-router-dom';
 import Modal from 'react-modal';
-import { NewsDetailContet, ParticipationOptions, PostNewsScrap, DeleteNewsScrap, GetNewsScrapStatus } from "@/widgets/detail";
+import {
+   NewsDetailContet, 
+   ParticipationOptions, 
+   NewsRecommendationList, 
+   PostNewsScrap, 
+   DeleteNewsScrap, 
+   GetNewsScrapStatus, 
+   ActionButton } from "@/widgets/detail";
 import "@shared/styles/CustomScroll.css"
 import "../styles/Detail.css"
 
@@ -55,10 +62,10 @@ export default function DetailPage() {
   if (isLoading) {
     return <div>로딩 중...</div>; // 로딩 중 메시지 또는 스켈레톤 UI 표시
   }
-  
+
   return (
-    <div className="overflow-y-auto max-h-[calc(100vh-100px)] bg-[#BFD46F]">
-      <div className="bg-white p-5 mx-3 mt-5 rounded-xl pb-18">
+    <div className="overflow-y-auto max-h-[calc(100vh-100px)] bg-[#BFD46F]" >
+      <div className="bg-white p-5 mx-3 mt-5 mb-5 rounded-xl pb-18">
         <div className="flex justify-between items-center">
           {/* 뒤로 가기  */}
           <LuChevronLeft 
@@ -115,7 +122,11 @@ export default function DetailPage() {
         <div className="h-1.5 w-full bg-[#F5F6FA]"></div>
         <div>
           <p className='m-5 text-2xl font-semibold'>이런 기사도 있어요!</p>
+          <NewsRecommendationList /> 
         </div>
+      </div>
+      <div>
+        <ActionButton newsId={id!}/>
       </div>
     </div>
   );

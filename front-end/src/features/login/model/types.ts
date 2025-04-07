@@ -17,16 +17,11 @@ export interface School {
   
   // /api/mypage로 POST할 요청 데이터 구조
   export interface MyPageRequest {
-    profile: {
-      nickname: string;
-      birthday: string;
-      school: {
-        id?: number | null;
-        name: string;
-        address: string;
-      };
-      gender: "MALE" | "FEMALE";
-      characterId: string; 
-    };
+    nickname: string;
+    birthday: string;
+    school: number;                
+    gender: "MALE" | "FEMALE";
+    difficulty: number;            
+    characterId: string;          
     interests: string[];
   }

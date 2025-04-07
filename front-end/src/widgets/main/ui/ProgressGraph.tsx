@@ -2,8 +2,11 @@ import ReactApexChart from "react-apexcharts"
 import { useEffect, useState } from "react"
 import dayjs from "dayjs"
 import { Link } from "react-router-dom"
+import { GetTodayReadNewsCount } from "../api/MainApi"
 
 export const ProgressGraph: React.FC = () => {
+
+  const {data: todayReadNewsCount, isLoading, isError, error } = GetTodayReadNewsCount();
   const [windowWidth, setWindowWidth] = useState(window.innerWidth)
   const [isEnabled, setIsEnabled] = useState<boolean>(false)
   const [remainingTime, setRemainingTime] = useState<string>("")
@@ -16,6 +19,22 @@ export const ProgressGraph: React.FC = () => {
     window.addEventListener("resize", handleResize)
     return () => window.removeEventListener("resize", handleResize)
   }, [])
+
+  useEffect(() => {
+    // 초기 상태 확인
+    checkTimeValidity()
+
+    // 1초마다 시간 확인
+    const intervalId = setInterval(checkTimeValidity, 1000)
+
+    return () => clearInterval(intervalId)
+  }, [])
+
+  if (isLoading) return <div className="loading">Loading...</div>;
+  if (isError) {
+      console.error("Error fetching today read news:", error); // 에러 로그 출력
+      return  <div>Error: {error.message}</div>;
+    }
 
   const options: ApexCharts.ApexOptions = {
     chart: {
@@ -61,7 +80,9 @@ export const ProgressGraph: React.FC = () => {
     labels: ["오늘 읽은 뉴스"],
   }
 
-  const series = [50] // 진행률 (퍼센트)
+
+  const percentage = (todayReadNewsCount.data / 5) * 100; // 퍼센트 계산
+  const series = [percentage]
 
   // 시간 계산해서 버튼 보여주기
   const checkTimeValidity = () => {
@@ -97,17 +118,6 @@ export const ProgressGraph: React.FC = () => {
       setStartEnterTime("")
     }
   }
-  
-
-  useEffect(() => {
-    // 초기 상태 확인
-    checkTimeValidity()
-
-    // 1초마다 시간 확인
-    const intervalId = setInterval(checkTimeValidity, 1000)
-
-    return () => clearInterval(intervalId)
-  }, [])
 
   return (
     <div className="bg-white/90 shadow-m rounded-[15px] shadow-[4px_4px_3px_rgba(0,0,0,0.13)] w-40 h-40 m-3 sm:w-60 sm:h-60 flex justify-center items-center">

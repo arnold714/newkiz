@@ -3,6 +3,7 @@ import Modal from "react-modal";
 import { FaCheckCircle } from "react-icons/fa";
 import { LuChevronLeft } from "react-icons/lu";
 import { useNavigate } from "react-router-dom";
+import { useCookies } from "react-cookie";
 import "@shared/styles/CustomScroll.css";
 import { SelectCharacterModal } from "@/widgets/mypage";
 import { fetchMyPage, updateMyPage } from "@/pages/mypage";
@@ -14,6 +15,7 @@ Modal.setAppElement("#root")
 export const ModifyInfoPage = () => {
   const [isCharacterMoalOpen, setIsCharacterModalOpen] = useState<boolean>(false);
   const [isSchoolModalOpen, setIsSchoolModalOpen] = useState<boolean>(false);
+  const [cookies, setCookie] = useCookies(["userProfile"]);
 
   const navigate = useNavigate()
   const imgUrl: string = import.meta.env.VITE_AWS_S3_BASE_URL
@@ -77,22 +79,46 @@ export const ModifyInfoPage = () => {
 
   const handleSave = async () => {
     try {
-      // 한글 -> 영문
       const uppercaseInterests = selectedInterests.map(
         (item) => interestMap[item] || item.toUpperCase()
       );
 
-      // request body 형식에 맞춰 구성
+      // PATCH 요청에 보낼 객체 (read-only 값은 제외)
       const patchData = {
         nickname,
-        school: schoolId,      // 숫자 ID
-        difficulty,            // 1=하,2=중,3=상
+        school: schoolId, 
+        difficulty,
         characterId,
         interests: uppercaseInterests,
       };
 
       await updateMyPage(patchData);
       alert("수정이 완료되었습니다.");
+
+      // 기존 쿠키에서 프로필 정보를 읽고, 변경된 값들을 병합
+      let existingProfile: any = {};
+      if (cookies.userProfile) {
+        existingProfile =
+          typeof cookies.userProfile === "string"
+            ? JSON.parse(cookies.userProfile)
+            : cookies.userProfile;
+      }
+      // updatedProfile 수정 가능한 필드는 새 값으로 업데이트
+      const updatedProfile = {
+        ...existingProfile,
+        nickname,
+        school: { id: schoolId, name: schoolName, address: existingProfile.school?.address || "" },
+        difficulty,
+        characterId,
+        interests: uppercaseInterests,
+      };
+
+      // 쿠키 업데이트 (7일 유효)
+      setCookie("userProfile", JSON.stringify(updatedProfile), {
+        path: "/",
+        maxAge: 60 * 60 * 24 * 7,
+      });
+
       navigate(-1);
     } catch (error) {
       console.error("마이페이지 수정 실패:", error);

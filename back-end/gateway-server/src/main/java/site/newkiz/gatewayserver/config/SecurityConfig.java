@@ -1,10 +1,8 @@
 package site.newkiz.gatewayserver.config;
 
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
@@ -31,16 +29,7 @@ public class SecurityConfig {
     return http
         .csrf(ServerHttpSecurity.CsrfSpec::disable)
         .cors(cors -> {})
-//        .cors(cors -> cors.configurationSource(exchange -> {
-//          var config = new org.springframework.web.cors.CorsConfiguration();
-//          config.setAllowedOrigins(List.of(applicationConfig.getDomain()));
-//          config.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
-//          config.setAllowedHeaders(List.of("*"));
-//          config.setAllowCredentials(true);
-//          return config;
-//        }))
         .authorizeExchange(exchanges -> exchanges
-//            .pathMatchers(HttpMethod.OPTIONS, "/**").permitAll()
             .pathMatchers("/", "/oauth2/**", "/api/auth/**").permitAll()
             .anyExchange().authenticated()
         )

@@ -39,7 +39,8 @@ public class SecurityConfig {
           return config;
         }))
         .authorizeExchange(exchanges -> exchanges
-            .pathMatchers(HttpMethod.OPTIONS, "/", "/oauth2/**", "/api/auth/**").permitAll()
+            .pathMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+            .pathMatchers("/", "/oauth2/**", "/api/auth/**").permitAll()
             .anyExchange().authenticated()
         )
         .oauth2Login(oauth2 -> oauth2

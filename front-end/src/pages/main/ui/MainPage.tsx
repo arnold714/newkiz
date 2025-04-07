@@ -3,9 +3,12 @@ import "@shared/styles/CustomScroll.css"
 import { useEffect } from "react";
 import { useCookies } from "react-cookie";
 import { fetchMyPage } from "@/pages/mypage";
+import { useUserProfile } from '@/shared';
 
 export default function MainPage() {
-  const [cookies, setCookie] = useCookies(["userProfile"]);
+  const [, setCookie] = useCookies(["userProfile"]);
+  const userProfile = useUserProfile();
+  const imgUrl: string = import.meta.env.VITE_AWS_S3_BASE_URL;
 
   useEffect(() => {
     (async () => {
@@ -38,21 +41,15 @@ export default function MainPage() {
     })();
   }, [setCookie]);
 
-  const parsedProfile =
-    cookies.userProfile &&
-    typeof cookies.userProfile === "string"
-      ? JSON.parse(cookies.userProfile)
-      : cookies.userProfile || {};
-
-  const nickname = parsedProfile.nickname || "닉네임";
-  const characterId = parsedProfile.characterId || "nico";
+  const nickname = userProfile?.nickname || "닉네임";
+  const characterId = userProfile?.characterId || "nico";
 
   return (
       <div className="h-screen flex flex-col overflow-auto scroll pb-20">
         <div className='my-5 flex justify-center min-gap-2 gap-[10vw]  items-center'>
           <div className='flex flex-col justify-center items-center'>
             <p className='text-[#7CBA36] text-[20px] font-extrabold text-stroke-1 mb-0'>{nickname}</p>
-            <img src={`https://newkiz.s3.ap-northeast-2.amazonaws.com/dinos/${characterId}.png`}
+            <img src={`${imgUrl}dinos/${characterId}.png`}
             alt={`character_${characterId}`} className='w-[60%] min-w-25 sm:w-35 mt-0'/>
           </div>
           <div className='flex justify-center'>

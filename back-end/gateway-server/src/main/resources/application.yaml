@@ -8,7 +8,24 @@ spring:
   cloud:
     gateway:
       forwarded:
-        enabled: true  # X-Forwarded-* 헤더를 활용하도록 설정 
+        enabled: true  # X-Forwarded-* 헤더를 활용하도록 설정
+
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials
+
+      globalcors:
+        add-to-simple-url-handler-mapping: true
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins: ${APPLICATION_DOMAIN}
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS
+            allowedHeaders: "*"
+            allowCredentials: true
 
       routes:
         - id: news-service
@@ -27,8 +44,6 @@ spring:
           uri: http://game-service
           predicates:
             - Path=/ws/**
-          filters:
-            - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials
 
         - id: chatbot-service
           uri: http://chatbot-service

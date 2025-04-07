@@ -1,9 +1,9 @@
 export interface ApiResponse {
     success: boolean;
-    data: NewsTodayItem[]; // ✅ 실제 데이터는 data 필드 안에 있음
+    data: NewsTodayItem[]; 
     error: string | null;
-  }
-
+  };
+// 오늘의 추천 뉴스
 export interface NewsTodayItem {
     id: string;
     title: string;
@@ -14,8 +14,15 @@ export interface NewsTodayItem {
     img: string;
     views: number;
     scrap: number;
-}
+};
+//오늘 읽은 뉴스 개수 타입
+export interface TodayReadNewsCount {
+    success: boolean;
+    data: number;
+    error: string | null;
+};
 
+//사용자 추천 뉴스 
 export interface News {
     title: string;
     content: string;

@@ -2,6 +2,7 @@ package site.newkiz.gatewayserver.filter;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -28,8 +29,9 @@ public class JwtAuthenticationFilter implements WebFilter {
   @Override
   public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
     // ✅ OPTIONS 요청은 CORS preflight → 무조건 통과
-    if (exchange.getRequest().getMethod().name().equalsIgnoreCase("OPTIONS")) {
-      return chain.filter(exchange);
+    if (exchange.getRequest().getMethod() == HttpMethod.OPTIONS) {
+      exchange.getResponse().setStatusCode(HttpStatus.OK);
+      return exchange.getResponse().setComplete();
     }
 
     try {

@@ -9,6 +9,8 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import site.newkiz.gameserver.entity.Game;
+import site.newkiz.gameserver.entity.GameScore;
+import site.newkiz.gameserver.entity.GameUserScore;
 import site.newkiz.gameserver.entity.Player;
 import site.newkiz.gameserver.entity.Position;
 import site.newkiz.gameserver.entity.Quiz;
@@ -17,6 +19,7 @@ import site.newkiz.gameserver.entity.dto.QuizInfo;
 import site.newkiz.gameserver.entity.dto.QuizResult;
 import site.newkiz.gameserver.entity.enums.Direction;
 import site.newkiz.gameserver.entity.enums.State;
+import site.newkiz.gameserver.repository.GameUserScoreRepository;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +27,7 @@ import site.newkiz.gameserver.entity.enums.State;
 public class GameService {
 
   private final SimpMessagingTemplate messagingTemplate;
+  private final GameUserScoreRepository gameUserScoreRepository;
   private Game game;
 
   @Scheduled(cron = "0 55 17 * * ?")
@@ -107,7 +111,21 @@ public class GameService {
     // todo 게임 종료 스코어
     log.info("퀴즈 게임 종료");
     game.setState(State.FINISHED);
-    messagingTemplate.convertAndSend("/sub/game-info", Game.toFinishedGameInfo(game));
+    List<GameScore> gameScoreList = new ArrayList<>();
+
+    for (Player player : game.getPlayers().values()) {
+      GameUserScore gameUserScore = gameUserScoreRepository.findByUserId(player.getId()).orElseGet(
+          () -> gameUserScoreRepository.save(new GameUserScore(player.getId(), 0))
+      );
+      gameUserScore.addScore(player.getScore());
+      gameUserScoreRepository.save(gameUserScore);
+      gameScoreList.add(
+          new GameScore(player.getId(), player.getScore(), gameUserScore.getTotalScore()));
+    }
+
+    gameScoreList.sort(Comparator.comparingInt(GameScore::getScore).reversed());
+    messagingTemplate.convertAndSend("/sub/game-info",
+        Game.toFinishedGameInfo(game, gameScoreList));
 
 
   }

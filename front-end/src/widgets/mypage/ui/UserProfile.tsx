@@ -37,7 +37,7 @@ export const UserProfile = () => {
           <p className="text-xl font-bold">{profile.nickname}</p>
         </div>
         <div className="h-1/2 flex justify-center">
-          <p className="text-[#9e9e9e] font-semibold">{profile.school?.name || "학교정보 없음"}</p>
+          <p className="text-[#9e9e9e] font-semibold">{profile.school.name}</p>
         </div>
       </div>
     </div>

@@ -33,15 +33,15 @@ export const UserStatistic = () => {
               label: "관심도",
               data: graphData
                 ? [
-                    graphData.economy,
-                    graphData.sports,
-                    graphData.world,
-                    graphData.culture,
-                    graphData.society,
-                    graphData.politics,
-                    graphData.it_science,
+                    Math.max(graphData.economy, 20),
+                    Math.max(graphData.sports, 20),
+                    Math.max(graphData.world, 20),
+                    Math.max(graphData.culture, 20),
+                    Math.max(graphData.society, 20),
+                    Math.max(graphData.politics, 20),
+                    Math.max(graphData.it_SCIENCE, 20),
                   ]
-                : [0, 0, 0, 0, 0, 0, 0],
+                : [30, 30, 30, 30, 30, 30, 30],
               backgroundColor: "rgba(126, 211, 33, 0.2)", // 내부 영역 색상
               borderColor: "#7ED321", // 외곽선 색상
               borderWidth: 2,

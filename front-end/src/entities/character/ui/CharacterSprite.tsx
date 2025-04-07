@@ -188,18 +188,27 @@ export const CharacterSprite: React.FC<CharacterSpriteProps> = ({
 
   // 퀴즈 탈락 애니메이션 처리
   useEffect(() => {
-    if (!userId || !quizResult || !quizResult.wrongPlayers) return
-
+    console.log("Quiz result changed:", quizResult);
+    console.log("Current userId:", userId);
+    
+    if (!userId || !quizResult || !quizResult.wrongPlayers) {
+      console.log("Missing data for elimination check:", { userId, quizResult });
+      return;
+    }
+  
+    console.log("Wrong players array:", quizResult.wrongPlayers);
+    
     // 탈락한 플레이어인지 확인
     if (quizResult.wrongPlayers.includes(userId)) {
-      console.log(`Player ${userId} has been eliminated`)
-      setIsDead(true)
-      setIsMoving(false) // 움직임 즉시 중단
-
+      console.log(`Player ${userId} has been eliminated`);
+      setIsDead(true);
+      setIsMoving(false); // 움직임 즉시 중단
+      console.log(userId, " 탈락.");
+  
       // 이미 죽은 상태에서 다시 리셋되지 않도록 처리
-      setDeathAnimationComplete(false)
+      setDeathAnimationComplete(false);
     }
-  }, [quizResult, userId])
+  }, [quizResult, userId]);
 
   // 퀴즈 탈락 유저 처리
   useEffect(() => {
@@ -234,7 +243,7 @@ export const CharacterSprite: React.FC<CharacterSpriteProps> = ({
               frameWidth={24}
               totalWidth={120}
               frameCount={5}
-              frameTime={500}
+              frameTime={200}
               direction={direction}
               loop={false}
               onAnimationComplete={handleDeathAnimationComplete}

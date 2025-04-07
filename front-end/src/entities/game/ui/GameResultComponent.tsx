@@ -94,7 +94,7 @@ export const GameResultComponent = ({ results }: GameResultComponentProps) => {
 
   return (
     <div className="flex flex-col items-center h-full w-full bg-white bg-opacity-50 rounded-xl p-6 relative px-4">
-      <p className="text-black text-3xl font-bold mb-4">게임 종료</p>
+      <p className="text-[#7CBA36] text-3xl font-bold mb-4">최종 기록</p>
       <div className="ag-theme-alpine w-full h-2/3">
         <AgGridReact<GameResult> rowData={displayData} columnDefs={columnDefs} defaultColDef={defaultColDef} animateRows={true} domLayout="autoHeight" />
       </div>

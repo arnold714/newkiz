@@ -30,14 +30,15 @@ public class SecurityConfig {
   public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
     return http
         .csrf(ServerHttpSecurity.CsrfSpec::disable)
-        .cors(cors -> cors.configurationSource(exchange -> {
-          var config = new org.springframework.web.cors.CorsConfiguration();
-          config.setAllowedOrigins(List.of(applicationConfig.getDomain()));
-          config.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
-          config.setAllowedHeaders(List.of("*"));
-          config.setAllowCredentials(true);
-          return config;
-        }))
+        .cors(cors -> {})
+//        .cors(cors -> cors.configurationSource(exchange -> {
+//          var config = new org.springframework.web.cors.CorsConfiguration();
+//          config.setAllowedOrigins(List.of(applicationConfig.getDomain()));
+//          config.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
+//          config.setAllowedHeaders(List.of("*"));
+//          config.setAllowCredentials(true);
+//          return config;
+//        }))
         .authorizeExchange(exchanges -> exchanges
 //            .pathMatchers(HttpMethod.OPTIONS, "/**").permitAll()
             .pathMatchers("/", "/oauth2/**", "/api/auth/**").permitAll()

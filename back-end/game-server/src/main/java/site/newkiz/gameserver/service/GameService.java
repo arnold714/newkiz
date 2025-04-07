@@ -2,6 +2,7 @@ package site.newkiz.gameserver.service;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
@@ -109,7 +110,6 @@ public class GameService {
       }
     }
 
-    // todo 게임 종료 스코어
     log.info("퀴즈 게임 종료");
     game.setState(State.FINISHED);
     List<GameScore> gameScoreList = new ArrayList<>();
@@ -121,14 +121,28 @@ public class GameService {
       gameUserScore.addScore(player.getScore());
       gameUserScoreRepository.save(gameUserScore);
       gameScoreList.add(
-          new GameScore(player.getId(), player.getScore(), gameUserScore.getTotalScore()));
+          new GameScore(player.getId(), player.getNickname(), player.getScore(),
+              gameUserScore.getTotalScore()));
     }
 
     gameScoreList.sort(Comparator.comparingInt(GameScore::getScore).reversed());
+
+    Map<Integer, List<GameScore>> scoreRank = new HashMap<>();
+
+    int rank = 1;
+    scoreRank.put(rank, new ArrayList<>());
+    scoreRank.get(rank).add(gameScoreList.get(0));
+
+    for (int i = 1; i < gameScoreList.size(); i++) {
+      if (scoreRank.get(rank).get(0).getScore() > gameScoreList.get(i).getScore()) {
+        rank++;
+        scoreRank.put(rank, new ArrayList<>());
+      }
+      scoreRank.get(rank).add(gameScoreList.get(i));
+    }
+
     messagingTemplate.convertAndSend("/sub/game-info",
-        Game.toFinishedGameInfo(game, gameScoreList));
-
-
+        Game.toFinishedGameInfo(game, scoreRank));
   }
 
   public QuizResult checkAnswers() {

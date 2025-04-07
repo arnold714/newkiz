@@ -12,12 +12,14 @@ import site.newkiz.gameserver.entity.enums.State;
 @Data
 @NoArgsConstructor
 public class ConnectGameInfo {
+
   private State state;
   private int timeLeft;
   private Map<Integer, Player> players;
 
   public ConnectGameInfo(Game game) {
     ZonedDateTime now = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
+    // todo 남은 대기시간
     this.timeLeft = Math.max(game.getStartHour() - now.getHour(), 0);
     this.state = game.getState();
     this.players = game.getPlayers();

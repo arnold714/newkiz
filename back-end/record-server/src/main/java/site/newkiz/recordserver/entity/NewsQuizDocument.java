@@ -34,6 +34,7 @@ public class NewsQuizDocument {
     private String question;
     private List<String> options;
     private String answer;
+    private String explanation;
   }
 
 }

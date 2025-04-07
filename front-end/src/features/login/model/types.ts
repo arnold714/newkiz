@@ -22,8 +22,6 @@ export interface School {
       birthday: string;
       school: {
         id?: number | null;
-        name: string;
-        address: string;
       };
       gender: "MALE" | "FEMALE";
       characterId: string; 

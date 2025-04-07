@@ -12,6 +12,7 @@ import { Player, State } from "@/features/game/model/types"
 import { useAppDispatch, useAppSelector } from "@/app/redux/hooks"
 import { setMovementProhibition } from "@/features/game/model/gameSlice"
 import { IJoystickUpdateEvent } from "react-joystick-component/build/lib/Joystick"
+import { useUserProfile } from "@/shared"
 
 export const GamePage: React.FC = () => {
   const [joystickData, setJoystickData] = useState<JoystickData>({
@@ -23,9 +24,22 @@ export const GamePage: React.FC = () => {
   const [wScale, setWScale] = useState<number>(1)
   const [playersPositions, setPlayersPositions] = useState<Record<number, [number, number, number]>>({})
   const [activePlayers, setActivePlayers] = useState<Record<number, Player>>({})
-  
+  const [userId, setUserId] = useState<number | undefined>(undefined)
+  const [characterName, setCharacterName] = useState<string | null>(null)
+  const [nickname, setNickname] = useState<string | null>(null)
+
   const dispatch = useAppDispatch()
   const movementProhibition = useAppSelector((state) => state.game.movementProhibition)
+
+  const user = useUserProfile()
+
+  useEffect(() => {
+    if (user) {
+      setUserId(user.id)
+      setCharacterName(user.characterId)
+      setNickname(user.nickname)
+    }
+  }, [user])
 
   // 게임 종료 시 움직임 금지
   useEffect(() => {
@@ -59,7 +73,7 @@ export const GamePage: React.FC = () => {
   // }
 
   // // 임시 userId
-  const userId = 3
+  // const userId = 3
 
   // WebSocket 연결
   const { connected, allPlayers, gameState, waitingInfo, currentQuiz, quizResult, sendMove, setMapBoundaries } = useWebSocket(userId)
@@ -184,19 +198,21 @@ export const GamePage: React.FC = () => {
             />
             <TileMap tilesetPath={`${tileMapUrl}assets/Basic_Grass_Biom_things.png`} tileSize={16} mapWidth={16} mapHeight={10} tileData={biomeData} scale={0.5} wScale={wScale} />
             {/* 로컬 플레이어 */}
-            <CharacterSprite
-              characterName={"kuro"}
-              joystickData={joystickData}
-              tileMapSize={tileMapSize}
-              initialPosition={[0, 0, 1]}
-              userId={userId}
-              nickname={"타락파워전사"}
-              sendMove={sendMove}
-              setMapBoundaries={setMapBoundaries}
-              quizResult={quizResult || undefined}
-              allPlayers={activePlayers}
-              onPlayerRemove={handlePlayerRemove}
-            />
+            {characterName && userId !== undefined && nickname && (
+              <CharacterSprite
+                characterName={characterName}
+                joystickData={joystickData}
+                tileMapSize={tileMapSize}
+                initialPosition={[0, 0, 1]}
+                userId={userId}
+                nickname={nickname}
+                sendMove={sendMove}
+                setMapBoundaries={setMapBoundaries}
+                quizResult={quizResult || undefined}
+                allPlayers={activePlayers}
+                onPlayerRemove={handlePlayerRemove}
+              />
+            )}
             {/* 다른 플레이어 */}
             {connected &&
               allPlayers &&

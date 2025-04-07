@@ -29,6 +29,6 @@ export const GetTodayReadNewsCount = () => {
 };
 
 // 개인 맞춤형 뉴스 추천
-export const GetNewsByUserInterests =  () => {
-    return userQuery
-}
+// export const GetNewsByUserInterests =  () => {
+//     return userQuery
+// }

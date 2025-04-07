@@ -3,7 +3,7 @@ export interface ApiResponse {
     data: NewsTodayItem[]; 
     error: string | null;
   };
-
+// 오늘의 추천 뉴스
 export interface NewsTodayItem {
     id: string;
     title: string;
@@ -15,11 +15,14 @@ export interface NewsTodayItem {
     views: number;
     scrap: number;
 };
+//오늘 읽은 뉴스 개수 타입
 export interface TodayReadNewsCount {
     success: boolean;
     data: number;
     error: string | null;
 };
+
+//사용자 추천 뉴스 
 export interface News {
     title: string;
     content: string;

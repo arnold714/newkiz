@@ -1,5 +1,6 @@
 package site.newkiz.gameserver.entity.dto;
 
+import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,6 +14,6 @@ public class QuizResult {
   private String question;
   private boolean answer;
   private String explanation;
-  private boolean result;
-  private int score;
+  private List<Integer> correctPlayers;
+  private List<Integer> wrongPlayers;
 }

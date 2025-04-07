@@ -8,8 +8,11 @@ import { calculateWScale } from "@/features/game"
 import { JoystickData } from "@/shared/types/joystick"
 import { useWebSocket } from "@/features/game/model/useWebSocket"
 import { WaitingPage, QuestionComponent, GameResultComponent } from "@/entities/game"
-import { State } from "@/features/game/model/types"
-import { GameResult } from "@/entities/character/model/types"
+import { Player, State } from "@/features/game/model/types"
+import { useAppDispatch, useAppSelector } from "@/app/redux/hooks"
+import { setMovementProhibition } from "@/features/game/model/gameSlice"
+import { IJoystickUpdateEvent } from "react-joystick-component/build/lib/Joystick"
+import { useUserProfile } from "@/shared"
 
 export const GamePage: React.FC = () => {
   const [joystickData, setJoystickData] = useState<JoystickData>({
@@ -17,26 +20,51 @@ export const GamePage: React.FC = () => {
     y: 0,
     isMoving: false,
   })
-  const [currentGameState, setCurrentGameState] = useState<State>("WAITING");
+  const [currentGameState, setCurrentGameState] = useState<State>("WAITING")
   const [wScale, setWScale] = useState<number>(1)
+  const [playersPositions, setPlayersPositions] = useState<Record<number, [number, number, number]>>({})
+  const [activePlayers, setActivePlayers] = useState<Record<number, Player>>({})
+  const [userId, setUserId] = useState<number | undefined>(undefined)
+  const [characterName, setCharacterName] = useState<string | null>(null)
+  const [nickname, setNickname] = useState<string | null>(null)
 
-  const connected = true
+  const dispatch = useAppDispatch()
+  const movementProhibition = useAppSelector((state) => state.game.movementProhibition)
+
+  const user = useUserProfile()
+
+  useEffect(() => {
+    if (user) {
+      setUserId(user.id)
+      setCharacterName(user.characterId)
+      setNickname(user.nickname)
+    }
+  }, [user])
+
+  // 게임 종료 시 움직임 금지
+  useEffect(() => {
+    if (currentGameState === "FINISHED") {
+      dispatch(setMovementProhibition(true))
+    }
+  }, [currentGameState])
+
+  // const connected = true
 
   // const allPlayers = [
   //   { id: 2, characterName: "nico", position: { direction: 1, x: -1, y: -1 }, nickname: "Player1" },
   //   { id: 4, characterName: "kuro", position: { direction: 1, x: 1, y: -1 }, nickname: "Player2" },
   // ]
 
-  useEffect(()=>{
-    console.log("게임 상태: ", currentGameState);
-  }, [currentGameState])
+  // useEffect(()=>{
+  //   console.log("게임 상태: ", currentGameState);
+  // }, [currentGameState])
 
-  const rowData: GameResult[] = [
-    { rank: 1, nickname: '타락파워전사', score: 120, totalScore: 450, rankChange: 2 },
-    { rank: 2, nickname: '게임왕', score: 100, totalScore: 380, rankChange: -1 },
-    { rank: 3, nickname: '실버맨', score: 90, totalScore: 320, rankChange: 0 },
-    // 더 많은 데이터...
-  ];
+  // const rowData: GameResult[] = [
+  //   { rank: 1, nickname: "타락파워전사", score: 120, totalScore: 450, rankChange: 2 },
+  //   { rank: 2, nickname: "게임왕", score: 100, totalScore: 380, rankChange: -1 },
+  //   { rank: 3, nickname: "실버맨", score: 90, totalScore: 320, rankChange: 0 },
+  //   // 더 많은 데이터...
+  // ]
 
   // waitingInfo
   // const waitingInfo: NewWaitingInfo = {
@@ -45,18 +73,37 @@ export const GamePage: React.FC = () => {
   // }
 
   // // 임시 userId
-  const userId = 3
+  // const userId = 3
 
   // WebSocket 연결
-  const { allPlayers, gameState, waitingInfo,  currentQuiz, quizResult, sendMove, setMapBoundaries } = useWebSocket(userId)
+  const { connected, allPlayers, gameState, waitingInfo, currentQuiz, quizResult, sendMove, setMapBoundaries } = useWebSocket(userId)
   // connected, gameInfo, allPlayers, currentQuiz, quizResult,
-  
-  useEffect(()=>{
-    setCurrentGameState(gameState)
+
+  // currentGameState 처리
+  useEffect(() => {
+    if (!gameState) return
+    setCurrentGameState(gameState.state)
   }, [gameState])
 
+  useEffect(() => {
+    if (allPlayers) {
+      setActivePlayers(allPlayers)
+    }
+  }, [allPlayers])
+
+  const handlePlayerRemove = (playerId: number) => {
+    setActivePlayers((prev) => {
+      const newPlayers = { ...prev }
+      delete newPlayers[playerId]
+      return newPlayers
+    })
+  }
+
   // 조이스틱 데이터 처리
-  const handleJoystickMove = (event: any) => {
+  const handleJoystickMove = (event: IJoystickUpdateEvent) => {
+    // 움직이면 안 되는 상태
+    if (movementProhibition) return
+
     const { x, y } = event
     if (x !== null && y !== null) {
       setJoystickData({
@@ -74,6 +121,21 @@ export const GamePage: React.FC = () => {
       isMoving: false,
     })
   }
+
+  // 다른 유저들 움직임 처리
+  useEffect(() => {
+    if (!allPlayers) return
+
+    const newPositions: Record<number, [number, number, number]> = {}
+
+    Object.values(allPlayers)
+      .filter((player) => player.id !== userId)
+      .forEach((player) => {
+        newPositions[player.id] = [player.position.x, player.position.y, 0]
+      })
+
+    setPlayersPositions(newPositions)
+  }, [allPlayers, userId])
 
   // 너비 계산
   useEffect(() => {
@@ -103,17 +165,17 @@ export const GamePage: React.FC = () => {
       <div className="flex justify-center items-center w-full h-full relative">
         {connected && waitingInfo && currentGameState === "WAITING" ? (
           <div className="absolute w-[80%] top-15 z-[1000] flex justify-center select-none">
-            <WaitingPage waitingInfo={waitingInfo}/>
+            <WaitingPage waitingInfo={waitingInfo} />
           </div>
         ) : null}
         {connected && currentGameState === "PLAYING" ? (
           <div className="absolute w-[80%] top-10 z-[1000] flex flex-col justify-center items-center opacity-90 select-none">
-            <QuestionComponent questionNo={currentQuiz?.quizNumber} question={currentQuiz?.question} timeLeft={currentQuiz?.timeLeft} quizResult={quizResult} />
+            <QuestionComponent questionNo={currentQuiz?.quizNumber} question={currentQuiz?.question} timeLeft={currentQuiz?.timeLeft} quizResult={quizResult} gameState={gameState} />
           </div>
         ) : null}
-        {connected && currentGameState === "FINISHED" ? (
-          <div className="absolute w-[80%] h-[60%] top-10 z-[1000] flex flex-col justify-center items-center opacity-90 select-none">
-            <GameResultComponent results={rowData}/>
+        {gameState.scoreList && connected && currentGameState === "FINISHED" ? (
+          <div className="absolute w-[80%] h-[70%] top-10 z-[1000] flex flex-col justify-center items-center opacity-90 select-none">
+            <GameResultComponent results={gameState.scoreList} />
           </div>
         ) : null}
 
@@ -135,16 +197,23 @@ export const GamePage: React.FC = () => {
               color={"#97d258"}
             />
             <TileMap tilesetPath={`${tileMapUrl}assets/Basic_Grass_Biom_things.png`} tileSize={16} mapWidth={16} mapHeight={10} tileData={biomeData} scale={0.5} wScale={wScale} />
-            <CharacterSprite 
-              characterName="kuro" 
-              joystickData={joystickData} 
-              tileMapSize={tileMapSize} 
-              initialPosition={[0, 0, 1]} 
-              userId={userId} 
-              nickname={"타락파워전사"} 
-              sendMove={sendMove}
-              setMapBoundaries={setMapBoundaries}
-            />
+            {/* 로컬 플레이어 */}
+            {characterName && userId !== undefined && nickname && (
+              <CharacterSprite
+                characterName={characterName}
+                joystickData={joystickData}
+                tileMapSize={tileMapSize}
+                initialPosition={[0, 0, 1]}
+                userId={userId}
+                nickname={nickname}
+                sendMove={sendMove}
+                setMapBoundaries={setMapBoundaries}
+                quizResult={quizResult || undefined}
+                allPlayers={activePlayers}
+                onPlayerRemove={handlePlayerRemove}
+              />
+            )}
+            {/* 다른 플레이어 */}
             {connected &&
               allPlayers &&
               Object.values(allPlayers)
@@ -155,9 +224,12 @@ export const GamePage: React.FC = () => {
                       key={player.id}
                       characterName={player.characterName}
                       tileMapSize={tileMapSize}
-                      initialPosition={[player.position.x, player.position.y, 0]}
+                      initialPosition={playersPositions[player.id] || [player.position.x, player.position.y, 0]}
                       userId={player.id}
                       nickname={player.nickname}
+                      quizResult={quizResult || undefined}
+                      allPlayers={activePlayers}
+                      onPlayerRemove={handlePlayerRemove}
                     />
                   </>
                 ))}

@@ -36,8 +36,6 @@ export default function FinalConfirm({
           birthday: basicInfo.birthdate,
           school: {
             id: basicInfo.schoolId || null,
-            name: basicInfo.schoolName,
-            address: basicInfo.schoolAddress,
           },
           gender: mappedGender,
           characterId: selectedCharacter, // 선택한 캐릭터 추가

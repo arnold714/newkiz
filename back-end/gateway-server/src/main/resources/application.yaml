@@ -1,14 +1,14 @@
 application:
   domain: ${APPLICATION_DOMAIN}
 
-server:
-  forward-headers-strategy: framework
+# server:
+  # forward-headers-strategy: framework
 
 spring:
   cloud:
     gateway:
-      forwarded:
-        enabled: true  # X-Forwarded-* 헤더를 활용하도록 설정
+      # forwarded:
+        # enabled: true  # X-Forwarded-* 헤더를 활용하도록 설정
 
       default-filters:
         - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials

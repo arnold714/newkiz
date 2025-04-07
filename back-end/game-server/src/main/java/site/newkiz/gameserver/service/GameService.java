@@ -47,20 +47,20 @@ public class GameService {
   }
 
   public void joinGame(Integer userId) {
-    // 유저 정보 조회 - 닉네임, 캐릭 정보
-    Position position = new Position(Direction.EAST.getValue(), 0, 0);
-    Player player = new Player(userId, "nickname", "characterName", position);
+    // todo 유저 정보 조회 - 닉네임, 캐릭 정보
+    Position position = new Position(Direction.EAST.getValue(), 0.5f, 0);
+    Player player = new Player(userId, "nickname", "KURO", position);
 
     // 플레이어 리스트에 유저 등록
-    game.getPlayers().put(player.getId(), player);
+    game.registerPlayer(player.getId(), player);
 
     // 게임 정보 전송 - 게임 상태 / 남은 대기 시간 / 다른 플레이어들 정보
     messagingTemplate.convertAndSend("/sub/users/" + userId + "/info", new ConnectGameInfo(game));
   }
 
-  public void move(Player player) {
+  public void movePlayer(Player player) {
     // 움직인 유저 좌표 최신화
-    Player movedPlayer = game.getPlayers().get(player.getId());
+    Player movedPlayer = game.getAlivePlayers().get(player.getId());
     movedPlayer.setPosition(player.getPosition());
 
     // 모든 유저에게 공유
@@ -71,11 +71,11 @@ public class GameService {
   public void startGame() throws InterruptedException {
     log.info("게임 시작 - 총 " + game.quizCount() + " 문제");
 
-    // 게임 상태 PLAYING 으로 변경
+    // todo 게임 들어왔다 나갔을 경우 Players 에서 삭제해야함
+    // 게임 상태 PLAYING 으로 변경 및 게임 시작 메시지 send
     game.setState(State.PLAYING);
-
-    // todo 게임 시작 메시지 send
-    messagingTemplate.convertAndSend("/sub/game-info", new ConnectGameInfo(game));
+    messagingTemplate.convertAndSend("/sub/game-info", Game.toPlayingGameInfo(game));
+    Thread.sleep(5000);
 
     // 게임의 퀴즈 수 만큼 진행
     for (int currentQuizNumber = 1; currentQuizNumber <= game.quizCount(); currentQuizNumber++) {
@@ -85,57 +85,57 @@ public class GameService {
       Quiz quiz = game.getCurrnetQuiz();
 
       // 현재 문제 정보 send
-      sendQuizInfo(currentQuizNumber, quiz);
+      messagingTemplate.convertAndSend("/sub/quiz-info",
+          new QuizInfo(currentQuizNumber, quiz.getQuestion(), quiz.getTimeLeft()));
 
       // 퀴즈 시간 만큼 대기
-      Thread.sleep(10000);
-      // todo 플레이어들 정답 판정, 오답자 스코어 정보 제공 및 나가기 or 관전 선택
+      Thread.sleep(quiz.getTimeLeft() * 1000);
 
-      log.info(currentQuizNumber + " 번 문제 정답: " + quiz.getQuestion());
-      // todo 정답 판정 보여주는 시간만큼 대기 / 오답자 커넥션 끊어야하는데
-      judgeAnswer(currentQuizNumber, quiz);
-      Thread.sleep(3000);
+      // 정답 판정
+      log.info(currentQuizNumber + " 번 문제 정답: ~~~");
+      QuizResult quizResult = checkAnswers();
+      messagingTemplate.convertAndSend("/sub/quiz-result", quizResult);
 
-      // todo 오답자 커넥션 끊어야하는데
+      Thread.sleep(5000);
 
-      // todo 스코어 랭킹 관리
-
-    }
-
-    // todo 퀴즈 종료 스코어
-    log.info("퀴즈 게임 종료");
-
-
-  }
-
-  public void sendQuizInfo(int quizNumber, Quiz quiz) {
-    // 퀴즈 번호, 문제 내용, 문제 시간
-    messagingTemplate.convertAndSend("/sub/quiz-info",
-        new QuizInfo(quizNumber, quiz.getQuestion(), quiz.getTimeLeft()));
-  }
-
-  public void judgeAnswer(int quizNumber, Quiz quiz) {
-    Map<Integer, Player> players = game.getPlayers();
-    for (Player player : players.values()) {
-      QuizResult quizResult = QuizResult.builder()
-          .quizNumber(quizNumber)
-          .question(quiz.getQuestion())
-          .answer(quiz.isAnswer())
-          .explanation(quiz.getExplanation())
-          .build();
-
-      if ((quiz.isAnswer() && player.getPosition().getX() < 0)
-          || (!quiz.isAnswer() && player.getPosition().getX() >= 0)) {
-        player.addScore();
-        quizResult.setScore(player.getScore());
-        quizResult.setResult(true);
-      } else {
-        quizResult.setScore(player.getScore());
-        quizResult.setResult(false);
+      // 생존자 없으면 게임 종료
+      if (game.getAlivePlayers().isEmpty()) {
+        break;
       }
-
-      messagingTemplate.convertAndSend("/sub/users/" + player.getId() + "/quiz-result", quizResult);
     }
+
+    // todo 게임 종료 스코어
+    log.info("퀴즈 게임 종료");
+    game.setState(State.FINISHED);
+    messagingTemplate.convertAndSend("/sub/game-info", Game.toFinishedGameInfo(game));
+
+
   }
 
+  public QuizResult checkAnswers() {
+    Quiz quiz = game.getCurrnetQuiz();
+    Map<Integer, Player> players = game.getAlivePlayers();
+    List<Integer> correctPlayers = new ArrayList<>();
+    List<Integer> wrongPlayers = new ArrayList<>();
+
+    for (Player player : players.values()) {
+      if ((quiz.isAnswer() && player.getPosition().getX() < 0.5)
+          || (!quiz.isAnswer() && player.getPosition().getX() >= 0.5)) {
+        correctPlayers.add(player.getId());
+        player.addScore();
+      } else {
+        wrongPlayers.add(player.getId());
+        players.remove(player.getId());
+      }
+    }
+
+    return QuizResult.builder()
+        .quizNumber(game.getCurrentQuizNumber())
+        .question(quiz.getQuestion())
+        .answer(quiz.isAnswer())
+        .explanation(quiz.getExplanation())
+        .correctPlayers(correctPlayers)
+        .wrongPlayers(wrongPlayers)
+        .build();
+  }
 }

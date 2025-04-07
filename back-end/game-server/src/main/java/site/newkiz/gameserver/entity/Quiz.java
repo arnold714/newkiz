@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class Quiz {
+
   // 문제 질문
   private String question;
 
@@ -13,7 +14,7 @@ public class Quiz {
   // 해설
   private String explanation;
 
-  // 남은 시간 - 필요한가
+  // 문제 푸는 시간 (초 단위)
   private int timeLeft;
 
   public Quiz(String question, boolean answer, String explanation) {

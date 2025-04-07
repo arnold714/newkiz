@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useFrame, useLoader } from '@react-three/fiber';
 import * as THREE from 'three';
 import { SpriteAnimationProps } from '../model/types';
@@ -10,6 +10,8 @@ export const SpriteAnimation: React.FC<SpriteAnimationProps> = ({
   frameCount, // 총 프레임 수
   frameTime, // 한 프레임이 유지되는 시간
   direction, // 캐릭터 방향 (1: 오른쪽, -1: 왼쪽) 
+  loop = true, // 애니메이션 반복 여부 (기본값: true)
+  onAnimationComplete, // 애니메이션 완료 콜백
 }) => {
   // useLoader(THREE.TextureLoader)를 사용하여 이미지를 로드하는 훅
   // THREE.texture 객체 생성
@@ -17,6 +19,7 @@ export const SpriteAnimation: React.FC<SpriteAnimationProps> = ({
   const texture = useLoader(THREE.TextureLoader, texturePath); // 이미지의 텍스터 설정
   const timeRef = useRef<number>(0); // 프레임 시간을 추적하기 위한 ref
   const frameRef = useRef<number>(0); // 현재 프레임 인덱스를 저장하는 ref
+  const animationCompleted = useRef<boolean>(false); // 애니메이션 완료 여부
   
   // 텍스처 설정
   texture.magFilter = THREE.NearestFilter;
@@ -32,12 +35,28 @@ export const SpriteAnimation: React.FC<SpriteAnimationProps> = ({
   texture.repeat.set(frameSize.x, frameSize.y);
   
   useFrame((_, delta) => { // 매 프레임마다 실행될 함수를 작성하는 훅
+
+    if (!loop && animationCompleted.current) {
+      return;
+    }
+
     timeRef.current += delta * 1000; // timeRef값에 1초 추가
     
     if (timeRef.current >= frameTime) {
-      frameRef.current = (frameRef.current + 1) % frameCount;
-      texture.offset.x = frameRef.current * frameSize.x;
-      timeRef.current = 0;
+      if (!loop && frameRef.current === frameCount - 2) {
+        frameRef.current = frameCount - 1; // 마지막 프레임으로 이동
+        texture.offset.x = frameRef.current * frameSize.x;
+        timeRef.current = 0;
+        animationCompleted.current = true;
+        
+        if (onAnimationComplete) {
+          onAnimationComplete();
+        }
+      } else {
+        frameRef.current = (frameRef.current + 1) % frameCount;
+        texture.offset.x = frameRef.current * frameSize.x;
+        timeRef.current = 0;
+      }
     }
 
     // direction 값에 따라 텍스처 좌우반전
@@ -48,6 +67,14 @@ export const SpriteAnimation: React.FC<SpriteAnimationProps> = ({
       texture.repeat.set(frameSize.x, frameSize.y);
     }
   });
+
+  useEffect(() => {
+    if (!loop && animationCompleted.current) {
+      frameRef.current = 0;
+      texture.offset.x = 0;
+      animationCompleted.current = false;
+    }
+  }, [direction, loop]);
 
   // 스프라이트 크기 설정 (픽셀 아트 스타일 유지를 위해 비율 조정)
   const baseScale = 1;

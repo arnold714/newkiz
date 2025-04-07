@@ -2,7 +2,7 @@ import { LuX } from "react-icons/lu";
 import { useEffect, useState } from "react";
 import { QuizData } from "@/features/detail/model/types";
 import { QuizResult } from "./QuizResult";
-import { GetNewsQuiz } from "../api/DetailApi";
+import { GetNewsQuiz, PostNewsQuiz } from "../api/DetailApi";
 import Swal from "sweetalert2";  
 
 interface QuizModalProps {
@@ -33,22 +33,31 @@ export const QuizModal = ({ closeModal, id }: QuizModalProps) => {
   },[id]);
   if (errorMessage) return <div>Error: {errorMessage}</div>;
   if (!newsQuizData) return <div>Loading...</div>;
+
   // 답 클릭
   const handleChoiceClick = (choiceId: number) => {
     setSelectedChoice(choiceId)
   };
 
   //제출
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (selectedChoice === null) {
       Swal.fire({
-      icon: "warning",
-      title: "답을 선택해 주세요!",
-      text: "제출 전에 답을 선택해야 합니다.",
-      confirmButtonText: "확인",
+        icon: "warning",
+        title: "답을 선택해 주세요!",
+        text: "제출 전에 답을 선택해야 합니다.",
+        confirmButtonText: "확인",
       });
     } else {
-      setIsAnswerSubmitted(true);
+      try {
+        // PostNewsQuiz API 호출
+        const response = await PostNewsQuiz(id as string);
+        if (response) {
+          setIsAnswerSubmitted(true);
+        }
+      } catch (error) {
+        console.log("퀴즈 제출 실패:", error);
+      }
     }
   };
 

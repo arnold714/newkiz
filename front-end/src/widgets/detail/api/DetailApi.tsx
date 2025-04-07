@@ -1,6 +1,11 @@
 import { customAxios } from "@/shared";
-import { NewsDetail, QuizData, NewsScrapStatus } from "@/features/detail/model/types";
-
+import { 
+  NewsDetail, 
+  QuizData, 
+  NewsScrapStatus, 
+  NewsQuizCheck,
+  QuizSubmissionRequest } from "@/features/detail/model/types";
+import { useQuery } from "@tanstack/react-query";
 // 뉴스 상세내용 
 export const GetNewsDetail = async (newsId: string): Promise<NewsDetail | undefined> => {
   try {
@@ -17,7 +22,20 @@ export const GetNewsDetail = async (newsId: string): Promise<NewsDetail | undefi
   }
 };
 
-//객관식 퀴즈 상세 조회/
+//객관식 퀴즈 풀이 여부 조회
+export const GetNewsQuizCheck = (newsId: string) => {
+  return useQuery<NewsQuizCheck, Error>({
+    queryKey: ['newsQuizCheck', newsId],
+    queryFn: async () => {
+      const response = await customAxios.get(`/api/news/${newsId}/quiz/check`);
+      console.log('뉴스 퀴즈 풀이여부 api response:', response.data);
+      return response.data;
+    },
+    initialData: { success: false, data: null, error: null },
+  })
+};
+
+//객관식 퀴즈 상세 조회
 export const GetNewsQuiz =  async (newsId: string): Promise<QuizData | undefined> => {
   try {
     const response = await customAxios.get(`api/news/${newsId}/quiz`);
@@ -28,9 +46,19 @@ export const GetNewsQuiz =  async (newsId: string): Promise<QuizData | undefined
   }
 };
 
+//객관식 퀴즈 풀이
+export const PostNewsQuiz = async (newsId: string):Promise<QuizSubmissionRequest | undefined> => {
+  try {
+    const response = await customAxios.post(`/api/news/${newsId}/quiz`);
+    console.log('퀴즈 풀이 api post전송 성공:', response.data);
+    return response.data;
+  } catch (error) {
+    console.log('퀴즈 풀이 상태 api 전송 실패:', error);
+  }
+};
 
 
-//뉴스 스크랩 여부 조회 //
+//뉴스 스크랩 여부 조회 
 export const GetNewsScrapStatus = async (newsId:string): Promise<NewsScrapStatus | undefined> => {
   try {
     const response = await customAxios.get(`api/news/${newsId}/scrap`);

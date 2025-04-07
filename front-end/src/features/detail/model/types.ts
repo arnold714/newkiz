@@ -27,6 +27,12 @@ export interface context {
     data: string;
   }[];
 };
+//퀴즈 풀이 여부
+export interface NewsQuizCheck {
+  success: boolean;
+  data: boolean | null;
+  error: string | null;
+};
 
 //퀴즈 답 리스트
 export interface QuizChoic {
@@ -45,6 +51,11 @@ export interface QuizData {
       answer: string;
     }
   }
+};
+
+//퀴즈 풀이 후 여부 전송
+export interface QuizSubmissionRequest {
+  isCorrect: boolean;
 };
 
 // 단어 사전

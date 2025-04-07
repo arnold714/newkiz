@@ -106,3 +106,11 @@ export interface SummaryResponse {
   data: SummaryItem[] | SummaryItem; // 서버가 배열/단일 중 어느 형태로 주는지 확인
   error?: string | null;
 }
+
+export interface UpdateMyPageRequest {
+  nickname: string;
+  school: number;        // 학교 ID
+  difficulty: number;    // 1=하, 2=중, 3=상
+  characterId: string;
+  interests: string[];
+}

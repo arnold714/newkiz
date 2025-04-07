@@ -18,16 +18,18 @@ export const ModifyInfoPage = () => {
   const navigate = useNavigate()
   const imgUrl: string = import.meta.env.VITE_AWS_S3_BASE_URL
 
+   // 표시용 상태 (읽기 전용)
+   const [birthday, setBirthday] = useState<string>("");      // 생년월일
+   const [gender, setGender] = useState<string>("");   
+  // 사용자 정보 상태
+  const [nickname, setNickname] = useState("");
+  const [schoolName, setSchoolName] = useState("");
+  const [schoolId, setSchoolId] = useState<number>(0); // 학교 검색 시 ID 저장
+  const [difficulty, setDifficulty] = useState<number>(2); // 1=하,2=중,3=상 (기본값: 중)
+  const [characterId, setCharacterId] = useState<string>("");
   const [selectedInterests, setSelectedInterests] = useState<string[]>([]);
 
-  // 사용자 정보
-  const [nickname, setNickname] = useState("");
-  const [birthday, setBirthday] = useState("");
-  const [schoolName, setSchoolName] = useState("");
-  const [gender, setGender] = useState<"남자" | "여자">("남자");
-  const [characterId, setCharacter] = useState<string>("");
-
-  const interests = ["경제", "정치", "사회", "스포츠", "세계", "생활/문화", "IT/과학"]
+  const interests = ["경제", "정치", "사회", "스포츠", "세계", "생활/문화", "IT/과학"];
 
    // 마이페이지 조회 API 호출
    useEffect(() => {
@@ -37,19 +39,20 @@ export const ModifyInfoPage = () => {
         if (data.success) {
           const { profile, interests } = data.data;
 
-          setNickname(profile.nickname);
-          setBirthday(profile.birthday);
-          setSchoolName(profile.school.name);
+          // 읽기 전용: birthday, gender
+          setBirthday(profile.birthday); 
           setGender(profile.gender === "MALE" ? "남자" : "여자");
 
-          // 캐릭터가 있다면 상태에 저장
-          if (profile.characterId) {
-            setCharacter(profile.characterId);
-          }
+          // 수정 가능: nickname, school, difficulty, characterId, interests
+          setNickname(profile.nickname);
+          setSchoolName(profile.school.name);
+          setSchoolId(profile.school.id);
+          setDifficulty(profile.difficulty);
+          setCharacterId(profile.characterId || "");
 
-          // 대문자 interests -> UI 한글 변환
+          // 관심사 대문자 -> 한글
           const mappedInterests = interests
-            .map((item: string) => interestMapReverse[item] || item)
+            .map((item) => interestMapReverse[item] || item)
             .filter(Boolean);
           setSelectedInterests(mappedInterests);
         }
@@ -61,14 +64,17 @@ export const ModifyInfoPage = () => {
 
   // 관심사 토글
   const toggleInterest = (interest: string) => {
-    if (selectedInterests.includes(interest)) {
-      setSelectedInterests((prev) => prev.filter((item) => item !== interest));
-    } else {
-      setSelectedInterests((prev) => [...prev, interest]);
-    }
+    setSelectedInterests((prev) =>
+      prev.includes(interest)
+        ? prev.filter((item) => item !== interest)
+        : [...prev, interest]
+    );
   };
 
-  // 저장하기
+  const handleDifficultyClick = (level: number) => {
+    setDifficulty(level);
+  };
+
   const handleSave = async () => {
     try {
       // 한글 -> 영문
@@ -76,16 +82,13 @@ export const ModifyInfoPage = () => {
         (item) => interestMap[item] || item.toUpperCase()
       );
 
-      // "남자" -> "MALE", "여자" -> "FEMALE"
-      const mappedGender = gender === "남자" ? "MALE" : "FEMALE";
-
+      // request body 형식에 맞춰 구성
       const patchData = {
         nickname,
-        birthday,
-        schoolName,
-        gender: mappedGender,
+        school: schoolId,      // 숫자 ID
+        difficulty,            // 1=하,2=중,3=상
+        characterId,
         interests: uppercaseInterests,
-        characterId, // 캐릭터 필드 추가
       };
 
       await updateMyPage(patchData);
@@ -114,19 +117,12 @@ export const ModifyInfoPage = () => {
         </div>
         <div className="flex flex-col items-start w-full px-3 gap-2">
           <p className="font-semibold">생년월일</p>
-          <input type="text" className="border-1 border-gray-200 w-full h-10 rounded-lg px-3" value={birthday}
-            onChange={(e) => setBirthday(e.target.value)} />
+          <input type="text" readOnly className="border-1 border-gray-200 w-full h-10 rounded-lg px-3 bg-gray-100 text-gray-600" value={birthday} />
         </div>
         <div className="flex flex-col items-start w-full px-3 gap-2">
           <p className="font-semibold">출신 학교</p>
           <div className="flex gap-2">
-            <input
-              type="text"
-              className="border-1 border-gray-200 w-full h-10 rounded-lg px-3"
-              value={schoolName}
-              readOnly
-              placeholder="학교를 검색해주세요."
-            />
+            <input type="text" className="border-1 border-gray-200 w-full h-10 rounded-lg px-3" value={schoolName} readOnly placeholder="학교를 검색해주세요." />
             <button
               onClick={() => setIsSchoolModalOpen(true)}
               className="bg-[#4285F4] text-white px-3 py-2 rounded-lg text-md whitespace-nowrap"
@@ -137,14 +133,31 @@ export const ModifyInfoPage = () => {
         </div>
         <div className="flex flex-col items-start w-full px-3 gap-2">
           <p className="font-semibold">성별</p>
-          <select
-            className="border border-gray-200 w-full h-10 rounded-lg px-3 bg-white focus:outline-none focus:ring-2 focus:ring-[#7CBA36] focus:border-transparent"
-            value={gender}
-            onChange={(e) => setGender(e.target.value as "남자" | "여자")}
-          >
-            <option value="남자">남자</option>
-            <option value="여자">여자</option>
-          </select>
+          <input type="text" readOnly className="border-1 border-gray-200 w-full h-10 rounded-lg px-3 bg-gray-100 text-gray-600" value={gender} />
+        </div>
+        <div className="flex flex-col items-start w-full px-3 gap-2">
+          <p className="font-semibold">난이도</p>
+          <div className="flex items-center gap-2">
+            {/* 하(1), 중(2), 상(3) */}
+            <button
+              className={`px-4 py-2 rounded-md ${difficulty === 1 ? "bg-[#7CBA36] text-white" : "bg-gray-200"}`}
+              onClick={() => handleDifficultyClick(1)}
+            >
+              하
+            </button>
+            <button
+              className={`px-4 py-2 rounded-md ${difficulty === 2 ? "bg-[#7CBA36] text-white" : "bg-gray-200"}`}
+              onClick={() => handleDifficultyClick(2)}
+            >
+              중
+            </button>
+            <button
+              className={`px-4 py-2 rounded-md ${difficulty === 3 ? "bg-[#7CBA36] text-white" : "bg-gray-200"}`}
+              onClick={() => handleDifficultyClick(3)}
+            >
+              상
+            </button>
+          </div>
         </div>
       </div>
       <hr className="border-2 border-gray-100 w-full my-5" />
@@ -183,9 +196,9 @@ export const ModifyInfoPage = () => {
       <Modal isOpen={isCharacterMoalOpen} onRequestClose={() => setIsCharacterModalOpen(false)} className="modal ranking-modal" overlayClassName="modal-overlay" shouldCloseOnOverlayClick={true}>
       <SelectCharacterModal
           closeModal={() => setIsCharacterModalOpen(false)}
-          currentCharacter={characterId} // 현재 캐릭터 전달
+          currentCharacter={characterId}
           onSelectCharacter={(newChar) => {
-            setCharacter(newChar);
+            setCharacterId(newChar);
             setIsCharacterModalOpen(false);
           }}
         />
@@ -200,7 +213,8 @@ export const ModifyInfoPage = () => {
         <SchoolSearchModal
           isOpen={isSchoolModalOpen}
           onClose={() => setIsSchoolModalOpen(false)}
-          onSelectSchool={(_schoolId, name, _address) => {
+          onSelectSchool={(id, name, _address) => {
+            setSchoolId(id);
             setSchoolName(name);
             setIsSchoolModalOpen(false);
           }}

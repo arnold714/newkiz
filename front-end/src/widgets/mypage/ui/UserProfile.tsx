@@ -1,31 +1,13 @@
-import { useEffect, useState } from "react";
-import { useCookies } from "react-cookie";
-import { Profile } from "@/features/mypage";
+import { useUserProfile } from "@/shared";
 import "@shared/styles/CustomScroll.css";
 
 export const UserProfile = () => {
-    const [cookies] = useCookies(["userProfile"]);
-    const [profile, setProfile] = useState<Profile | null>(null);
-    const imgUrl: string = import.meta.env.VITE_AWS_S3_BASE_URL
-    
-    useEffect(() => {
-      if (cookies.userProfile) {
-        try {
-          // 쿠키 값이 문자열이면 파싱, 객체이면 그대로 사용
-          const storedProfile =
-            typeof cookies.userProfile === "string"
-              ? JSON.parse(cookies.userProfile)
-              : cookies.userProfile;
-          setProfile(storedProfile);
-        } catch (error) {
-          console.error("쿠키 파싱 실패:", error);
-        }
-      }
-    }, [cookies]);
+  const profile = useUserProfile();
+  const imgUrl: string = import.meta.env.VITE_AWS_S3_BASE_URL;
   
-    if (!profile) {
-      return <div>로딩중...</div>;
-    }
+  if (!profile) {
+    return <div>로딩중...</div>;
+  }
 
     return (
         <div className="h-full w-full flex flex-row justify-center items-center gap-5">

@@ -17,7 +17,7 @@ export const GetNewsDetail = async (newsId: string): Promise<NewsDetail | undefi
   }
 };
 
-//객관식 퀴즈 상세 조회
+//객관식 퀴즈 상세 조회/
 export const GetNewsQuiz =  async (newsId: string): Promise<QuizData | undefined> => {
   try {
     const response = await customAxios.get(`api/news/${newsId}/quiz`);

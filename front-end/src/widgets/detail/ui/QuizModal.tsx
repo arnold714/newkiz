@@ -67,14 +67,14 @@ export const QuizModal = ({ closeModal, id }: QuizModalProps) => {
             {newsQuizData ? (
               <>
                 <h2 className="text-3xl font-bold">{newsQuizData.quiz.multipleChoiceQuiz.question}</h2>
-                <div className="flex flex-col justify-center items-center">
+                <div className="flex flex-col justify-start items-start">
                   {newsQuizData.quiz.multipleChoiceQuiz.options.map((choice, index) => (
                     <button
                       key={index}
                       onClick={() => handleChoiceClick(index)}
-                      className={`w-fit min-w-[200px] w-auto font-bold text-2xl border-[#BDBDBD] rounded-lg shadow-[4px_4px_5px_2px_rgba(0,0,0,0.1)] mt-5 p-3 hover:scale-105 hover:bg-[#7CBA36] hover:text-white ${
+                      className={`min-w-[200px] w-auto font-bold text-2xl rounded-lg mt-3 p-2 hover:scale-105 hover:bg-[#7CBA36] hover:text-white text-left ${
                         selectedChoice === index
-                          ? "bg-[#7CBA36] text-white"
+                          ? " text-[#202020]  border-[#BDBDBD] border-2  shadow-[4px_4px_5px_2px_rgba(0,0,0,0.1)] "
                           : "bg-white text-[#202020]"
                       }`}
                     >

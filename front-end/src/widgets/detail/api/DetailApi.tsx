@@ -21,11 +21,14 @@ export const GetNewsDetail = async (newsId: string): Promise<NewsDetail | undefi
 export const GetNewsQuiz =  async (newsId: string): Promise<QuizData | undefined> => {
   try {
     const response = await customAxios.get(`api/news/${newsId}/quiz`);
+    console.log('')
     return response.data.data;
   } catch (error) {
     console.error('퀴즈 불러오기 실패:', error);
   }
 };
+
+
 
 //뉴스 스크랩 여부 조회
 export const GetNewsScrapStatus = async (newsId:string): Promise<NewsScrapStatus | undefined> => {

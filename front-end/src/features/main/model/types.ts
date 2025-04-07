@@ -1,8 +1,8 @@
 export interface ApiResponse {
     success: boolean;
-    data: NewsTodayItem[]; // ✅ 실제 데이터는 data 필드 안에 있음
+    data: NewsTodayItem[]; 
     error: string | null;
-  }
+  };
 
 export interface NewsTodayItem {
     id: string;
@@ -14,8 +14,12 @@ export interface NewsTodayItem {
     img: string;
     views: number;
     scrap: number;
-}
-
+};
+export interface TodayReadNewsCount {
+    success: boolean;
+    data: number;
+    error: string | null;
+};
 export interface News {
     title: string;
     content: string;

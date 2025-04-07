@@ -29,10 +29,10 @@ public class JwtAuthenticationFilter implements WebFilter {
   @Override
   public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
     // ✅ OPTIONS 요청은 CORS preflight → 무조건 통과
-    if (exchange.getRequest().getMethod() == HttpMethod.OPTIONS) {
-      exchange.getResponse().setStatusCode(HttpStatus.OK);
-      return exchange.getResponse().setComplete();
-    }
+//    if (exchange.getRequest().getMethod() == HttpMethod.OPTIONS) {
+//      exchange.getResponse().setStatusCode(HttpStatus.OK);
+//      return exchange.getResponse().setComplete();
+//    }
 
     try {
       String accessToken = cookieUtil.getAccessToken(exchange.getRequest());

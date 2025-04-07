@@ -65,7 +65,7 @@ export interface Profile {
     culture: number;
     sports: number;
     world: number;
-    it_science: number;
+    it_SCIENCE: number;
     politics: number;
   }
   

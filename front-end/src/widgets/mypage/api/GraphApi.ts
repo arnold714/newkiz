@@ -10,7 +10,7 @@ export async function fetchUserGraph(): Promise<GraphData> {
       culture: 0,
       sports: 0,
       world: 0,
-      it_science: 0,
+      it_SCIENCE: 0,
       politics: 0,
     };
   

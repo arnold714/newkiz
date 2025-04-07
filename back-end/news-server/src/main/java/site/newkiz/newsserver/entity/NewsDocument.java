@@ -24,6 +24,7 @@ public class NewsDocument {
   private String subCategory;
   private String article;
   private String img;
+  private String summary;
   private int views;
   private int scrap;
   @Field("context_list")
@@ -53,5 +54,6 @@ public class NewsDocument {
   public static class Word {
 
     private String word;
+    private String mean;
   }
 }

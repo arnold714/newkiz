@@ -1,6 +1,5 @@
 package site.newkiz.newsserver.entity;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,6 +20,7 @@ public class NewsQuizDocument {
   @Getter
   @Setter
   public static class Quiz {
+
     @Field("multiple_choice_quiz")
     private MultipleChoiceQuiz multipleChoiceQuiz;
   }
@@ -28,9 +28,11 @@ public class NewsQuizDocument {
   @Getter
   @Setter
   public static class MultipleChoiceQuiz {
+
     private String question;
     private List<String> options;
     private String answer;
+    private String explanation;
   }
 
 }

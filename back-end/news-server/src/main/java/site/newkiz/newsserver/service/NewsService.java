@@ -20,8 +20,10 @@ import site.newkiz.newsserver.entity.NewsScrap;
 import site.newkiz.newsserver.entity.NewsSummary;
 import site.newkiz.newsserver.entity.NewsViewLog;
 import site.newkiz.newsserver.entity.QuizSolveLog;
+import site.newkiz.newsserver.entity.SearchLog;
 import site.newkiz.newsserver.entity.dto.NewsScrapResponse;
 import site.newkiz.newsserver.entity.enums.NewsCategory;
+import site.newkiz.newsserver.entity.enums.NewsDetailCategory;
 import site.newkiz.newsserver.global.exception.BadRequestException;
 import site.newkiz.newsserver.global.exception.NotFoundException;
 import site.newkiz.newsserver.repository.NewsQuizRepository;
@@ -29,6 +31,7 @@ import site.newkiz.newsserver.repository.NewsRepository;
 import site.newkiz.newsserver.repository.NewsScrapRepository;
 import site.newkiz.newsserver.repository.NewsSummaryRepository;
 import site.newkiz.newsserver.repository.NewsViewLogRepository;
+import site.newkiz.newsserver.repository.SearchLogRepository;
 
 @Service
 @RequiredArgsConstructor
@@ -39,6 +42,7 @@ public class NewsService {
   private final NewsSummaryRepository newsSummaryRepository;
   private final NewsScrapRepository newsScrapRepository;
   private final NewsQuizRepository newsQuizRepository;
+  private final SearchLogRepository searchLogRepository;
   private final MongoTemplate mongoTemplate;
 
 
@@ -126,6 +130,30 @@ public class NewsService {
 
       // 이후 페이지: 카테고리 AND 커서 기반 페이징
       return newsRepository.findNewsByCategoryAndCursor(category, cursor, pageable);
+    }
+  }
+
+  public List<NewsDocument> getNewsBySubcategory(String cursorIdStr, String subcategoryId) {
+    Pageable pageable = PageRequest.of(0, LIMIT, Sort.by(Sort.Direction.DESC, "_id"));
+    String category;
+    try {
+      category = NewsDetailCategory.valueOf(subcategoryId).getKoreanName();
+    } catch (Exception e) {
+      throw new BadRequestException("Invalid category");
+    }
+    if (cursorIdStr == null || cursorIdStr.isEmpty()) {
+      // 첫 페이지: 카테고리별 최신 뉴스 20개
+      return newsRepository.findTop20BySubCategoryOrderByIdDesc(category);
+    } else {
+      ObjectId cursor;
+      try {
+        cursor = new ObjectId(cursorIdStr);
+      } catch (Exception e) {
+        throw new BadRequestException("Invalid cursor format");
+      }
+
+      // 이후 페이지: 카테고리 AND 커서 기반 페이징
+      return newsRepository.findNewsBySubCategoryAndCursor(category, cursor, pageable);
     }
   }
 
@@ -254,5 +282,52 @@ public class NewsService {
     );
 
     return quizSolveLog != null;
+  }
+
+  public List<NewsDocument> searchNewsByTitle(String userId, String keyword, String cursorIdStr) {
+    logSearch(userId, keyword);
+
+    Pageable pageable = PageRequest.of(0, LIMIT, Sort.by(Sort.Direction.DESC, "_id"));
+
+    if (cursorIdStr == null || cursorIdStr.isEmpty()) {
+      return newsRepository.findTop20ByTitleContainingOrderByIdDesc(keyword);  // 첫 페이지
+    } else {
+      ObjectId cursor;
+      try {
+        cursor = new ObjectId(cursorIdStr);
+      } catch (Exception e) {
+        throw new BadRequestException("Invalid cursor format");
+      }
+
+      return newsRepository.findByTitleContainingAndCursor(keyword, cursor, pageable);  // 이후 페이지
+    }
+  }
+
+  private void logSearch(String userId, String keyword) {
+    SearchLog searchLog = searchLogRepository.findByKeyword(keyword)
+        .orElseGet(() -> {
+          SearchLog newLog = new SearchLog();
+          newLog.setUserId(userId);
+          newLog.setKeyword(keyword);
+          return newLog;
+        });
+
+    searchLog.setSearchedAt(LocalDateTime.now());
+    searchLogRepository.save(searchLog);
+  }
+
+  public List<SearchLog> getRecentSearches(String userId) {
+    return searchLogRepository.findTop5ByUserIdOrderBySearchedAtDesc(userId);
+  }
+
+  public void deleteSearchLogById(String id, String userId) {
+    SearchLog searchLog = searchLogRepository.findById(id)
+        .orElseThrow(() -> new NotFoundException("검색 로그가 존재하지 않습니다."));
+
+    if (!searchLog.getUserId().equals(userId)) {
+      throw new NotFoundException("해당 사용자의 검색 로그가 아닙니다.");
+    }
+
+    searchLogRepository.deleteById(id);
   }
 }

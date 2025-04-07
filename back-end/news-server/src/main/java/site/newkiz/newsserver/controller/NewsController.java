@@ -15,6 +15,7 @@ import site.newkiz.newsserver.entity.NewsDocument;
 import site.newkiz.newsserver.entity.NewsQuizDocument;
 import site.newkiz.newsserver.entity.NewsScrap;
 import site.newkiz.newsserver.entity.NewsSummary;
+import site.newkiz.newsserver.entity.SearchLog;
 import site.newkiz.newsserver.entity.dto.NewsListDto;
 import site.newkiz.newsserver.entity.dto.NewsScrapResponse;
 import site.newkiz.newsserver.entity.dto.NewsSummaryRequest;
@@ -50,6 +51,15 @@ public class NewsController {
       @RequestParam(value = "cursor", required = false) String cursor,
       @PathVariable(value = "categoryId") String categoryId) {
     List<NewsDocument> newsList = newsService.getNewsByCategory(cursor, categoryId);
+    String nextCursor = (newsList.isEmpty()) ? null : newsList.get(newsList.size() - 1).getId();
+    return ApiResponse.success(new NewsListDto(newsList, nextCursor));
+  }
+
+  @GetMapping("/subcategory/{subcategoryId}")
+  public ApiResponse<NewsListDto> getNewsBySubcategory(
+      @RequestParam(value = "cursor", required = false) String cursor,
+      @PathVariable(value = "subcategoryId") String subcategoryId) {
+    List<NewsDocument> newsList = newsService.getNewsBySubcategory(cursor, subcategoryId);
     String nextCursor = (newsList.isEmpty()) ? null : newsList.get(newsList.size() - 1).getId();
     return ApiResponse.success(new NewsListDto(newsList, nextCursor));
   }
@@ -125,6 +135,30 @@ public class NewsController {
 
     //이곳에 해설 제공
 
+    return ApiResponse.success();
+  }
+
+  @GetMapping("/search")
+  public ApiResponse<NewsListDto> searchNewsByTitle(
+      @RequestHeader(value = "User-Id") String userId,
+      @RequestParam(value = "keyword") String keyword,
+      @RequestParam(value = "cursor", required = false) String cursor) {
+    List<NewsDocument> newsList = newsService.searchNewsByTitle(userId, keyword, cursor);
+    String nextCursor = (newsList.isEmpty()) ? null : newsList.get(newsList.size() - 1).getId();
+    return ApiResponse.success(new NewsListDto(newsList, nextCursor));
+  }
+
+  @GetMapping("/search/recent")
+  public ApiResponse<List<SearchLog>> getRecentSearches(
+      @RequestHeader(value = "User-Id") String userId) {
+    List<SearchLog> recentSearches = newsService.getRecentSearches(userId);
+    return ApiResponse.success(recentSearches);
+  }
+
+  @DeleteMapping("/search/{searchId}")
+  public ApiResponse<Void> deleteSearchLogById(@PathVariable("searchId") String searchId,
+      @RequestHeader(value = "User-Id") String userId) {
+    newsService.deleteSearchLogById(searchId, userId);
     return ApiResponse.success();
   }
 }

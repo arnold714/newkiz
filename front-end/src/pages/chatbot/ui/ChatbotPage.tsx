@@ -1,18 +1,23 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { LuSend, LuX } from "react-icons/lu";
 import "@shared/styles/CustomScroll.css";
 import { useParams, useNavigate } from "react-router-dom";
 import { initializeChatHistory, sendChatMessage } from "@/pages/chatbot";
 import { ChatMessage } from "@/features/chatbot";
+import { useUserProfile } from "@/shared";
 
 export default function ChatbotPage() {
   const { newsId } = useParams<{ newsId: string }>();
   const navigate = useNavigate();
   const imgUrl: string = import.meta.env.VITE_AWS_S3_BASE_URL
+  const profile = useUserProfile();
 
   const [message, setMessage] = useState<string>("");
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [loadingHistory, setLoadingHistory] = useState<boolean>(true);
+
+  // 스크롤을 위한 ref
+  const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // 페이지 로드시 뉴스 id에 해당하는 챗봇 기록을 불러옴
   useEffect(() => {
@@ -20,10 +25,15 @@ export default function ChatbotPage() {
     const fetchHistory = async () => {
       try {
         const response = await initializeChatHistory(newsId);
-        if (response.success) {
-          setMessages(response.data.messages);
+        if (response && response.chatHistory) {
+          // 응답을 ChatMessage[] 배열로 변환합니다.
+          const parsedMessages: ChatMessage[] = response.chatHistory.flatMap((item: any) => [
+            { type: "user", text: item.user },
+            { type: "assistant", text: item.assistant },
+          ]);
+          setMessages(parsedMessages);
         } else {
-          console.error("채팅 기록 초기화 실패:", response.error);
+          console.error("채팅 기록 초기화 실패: 응답 데이터가 올바르지 않음", response);
         }
       } catch (error) {
         console.error("채팅 기록 초기화 오류:", error);
@@ -34,25 +44,37 @@ export default function ChatbotPage() {
     fetchHistory();
   }, [newsId]);
 
+  // 메시지 전송 후 자동 스크롤: messages가 변경될 때마다 하단으로 스크롤
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages]);
+
   // 메시지 전송 핸들러
   const handleSendMessage = async () => {
-    if (message.trim() && newsId) {
-      // 즉시 사용자의 메시지를 추가하여 UI 반영
-      setMessages(prev => [...prev, { type: "user", text: message }]);
+    if (!message.trim() || !newsId) return;
 
-      try {
-        const response = await sendChatMessage({ newsId, question: message });
-        if (response.success) {
-          const botMsg: ChatMessage = { type: "assistant", text: response.data.answer };
-          setMessages(prev => [...prev, botMsg]);
-        } else {
-          console.error("챗봇 응답 실패:", response.error);
-        }
-      } catch (error) {
-        console.error("챗봇 요청 오류:", error);
+    // 임시로 사용자의 메시지 추가 (옵션)
+    setMessages((prev) => [...prev, { type: "user", text: message }]);
+
+    try {
+      // 요청: { newsId, question }
+      // 서버 응답: { sessionId, chatHistory: [ { user, assistant }, ... ] }
+      const response = await sendChatMessage({ newsId, question: message });
+      if (response.chatHistory) {
+        const parsedMessages: ChatMessage[] = response.chatHistory.flatMap((item) => [
+          { type: "user", text: item.user },
+          { type: "assistant", text: item.assistant },
+        ]);
+        setMessages(parsedMessages);
+      } else {
+        console.error("챗봇 응답 실패: 응답 데이터에 chatHistory가 없습니다.", response);
       }
-      setMessage("");
+    } catch (error) {
+      console.error("챗봇 요청 오류:", error);
     }
+    setMessage("");
   };
 
   const handleCloseChat = () => {
@@ -81,6 +103,10 @@ export default function ChatbotPage() {
     return <div>로딩중...</div>;
   }
 
+  if (!profile) {
+    return <div>프로필 로딩중...</div>;
+  }
+
   return (
     <div className="chatbot-container w-full mx-auto rounded-lg shadow-xl bg-white flex flex-col h-screen">
       {/* 헤더 */}
@@ -99,7 +125,7 @@ export default function ChatbotPage() {
           <div key={idx} className={`message ${msg.type === "user" ? "text-right" : "text-left"}`}>
             {msg.type === "assistant" && (
               <img 
-                src={`${imgUrl}dinos/kira.png`}
+                src={`${imgUrl}dinos/${profile.characterId}.png`}
                 alt="assistant"
                 className="w-14 h-16 mt-0 ml-2 mr-2 inline-block"
               />
@@ -113,6 +139,7 @@ export default function ChatbotPage() {
             </div>
           </div>
         ))}
+        <div ref={messagesEndRef} />
       </div>
 
       {/* 메시지 입력창 */}

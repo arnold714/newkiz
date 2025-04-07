@@ -9,7 +9,6 @@ import { JoystickData } from "@/shared/types/joystick"
 import { useWebSocket } from "@/features/game/model/useWebSocket"
 import { WaitingPage, QuestionComponent, GameResultComponent } from "@/entities/game"
 import { Player, State } from "@/features/game/model/types"
-import { GameResult } from "@/entities/character/model/types"
 import { useAppDispatch, useAppSelector } from "@/app/redux/hooks"
 import { setMovementProhibition } from "@/features/game/model/gameSlice"
 import { IJoystickUpdateEvent } from "react-joystick-component/build/lib/Joystick"
@@ -24,7 +23,7 @@ export const GamePage: React.FC = () => {
   const [wScale, setWScale] = useState<number>(1)
   const [playersPositions, setPlayersPositions] = useState<Record<number, [number, number, number]>>({})
   const [activePlayers, setActivePlayers] = useState<Record<number, Player>>({})
-
+  
   const dispatch = useAppDispatch()
   const movementProhibition = useAppSelector((state) => state.game.movementProhibition)
 
@@ -33,7 +32,7 @@ export const GamePage: React.FC = () => {
     if (currentGameState === "FINISHED") {
       dispatch(setMovementProhibition(true))
     }
-  }, [currentGameState, dispatch])
+  }, [currentGameState])
 
   // const connected = true
 
@@ -46,12 +45,12 @@ export const GamePage: React.FC = () => {
   //   console.log("게임 상태: ", currentGameState);
   // }, [currentGameState])
 
-  const rowData: GameResult[] = [
-    { rank: 1, nickname: "타락파워전사", score: 120, totalScore: 450, rankChange: 2 },
-    { rank: 2, nickname: "게임왕", score: 100, totalScore: 380, rankChange: -1 },
-    { rank: 3, nickname: "실버맨", score: 90, totalScore: 320, rankChange: 0 },
-    // 더 많은 데이터...
-  ]
+  // const rowData: GameResult[] = [
+  //   { rank: 1, nickname: "타락파워전사", score: 120, totalScore: 450, rankChange: 2 },
+  //   { rank: 2, nickname: "게임왕", score: 100, totalScore: 380, rankChange: -1 },
+  //   { rank: 3, nickname: "실버맨", score: 90, totalScore: 320, rankChange: 0 },
+  //   // 더 많은 데이터...
+  // ]
 
   // waitingInfo
   // const waitingInfo: NewWaitingInfo = {
@@ -160,9 +159,9 @@ export const GamePage: React.FC = () => {
             <QuestionComponent questionNo={currentQuiz?.quizNumber} question={currentQuiz?.question} timeLeft={currentQuiz?.timeLeft} quizResult={quizResult} gameState={gameState} />
           </div>
         ) : null}
-        {connected && currentGameState === "FINISHED" ? (
-          <div className="absolute w-[80%] h-[60%] top-10 z-[1000] flex flex-col justify-center items-center opacity-90 select-none">
-            <GameResultComponent results={rowData} />
+        {gameState.scoreList && connected && currentGameState === "FINISHED" ? (
+          <div className="absolute w-[80%] h-[70%] top-10 z-[1000] flex flex-col justify-center items-center opacity-90 select-none">
+            <GameResultComponent results={gameState.scoreList} />
           </div>
         ) : null}
 
@@ -185,19 +184,19 @@ export const GamePage: React.FC = () => {
             />
             <TileMap tilesetPath={`${tileMapUrl}assets/Basic_Grass_Biom_things.png`} tileSize={16} mapWidth={16} mapHeight={10} tileData={biomeData} scale={0.5} wScale={wScale} />
             {/* 로컬 플레이어 */}
-              <CharacterSprite
-                characterName="kuro"
-                joystickData={joystickData}
-                tileMapSize={tileMapSize}
-                initialPosition={[0, 0, 1]}
-                userId={userId}
-                nickname={"타락파워전사"}
-                sendMove={sendMove}
-                setMapBoundaries={setMapBoundaries}
-                quizResult={quizResult || undefined}
-                allPlayers={activePlayers}
-                onPlayerRemove={handlePlayerRemove}
-              />
+            <CharacterSprite
+              characterName={"kuro"}
+              joystickData={joystickData}
+              tileMapSize={tileMapSize}
+              initialPosition={[0, 0, 1]}
+              userId={userId}
+              nickname={"타락파워전사"}
+              sendMove={sendMove}
+              setMapBoundaries={setMapBoundaries}
+              quizResult={quizResult || undefined}
+              allPlayers={activePlayers}
+              onPlayerRemove={handlePlayerRemove}
+            />
             {/* 다른 플레이어 */}
             {connected &&
               allPlayers &&

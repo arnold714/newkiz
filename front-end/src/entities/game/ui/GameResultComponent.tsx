@@ -2,19 +2,19 @@ import { AgGridReact } from "ag-grid-react"
 import "ag-grid-community/styles/ag-grid.css"
 import "ag-grid-community/styles/ag-theme-alpine.css"
 import { useEffect, useMemo, useState } from "react"
-import { GameResult } from "@/entities/character/model/types"
 import { ColDef, ModuleRegistry, ClientSideRowModelModule } from "ag-grid-community"
 import { useNavigate } from "react-router-dom"
+import { ScoreList } from "@/features/game/model/types"
 
 // 필요한 모듈 등록
 ModuleRegistry.registerModules([ClientSideRowModelModule])
 
 interface GameResultComponentProps {
-  results: GameResult[]
+  results: ScoreList[]
 }
 
 export const GameResultComponent = ({ results }: GameResultComponentProps) => {
-  const [rawData, setRawData] = useState<GameResult[]>([])
+  const [rawData, setRawData] = useState<ScoreList[]>([])
 
   const navigate = useNavigate()
 
@@ -27,11 +27,11 @@ export const GameResultComponent = ({ results }: GameResultComponentProps) => {
   }, [results])
 
   // 컬럼 정의에 keyof GameResult 타입을 사용
-  const columnDefs = useMemo<ColDef<GameResult>[]>(
+  const columnDefs = useMemo<ColDef<ScoreList>[]>(
     () => [
       {
         headerName: "순위",
-        field: "rank",
+        field: "scoreRank",
         sortable: true,
         width: 60,
       },
@@ -53,17 +53,6 @@ export const GameResultComponent = ({ results }: GameResultComponentProps) => {
         sortable: true,
         width: 60,
       },
-      {
-        headerName: "순위 변동",
-        field: "rankChange",
-        sortable: true,
-        width: 90,
-        cellRenderer: (params: any) => {
-          if (params.value > 0) return `↑ ${params.value}`
-          if (params.value < 0) return `↓ ${Math.abs(params.value)}`
-          return "-"
-        },
-      },
     ],
     []
   )
@@ -78,13 +67,13 @@ export const GameResultComponent = ({ results }: GameResultComponentProps) => {
   )
 
   // 테스트용 더미 데이터 (실제 사용 시 제거)
-  const dummyData = useMemo<GameResult[]>(
+  const dummyData = useMemo<ScoreList[]>(
     () => [
-      { rank: 1, nickname: "플레이어1", score: 100, totalScore: 500, rankChange: 2 },
-      { rank: 2, nickname: "플레이어2", score: 90, totalScore: 450, rankChange: -1 },
-      { rank: 3, nickname: "플레이어3", score: 85, totalScore: 420, rankChange: 0 },
-      { rank: 4, nickname: "플레이어4", score: 80, totalScore: 400, rankChange: 3 },
-      { rank: 5, nickname: "플레이어5", score: 75, totalScore: 380, rankChange: -2 },
+      { scoreRank: 1, nickname: "플레이어1", score: 100, totalScore: 500 },
+      { scoreRank: 2, nickname: "플레이어2", score: 90, totalScore: 450 },
+      { scoreRank: 3, nickname: "플레이어3", score: 85, totalScore: 420 },
+      { scoreRank: 4, nickname: "플레이어4", score: 80, totalScore: 400 },
+      { scoreRank: 5, nickname: "플레이어5", score: 75, totalScore: 380 },
     ],
     []
   )
@@ -96,7 +85,7 @@ export const GameResultComponent = ({ results }: GameResultComponentProps) => {
     <div className="flex flex-col items-center h-full w-full bg-white bg-opacity-50 rounded-xl p-6 relative px-4">
       <p className="text-[#7CBA36] text-3xl font-bold mb-4">최종 기록</p>
       <div className="ag-theme-alpine w-full h-2/3">
-        <AgGridReact<GameResult> rowData={displayData} columnDefs={columnDefs} defaultColDef={defaultColDef} animateRows={true} domLayout="autoHeight" />
+        <AgGridReact<ScoreList> rowData={displayData} columnDefs={columnDefs} defaultColDef={defaultColDef} animateRows={true} domLayout="autoHeight" />
       </div>
       <button className="absolute bottom-2 bg-[#7CBA36] rounded-md px-10 py-2 text-lg font-bold text-white" onClick={handleGoBack}>
         나가기

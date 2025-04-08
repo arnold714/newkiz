@@ -120,22 +120,29 @@ export default function ChatbotPage() {
       </div>
 
       {/* 대화 내용 */}
-      <div className="chatbot-messages p-4 flex-grow overflow-y-auto scroll">
+      <div className="chatbot-messages p-4 flex-grow overflow-y-auto scroll space-y-4">
         {messages.map((msg, idx) => (
-          <div key={idx} className={`message ${msg.type === "user" ? "text-right" : "text-left"}`}>
-            {msg.type === "assistant" && (
-              <img 
-                src={`${imgUrl}dinos/${profile.characterId}.png`}
-                alt="assistant"
-                className="w-14 h-16 mt-0 ml-2 mr-2 inline-block"
-              />
-            )}
-            <div
-              className={`inline-block p-2 rounded-lg ${
-                msg.type === "user" ? "bg-blue-500 text-white text-xl" : "bg-gray-200 text-black text-xl"
-              }`}
-            >
-              {msg.text}
+          <div 
+            key={idx} 
+            className={`message ${msg.type === "user" ? "text-right mb-4" : "text-left mb-4"}`}
+          >
+            <div className="flex items-end">
+              {msg.type === "assistant" && (
+                <img 
+                  src={`${imgUrl}dinos/${profile.characterId}.png`}
+                  alt="assistant"
+                  className="w-14 h-16 mt-0 ml-2 mr-2 inline-block"
+                />
+              )}
+              <div
+                className={`inline-block p-3 rounded-lg my-1 ${
+                  msg.type === "user" 
+                    ? "bg-blue-500 text-white text-xl ml-auto" 
+                    : "bg-gray-200 text-black text-xl"
+                }`}
+              >
+                {msg.text}
+              </div>
             </div>
           </div>
         ))}

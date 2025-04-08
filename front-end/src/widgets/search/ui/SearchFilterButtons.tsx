@@ -7,7 +7,7 @@ export const SearchFilterButtons: React.FC<SearchFilterButtonsProps> = ({
   selectedFilter,
   onFilterChange,
 }) => {
-  const filters = ["전체", "뉴스", "shorts", "기자단"];
+  const filters = ["전체", "뉴스", "기자단"];
 
   return (
     <div className="flex space-x-4 overflow-x-auto pb-2">

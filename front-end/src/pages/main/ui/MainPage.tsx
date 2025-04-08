@@ -66,7 +66,7 @@ export default function MainPage() {
           <div className="text-2xl font-bold text-center m-3">
           {nickname} 님을 위한 추천 뉴스
           </div>
-          <RecommendedNews />
+          <RecommendedNews userProfile={userProfile}/>
         </div>
       </div>
   );

@@ -1,49 +1,18 @@
 import { useState } from "react";
 import Button from "@/shared/ui/Button";
-import { News, NewsCategory } from "@/features/main/model/types";
+import {  NewsCategory } from "@/features/main/model/types";
 
-export const RecommendedNews = () => {
+interface RecommendedNewsProps {
+    userProfile: {
+       interests: string[]
+    }
+};
 
-    //하드 코딩한 뉴스 데이터
-    const newsData: News[] = [
-        {
-             title: '손흥민 시즌 12호 도움최고인데어디까지...',
-             content: 'ai를 통해 한줄 요약',
-             imageUrl: "/newsImage3.png",
-             category: '스포츠'
-        },
-        {
-            title: '김도영 시범경기부터..',
-            content: 'ai를 통해 한줄 요약',
-            imageUrl: "/newsImage2.png",
-            category: '스포츠'
-        },
-        {
-            title: '손흥민, 토트넘에 모..',
-            content: 'ai를 통해 한줄 요약',
-            imageUrl: "/newsImage3.png",
-            category: '스포츠'
-        },
-        {
-            title: '손흥민, 토트넘에 모..',
-            content: 'ai를 통해 한줄 요약',
-            imageUrl: "/newsImage3.png",
-            category: '스포츠'
-        }
-    
+export const RecommendedNews: React.FC<RecommendedNewsProps> = ({ userProfile }) => {
 
-    ];
 
     const [selectedCategory, setSelectedCategory] = useState<NewsCategory>('전체');
     
-    //카테고리 
-    const categories = [
-        {label: '전체'},
-        {label: '스포츠'},
-        {label: '경제'},
-        {label: '정치'},
-    ];
-
     //카테고리 별 뉴스 필터링
     const filteredNews = selectedCategory === "전체"
       ? newsData
@@ -53,7 +22,7 @@ export const RecommendedNews = () => {
         <div>
             {/* 카테고리 버튼 리스트 */}
             <div className="flex justify-center gap-3">
-                {categories.map((category) => [
+                {userProfile.interests.map((category) => [
                     <Button
                         key={category.label}
                         label={category.label}

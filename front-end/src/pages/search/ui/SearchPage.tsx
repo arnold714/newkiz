@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { LuSearch, LuChevronLeft, LuX } from "react-icons/lu";
 import { fetchRecentSearches, deleteSearchHistory, fetchPopularKeywords } from "@/pages/search";
-import { RecentSearchItem, WordCloudItem } from "@/features/search";
+import { RecentSearchItem } from "@/features/search";
 import { useNavigate } from "react-router-dom";
 import "@shared/styles/CustomScroll.css"
 import { WordCloud } from "@/widgets/search";

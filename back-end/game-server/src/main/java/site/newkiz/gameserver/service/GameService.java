@@ -45,7 +45,20 @@ public class GameService {
   private Game game;
   private final MongoTemplate mongoTemplate;
 
-  @Scheduled(cron = "0 55 17 * * ?")
+  // todo 게임 test 반복
+  @Scheduled(cron = "0 */3 20 * * ?", zone = "Asia/Seoul")
+  public void test() throws InterruptedException {
+    log.info("----test----");
+    createGame();
+
+    log.info("Test Game start after 10 seconds");
+    Thread.sleep(10000);
+
+    log.info("Test Game start!");
+    startGame();
+  }
+
+  @Scheduled(cron = "0 55 17 * * ?", zone = "Asia/Seoul")
   public void createGame() throws InterruptedException {
     log.info("게임 생성");
     game = new Game();
@@ -57,7 +70,7 @@ public class GameService {
     Query query = new Query();
     query.addCriteria(Criteria.where("quiz.ox_quiz.answer").regex("^[oOxX]$"));
     query.with(Sort.by(Sort.Direction.DESC, "published"));
-    query.limit(20); // 최근 20개만
+    query.limit(10); // todo 최근 20개만
 
     return mongoTemplate.find(query, NewsQuizDocument.class).stream().map(q -> {
       String question = q.getQuiz().getOxQuiz().getQuestion();
@@ -93,7 +106,7 @@ public class GameService {
     }
   }
 
-  @Scheduled(cron = "0 0 18 * * ?")
+  @Scheduled(cron = "0 0 18 * * ?", zone = "Asia/Seoul")
   public void startGame() throws InterruptedException {
     log.info("게임 시작 - 총 {} 문제", game.quizCount());
 

@@ -16,14 +16,14 @@ public class StartRunner implements ApplicationRunner {
 
   @Override
   public void run(ApplicationArguments args) throws InterruptedException {
-    log.info("Game created");
-    gameService.createGame();
-
-    log.info("Game start after 10 seconds");
-    Thread.sleep(10000);
-
-    log.info("Game start!");
-    gameService.startGame();
+//    log.info("Game created");
+//    gameService.createGame();
+//
+//    log.info("Game start after 10 seconds");
+//    Thread.sleep(10000);
+//
+//    log.info("Game start!");
+//    gameService.startGame();
 
   }
 }

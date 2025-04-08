@@ -29,7 +29,7 @@ spring:
         - id: game-service
           uri: http://game-service
           predicates:
-            - Path=/ws/**, /api/game
+            - Path=/ws/**, /api/game/**
 
         - id: chatbot-service
           uri: http://chatbot-service
@@ -82,6 +82,6 @@ jwt:
     access-expire-time: ${JWT_ACCESS_EXPIRE_TIME}  # 액세스 토큰 만료 시간 (30분, 밀리초 단위)
     refresh-expire-time: ${JWT_REFRESH_EXPIRE_TIME}  # 리프레시 토큰 만료 시간 (14일, 밀리초 단위)
 
-logging:
-  level:
-    reactor.netty: DEBUG
+#logging:
+#  level:
+#    reactor.netty: DEBUG

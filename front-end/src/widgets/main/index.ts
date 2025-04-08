@@ -4,4 +4,5 @@ export { ProgressGraph }  from './ui/ProgressGraph';
 export { 
     GetTodayNews, 
     GetTodayReadNewsCount,
-    GetRecommendNews } from './api/MainApi';
+    GetRecommendNews, 
+    GetRecommendCategory } from './api/MainApi';

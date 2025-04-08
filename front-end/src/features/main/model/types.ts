@@ -40,3 +40,5 @@ export const interest: Record<string, string> = {
     "WORLD": "세계",
     "CULTURE": "생활/문화",
   };
+
+  export type Category = "전체" | keyof typeof interest

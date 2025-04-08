@@ -3,6 +3,7 @@ import Button from "@/shared/ui/Button";
 import { GetRecommendNews, GetRecommendCategory } from "../api/MainApi";
 import "@shared/styles/CustomScroll.css"
 import { interest, Category } from "@/features/main";
+import { Link } from "react-router-dom";
 import "../styles/ReommendedNews.css"
 
 interface RecommendedNewsProps {
@@ -14,10 +15,10 @@ interface RecommendedNewsProps {
 export const RecommendedNews: React.FC<RecommendedNewsProps> = ({ userProfile }) => {
     const interests = userProfile.interests;
     const categories = ["전체", ...interests];
-
+    
     const {data: recommendedNews, isLoading: isNewsLoading, isError: isNewsError, error: newsError, } = GetRecommendNews();
+    // 선택한 카테고리 버튼 값
     const [selectedCategory, setSelectedCategory] = useState<Category>('전체');
-    console.log("selectedCategory:",selectedCategory)
     const {data: recommendedCategory, isLoading: isCatLoading, isError: isCatError, error: catError, } = GetRecommendCategory(selectedCategory);
     
     // 선택된 카테고리에 따라 보여줄 데이터
@@ -29,7 +30,7 @@ export const RecommendedNews: React.FC<RecommendedNewsProps> = ({ userProfile })
     if (isLoadingDisplay) return <div>Loading</div>;
     if (isErrorDisplay) {
       console.error("Error fetching today's news:", errorDisplay);
-      return <div>Error: {errorDisplay.message}</div>;
+      return <div>Error: {errorDisplay?.message || 'An unknown error occurred'}</div>;
     }
 
     return (
@@ -56,14 +57,15 @@ export const RecommendedNews: React.FC<RecommendedNewsProps> = ({ userProfile })
             <div className="mt-5 space-y-4 pb-20">
                 {newsToDisplay && newsToDisplay.length > 0 ? (
                 newsToDisplay.map((news) => (
+                    <Link to={`detail/${news.id}`}>
                     <div
                     key={news.id}
-                    className="flex items-start p-4 bg-white rounded-[10px] mx-10 shadow-[0px_3px_6px_rgba(32,32,32,0.23)] transform transition-transform duration-200 hover:scale-105 focus:scale-105"
+                    className="flex mb-4 items-start p-4 bg-white rounded-[10px] mx-10 shadow-[0px_3px_6px_rgba(32,32,32,0.23)] transform transition-transform duration-200 hover:scale-105 focus:scale-105"
                     >
                     <img
                         src={news.img}
                         alt={news.title}
-                        className="w-35 h-35 rounded-lg"
+                        className="w-[150px] h-[150px] object-cover rounded-lg flex-shrink-0"
                     />
                     <div className="ml-4 flex flex-col justify-start">
                         <h3 className="text-2xl font-bold text-[#202020] clamp-2 mb-2">
@@ -74,6 +76,7 @@ export const RecommendedNews: React.FC<RecommendedNewsProps> = ({ userProfile })
                         </p>
                     </div>
                     </div>
+                    </Link>
                 ))
                 ) : (
                 <div className="text-center text-gray-500 text-lg">

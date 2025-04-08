@@ -45,7 +45,7 @@ export const GetRecommendNews =  () => {
 export const GetRecommendCategory = ( categoryId:string ) => {
     console.log("categoryId:",categoryId)
     return useQuery<NewsItem[], Error>({
-        queryKey: ['recommendedCategory'],
+        queryKey: ['recommendedCategory', categoryId],
         queryFn: async () => {
             const response = await customAxios.get<ApiResponse>(`/api/news/recommend/category/${categoryId}`);
             console.log('카테고리 별 뉴스 추천 API response:', response.data.data);

@@ -41,3 +41,14 @@ export interface NewsItem {
     data: null;
     error: string | null;
   }
+
+  export interface WordCloudItem {
+    _id: string;  // 키워드
+    count: number;  // 해당 키워드의 가중치
+  }
+  
+  export interface WordCloudResponse {
+    success: boolean;
+    data: WordCloudItem[];
+    error: string | null;
+  }

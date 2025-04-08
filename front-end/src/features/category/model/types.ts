@@ -4,6 +4,7 @@ export interface NewsItem {
     link: string;          // 원문 링크
     published: string;     // 발행 일시
     category: string;      // ex) 'it_science', 'sports' 등
+    subCategory: string;   // ex) 'ai_robotics', 'soccer' 등
     article: string;       // 뉴스 기사 요약/본문
     img: string;           // 이미지 URL
     views: number;         // 조회수

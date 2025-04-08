@@ -20,7 +20,7 @@ export const GamePage: React.FC = () => {
     y: 0,
     isMoving: false,
   })
-  const [currentGameState, setCurrentGameState] = useState<State>("WAITING")
+  const [currentGameState, setCurrentGameState] = useState<State>("WAITING") //FINISHED
   const [wScale, setWScale] = useState<number>(1)
   const [playersPositions, setPlayersPositions] = useState<Record<number, [number, number, number]>>({})
   const [activePlayers, setActivePlayers] = useState<Record<number, Player>>({})
@@ -48,29 +48,26 @@ export const GamePage: React.FC = () => {
     }
   }, [currentGameState])
 
-  // const connected = true
-
-  // const allPlayers = [
-  //   { id: 2, characterName: "nico", position: { direction: 1, x: -1, y: -1 }, nickname: "Player1" },
-  //   { id: 4, characterName: "kuro", position: { direction: 1, x: 1, y: -1 }, nickname: "Player2" },
-  // ]
+  const scoreRank = {
+    1: {
+      userId: 3,
+      nickname: "nickname",
+      score: 2,
+      totalScore: 7
+    },
+    2: { 
+      userId: 1, 
+      nickname: "nickname",
+      score: 3, 
+      totalScore: 8 
+    },
+  }
 
   // useEffect(()=>{
   //   console.log("게임 상태: ", currentGameState);
   // }, [currentGameState])
 
-  // const rowData: GameResult[] = [
-  //   { rank: 1, nickname: "타락파워전사", score: 120, totalScore: 450, rankChange: 2 },
-  //   { rank: 2, nickname: "게임왕", score: 100, totalScore: 380, rankChange: -1 },
-  //   { rank: 3, nickname: "실버맨", score: 90, totalScore: 320, rankChange: 0 },
-  //   // 더 많은 데이터...
-  // ]
-
-  // waitingInfo
-  // const waitingInfo: NewWaitingInfo = {
-  //   state: "WAITING",
-  //   timeLeft: 10,
-  // }
+  // const connected = true
 
   // // 임시 userId
   // const userId = 3
@@ -83,6 +80,8 @@ export const GamePage: React.FC = () => {
   useEffect(() => {
     if (!gameState) return
     setCurrentGameState(gameState.state)
+    console.log("게임 state: ", gameState.state)
+    console.log("gameState 데이터: ", gameState)
   }, [gameState])
 
   useEffect(() => {
@@ -173,9 +172,9 @@ export const GamePage: React.FC = () => {
             <QuestionComponent questionNo={currentQuiz?.quizNumber} question={currentQuiz?.question} timeLeft={currentQuiz?.timeLeft} quizResult={quizResult} gameState={gameState} />
           </div>
         ) : null}
-        {gameState.scoreList && connected && currentGameState === "FINISHED" ? (
+        { connected && currentGameState === "FINISHED" ? (
           <div className="absolute w-[80%] h-[70%] top-10 z-[1000] flex flex-col justify-center items-center opacity-90 select-none">
-            <GameResultComponent results={gameState.scoreList} />
+            <GameResultComponent scoreRank={scoreRank} />
           </div>
         ) : null}
 

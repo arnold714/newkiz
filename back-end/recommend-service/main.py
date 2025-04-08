@@ -1,11 +1,55 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
+from pymongo import MongoClient
 import pickle
 import numpy as np
 from lightfm import LightFM
 from lightfm.data import Dataset
+import pandas as pd
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
+from dotenv import load_dotenv
+import os
+
+# ✅ .env 파일 로드
+load_dotenv()
+
+# ✅ 환경변수에서 MongoDB 접속 정보 가져오기
+MONGO_HOST = os.getenv("MONGO_HOST")
+MONGO_DB = os.getenv("MONGO_DATABASE")
+MONGO_USER = os.getenv("MONGO_USER")
+MONGO_PASSWORD = os.getenv("MONGO_PASSWORD")
+ARTICLE_COLLECTION = os.getenv("ARTICLE_DATABASE")
+
+# ✅ MongoDB URI 생성
+MONGO_URI = f"mongodb://{MONGO_USER}:{MONGO_PASSWORD}@{MONGO_HOST}/?authSource=admin"
+
+# ✅ MongoDB 연결
+client = MongoClient(MONGO_URI)
+db = client[MONGO_DB]
+collection = db[ARTICLE_COLLECTION]
 
 app = FastAPI()
+
+# 뉴스 데이터 로드 및 전처리
+def load_articles():
+    documents = list(collection.find({}, {"_id": 1, "word_list.word": 1}))
+    data = []
+    for doc in documents:
+        if "word_list" in doc and isinstance(doc["word_list"], list):
+            words = [entry["word"] for entry in doc["word_list"] if "word" in entry]
+            data.append({
+                "_id": str(doc["_id"]),
+                "keywords": " ".join(words)
+            })
+    return pd.DataFrame(data)
+
+articles_df = load_articles()
+
+# TF-IDF 벡터화 및 유사도 계산
+vectorizer = TfidfVectorizer()
+tfidf_matrix = vectorizer.fit_transform(articles_df["keywords"])
+cosine_sim_matrix = cosine_similarity(tfidf_matrix, tfidf_matrix)
 
 try:
     with open("./lightfm/lightfm_model.pkl", "rb") as f:
@@ -38,6 +82,9 @@ class RecommendRequest(BaseModel):
 class RecommendCategoryRequest(BaseModel):
     user_id: str
     category_id: str
+
+class RelatedNewsRequest(BaseModel):
+    content_id: str
 
 @app.post("/api/recommend")
 def recommend(req: RecommendRequest):
@@ -108,3 +155,23 @@ def recommend_by_category(req: RecommendCategoryRequest):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+@app.post("/api/related")
+def recommend_related_news(req: RelatedNewsRequest):
+    try:
+        if req.content_id not in articles_df["_id"].values:
+            raise HTTPException(status_code=404, detail="입력한 content_id가 존재하지 않습니다.")
+
+        idx = articles_df[articles_df["_id"] == req.content_id].index[0]
+        sim_scores = list(enumerate(cosine_sim_matrix[idx]))
+        sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
+        top_similar_indices = [i for i, score in sim_scores[1:11]]  # 자기 자신 제외
+
+        recommended_ids = articles_df.iloc[top_similar_indices]["_id"].tolist()
+
+        return {
+            "input_id": req.content_id,
+            "related_news": recommended_ids
+        }
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"관련 뉴스 추천 실패: {str(e)}")

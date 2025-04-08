@@ -4,7 +4,7 @@ import { QuizInfo, QuizResult, Position, Player, WaitingInfo, GameState, NewWait
 import { denormalizePosition } from "@entities/character/model/nomalizationPosition";
 import { Boundaries } from "@/shared/types/common";
 
-const API_URL = import.meta.env.VITE_DEV_API_URL;
+const API_URL = import.meta.env.VITE_API_URL;
 
 export const useWebSocket = (userId?: number) => {
   const [connected, setConnected] = useState(false);

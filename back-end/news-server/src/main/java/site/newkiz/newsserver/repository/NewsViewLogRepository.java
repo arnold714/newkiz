@@ -5,5 +5,5 @@ import site.newkiz.newsserver.entity.NewsViewLog;
 
 public interface NewsViewLogRepository extends MongoRepository<NewsViewLog, String> {
 
-  boolean existsByUserIdAndNewsId(String userId, String newsId);
+  NewsViewLog findByUserIdAndNewsId(String userId, String newsId);
 }

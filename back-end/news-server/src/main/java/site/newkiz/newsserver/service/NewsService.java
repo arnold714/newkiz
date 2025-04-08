@@ -95,9 +95,9 @@ public class NewsService {
         .orElseThrow(() -> new NotFoundException("News not found"));
 
     // 사용자 조회 로그 있는지 확인
-    boolean hasViewed = newsViewLogRepository.existsByUserIdAndNewsId(userId, newsId);
+    NewsViewLog newsViewLog = newsViewLogRepository.findByUserIdAndNewsId(userId, newsId);
 
-    if (!hasViewed) {
+    if (newsViewLog == null) {
       // 조회수 증가
       mongoTemplate.updateFirst(
           Query.query(Criteria.where("_id").is(newsId)),
@@ -119,6 +119,8 @@ public class NewsService {
           .newsId(newsId)
           .build();
       newsViewLogRepository.save(viewLog);
+    } else {
+      newsViewLog.setViewedAt(LocalDateTime.now());
     }
 
     return newsDocument;

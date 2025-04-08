@@ -1,84 +1,88 @@
-import { useRef, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { LuSearch, LuChevronLeft, LuX } from "react-icons/lu";
-import WordCloud from "@/widgets/search/ui/WordCloud";
+import { fetchRecentSearches, deleteSearchHistory } from "@/pages/search";
+import { RecentSearchItem } from "@/features/search";
+import { useNavigate } from "react-router-dom";
 import "@shared/styles/CustomScroll.css"
-
-// 인기 키워드 타입 정의
-interface PopularKeyword {
-  text: string;
-  weight: number; // 가중치 (조회수 또는 중요도)
-}
 
 export default function SearchPage() {
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const [recentSearches, setRecentSearches] = useState<string[]>([
-    "손흥민",
-    "챗 지피티",
-    "야구",
-  ]);
-
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [containerWidth, setContainerWidth] = useState<number>(0);
-
-  useEffect(() => {
-    const observer = new ResizeObserver((entries) => {
-      if (entries[0]) {
-        const width = entries[0].contentRect.width;
-        setContainerWidth(width);
-      }
-    });
-
-    if (containerRef.current) observer.observe(containerRef.current);
-
-    return () => observer.disconnect();
-  }, []);
-
-  // 인기 키워드 데이터 (예시)
-  const [popularKeywords] = useState<PopularKeyword[]>([
-    { text: "올림픽", weight: 95 },
-    { text: "방탄소년단", weight: 88 },
-    { text: "코로나", weight: 75 },
-    { text: "이변", weight: 50 },
-    { text: "주식", weight: 85 },
-    { text: "전기차", weight: 70 },
-    { text: "갤럭시", weight: 65 },
-    { text: "아이폰", weight: 60 },
-    { text: "AI", weight: 90 },
-    { text: "날씨", weight: 55 },
-    { text: "월드컵", weight: 72 },
-    { text: "여행", weight: 68 },
-    { text: "배달", weight: 58 },
-  ]);
+  const [recentSearches, setRecentSearches] = useState<RecentSearchItem[]>([]);
+  const [, setLoading] = useState<boolean>(false);
+  const [, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   const handleSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
   };
 
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" && searchQuery.trim()) {
+      navigate(`/search/${encodeURIComponent(searchQuery.trim())}`);
+      setSearchQuery("");
+    }
+  };
+
   const handleSearch = () => {
-    console.log("Search for:", searchQuery);
+    if (searchQuery.trim()) {
+      navigate(`/search/${encodeURIComponent(searchQuery.trim())}`);
+      setSearchQuery("");
+    }
+  };
+
+  const handleRecentSearchClick = (keyword: string) => {
+    navigate(`/search/${encodeURIComponent(keyword)}`);
     setSearchQuery("");
   };
 
-  const handleClearSearch = (index: number) => {
-    const updatedSearches = [...recentSearches];
-    updatedSearches.splice(index, 1);
-    setRecentSearches(updatedSearches);
+  // 최근 검색어 불러오기
+  const loadRecentSearches = async () => {
+    setLoading(true);
+    try {
+      const res = await fetchRecentSearches();
+      if (res.success) {
+        const sorted = res.data.sort(
+          (a, b) => new Date(b.searchedAt).getTime() - new Date(a.searchedAt).getTime()
+        );
+        const recent = sorted.slice(0, 5);
+        setRecentSearches(recent);
+      } else {
+        setError("최근 검색어를 불러오지 못했습니다.");
+      }
+    } catch (err) {
+      console.error("최근 검색어 로드 에러:", err);
+      setError("최근 검색어 불러오기 오류");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadRecentSearches();
+  }, []);
+
+  // 삭제 API 호출 및 화면 갱신
+  const handleDeleteSearch = async (searchId: string) => {
+    try {
+      const res = await deleteSearchHistory(searchId);
+      if (res.success) {
+        loadRecentSearches();
+      } else {
+        console.error("삭제 실패:", res.error);
+      }
+    } catch (err) {
+      console.error("검색 기록 삭제 에러:", err);
+    }
   };
 
   const handleReturn = () => {
     window.history.back();
   };
 
-  // 키워드 클릭 시 검색어 업데이트
-  const handleKeywordClick = (keyword: string) => {
-    setSearchQuery(keyword);
-    console.log("Selected keyword:", keyword);
-  };
-
   return (
     <div className="flex flex-col h-screen pb-15">
       {/* 고정 헤더 부분 */}
-      <div className="flex-none p-4">
+      <div className="flex-none p-2 pt-6">
         <div className="flex items-center">
           <button className="p-2" onClick={handleReturn}>
             <LuChevronLeft size={25} />
@@ -90,6 +94,7 @@ export default function SearchPage() {
               placeholder="검색어를 입력하세요"
               value={searchQuery}
               onChange={handleSearchInputChange}
+              onKeyDown={handleKeyPress}
             />
             <button
               className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-600"
@@ -110,16 +115,17 @@ export default function SearchPage() {
         {/* Recent Searches */}
         <div className="space-y-2 mb-6">
           <h2 className="font-semibold text-xl mb-5">최근 검색어</h2>
-          {recentSearches.map((search, index) => (
-            <div key={index} className="flex justify-between items-center mb-5 ml-8">
-              <div className="flex items-center space-x-2">
+          {recentSearches.map((search) => (
+            <div key={search.id} className="flex justify-between items-center mb-5 ml-8">
+              <div className="flex items-center space-x-2 cursor-pointer"
+                   onClick={() => handleRecentSearchClick(search.keyword)}>
                 <LuSearch className="text-gray-400 mr-5" size={22} />
-                <span className="text-gray-600 text-xl">{search}</span>
+                <span className="text-gray-600 text-xl">{search.keyword}</span>
               </div>
               <LuX
                 className="text-gray-500 hover:text-gray-800 cursor-pointer"
                 size={20}
-                onClick={() => handleClearSearch(index)}
+                onClick={() => handleDeleteSearch(search.id)} 
               />
             </div>
           ))}
@@ -127,21 +133,6 @@ export default function SearchPage() {
 
         {/* 회색 구분선 */}
         <hr className="border-b-5 border-gray-100 -mx-4 mb-6" />
-
-        {/* 인기 키워드 워드 클라우드 */}
-        <div>
-          <h2 className="font-semibold text-xl mb-5">인기있는 키워드</h2>
-          <div ref={containerRef} className="p-4 bg-white rounded-xl w-full">
-            {containerWidth > 0 && (
-              <WordCloud
-                keywords={popularKeywords}
-                onKeywordClick={handleKeywordClick}
-                width={containerWidth}
-                height={350}
-              />
-            )}
-          </div>
-        </div>
       </div>
     </div>
   );

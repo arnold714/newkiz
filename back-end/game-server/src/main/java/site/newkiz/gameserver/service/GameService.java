@@ -11,6 +11,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import site.newkiz.gameserver.entity.Game;
+import site.newkiz.gameserver.entity.GameSchoolScore;
 import site.newkiz.gameserver.entity.GameScore;
 import site.newkiz.gameserver.entity.GameUserScore;
 import site.newkiz.gameserver.entity.Player;
@@ -22,6 +23,7 @@ import site.newkiz.gameserver.entity.dto.QuizInfo;
 import site.newkiz.gameserver.entity.dto.QuizResult;
 import site.newkiz.gameserver.entity.enums.Direction;
 import site.newkiz.gameserver.entity.enums.State;
+import site.newkiz.gameserver.repository.GameSchoolScoreRepository;
 import site.newkiz.gameserver.repository.GameUserScoreRepository;
 import site.newkiz.gameserver.repository.ProfileRepository;
 
@@ -33,6 +35,7 @@ public class GameService {
   private final SimpMessagingTemplate messagingTemplate;
   private final GameUserScoreRepository gameUserScoreRepository;
   private final ProfileRepository profileRepository;
+  private final GameSchoolScoreRepository gameSchoolScoreRepository;
   private Game game;
 
   @Scheduled(cron = "0 55 17 * * ?")
@@ -56,10 +59,10 @@ public class GameService {
   }
 
   public void joinGame(Integer userId) {
-    // todo 유저 정보 조회 - 닉네임, 캐릭 정보
     Profile profile = profileRepository.findByUserId(userId).orElse(null);
     Position position = new Position(Direction.EAST.getValue(), 0.5f, 0);
-    Player player = new Player(userId, profile.getNickname(), profile.getCharacterId(), position);
+    Player player = new Player(userId, profile.getNickname(), profile.getCharacterId(), position,
+        profile.getSchool());
 
     // 플레이어 리스트에 유저 등록
     game.registerPlayer(player.getId(), player);
@@ -119,6 +122,15 @@ public class GameService {
     List<GameScore> gameScoreList = new ArrayList<>();
 
     for (Player player : game.getPlayers().values()) {
+      // 학교 점수 추가
+      GameSchoolScore gameSchoolScore = gameSchoolScoreRepository.findBySchool(player.getSchool())
+          .orElseGet(
+              () -> gameSchoolScoreRepository.save(new GameSchoolScore(player.getSchool(), 0))
+          );
+      gameSchoolScore.addScore(player.getScore());
+      gameSchoolScoreRepository.save(gameSchoolScore);
+
+      // 유저 점수 추가
       GameUserScore gameUserScore = gameUserScoreRepository.findByUserId(player.getId()).orElseGet(
           () -> gameUserScoreRepository.save(new GameUserScore(player.getId(), 0))
       );

@@ -91,13 +91,13 @@ export default function DetailPage() {
   }
 
   const filteredContext = newsDetail?.contextList?.filter((contextLevel: context) => {
-    if (activeButton === '상' && contextLevel.level === 1) {
+    if (activeButton === '상' && contextLevel.level === 3) {
       return true;
     }
     if (activeButton === '중' && contextLevel.level === 2) {
       return true;
     }
-    if (activeButton === '하' && contextLevel.level === 3) {
+    if (activeButton === '하' && contextLevel.level === 1) {
       return true;
     }
     return false;

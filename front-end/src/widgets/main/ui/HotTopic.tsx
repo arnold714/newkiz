@@ -15,7 +15,7 @@ const NewsSlide:React.FC<{id:string, image: string, title: string, article: stri
                 alt={title}
                 className="w-[400px] h-[270px] object-cover object-top rounded-lg"
                 />
-            <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2  w-[90%] p-4 rounded-lg bg-white/70  duration-300 mb-4">
+            <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2  w-[90%] p-4 rounded-lg bg-white/85  duration-300 mb-4">
                 <div className="title mb-2 text-xl font-bold leading-tight truncate">{title}</div>
                 <div className="content text-base leading-snug truncate">{article}</div>
             </div>
@@ -48,6 +48,7 @@ export const HotTopic = () => {
                 speed={500}
                 pagination={isTablet ? false :{ clickable: true }}
                 modules={[EffectCoverflow, Pagination]}
+                initialSlide={0} //일단 첫 번째 슬라이드 활성화
                 className="mySwiper"
                 >
                 {todayNews.map((news) => (

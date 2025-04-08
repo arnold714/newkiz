@@ -1,10 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
-import { NewsTodayItem, ApiResponse, TodayReadNewsCount } from "@/features/main";
+import { NewsItem, ApiResponse, TodayReadNewsCount } from "@/features/main";
 import { customAxios } from "@/shared";
 
 //오늘의 뉴스
 export const GetTodayNews = () => {
-    return useQuery<NewsTodayItem[], Error>({
+    return useQuery<NewsItem[], Error>({
         queryKey: ['todayNews'],
         queryFn: async () => {
             const response = await customAxios.get<ApiResponse>('/api/news/today');
@@ -28,7 +28,29 @@ export const GetTodayReadNewsCount = () => {
     });
 };
 
-// 개인 맞춤형 뉴스 추천
-// export const GetNewsByUserInterests =  () => {
-//     return userQuery
-// }
+// 개인 맞춤형 뉴스 추천(카테고리 상관x)
+export const GetRecommendNews =  () => {
+    return useQuery<NewsItem[], Error>({
+        queryKey: ['recommendedNews'],
+        queryFn: async () => {
+            const response = await customAxios.get<ApiResponse>(`/api/news/recommend`);
+            console.log('개인 맞춤형 추천 뉴스(전체) API response:', response.data.data);
+            return response.data.data;
+        },
+        initialData: [],
+    })
+};
+
+//카테고리 별 뉴스 추천
+export const GetRecommendCategory = ( categoryId:string ) => {
+    console.log("categoryId:",categoryId)
+    return useQuery<NewsItem[], Error>({
+        queryKey: ['recommendedCategory', categoryId],
+        queryFn: async () => {
+            const response = await customAxios.get<ApiResponse>(`/api/news/recommend/category/${categoryId}`);
+            console.log('카테고리 별 뉴스 추천 API response:', response.data.data);
+            return response.data.data;
+        },
+        initialData: [],
+    })
+};

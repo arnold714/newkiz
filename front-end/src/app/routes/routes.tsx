@@ -258,6 +258,14 @@ const routes: RouteObject[] = [
           </Suspense>
         ),
       },
+      {
+        path: "details/:categoryId/:subCategoryId",
+        element: (
+          <Suspense fallback={<LoadingComponent />}>
+            <CategoryDetailPage />
+          </Suspense>
+        ),
+      },
     ],
   },
   //   ],

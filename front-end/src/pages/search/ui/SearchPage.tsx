@@ -1,13 +1,15 @@
 import { useState, useEffect } from "react";
 import { LuSearch, LuChevronLeft, LuX } from "react-icons/lu";
-import { fetchRecentSearches, deleteSearchHistory } from "@/pages/search";
+import { fetchRecentSearches, deleteSearchHistory, fetchPopularKeywords } from "@/pages/search";
 import { RecentSearchItem } from "@/features/search";
 import { useNavigate } from "react-router-dom";
 import "@shared/styles/CustomScroll.css"
+import { WordCloud } from "@/widgets/search";
 
 export default function SearchPage() {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [recentSearches, setRecentSearches] = useState<RecentSearchItem[]>([]);
+  const [popularKeywords, setPopularKeywords] = useState<any[]>([]);
   const [, setLoading] = useState<boolean>(false);
   const [, setError] = useState<string | null>(null);
   const navigate = useNavigate();
@@ -57,8 +59,23 @@ export default function SearchPage() {
     }
   };
 
+  // 인기 키워드 불러오기
+  const loadPopularKeywords = async () => {
+    try {
+      const res = await fetchPopularKeywords();
+      if (res.success) {
+        setPopularKeywords(res.data);
+      } else {
+        setError("인기 검색어 불러오기 실패");
+      }
+    } catch (err) {
+      setError("인기 검색어 불러오기 오류");
+    }
+  };
+
   useEffect(() => {
     loadRecentSearches();
+    loadPopularKeywords();
   }, []);
 
   // 삭제 API 호출 및 화면 갱신
@@ -133,6 +150,20 @@ export default function SearchPage() {
 
         {/* 회색 구분선 */}
         <hr className="border-b-5 border-gray-100 -mx-4 mb-6" />
+
+        {/* 인기 검색어 */}
+        <div className="space-y-2 mb-6">
+          <h2 className="font-semibold text-xl mb-3">인기 검색어</h2>
+          <WordCloud
+            keywords={popularKeywords.map(item => ({
+              _id: item._id, // _id를 text로 사용
+              count: item.count, // count를 weight로 사용
+            }))}
+            onKeywordClick={handleSearch}
+            width={360}
+            height={360}
+          />
+        </div>
       </div>
     </div>
   );

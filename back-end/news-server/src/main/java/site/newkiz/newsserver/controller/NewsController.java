@@ -42,7 +42,7 @@ public class NewsController {
 
   @GetMapping("/{newsId}")
   public ApiResponse<NewsDocument> getNewsById(@PathVariable(value = "newsId") String newsId,
-      @RequestHeader(value = "USER-ID") String userId) {
+      @RequestHeader(value = "User-Id") String userId) {
     NewsDocument news = newsService.getNewsById(newsId, userId);
     return ApiResponse.success(news);
   }

@@ -96,7 +96,6 @@ public class NewsService {
 
     // 사용자 조회 로그 있는지 확인
     NewsViewLog newsViewLog = newsViewLogRepository.findByUserIdAndNewsId(userId, newsId);
-
     if (newsViewLog == null) {
       // 조회수 증가
       mongoTemplate.updateFirst(
@@ -120,7 +119,11 @@ public class NewsService {
           .build();
       newsViewLogRepository.save(viewLog);
     } else {
-      newsViewLog.setViewedAt(LocalDateTime.now());
+      mongoTemplate.updateFirst(
+          Query.query(Criteria.where("newsId").is(newsId).and("userId").is(userId)),
+          new Update().set("viewedAt", LocalDateTime.now()),
+          NewsViewLog.class
+      );
     }
 
     return newsDocument;

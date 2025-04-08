@@ -182,4 +182,11 @@ public class NewsController {
         categoryId);
     return ApiResponse.success(recommendedNews);
   }
+
+  @GetMapping("/{newsId}/related")
+  public ApiResponse<List<NewsDocument>> getRelatedNews(
+      @PathVariable(value = "newsId") String newsId) {
+    List<NewsDocument> relatedNews = newsService.getRelatedNews(newsId);
+    return ApiResponse.success(relatedNews);
+  }
 }

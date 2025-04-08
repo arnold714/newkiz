@@ -33,6 +33,7 @@ import site.newkiz.newsserver.entity.QuizSolveLog;
 import site.newkiz.newsserver.entity.SearchLog;
 import site.newkiz.newsserver.entity.dto.NewsScrapResponse;
 import site.newkiz.newsserver.entity.dto.RecommendResponse;
+import site.newkiz.newsserver.entity.dto.RelatedResponse;
 import site.newkiz.newsserver.entity.enums.NewsCategory;
 import site.newkiz.newsserver.entity.enums.NewsDetailCategory;
 import site.newkiz.newsserver.global.exception.BadRequestException;
@@ -420,5 +421,39 @@ public class NewsService {
   public List<SearchLogRepository.KeywordCount> getTop10MostSearchedKeywordsWithin24Hours() {
     LocalDateTime from = LocalDateTime.now().minusHours(24);
     return searchLogRepository.findTop10MostSearchedKeywordsWithin24Hours(from);
+  }
+
+  public List<NewsDocument> getRelatedNews(String newsId) {
+    String fastApiUrl = recommendApiUrl + "/api/related";
+
+    // 요청 바디 생성
+    Map<String, Object> request = new HashMap<>();
+    request.put("content_id", newsId);
+
+    HttpHeaders headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_JSON);
+
+    HttpEntity<Map<String, Object>> httpEntity = new HttpEntity<>(request, headers);
+
+    // 응답을 RelatedResponse 받기
+    ResponseEntity<RelatedResponse> response = restTemplate.postForEntity(
+        fastApiUrl,
+        httpEntity,
+        RelatedResponse.class
+    );
+
+    List<String> relatedIds = response.getBody().getRelated_news();
+
+    // DB에서 NewsDocument 리스트 조회
+    List<NewsDocument> documents = newsRepository.findByIdIn(relatedIds);
+
+    // ID 순서 보장 필요 시 정렬
+    Map<String, NewsDocument> docMap = documents.stream()
+        .collect(Collectors.toMap(NewsDocument::getId, Function.identity()));
+
+    return relatedIds.stream()
+        .map(docMap::get)
+        .filter(Objects::nonNull)
+        .toList();
   }
 }

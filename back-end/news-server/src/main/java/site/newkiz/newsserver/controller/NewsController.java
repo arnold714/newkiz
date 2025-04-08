@@ -21,6 +21,7 @@ import site.newkiz.newsserver.entity.dto.NewsScrapResponse;
 import site.newkiz.newsserver.entity.dto.NewsSummaryRequest;
 import site.newkiz.newsserver.entity.dto.SolveQuizRequest;
 import site.newkiz.newsserver.global.ApiResponse;
+import site.newkiz.newsserver.repository.SearchLogRepository;
 import site.newkiz.newsserver.service.NewsService;
 
 @RestController
@@ -158,6 +159,12 @@ public class NewsController {
       @RequestHeader(value = "User-Id") String userId) {
     newsService.deleteSearchLogById(searchId, userId);
     return ApiResponse.success();
+  }
+
+  @GetMapping("/search/cloud")
+  public ApiResponse<List<SearchLogRepository.KeywordCount>> getTop10MostSearchedKeywordsWithin24Hours() {
+    List<SearchLogRepository.KeywordCount> top10Keywords = newsService.getTop10MostSearchedKeywordsWithin24Hours();
+    return ApiResponse.success(top10Keywords);
   }
 
   @GetMapping("/recommend")

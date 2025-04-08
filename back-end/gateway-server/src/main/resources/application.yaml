@@ -41,6 +41,11 @@ spring:
           predicates:
             - Path=/api/records/**
 
+        - id: recommend-service
+          uri: http://recommend-service
+          predicates:
+            - Path=/api/recommend/**          
+
   r2dbc:
     url: r2dbc:pool:mysql://${MYSQL_HOST}/${MYSQL_DATABASE}?serverTimezone=Asia/Seoul
     username: ${MYSQL_USER}

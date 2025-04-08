@@ -27,6 +27,7 @@ export const CharacterSprite: React.FC<CharacterSpriteProps> = ({
   const [texturesLoaded, setTexturesLoaded] = useState<boolean>(false)
   const [isDead, setIsDead] = useState<boolean>(false)
   const [deathAnimationComplete, setDeathAnimationComplete] = useState<boolean>(false)
+  const [isGhost, setIsGhost] = useState<boolean>(false)
   // ref
   const characterRef = useRef<THREE.Group>(null)
   const frameCount = useRef(0)
@@ -49,6 +50,7 @@ export const CharacterSprite: React.FC<CharacterSpriteProps> = ({
   const textureIdlePath = `${imgUrl}dinoset/${characterName}/base/idle.png`
   const textureMovePath = `${imgUrl}dinoset/${characterName}/base/move.png`
   const textureDeadPath = `${imgUrl}dinoset/${characterName}/base/dead.png`
+  const textureGhostPath = `${imgUrl}dinoset/${characterName}/ghost/idle.png`
 
   // 경계값 계산 후 WebSocket 훅에 전달
   const boundaries = React.useMemo(() => {
@@ -64,6 +66,7 @@ export const CharacterSprite: React.FC<CharacterSpriteProps> = ({
 
   const handleDeathAnimationComplete = () => {
     setDeathAnimationComplete(true)
+    setIsGhost(true)
   }
 
   // 조이스틱 데이터 변경 시 캐릭터 상태 업데이트
@@ -162,7 +165,7 @@ export const CharacterSprite: React.FC<CharacterSpriteProps> = ({
     // 메모리에 프리로딩
     const textureLoader = new THREE.TextureLoader() // textureLoader 인스턴스 생성
     let loadedCount = 0 // 로드된 텍스처 개수
-    const totalTextures = 3
+    const totalTextures = 4
 
     const onLoad = () => {
       // 로드가 되면 로드 카운트 +1
@@ -177,13 +180,14 @@ export const CharacterSprite: React.FC<CharacterSpriteProps> = ({
       textureLoader.load(textureIdlePath, onLoad), // idleTexture 로드
       textureLoader.load(textureMovePath, onLoad), // moveTexture 로드
       textureLoader.load(textureDeadPath, onLoad), // deadTexture 로드
+      textureLoader.load(textureGhostPath, onLoad), // deadTexture 로드
     ]
 
     // 컴포넌트 언마운트 시 메모리 정리
     return () => {
       textures.forEach((texture) => texture.dispose())
     }
-  }, [textureIdlePath, textureMovePath, textureDeadPath])
+  }, [textureIdlePath, textureMovePath, textureDeadPath, textureGhostPath])
 
   // 퀴즈 탈락 애니메이션 처리
   useEffect(() => {
@@ -233,7 +237,7 @@ export const CharacterSprite: React.FC<CharacterSpriteProps> = ({
     <group ref={characterRef} position={position}>
       {texturesLoaded && (
         <>
-          {isDead ? (
+          {isDead && !isGhost ? (
             <SpriteAnimation
               texturePath={textureDeadPath}
               frameWidth={24}
@@ -244,6 +248,8 @@ export const CharacterSprite: React.FC<CharacterSpriteProps> = ({
               loop={false}
               onAnimationComplete={handleDeathAnimationComplete}
             />
+          ) : isDead && isGhost ? (
+            <SpriteAnimation texturePath={textureGhostPath} frameWidth={24} totalWidth={96} frameCount={4} frameTime={100} direction={direction} />
           ) : (
             <>
               {!isMoving && <SpriteAnimation texturePath={textureIdlePath} frameWidth={24} totalWidth={72} frameCount={3} frameTime={200} direction={direction} />}

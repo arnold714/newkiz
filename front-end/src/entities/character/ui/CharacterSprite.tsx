@@ -18,6 +18,7 @@ export const CharacterSprite: React.FC<CharacterSpriteProps> = ({
   setMapBoundaries,
   quizResult,
   onPlayerRemove,
+  isLocal
 }) => {
   // state
   const [position, setPosition] = useState<[number, number, number]>(initialPosition)
@@ -39,8 +40,6 @@ export const CharacterSprite: React.FC<CharacterSpriteProps> = ({
   // 움직임이 금지된 상태인지 확인
   const movementProhibition = useAppSelector((state) => state.game.movementProhibition)
 
-  const isLocalPlayer = Boolean(joystickData)
-  const isOtherPlayer = !isLocalPlayer && userId !== undefined
   const { viewport } = useThree()
   const SPEED = 5
   const characterSize = { width: 1, height: 1 }
@@ -69,7 +68,7 @@ export const CharacterSprite: React.FC<CharacterSpriteProps> = ({
 
   // 조이스틱 데이터 변경 시 캐릭터 상태 업데이트
   useEffect(() => {
-    if (!joystickData || isDead) return
+    if (!joystickData || isDead || !isLocal) return
 
     const isJoystickMoving = joystickData.isMoving
     setIsMoving(isJoystickMoving)
@@ -81,7 +80,7 @@ export const CharacterSprite: React.FC<CharacterSpriteProps> = ({
 
   // 다른 유저들 좌표 변화 탐지
   useEffect(() => {
-    if (isOtherPlayer && initialPosition) {
+    if (!isLocal && initialPosition) {
       // 방향감지
       if (initialPosition[0] !== position[0]) {
         setDirection(initialPosition[0] > position[0] ? -1 : 1)
@@ -93,7 +92,7 @@ export const CharacterSprite: React.FC<CharacterSpriteProps> = ({
       // 일정 거리 이상 움직여야 상태 변경
       setIsMoving(distance > 0.01)
     }
-  }, [initialPosition, isOtherPlayer, position])
+  }, [initialPosition, isLocal, position])
 
   // 프레임 별 처리
   useFrame((_, delta) => {
@@ -104,7 +103,7 @@ export const CharacterSprite: React.FC<CharacterSpriteProps> = ({
     const currentTime = Date.now()
 
     // 로컬 유저 움직임 처리
-    if (isLocalPlayer && joystickData && joystickData.isMoving) {
+    if (isLocal && joystickData && joystickData.isMoving) {
       const [x, y, z] = position
       // 새로운 좌표 계산
       const newX = Math.max(boundaries.minX, Math.min(x + joystickData.x * SPEED * delta, boundaries.maxX))
@@ -130,7 +129,7 @@ export const CharacterSprite: React.FC<CharacterSpriteProps> = ({
         })
       }
       // 움직이다가 멈추면 전송
-      else if (isLocalPlayer && isMoving && !joystickData?.isMoving) {
+      else if (isLocal && isMoving && !joystickData?.isMoving) {
         setIsMoving(false)
 
         if (sendMove && userId !== undefined) {
@@ -143,7 +142,7 @@ export const CharacterSprite: React.FC<CharacterSpriteProps> = ({
       }
     }
     // 다른 유저 움직임 처리
-    else if (isOtherPlayer) {
+    else if (!isLocal) {
       const [x, y, z] = position
       const [targetX, targetY] = initialPosition
 
@@ -255,8 +254,8 @@ export const CharacterSprite: React.FC<CharacterSpriteProps> = ({
           )}
 
           {/* 닉네임 표시 - Html 컴포넌트 사용 */}
-          <Html position={[0, -0.6, 0]} center style={{ userSelect: "none", zIndex: 1, position: "relative" }}>
-            <div style={{ color: "white", background: "rgba(0,0,0,0.5)", padding: "2px 5px", borderRadius: "3px", whiteSpace: "nowrap", zIndex: "50" }}>{nickname}</div>
+          <Html position={[0, -0.7, 0]} center style={{ userSelect: "none", zIndex: 1, position: "relative" }}>
+            <div style={{ color: "white", background: `${isLocal?'rgba(255, 30, 50, 0.5)':'rgba(0,0,0,0.5)'}`, padding: "2px 5px", borderRadius: "3px", whiteSpace: "nowrap", zIndex: "50" }}>{nickname}</div>
           </Html>
         </>
       )}

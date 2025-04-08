@@ -7,11 +7,12 @@ from service.news_levels_generate import news_levels_generate
 from service.quiz_generate import generate_quiz
 from service.word_extract import word_extraction
 from datetime import datetime, UTC
+import logging
 
 async def generate_news_pipeline(news: News) -> dict:
     # 1. 요약 생성
     summary = await generate_summary(news.title, news.article)
-
+    
     # 2. 세부 카테고리 분류
     sub_category = sub_category_classify(news)
 
@@ -25,8 +26,7 @@ async def generate_news_pipeline(news: News) -> dict:
     # 5. 퀴즈 생성
     quiz = await generate_quiz(news.article, keywords)
 
-    # 6. 전체 JSON 객체 구성
-    return {
+    result = {
         "context_list": context_list,
         "quiz": quiz,
         "updated_at": datetime.now(UTC).isoformat(),
@@ -34,3 +34,6 @@ async def generate_news_pipeline(news: News) -> dict:
         "sub_category": sub_category,
         "summary": summary
     }
+    logging.info("뉴스 생성 파이프라인 결과: %s", result)
+    # 6. 전체 JSON 객체 구성
+    return result

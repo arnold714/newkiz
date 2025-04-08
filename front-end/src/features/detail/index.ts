@@ -1,1 +1,9 @@
-export type { NewsDetail } from './model/types';
+export type { 
+  NewsDetail, 
+  NewsScrapStatus, 
+  QuizData, 
+  context, 
+  NewsQuizCheck, 
+  QuizChoic, 
+  QuizSubmissionResponse,
+  MultipleChoiceQuiz  } from './model/types';

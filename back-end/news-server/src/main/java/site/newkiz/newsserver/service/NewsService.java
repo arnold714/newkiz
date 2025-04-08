@@ -1,7 +1,12 @@
 package site.newkiz.newsserver.service;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,8 +17,13 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 import site.newkiz.newsserver.entity.NewsDocument;
 import site.newkiz.newsserver.entity.NewsQuizDocument;
 import site.newkiz.newsserver.entity.NewsScrap;
@@ -22,6 +32,7 @@ import site.newkiz.newsserver.entity.NewsViewLog;
 import site.newkiz.newsserver.entity.QuizSolveLog;
 import site.newkiz.newsserver.entity.SearchLog;
 import site.newkiz.newsserver.entity.dto.NewsScrapResponse;
+import site.newkiz.newsserver.entity.dto.RecommendResponse;
 import site.newkiz.newsserver.entity.enums.NewsCategory;
 import site.newkiz.newsserver.entity.enums.NewsDetailCategory;
 import site.newkiz.newsserver.global.exception.BadRequestException;
@@ -44,6 +55,7 @@ public class NewsService {
   private final NewsQuizRepository newsQuizRepository;
   private final SearchLogRepository searchLogRepository;
   private final MongoTemplate mongoTemplate;
+  private final RestTemplate restTemplate;
 
 
   @Value("${article.limit}")
@@ -54,6 +66,9 @@ public class NewsService {
 
   @Value("${article.db}")
   private String ARTICLE_DB;
+
+  @Value("${recommend.api-url}")
+  private String recommendApiUrl;
 
 
   public List<NewsDocument> getAllNews(String cursorIdStr) {
@@ -304,7 +319,8 @@ public class NewsService {
   }
 
   private void logSearch(String userId, String keyword) {
-    SearchLog searchLog = searchLogRepository.findByKeyword(keyword)
+
+    SearchLog searchLog = searchLogRepository.findByUserIdAndKeyword(userId, keyword)
         .orElseGet(() -> {
           SearchLog newLog = new SearchLog();
           newLog.setUserId(userId);
@@ -329,5 +345,75 @@ public class NewsService {
     }
 
     searchLogRepository.deleteById(id);
+  }
+
+  public List<NewsDocument> getRecommendedNews(String userId) {
+    String fastApiUrl = recommendApiUrl + "/api/recommend";
+
+    // 요청 바디 생성
+    Map<String, Object> request = new HashMap<>();
+    request.put("user_id", userId);
+
+    HttpHeaders headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_JSON);
+
+    HttpEntity<Map<String, Object>> httpEntity = new HttpEntity<>(request, headers);
+
+    // 응답을 RecommendationResponse로 받기
+    ResponseEntity<RecommendResponse> response = restTemplate.postForEntity(
+        fastApiUrl,
+        httpEntity,
+        RecommendResponse.class
+    );
+
+    List<String> recommendedIds = response.getBody().getRecommended();
+
+    // DB에서 NewsDocument 리스트 조회
+    List<NewsDocument> documents = newsRepository.findByIdIn(recommendedIds);
+
+    // ID 순서 보장 필요 시 정렬
+    Map<String, NewsDocument> docMap = documents.stream()
+        .collect(Collectors.toMap(NewsDocument::getId, Function.identity()));
+
+    return recommendedIds.stream()
+        .map(docMap::get)
+        .filter(Objects::nonNull)
+        .toList();
+  }
+
+
+  public List<NewsDocument> getRecommendedNewsByCategory(String userId, String categoryId) {
+    String fastApiUrl = recommendApiUrl + "/api/recommend/category";
+
+    // 요청 바디 생성
+    Map<String, Object> request = new HashMap<>();
+    request.put("user_id", userId);
+    request.put("category_id", NewsCategory.valueOf(categoryId).getKoreanName());
+
+    HttpHeaders headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_JSON);
+
+    HttpEntity<Map<String, Object>> httpEntity = new HttpEntity<>(request, headers);
+
+    // 응답을 RecommendationResponse로 받기
+    ResponseEntity<RecommendResponse> response = restTemplate.postForEntity(
+        fastApiUrl,
+        httpEntity,
+        RecommendResponse.class
+    );
+
+    List<String> recommendedIds = response.getBody().getRecommended();
+
+    // DB에서 NewsDocument 리스트 조회
+    List<NewsDocument> documents = newsRepository.findByIdIn(recommendedIds);
+
+    // ID 순서 보장 필요 시 정렬
+    Map<String, NewsDocument> docMap = documents.stream()
+        .collect(Collectors.toMap(NewsDocument::getId, Function.identity()));
+
+    return recommendedIds.stream()
+        .map(docMap::get)
+        .filter(Objects::nonNull)
+        .toList();
   }
 }

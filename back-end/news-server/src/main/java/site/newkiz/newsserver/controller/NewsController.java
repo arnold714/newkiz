@@ -133,8 +133,6 @@ public class NewsController {
       @RequestBody SolveQuizRequest solveQuizRequest) {
     newsService.solveQuiz(userId, newsId, solveQuizRequest.getIsCorrect());
 
-    //이곳에 해설 제공
-
     return ApiResponse.success();
   }
 
@@ -160,5 +158,21 @@ public class NewsController {
       @RequestHeader(value = "User-Id") String userId) {
     newsService.deleteSearchLogById(searchId, userId);
     return ApiResponse.success();
+  }
+
+  @GetMapping("/recommend")
+  public ApiResponse<List<NewsDocument>> getRecommendedNews(
+      @RequestHeader(value = "User-Id") String userId) {
+    List<NewsDocument> recommendedNews = newsService.getRecommendedNews(userId);
+    return ApiResponse.success(recommendedNews);
+  }
+
+  @GetMapping("/recommend/category/{categoryId}")
+  public ApiResponse<List<NewsDocument>> getRecommendedNews(
+      @RequestHeader(value = "User-Id") String userId,
+      @PathVariable(value = "categoryId") String categoryId) {
+    List<NewsDocument> recommendedNews = newsService.getRecommendedNewsByCategory(userId,
+        categoryId);
+    return ApiResponse.success(recommendedNews);
   }
 }

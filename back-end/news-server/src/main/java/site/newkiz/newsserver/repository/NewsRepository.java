@@ -37,4 +37,5 @@ public interface NewsRepository extends MongoRepository<NewsDocument, String> {
   @Query("{ 'title': { '$regex': ?0, '$options': 'i' } }")
   List<NewsDocument> findTop20ByTitleContainingOrderByIdDesc(String keyword);
 
+  List<NewsDocument> findByIdIn(List<String> ids);
 }

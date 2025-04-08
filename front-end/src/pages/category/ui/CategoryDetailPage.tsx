@@ -10,19 +10,20 @@ const ITEMS_PER_PAGE = 5;
 const CategoryDetailPage: React.FC = () => {
   const { categoryId } = useParams<{ categoryId: string }>();
   const navigate = useNavigate();
-  // 전체 뉴스 리스트
   const [newsList, setNewsList] = useState<NewsItem[]>([]);
   // 화면에 표시할 뉴스 목록
   const [displayedList, setDisplayedList] = useState<NewsItem[]>([]);
-  // 현재 페이지(=몇 덩어리를 보여줄 것인가)
   const [page, setPage] = useState(1);
-
   const observerRef = useRef<HTMLDivElement | null>(null);
 
   // 카테고리 클릭 핸들러
   const handleCategoryTabClick = (id: string) => {
     navigate(`/category/details/${id}`);
   };
+
+  const handleNewsClick = (newsId: string) => {
+    navigate(`/detail/${newsId}`);
+  }
 
   // categoryId가 변경될 때마다 뉴스 데이터를 API로부터 가져옴
   useEffect(() => {
@@ -31,7 +32,6 @@ const CategoryDetailPage: React.FC = () => {
       .then((data) => {
         const result = data ?? [];
         setNewsList(result);
-        // 초기 페이지/표시 목록 설정
         setPage(1);
         setDisplayedList(result.slice(0, ITEMS_PER_PAGE));
       })
@@ -41,41 +41,29 @@ const CategoryDetailPage: React.FC = () => {
       });
   }, [categoryId]);
 
-  // 2) page가 바뀔 때마다 displayedList를 업데이트
+  // page 바뀔 때마다 displayedList 업데이트
   useEffect(() => {
-    // page * ITEMS_PER_PAGE 만큼 잘라서 표시
     setDisplayedList(newsList.slice(0, page * ITEMS_PER_PAGE));
   }, [page, newsList]);
 
-  // 3) IntersectionObserver로 스크롤 감지
+  // IntersectionObserver
   useEffect(() => {
-    // 이미 표시된 아이템 개수 >= 전체 아이템 개수이면 더 이상 관찰할 필요 없음
     if (displayedList.length >= newsList.length) return;
 
     const observerCallback: IntersectionObserverCallback = (entries) => {
       const [entry] = entries;
       if (entry.isIntersecting) {
-        // 바닥이 보이면 다음 페이지 로드
         setPage((prev) => prev + 1);
       }
     };
 
-    const observerOptions = {
-      root: null, // viewport
-      rootMargin: '0px',
-      threshold: 0.1, // 10%만 보여도 트리거
-    };
-
+    const observerOptions = { root: null, rootMargin: '0px', threshold: 0.1 };
     const observer = new IntersectionObserver(observerCallback, observerOptions);
 
-    if (observerRef.current) {
-      observer.observe(observerRef.current);
-    }
+    if (observerRef.current) observer.observe(observerRef.current);
 
     return () => {
-      if (observerRef.current) {
-        observer.unobserve(observerRef.current);
-      }
+      if (observerRef.current) observer.unobserve(observerRef.current);
     };
   }, [displayedList, newsList]);
 
@@ -126,7 +114,8 @@ const CategoryDetailPage: React.FC = () => {
             {displayedList.map((news) => (
               <div
                 key={news.id}
-                className="bg-white rounded-lg shadow-md overflow-hidden"
+                onClick={() => handleNewsClick(news.id)}
+                className="bg-white rounded-lg shadow-md overflow-hidden cursor-pointer"
               >
                 <div className="flex p-4">
                   <div className="w-24 h-24 rounded overflow-hidden mr-4 flex-shrink-0">

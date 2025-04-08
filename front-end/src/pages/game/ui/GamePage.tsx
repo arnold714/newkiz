@@ -45,23 +45,9 @@ export const GamePage: React.FC = () => {
   useEffect(() => {
     if (currentGameState === "FINISHED") {
       dispatch(setMovementProhibition(true))
+      setActivePlayers({})
     }
   }, [currentGameState])
-
-  const scoreRank = {
-    1: {
-      userId: 3,
-      nickname: "nickname",
-      score: 2,
-      totalScore: 7
-    },
-    2: {
-      userId: 1,
-      nickname: "nickname",
-      score: 3,
-      totalScore: 8
-    },
-  }
 
   // useEffect(()=>{
   //   console.log("게임 상태: ", currentGameState);
@@ -180,9 +166,9 @@ export const GamePage: React.FC = () => {
             <QuestionComponent questionNo={currentQuiz?.quizNumber} question={currentQuiz?.question} timeLeft={currentQuiz?.timeLeft} quizResult={quizResult} gameState={gameState} />
           </div>
         ) : null}
-        {connected && currentGameState === "FINISHED" ? (
+        {connected && gameState.scoreRank && currentGameState === "FINISHED" ? (
           <div className="absolute w-[80%] h-[70%] top-10 z-[1000] flex flex-col justify-center items-center opacity-90 select-none">
-            <GameResultComponent scoreRank={scoreRank} />
+            <GameResultComponent scoreRank={gameState.scoreRank} />
           </div>
         ) : null}
 
@@ -218,6 +204,7 @@ export const GamePage: React.FC = () => {
                 quizResult={quizResult || undefined}
                 allPlayers={activePlayers}
                 onPlayerRemove={handlePlayerRemove}
+                isLocal={true}
               />
             )}
             {/* 다른 플레이어 */}
@@ -225,7 +212,7 @@ export const GamePage: React.FC = () => {
               allPlayers &&
               Object.keys(allPlayers).length > 0 &&
               Object.values(allPlayers)
-                .filter((player) => player.id !== userId && player.id) // Filter out undefined/null and current user
+                .filter((player) => player.id !== userId && player.id)
                 .map((player) => (
                   <CharacterSprite
                     key={`player-${player.id}`}
@@ -240,12 +227,17 @@ export const GamePage: React.FC = () => {
                     quizResult={quizResult || undefined}
                     allPlayers={activePlayers}
                     onPlayerRemove={handlePlayerRemove}
+                    isLocal={false}
                   />
                 ))}
           </Suspense>
         </Canvas>
         <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 z-20">
+        {userId !== undefined && !quizResult?.wrongPlayers[userId] ? (
           <JoystickController onMove={handleJoystickMove} onStop={handleJoystickStop} />
+        ):(
+          currentGameState !== "FINISHED" && <div className="px-8 py-2 bg-[#7CBA36] rounded-lg text-white text-center font-bold text-lg">나가기</div>
+        )}
         </div>
       </div>
     </div>

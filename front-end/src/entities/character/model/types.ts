@@ -25,6 +25,7 @@ export interface CharacterSpriteProps {
   quizResult?: QuizResult
   allPlayers?: Record<number, Player>
   onPlayerRemove?: (userId: number) => void
+  isLocal: boolean
 }
 
 export interface GameResult {

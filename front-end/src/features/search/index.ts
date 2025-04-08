@@ -1,1 +1,1 @@
-export type { NewsItem, SearchResponse, SearchRequest, RecentSearchItem, RecentSearchResponse, DeleteSearchHistoryResponse } from './model/types'
+export type { NewsItem, SearchResponse, SearchRequest, RecentSearchItem, RecentSearchResponse, DeleteSearchHistoryResponse, WordCloudItem, WordCloudResponse } from './model/types'

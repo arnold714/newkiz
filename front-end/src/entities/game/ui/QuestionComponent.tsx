@@ -72,10 +72,10 @@ export const QuestionComponent: React.FC<QuestionProps> = ({ questionNo, questio
             <p className="mt-4 text-xl font-semibold">{question}</p>
           </div>
           {showAnswer && quizResult && (
-            <div className="flex flex-col mt-6 text-center">
+            <div className="flex flex-col mt-6 text-center gap-2">
               <div className="flex flex-row justify-center items-center gap-2">
                 <p className="text-lg font-semibold">정답은</p>
-                {quizResult.answer ? <FaRegCircle className="text-3xl text-blue-600" strokeWidth={10} /> : <IoClose className="text-3xl text-red-600" strokeWidth={10} />}
+                {quizResult.answer ? <FaRegCircle className="text-3xl text-[#748BFF]" strokeWidth={10} /> : <IoClose className="text-3xl text-[#EF4452]" strokeWidth={10} />}
               </div>
               <p className="text-lg font-semibold text-gray-600">{quizResult?.explanation}</p>
             </div>

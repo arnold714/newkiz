@@ -14,11 +14,19 @@ export interface CharacterMovementResult {
 
 export type State = "WAITING" | "PLAYING" | "FINISHED"
 
-export interface ScoreList {
-  scoreRank: number
+export interface Score {
+  userId: number
   nickname: string
   score: number
   totalScore: number
+}
+
+export interface ScoreRow extends Score {
+  rank: number
+}
+
+export interface ScoreRank {
+  [rank: number]: Score
 }
 
 export interface Player {
@@ -32,7 +40,7 @@ export interface Player {
 export interface GameState {
   state: State
   timeLeft?: number
-  scoreList?: ScoreList[]
+  scoreRank?: ScoreRank[]
   players?: Player[]
 }
 

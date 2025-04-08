@@ -12,15 +12,17 @@ const Layout = ({ children }: LayoutProps) => {
     pathname.startsWith("/reporter") ||
     pathname.startsWith("/category");
 
-  const showHeader = !pathname.startsWith("/search/");
+    const backgroundStyle = showBackground ? {
+      backgroundImage: `url(${imgUrl}assets/background.png)`,
+      backgroundRepeat: 'repeat',
+      backgroundSize: 'cover',
+      backgroundPosition: 'center'
+    } : {};
 
   return (
-    <div className={`${showBackground ? `
-      bg-[url(${imgUrl}assets/background.png)]
-      bg-repeat bg-cover bg-center
-      max-w-[var(--max-width)] min-w-[var(--min-width)] mx-auto
-    ` : ''} h-screen flex flex-col`}>
-      {showHeader && <Header />} 
+    <div className={`${showBackground ? 'max-w-[var(--max-width)] min-w-[var(--min-width)] mx-auto' : ''} h-screen flex flex-col`}
+    style={backgroundStyle}>
+      {!pathname.startsWith("/search/") && <Header />}
       <div>
         {children}
       </div>

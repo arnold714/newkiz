@@ -1,44 +1,36 @@
 import { LuX } from "react-icons/lu";
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import { QuizData } from "@/features/detail/model/types";
 import { QuizResult } from "./QuizResult";
-import { GetNewsQuiz, PostNewsQuiz } from "../api/DetailApi";
+import { PostNewsQuiz } from "../api/DetailApi";
 import Swal from "sweetalert2";  
 
 interface QuizModalProps {
   closeModal: () => void;
   id?: string;
+  quizData: QuizData | null; 
 }
 
-export const QuizModal = ({ closeModal, id }: QuizModalProps) => {
-  const [newsQuizData, setNewsQuizData] = useState<QuizData|null>(null);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [selectedChoice, setSelectedChoice] = useState<number | null>(null);
-  const [isAnswerSubmitted, setIsAnswerSubmitted] = useState(false);
+export const QuizModal = ({ closeModal, id, quizData }: QuizModalProps) => {
+  
 
-  useEffect(() => {
-    if (!id) {
-      setErrorMessage("올바른 뉴스 id가 제공되지 않았습니다.");
-      return;
-    }
-    GetNewsQuiz(id)
-    .then((data) => {
-      if(data) {
-        setNewsQuizData(data);
-      }
-    })
-    .catch((error) => {
-      console.log('퀴즈 불러오기 실패:', error);
-    });
-  },[id]);
-  if (errorMessage) return <div>Error: {errorMessage}</div>;
-  if (!newsQuizData) return <div>Loading...</div>;
+  // 내가 선택한 답
+  const [selectedChoice, setSelectedChoice] = useState<number | null>(null);
+  //제출 여부 관리
+  const [isAnswerSubmitted, setIsAnswerSubmitted] = useState<boolean | null>(false);
+
+
 
   // 답 클릭
   const handleChoiceClick = (choiceId: number) => {
     setSelectedChoice(choiceId)
-  };
+  }; 
+  if (!quizData) return <div>퀴즈 데이터를 불러오는 중...</div>;
 
+  const correctAnswerIndex = quizData.quiz.multipleChoiceQuiz.options.indexOf(
+    quizData.quiz.multipleChoiceQuiz.answer
+  );
+  const isCorrect = selectedChoice === correctAnswerIndex;
   //제출
   const handleSubmit = async () => {
     if (selectedChoice === null) {
@@ -51,7 +43,7 @@ export const QuizModal = ({ closeModal, id }: QuizModalProps) => {
     } else {
       try {
         // PostNewsQuiz API 호출
-        const response = await PostNewsQuiz(id as string);
+        const response = await PostNewsQuiz(id as string, isCorrect);
         if (response) {
           setIsAnswerSubmitted(true);
         }
@@ -61,9 +53,6 @@ export const QuizModal = ({ closeModal, id }: QuizModalProps) => {
     }
   };
 
-  //정답확인 
-  const isCorrect = selectedChoice === newsQuizData?.quiz.multipleChoiceQuiz.options.indexOf(newsQuizData?.quiz.multipleChoiceQuiz.answer);
-  
   return (
     <div>
       {!isAnswerSubmitted ? (
@@ -73,11 +62,11 @@ export const QuizModal = ({ closeModal, id }: QuizModalProps) => {
           </div>
           <div className="m-5">
             <p>퀴즈 | 다음 문제를 읽고 답을 고르시오.</p>
-            {newsQuizData ? (
+            {quizData ? (
               <>
-                <h2 className="text-3xl font-bold">{newsQuizData.quiz.multipleChoiceQuiz.question}</h2>
+                <h2 className="text-3xl font-bold">{quizData.quiz.multipleChoiceQuiz.question}</h2>
                 <div className="flex flex-col justify-start items-start">
-                  {newsQuizData.quiz.multipleChoiceQuiz.options.map((choice, index) => (
+                  {quizData.quiz.multipleChoiceQuiz.options.map((choice, index) => (
                     <button
                       key={index}
                       onClick={() => handleChoiceClick(index)}
@@ -107,7 +96,7 @@ export const QuizModal = ({ closeModal, id }: QuizModalProps) => {
         </div>
       ) : (
         // QuizResult 모달 표시
-        <QuizResult isCorrect={isCorrect} onClose={closeModal} />
+        <QuizResult isCorrect={isCorrect} explanation={quizData.quiz.multipleChoiceQuiz.explanation} onClose={closeModal} />
       )}
     </div>
   );

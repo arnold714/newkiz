@@ -4,7 +4,7 @@ import {
   QuizData, 
   NewsScrapStatus, 
   NewsQuizCheck,
-  QuizSubmissionRequest } from "@/features/detail/model/types";
+  QuizSubmissionResponse } from "@/features/detail/model/types";
 import { useQuery } from "@tanstack/react-query";
 // 뉴스 상세내용 
 export const GetNewsDetail = async (newsId: string): Promise<NewsDetail | undefined> => {
@@ -39,7 +39,7 @@ export const GetNewsQuizCheck = (newsId: string) => {
 export const GetNewsQuiz =  async (newsId: string): Promise<QuizData | undefined> => {
   try {
     const response = await customAxios.get(`api/news/${newsId}/quiz`);
-    console.log('')
+    console.log('퀴즈 상세조회 api response:', response.data.data);
     return response.data.data;
   } catch (error) {
     console.error('퀴즈 불러오기 실패:', error);
@@ -47,13 +47,23 @@ export const GetNewsQuiz =  async (newsId: string): Promise<QuizData | undefined
 };
 
 //객관식 퀴즈 풀이
-export const PostNewsQuiz = async (newsId: string):Promise<QuizSubmissionRequest | undefined> => {
+export const PostNewsQuiz = async (newsId: string, isCorrect: boolean): Promise<QuizSubmissionResponse | undefined> => {
   try {
-    const response = await customAxios.post(`/api/news/${newsId}/quiz`);
+    const response = await customAxios.post(`/api/news/${newsId}/quiz`, {
+      isCorrect: isCorrect,
+
+    });
+    
     console.log('퀴즈 풀이 api post전송 성공:', response.data);
-    return response.data;
+
+    if (response.data.success) {
+      return response.data; // 성공시 데이터 반환
+    } else {
+      throw new Error(response.data.error.message); // 실패시 오류 메시지 던짐
+    }
   } catch (error) {
     console.log('퀴즈 풀이 상태 api 전송 실패:', error);
+    return undefined;
   }
 };
 

@@ -45,17 +45,31 @@ export interface QuizChoic {
 export interface QuizData {
   id: string;
   quiz: {
-    multipleChoiceQuiz: {
-      question: string;
-      options: string[];
-      answer: string;
-    }
+    multipleChoiceQuiz: MultipleChoiceQuiz;
   }
 };
 
+export interface MultipleChoiceQuiz {
+  question: string;
+  options: string[];
+  answer: string;
+  explanation: string; // 여기에 설명을 추가합니다.
+}
+
 //퀴즈 풀이 후 여부 전송
-export interface QuizSubmissionRequest {
-  isCorrect: boolean;
+export interface QuizSubmissionResponse {
+  success: boolean;
+  data: {
+    id: string;
+    newsId: string;
+    userId: string;
+    summary: string;
+    updatedAt: string;
+  } | null;
+  error: {
+    code: string;
+    message: string;
+  } | null;
 };
 
 // 단어 사전

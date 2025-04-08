@@ -1,8 +1,9 @@
-import { QuizModal, QuizResult, GetNewsQuizCheck } from "@/widgets/detail";
+import { QuizModal, QuizResult, GetNewsQuizCheck, GetNewsQuiz } from "@/widgets/detail";
 import Modal from 'react-modal';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "@/pages/detail/styles/Detail.css";
+import { QuizData } from "@/features/detail";
 
 Modal.setAppElement('#root');
 
@@ -14,9 +15,31 @@ const imgUrl: string = import.meta.env.VITE_AWS_S3_BASE_URL;
 
 export const ParticipationOptions: React.FC<NewsDetailContentProps> = ({ id }) => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false); // 모달 상태 관리
+    //퀴즈 데이터
+    const [newsQuizData, setNewsQuizData] = useState<QuizData|null>(null);
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   // GetNewsQuizCheck 호출 (id가 없으면 기본값 설정)
   const { data } = id ? GetNewsQuizCheck(id) : { data: null };
+
+    useEffect(() => {
+      if (!id) {
+        setErrorMessage("올바른 뉴스 id가 제공되지 않았습니다.");
+        return;
+      }
+      GetNewsQuiz(id)
+      .then((data) => {
+        if(data) {
+          setNewsQuizData(data);
+        }
+      })
+      .catch((error) => {
+        console.log('퀴즈 불러오기 실패:', error);
+      });
+    },[id]);
+
+    if (errorMessage) return <div>Error: {errorMessage}</div>;
+    if (!newsQuizData) return <div>Loading...</div>;
 
   const handleQuizCheck = () => {
     if (id) {
@@ -67,10 +90,15 @@ export const ParticipationOptions: React.FC<NewsDetailContentProps> = ({ id }) =
           {data && data.data === true ? (
             <QuizResult
               isCorrect={true} // 퀴즈 풀이 완료
+              explanation={newsQuizData.quiz.multipleChoiceQuiz.explanation} 
               onClose={() => setIsModalOpen(false)}
             />
           ) : data && data.data === false ? (
-            <QuizModal closeModal={() => setIsModalOpen(false)} id={id} />
+            <QuizModal 
+              closeModal={() => setIsModalOpen(false)} 
+              id={id} 
+              quizData={newsQuizData}
+            />
           ) : null} {/* data가 null일 경우 아무것도 렌더링하지 않음 */}
         </Modal>
       </div>

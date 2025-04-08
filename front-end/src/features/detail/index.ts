@@ -5,4 +5,5 @@ export type {
   context, 
   NewsQuizCheck, 
   QuizChoic, 
-  QuizSubmissionRequest } from './model/types';
+  QuizSubmissionResponse,
+  MultipleChoiceQuiz  } from './model/types';

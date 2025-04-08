@@ -29,7 +29,7 @@ spring:
         - id: game-service
           uri: http://game-service
           predicates:
-            - Path=/ws/**
+            - Path=/ws/**, /api/game
 
         - id: chatbot-service
           uri: http://chatbot-service

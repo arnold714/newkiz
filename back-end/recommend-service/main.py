@@ -39,7 +39,7 @@ class RecommendCategoryRequest(BaseModel):
     user_id: str
     category_id: str
 
-@app.post("/recommend")
+@app.post("/api/recommend")
 def recommend(req: RecommendRequest):
     if model is None:
         raise HTTPException(status_code=500, detail="모델이 로드되지 않았습니다.")
@@ -67,7 +67,7 @@ def recommend(req: RecommendRequest):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@app.post("/recommend/category")
+@app.post("/api/recommend/category")
 def recommend_by_category(req: RecommendCategoryRequest):
     if model is None:
         raise HTTPException(status_code=500, detail="모델이 로드되지 않았습니다.")

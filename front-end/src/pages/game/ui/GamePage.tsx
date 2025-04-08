@@ -73,14 +73,27 @@ export const GamePage: React.FC = () => {
   useEffect(() => {
     if (allPlayers) {
       setActivePlayers(allPlayers)
-      console.log("allPlayers: ", allPlayers)
+      console.log("activePlayers: ", activePlayers)
     }
   }, [allPlayers])
 
-  const handlePlayerRemove = (playerId: number) => {
+  // quizResult가 변경될 때마다 activePlayers에서 탈락한 플레이어 제거
+  useEffect(() => {
+    if (quizResult && quizResult.wrongPlayers && quizResult.wrongPlayers.length > 0) {
+      setActivePlayers((prevPlayers) => {
+        const newPlayers = { ...prevPlayers }
+        quizResult.wrongPlayers.forEach((playerId) => {
+          delete newPlayers[playerId]
+        })
+        return newPlayers
+      })
+    }
+  }, [quizResult])
+
+  const handlePlayerRemove = (userId: number) => {
     setActivePlayers((prev) => {
       const newPlayers = { ...prev }
-      delete newPlayers[playerId]
+      delete newPlayers[userId]
       return newPlayers
     })
   }
@@ -121,9 +134,9 @@ export const GamePage: React.FC = () => {
           newPositions[player.id] = [
             player.position.x,
             player.position.y,
-            0 // z 좌표
-          ];
-          console.log(`Setting position for player ${player.id}: [${player.position.x}, ${player.position.y}]`);
+            0, // z 좌표
+          ]
+          console.log(`Setting position for player ${player.id}: [${player.position.x}, ${player.position.y}]`)
         }
       })
 
@@ -191,7 +204,7 @@ export const GamePage: React.FC = () => {
             />
             <TileMap tilesetPath={`${tileMapUrl}assets/Basic_Grass_Biom_things.png`} tileSize={16} mapWidth={16} mapHeight={10} tileData={biomeData} scale={0.5} wScale={wScale} />
             {/* 로컬 플레이어 */}
-            {characterName && userId !== undefined && nickname && (
+            {characterName && userId !== undefined && nickname && activePlayers[userId] && (
               <CharacterSprite
                 characterName={characterName}
                 joystickData={joystickData}
@@ -209,19 +222,14 @@ export const GamePage: React.FC = () => {
             )}
             {/* 다른 플레이어 */}
             {connected &&
-              allPlayers &&
-              Object.keys(allPlayers).length > 0 &&
-              Object.values(allPlayers)
+              Object.values(activePlayers)
                 .filter((player) => player.id !== userId && player.id)
                 .map((player) => (
                   <CharacterSprite
                     key={`player-${player.id}`}
                     characterName={player.characterName}
                     tileMapSize={tileMapSize}
-                    initialPosition={
-                      playersPositions[player.id] ||
-                      [player.position.x, player.position.y, 0]
-                    }
+                    initialPosition={playersPositions[player.id] || [player.position.x, player.position.y, 0]}
                     userId={player.id}
                     nickname={player.nickname}
                     quizResult={quizResult || undefined}
@@ -233,11 +241,11 @@ export const GamePage: React.FC = () => {
           </Suspense>
         </Canvas>
         <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 z-20">
-        {userId !== undefined && !quizResult?.wrongPlayers[userId] ? (
-          <JoystickController onMove={handleJoystickMove} onStop={handleJoystickStop} />
-        ):(
-          currentGameState !== "FINISHED" && <div className="px-8 py-2 bg-[#7CBA36] rounded-lg text-white text-center font-bold text-lg">나가기</div>
-        )}
+          {userId !== undefined && !quizResult?.wrongPlayers[userId] ? (
+            <JoystickController onMove={handleJoystickMove} onStop={handleJoystickStop} />
+          ) : (
+            currentGameState !== "FINISHED" && <div className="px-8 py-2 bg-[#7CBA36] rounded-lg text-white text-center font-bold text-lg">나가기</div>
+          )}
         </div>
       </div>
     </div>

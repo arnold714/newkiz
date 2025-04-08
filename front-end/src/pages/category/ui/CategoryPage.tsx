@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { Category, SubCategory, categories } from '@/features/category';
+import { Category, categories } from '@/features/category';
 import { LuX } from 'react-icons/lu';
+import { SubCategoryGrid } from '@/widgets/category';
 
 export const CategoryPage: React.FC = () => {
   // 기본 선택 카테고리
@@ -35,6 +36,11 @@ export const CategoryPage: React.FC = () => {
   /** 전체보기 클릭 시 */
   const handleViewAll = () => {
     navigate(`/category/details/${selectedCategoryId}`);
+  };
+
+  const handleSubCategoryClick = (subCategoryId: string) => {
+    // 카테고리는 이미 selectedCategoryId에 있음
+    navigate(`/category/details/${selectedCategoryId}/${subCategoryId}`);
   };
 
   /** 서브 카테고리 컬러 가져오기 */
@@ -97,46 +103,20 @@ export const CategoryPage: React.FC = () => {
                 <h3 className="text-xl font-medium">
                   {selectedCategory?.name || '카테고리 선택'}
                 </h3>
-                <div
-                  className="text-lg text-gray-500 cursor-pointer"
-                  onClick={handleViewAll}
-                >
+                {/* 전체보기 버튼 */}
+                <div className="text-lg text-gray-500 cursor-pointer" onClick={handleViewAll}>
                   전체보기 &gt;
                 </div>
               </div>
 
               {/* 서브 카테고리 그리드 */}
-              <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 gap-4">
-                {selectedCategory?.subCategories.map(
-                  (subCategory: SubCategory, index: number) => {
-                    const colorClass = getSubCategoryColor(index);
-                    return (
-                      <div
-                        key={subCategory.id}
-                        className="cursor-pointer"
-                        onClick={handleViewAll}
-                      >
-                        <div
-                          className={`rounded-lg overflow-hidden shadow-lg ${colorClass} aspect-square flex flex-col`}
-                        >
-                          <div className="flex-grow flex items-center justify-center">
-                            {subCategory.iconName && (
-                              <img
-                                src={getIconUrl(subCategory.iconName)}
-                                alt={subCategory.name}
-                                className="w-3/5 h-3/5 object-contain"
-                              />
-                            )}
-                          </div>
-                          <div className="px-1 pb-2 text-center text-white font-medium text-sm leading-tight h-12 flex items-center justify-center">
-                            <span className="line-clamp-2">{subCategory.name}</span>
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  }
-                )}
-              </div>
+              <SubCategoryGrid
+                subCategories={selectedCategory?.subCategories || []}
+                onSubClick={(subId) => handleSubCategoryClick(subId)}
+                getColorClass={getSubCategoryColor}
+                getIconUrl={getIconUrl}
+                containerClassName="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4"
+              />
             </div>
           </div>
         </>

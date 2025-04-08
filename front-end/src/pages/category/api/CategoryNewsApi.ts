@@ -1,9 +1,6 @@
 import { customAxios } from '@/shared';
 import { NewsItem } from '@/features/category';
 
-/**
- * 카테고리 ID에 해당하는 뉴스 목록을 가져옵니다.
- */
 export async function fetchNewsByCategory(categoryId: string): Promise<NewsItem[]> {
   try {
     const upperCategoryId = categoryId.toUpperCase();
@@ -14,6 +11,19 @@ export async function fetchNewsByCategory(categoryId: string): Promise<NewsItem[
     return response.data.data.newsList;
   } catch (error) {
     console.error('Failed to fetch news list:', error);
+    return [];
+  }
+}
+
+export async function fetchNewsBySubCategory(subCategoryId: string): Promise<NewsItem[]> {
+  try {
+    const upperSubCat = subCategoryId.toUpperCase();
+    const response = await customAxios.get<{ data: { newsList: NewsItem[] } }>(
+      `/api/news/subcategory/${upperSubCat}`
+    );
+    return response.data.data.newsList;
+  } catch (error) {
+    console.error('Failed to fetch subcategory news list:', error);
     return [];
   }
 }

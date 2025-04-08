@@ -205,10 +205,12 @@ const routes: RouteObject[] = [
     ),
   },
   {
-    path: "/search/result",
+    path: "/search/:keyword",
     element: (
       <Suspense fallback={<LoadingComponent />}>
-        <SearchResultsPage />
+        <Layout>
+          <SearchResultsPage />
+          </Layout>
       </Suspense>
     ),
   },

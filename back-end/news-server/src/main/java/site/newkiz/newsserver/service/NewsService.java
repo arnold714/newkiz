@@ -416,4 +416,9 @@ public class NewsService {
         .filter(Objects::nonNull)
         .toList();
   }
+
+  public List<SearchLogRepository.KeywordCount> getTop10MostSearchedKeywordsWithin24Hours() {
+    LocalDateTime from = LocalDateTime.now().minusHours(24);
+    return searchLogRepository.findTop10MostSearchedKeywordsWithin24Hours(from);
+  }
 }

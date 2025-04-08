@@ -37,22 +37,29 @@ export const useWebSocket = (userId?: number) => {
             {}
           );
           setAllPlayers(playersMap);
+          console.log("playersMap: ", playersMap);
         },
         onMove(moveInfo: Player) {
-            if (boundaries) {
-                const denormalizedPosition = denormalizePosition(
-                  moveInfo.position, 
-                  boundaries
-                );
-                
-                setAllPlayers((prev) => ({
-                  ...prev,
-                  [moveInfo.id]: {
-                    ...moveInfo,
-                    position: denormalizedPosition
-                  },
-                }));
-              }
+          if (boundaries) {
+            const denormalizedPosition = denormalizePosition(
+              moveInfo.position, 
+              boundaries
+            );
+            
+            setAllPlayers((prev) => {
+              const updatedPlayers = {
+                ...prev,
+                [moveInfo.id]: {
+                  ...moveInfo,
+                  position: denormalizedPosition
+                },
+              };
+              console.log("Player moved - updated position for player:", moveInfo.id, denormalizedPosition);
+              return updatedPlayers;
+            });
+          } else {
+            console.warn("Boundaries not set yet, cannot denormalize position");
+          }
         },
         onQuizInfo(quizInfo: QuizInfo) {
           setCurrentQuiz(quizInfo);
@@ -68,7 +75,7 @@ export const useWebSocket = (userId?: number) => {
       .catch((err) => console.error("Failed to connect:", err));
 
     return () => webSocketService.disconnect();
-  }, [userId]);
+  }, [userId, boundaries]);
 
   const sendMove = useCallback(
     (userId:number, characterName: string, position: Position) => {
@@ -76,7 +83,7 @@ export const useWebSocket = (userId?: number) => {
       webSocketService.sendMoveMessage(userId, characterName, position, boundaries);
       // console.log("sendMove Position: ", position.x, ", ", position.y)
     },
-    [userId, webSocketService]
+    [userId, webSocketService, boundaries]
   );
 
   return { connected, waitingInfo, allPlayers, currentQuiz, quizResult, gameState, sendMove, setMapBoundaries };

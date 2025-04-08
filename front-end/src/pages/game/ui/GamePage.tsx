@@ -35,7 +35,7 @@ export const GamePage: React.FC = () => {
 
   useEffect(() => {
     if (user) {
-      setUserId(user.id)
+      setUserId(user.userId)
       setCharacterName(user.characterId)
       setNickname(user.nickname)
     }
@@ -55,11 +55,11 @@ export const GamePage: React.FC = () => {
       score: 2,
       totalScore: 7
     },
-    2: { 
-      userId: 1, 
+    2: {
+      userId: 1,
       nickname: "nickname",
-      score: 3, 
-      totalScore: 8 
+      score: 3,
+      totalScore: 8
     },
   }
 
@@ -87,6 +87,7 @@ export const GamePage: React.FC = () => {
   useEffect(() => {
     if (allPlayers) {
       setActivePlayers(allPlayers)
+      console.log("allPlayers: ", allPlayers)
     }
   }, [allPlayers])
 
@@ -130,7 +131,14 @@ export const GamePage: React.FC = () => {
     Object.values(allPlayers)
       .filter((player) => player.id !== userId)
       .forEach((player) => {
-        newPositions[player.id] = [player.position.x, player.position.y, 0]
+        if (player && player.position) {
+          newPositions[player.id] = [
+            player.position.x,
+            player.position.y,
+            0 // z 좌표
+          ];
+          console.log(`Setting position for player ${player.id}: [${player.position.x}, ${player.position.y}]`);
+        }
       })
 
     setPlayersPositions(newPositions)
@@ -172,7 +180,7 @@ export const GamePage: React.FC = () => {
             <QuestionComponent questionNo={currentQuiz?.quizNumber} question={currentQuiz?.question} timeLeft={currentQuiz?.timeLeft} quizResult={quizResult} gameState={gameState} />
           </div>
         ) : null}
-        { connected && currentGameState === "FINISHED" ? (
+        {connected && currentGameState === "FINISHED" ? (
           <div className="absolute w-[80%] h-[70%] top-10 z-[1000] flex flex-col justify-center items-center opacity-90 select-none">
             <GameResultComponent scoreRank={scoreRank} />
           </div>
@@ -215,22 +223,24 @@ export const GamePage: React.FC = () => {
             {/* 다른 플레이어 */}
             {connected &&
               allPlayers &&
+              Object.keys(allPlayers).length > 0 &&
               Object.values(allPlayers)
-                .filter((player) => player.id !== userId) // 현재 사용자 제외
+                .filter((player) => player.id !== userId && player.id) // Filter out undefined/null and current user
                 .map((player) => (
-                  <>
-                    <CharacterSprite
-                      key={player.id}
-                      characterName={player.characterName}
-                      tileMapSize={tileMapSize}
-                      initialPosition={playersPositions[player.id] || [player.position.x, player.position.y, 0]}
-                      userId={player.id}
-                      nickname={player.nickname}
-                      quizResult={quizResult || undefined}
-                      allPlayers={activePlayers}
-                      onPlayerRemove={handlePlayerRemove}
-                    />
-                  </>
+                  <CharacterSprite
+                    key={`player-${player.id}`}
+                    characterName={player.characterName}
+                    tileMapSize={tileMapSize}
+                    initialPosition={
+                      playersPositions[player.id] ||
+                      [player.position.x, player.position.y, 0]
+                    }
+                    userId={player.id}
+                    nickname={player.nickname}
+                    quizResult={quizResult || undefined}
+                    allPlayers={activePlayers}
+                    onPlayerRemove={handlePlayerRemove}
+                  />
                 ))}
           </Suspense>
         </Canvas>

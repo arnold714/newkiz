@@ -48,21 +48,6 @@ export const GamePage: React.FC = () => {
     }
   }, [currentGameState])
 
-  const scoreRank = {
-    1: {
-      userId: 3,
-      nickname: "nickname",
-      score: 2,
-      totalScore: 7
-    },
-    2: {
-      userId: 1,
-      nickname: "nickname",
-      score: 3,
-      totalScore: 8
-    },
-  }
-
   // useEffect(()=>{
   //   console.log("게임 상태: ", currentGameState);
   // }, [currentGameState])
@@ -180,9 +165,9 @@ export const GamePage: React.FC = () => {
             <QuestionComponent questionNo={currentQuiz?.quizNumber} question={currentQuiz?.question} timeLeft={currentQuiz?.timeLeft} quizResult={quizResult} gameState={gameState} />
           </div>
         ) : null}
-        {connected && currentGameState === "FINISHED" ? (
+        {connected && gameState.scoreRank && currentGameState === "FINISHED" ? (
           <div className="absolute w-[80%] h-[70%] top-10 z-[1000] flex flex-col justify-center items-center opacity-90 select-none">
-            <GameResultComponent scoreRank={scoreRank} />
+            <GameResultComponent scoreRank={gameState.scoreRank} />
           </div>
         ) : null}
 
@@ -218,6 +203,7 @@ export const GamePage: React.FC = () => {
                 quizResult={quizResult || undefined}
                 allPlayers={activePlayers}
                 onPlayerRemove={handlePlayerRemove}
+                isLocal={true}
               />
             )}
             {/* 다른 플레이어 */}
@@ -225,7 +211,7 @@ export const GamePage: React.FC = () => {
               allPlayers &&
               Object.keys(allPlayers).length > 0 &&
               Object.values(allPlayers)
-                .filter((player) => player.id !== userId && player.id) // Filter out undefined/null and current user
+                .filter((player) => player.id !== userId && player.id)
                 .map((player) => (
                   <CharacterSprite
                     key={`player-${player.id}`}
@@ -240,6 +226,7 @@ export const GamePage: React.FC = () => {
                     quizResult={quizResult || undefined}
                     allPlayers={activePlayers}
                     onPlayerRemove={handlePlayerRemove}
+                    isLocal={false}
                   />
                 ))}
           </Suspense>

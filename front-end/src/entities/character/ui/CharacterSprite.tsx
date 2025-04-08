@@ -254,8 +254,8 @@ export const CharacterSprite: React.FC<CharacterSpriteProps> = ({
           )}
 
           {/* 닉네임 표시 - Html 컴포넌트 사용 */}
-          <Html position={[0, -0.6, 0]} center style={{ userSelect: "none", zIndex: 1, position: "relative" }}>
-            <div style={{ color: "white", background: "rgba(0,0,0,0.5)", padding: "2px 5px", borderRadius: "3px", whiteSpace: "nowrap", zIndex: "50" }}>{nickname}</div>
+          <Html position={[0, -0.7, 0]} center style={{ userSelect: "none", zIndex: 1, position: "relative" }}>
+            <div style={{ color: "white", background: `${isLocal?'rgba(255, 30, 50, 0.5)':'rgba(0,0,0,0.5)'}`, padding: "2px 5px", borderRadius: "3px", whiteSpace: "nowrap", zIndex: "50" }}>{nickname}</div>
           </Html>
         </>
       )}

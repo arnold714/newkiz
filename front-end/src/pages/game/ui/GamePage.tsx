@@ -45,6 +45,7 @@ export const GamePage: React.FC = () => {
   useEffect(() => {
     if (currentGameState === "FINISHED") {
       dispatch(setMovementProhibition(true))
+      setActivePlayers({})
     }
   }, [currentGameState])
 
@@ -232,7 +233,11 @@ export const GamePage: React.FC = () => {
           </Suspense>
         </Canvas>
         <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 z-20">
+        {userId !== undefined && !quizResult?.wrongPlayers[userId] ? (
           <JoystickController onMove={handleJoystickMove} onStop={handleJoystickStop} />
+        ):(
+          currentGameState !== "FINISHED" && <div className="px-8 py-2 bg-[#7CBA36] rounded-lg text-white text-center font-bold text-lg">나가기</div>
+        )}
         </div>
       </div>
     </div>

@@ -2,6 +2,7 @@ import { Layout } from "@/shared"
 import { Suspense, lazy } from "react"
 import { createBrowserRouter, RouteObject } from "react-router-dom"
 import { LoadingComponent } from "@/shared"
+// import { ProtectedGameRoute } from "@/shared/model/ProtectedGameRoute"
 // import { ProtectedRoute } from "@/shared"
 
 // 디테일 페이지
@@ -41,6 +42,8 @@ const NewsSummaryPage = lazy(() => import("@pages/newssummary").then((module) =>
 // 카테고리 페이지
 const CategoryPage = lazy(() => import("@pages/category").then((module) => ({ default: module.CategoryPage })))
 const CategoryDetailPage = lazy(() => import("@pages/category").then((module) => ({ default: module.CategoryDetailPage })))
+// 잘못된 접근 
+const ForbiddenPage = lazy(()=> import("@shared/ui/ForbiddenPage").then((module)=>({default:module.ForbiddenPage})))
 
 const routes: RouteObject[] = [
   {
@@ -55,204 +58,206 @@ const routes: RouteObject[] = [
   // {
   //   element: <ProtectedRoute />,
   //   children: [
+  {
+    path: "/",
+    element: (
+      <Suspense fallback={<LoadingComponent />}>
+        <Layout>
+          <MainPage />
+        </Layout>
+      </Suspense>
+    ),
+  },
+  {
+    path: "/detail/:id",
+    element: (
+      <Suspense fallback={<LoadingComponent />}>
+        <Layout>
+          <DetailPage />
+        </Layout>
+      </Suspense>
+    ),
+  },
+  {
+    path: "/game",
+    element: (
+      // <ProtectedGameRoute> {/* game url로 직접 접근하지 못하도록 막는 코드 */}
+        <Suspense fallback={<LoadingComponent />}>
+          <GamePage />
+        </Suspense>
+      // </ProtectedGameRoute>
+    ),
+  },
+  {
+    path: "/mypage",
+    element: (
+      <Suspense fallback={<LoadingComponent />}>
+        <Layout>
+          <MyPage />
+        </Layout>
+      </Suspense>
+    ),
+    children: [
       {
-        path: "/",
+        path: "info",
         element: (
           <Suspense fallback={<LoadingComponent />}>
-            <Layout>
-              <MainPage />
-            </Layout>
+            <ModifyInfoPage />
           </Suspense>
         ),
       },
       {
-        path: "/detail/:id",
+        path: "scrap",
         element: (
           <Suspense fallback={<LoadingComponent />}>
-            <Layout>
-              <DetailPage />
-            </Layout>
-          </Suspense>
-        ),
-      },
-      {
-        path: "/game",
-        element: (
-          <Suspense fallback={<LoadingComponent />}>
-            <GamePage />
-          </Suspense>
-        ),
-      },
-      {
-        path: "/mypage",
-        element: (
-          <Suspense fallback={<LoadingComponent />}>
-            <Layout>
-              <MyPage />
-            </Layout>
+            <ScrapPage />
           </Suspense>
         ),
         children: [
           {
-            path: "info",
+            path: "news",
             element: (
               <Suspense fallback={<LoadingComponent />}>
-                <ModifyInfoPage />
+                <ScrappedNewsPage />
               </Suspense>
             ),
           },
           {
-            path: "scrap",
+            path: "words",
             element: (
               <Suspense fallback={<LoadingComponent />}>
-                <ScrapPage />
-              </Suspense>
-            ),
-            children: [
-              {
-                path: "news",
-                element: (
-                  <Suspense fallback={<LoadingComponent />}>
-                    <ScrappedNewsPage />
-                  </Suspense>
-                ),
-              },
-              {
-                path: "words",
-                element: (
-                  <Suspense fallback={<LoadingComponent />}>
-                    <ScrappedWordsPage />
-                  </Suspense>
-                ),
-              },
-            ],
-          },
-          {
-            path: "summary",
-            element: (
-              <Suspense fallback={<LoadingComponent />}>
-                <SummaryPage />
-              </Suspense>
-            ),
-          },
-          {
-            path: "wronganswer",
-            element: (
-              <Suspense fallback={<LoadingComponent />}>
-                <WrongAnswerPage />
+                <ScrappedWordsPage />
               </Suspense>
             ),
           },
         ],
       },
       {
-        path: "/reporter",
+        path: "summary",
         element: (
           <Suspense fallback={<LoadingComponent />}>
-            <Layout>
-              <ReporterPage />
-            </Layout>
-          </Suspense>
-        ),
-        children: [
-          {
-            path: "create",
-            element: (
-              <Suspense fallback={<LoadingComponent />}>
-                <CreateArticlePage />
-              </Suspense>
-            ),
-          },
-          {
-            path: "preview",
-            element: (
-              <Suspense fallback={<LoadingComponent />}>
-                <ArticlePreviewPage />
-              </Suspense>
-            ),
-          },
-          {
-            path: "upload",
-            element: (
-              <Suspense fallback={<LoadingComponent />}>
-                <ShortsUploadPage />
-              </Suspense>
-            ),
-          },
-          {
-            path: "setting",
-            element: (
-              <Suspense fallback={<LoadingComponent />}>
-                <ShortsSettingPage />
-              </Suspense>
-            ),
-          },
-        ],
-      },
-      {
-        path: "/search",
-        element: (
-          <Suspense fallback={<LoadingComponent />}>
-            <Layout>
-              <SearchPage />
-            </Layout>
+            <SummaryPage />
           </Suspense>
         ),
       },
       {
-        path: "/search/result",
+        path: "wronganswer",
         element: (
           <Suspense fallback={<LoadingComponent />}>
-            <SearchResultsPage />
+            <WrongAnswerPage />
+          </Suspense>
+        ),
+      },
+    ],
+  },
+  {
+    path: "/reporter",
+    element: (
+      <Suspense fallback={<LoadingComponent />}>
+        <Layout>
+          <ReporterPage />
+        </Layout>
+      </Suspense>
+    ),
+    children: [
+      {
+        path: "create",
+        element: (
+          <Suspense fallback={<LoadingComponent />}>
+            <CreateArticlePage />
           </Suspense>
         ),
       },
       {
-        path: "/userinfo",
+        path: "preview",
         element: (
           <Suspense fallback={<LoadingComponent />}>
-            <FirstLoginOnboarding />
+            <ArticlePreviewPage />
           </Suspense>
         ),
       },
       {
-        path: "/chatbot/:newsId",
+        path: "upload",
         element: (
           <Suspense fallback={<LoadingComponent />}>
-            <ChatbotPage />
+            <ShortsUploadPage />
           </Suspense>
         ),
       },
       {
-        path: "/newssummary/:id",
+        path: "setting",
         element: (
           <Suspense fallback={<LoadingComponent />}>
-            <Layout>
-              <NewsSummaryPage />
-            </Layout>
+            <ShortsSettingPage />
           </Suspense>
         ),
       },
+    ],
+  },
+  {
+    path: "/search",
+    element: (
+      <Suspense fallback={<LoadingComponent />}>
+        <Layout>
+          <SearchPage />
+        </Layout>
+      </Suspense>
+    ),
+  },
+  {
+    path: "/search/result",
+    element: (
+      <Suspense fallback={<LoadingComponent />}>
+        <SearchResultsPage />
+      </Suspense>
+    ),
+  },
+  {
+    path: "/userinfo",
+    element: (
+      <Suspense fallback={<LoadingComponent />}>
+        <FirstLoginOnboarding />
+      </Suspense>
+    ),
+  },
+  {
+    path: "/chatbot/:newsId",
+    element: (
+      <Suspense fallback={<LoadingComponent />}>
+        <ChatbotPage />
+      </Suspense>
+    ),
+  },
+  {
+    path: "/newssummary/:id",
+    element: (
+      <Suspense fallback={<LoadingComponent />}>
+        <Layout>
+          <NewsSummaryPage />
+        </Layout>
+      </Suspense>
+    ),
+  },
+  {
+    path: "/category",
+    element: (
+      <Suspense fallback={<LoadingComponent />}>
+        <Layout>
+          <CategoryPage />
+        </Layout>
+      </Suspense>
+    ),
+    children: [
       {
-        path: "/category",
+        path: "details/:categoryId",
         element: (
           <Suspense fallback={<LoadingComponent />}>
-            <Layout>
-              <CategoryPage />
-            </Layout>
+            <CategoryDetailPage />
           </Suspense>
         ),
-        children: [
-          {
-            path: "details/:categoryId",
-            element: (
-              <Suspense fallback={<LoadingComponent />}>
-                <CategoryDetailPage />
-              </Suspense>
-            ),
-          },
-        ],
       },
+    ],
+  },
   //   ],
   // },
   // 없는 페이지 처리
@@ -264,6 +269,14 @@ const routes: RouteObject[] = [
       </Suspense>
     ),
   },
+  {
+    path: "/forbidden",
+    element: (
+      <Suspense fallback={<LoadingComponent />}>
+        <ForbiddenPage />
+      </Suspense>
+    )
+  }
 ];
 
 export const router = createBrowserRouter(routes);

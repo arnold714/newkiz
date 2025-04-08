@@ -22,12 +22,14 @@ async def generate_quiz(article_text: str, keyword_list: list[str]) -> dict:
 {{
   "ox_quiz": {{
     "question": "...",
-    "answer": "O"
+    "answer": "O",
+    "explanation": "..."
   }},
   "multiple_choice_quiz": {{
     "question": "...",
     "options": ["...", "...", "...", "..."],
-    "answer": "..."
+    "answer": "...",
+    "explanation": "..."
   }}
 }}
 

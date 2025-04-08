@@ -188,11 +188,10 @@ export const CharacterSprite: React.FC<CharacterSpriteProps> = ({
 
   // 퀴즈 탈락 애니메이션 처리
   useEffect(() => {
-    console.log("Quiz result changed:", quizResult);
-    console.log("Current userId:", userId);
+    console.log("퀴즈 결과:", quizResult);
     
     if (!userId || !quizResult || !quizResult.wrongPlayers) {
-      console.log("Missing data for elimination check:", { userId, quizResult });
+      console.log("유저 아이디 || 퀴즈 결과 || 틀린 플레이어가 없음", { userId, quizResult });
       return;
     }
   

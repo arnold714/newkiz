@@ -38,7 +38,7 @@ export const GameResultComponent = ({ scoreRank }: GameResultComponentProps) => 
         headerName: "순위",
         field: "rank",
         sortable: true,
-        width: 60,
+        width: 80,
       },
       {
         headerName: "닉네임",
@@ -50,13 +50,13 @@ export const GameResultComponent = ({ scoreRank }: GameResultComponentProps) => 
         headerName: "점수",
         field: "score",
         sortable: true,
-        width: 60,
+        width: 80,
       },
       {
         headerName: "총점",
         field: "totalScore",
         sortable: true,
-        width: 60,
+        width: 80,
       },
     ],
     []

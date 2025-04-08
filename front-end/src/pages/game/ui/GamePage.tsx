@@ -20,7 +20,7 @@ export const GamePage: React.FC = () => {
     y: 0,
     isMoving: false,
   })
-  const [currentGameState, setCurrentGameState] = useState<State>("FINISHED") //FINISHED
+  const [currentGameState, setCurrentGameState] = useState<State>("WAITING") //FINISHED
   const [wScale, setWScale] = useState<number>(1)
   const [playersPositions, setPlayersPositions] = useState<Record<number, [number, number, number]>>({})
   const [activePlayers, setActivePlayers] = useState<Record<number, Player>>({})
@@ -48,8 +48,6 @@ export const GamePage: React.FC = () => {
     }
   }, [currentGameState])
 
-  const connected = true
-
   const scoreRank = {
     1: {
       userId: 3,
@@ -69,11 +67,13 @@ export const GamePage: React.FC = () => {
   //   console.log("게임 상태: ", currentGameState);
   // }, [currentGameState])
 
+  // const connected = true
+
   // // 임시 userId
   // const userId = 3
 
   // WebSocket 연결
-  const { allPlayers, gameState, waitingInfo, currentQuiz, quizResult, sendMove, setMapBoundaries } = useWebSocket(userId)
+  const { connected, allPlayers, gameState, waitingInfo, currentQuiz, quizResult, sendMove, setMapBoundaries } = useWebSocket(userId)
   // connected, gameInfo, allPlayers, currentQuiz, quizResult,
 
   // currentGameState 처리

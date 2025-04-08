@@ -1,2 +1,2 @@
 
-export type{ TodayReadNewsCount, ApiResponse, NewsItem } from './model/types';
+export type{ TodayReadNewsCount, ApiResponse, NewsItem, } from './model/types';

@@ -5,9 +5,9 @@ from pipeline import generate_news_pipeline
 app = FastAPI()
 
 
-@app.post("/news/generate")
+@app.post("/api/news/generate")
 async def news_generate(news: News):
-    result = generate_news_pipeline(news)
+    result = await generate_news_pipeline(news)
     return {
         "success": True,
         "data": result

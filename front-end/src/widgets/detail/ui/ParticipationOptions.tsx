@@ -1,4 +1,4 @@
-import { QuizModal, QuizResult, GetNewsQuizCheck, GetNewsQuiz } from "@/widgets/detail";
+import { QuizModal, GetNewsQuizCheck, GetNewsQuiz } from "@/widgets/detail";
 import Modal from 'react-modal';
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
@@ -86,20 +86,12 @@ export const ParticipationOptions: React.FC<NewsDetailContentProps> = ({ id }) =
           overlayClassName="modal-overlay"
           shouldCloseOnOverlayClick={true}
         >
-
-          {data && data.data === true ? (
-            <QuizResult
-              isCorrect={true} // 퀴즈 풀이 완료
-              explanation={newsQuizData.quiz.multipleChoiceQuiz.explanation} 
-              onClose={() => setIsModalOpen(false)}
-            />
-          ) : data && data.data === false ? (
-            <QuizModal 
-              closeModal={() => setIsModalOpen(false)} 
-              id={id} 
-              quizData={newsQuizData}
-            />
-          ) : null} {/* data가 null일 경우 아무것도 렌더링하지 않음 */}
+          <QuizModal 
+            closeModal={() => setIsModalOpen(false)} 
+            id={id} 
+            quizData={newsQuizData}
+            isSolved={data?.data ?? false} 
+          />
         </Modal>
       </div>
     </div>

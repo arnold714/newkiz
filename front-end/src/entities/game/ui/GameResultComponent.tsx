@@ -14,7 +14,7 @@ interface GameResultComponentProps {
   scoreRank: ScoreRank
 }
 
-export const GameResultComponent = ({ scoreRank }: GameResultComponentProps) => {
+export const GameResultComponent: React.FC<GameResultComponentProps> = ({ scoreRank }) => {
   const [rawData, setRawData] = useState<ScoreRow[]>()
 
   const navigate = useNavigate()
@@ -24,11 +24,15 @@ export const GameResultComponent = ({ scoreRank }: GameResultComponentProps) => 
   }
 
   useEffect(() => {
-    const converted = Object.entries(scoreRank).map(([rank, score]) => ({
-      rank: Number(rank),
-      ...score,
-    }))
-    setRawData(converted)
+    const converted = Object.entries(scoreRank)
+      .flatMap(([rank, players]) =>
+        players.map(player => ({
+          ...player,
+          rank: Number(rank),
+        }))
+      )
+
+    setRawData(converted);
   }, [scoreRank])
 
   // 컬럼 정의에 keyof GameResult 타입을 사용
@@ -39,6 +43,12 @@ export const GameResultComponent = ({ scoreRank }: GameResultComponentProps) => 
         field: "rank",
         sortable: true,
         width: 80,
+        cellRenderer: (params: any) => {
+          if (params.value > 0) return `↓ ${params.value}`;
+          if (params.value < 0) return `↑ ${Math.abs(params.value)}`;
+          return '-';
+        }
+
       },
       {
         headerName: "닉네임",

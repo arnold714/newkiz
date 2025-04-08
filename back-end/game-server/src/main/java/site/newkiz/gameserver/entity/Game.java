@@ -18,7 +18,7 @@ public class Game {
   private int startHour;
 
   // 전체 퀴즈 정보
-  private List<Quiz> quizList;
+  private List<GameQuiz> gameQuizList;
 
   // 현재 퀴즈
   private int currentQuizNumber;
@@ -34,7 +34,7 @@ public class Game {
     this.state = State.WAITING;
     // todo 임의로 18시 시작 지정
     this.startHour = 18;
-    this.quizList = new ArrayList<>();
+    this.gameQuizList = new ArrayList<>();
     this.currentQuizNumber = 0;
     this.players = new ConcurrentHashMap<>();
     this.alivePlayers = new ConcurrentHashMap<>();
@@ -46,11 +46,11 @@ public class Game {
   }
 
   public int quizCount() {
-    return this.quizList.size();
+    return this.gameQuizList.size();
   }
 
-  public Quiz getCurrnetQuiz() {
-    return this.quizList.get(this.currentQuizNumber - 1);
+  public GameQuiz getCurrnetQuiz() {
+    return this.gameQuizList.get(this.currentQuizNumber - 1);
   }
 
   public static Map<String, Object> toPlayingGameInfo(Game game) {

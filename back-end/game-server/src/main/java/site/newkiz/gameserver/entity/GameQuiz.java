@@ -1,9 +1,11 @@
 package site.newkiz.gameserver.entity;
 
 import lombok.Data;
+import lombok.ToString;
 
 @Data
-public class Quiz {
+@ToString
+public class GameQuiz {
 
   // 문제 질문
   private String question;
@@ -17,7 +19,7 @@ public class Quiz {
   // 문제 푸는 시간 (초 단위)
   private int timeLeft;
 
-  public Quiz(String question, boolean answer, String explanation) {
+  public GameQuiz(String question, boolean answer, String explanation) {
     this.question = question;
     this.answer = answer;
     this.explanation = explanation;

@@ -5,8 +5,13 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -15,6 +20,7 @@ import site.newkiz.gameserver.entity.GameQuiz;
 import site.newkiz.gameserver.entity.GameSchoolScore;
 import site.newkiz.gameserver.entity.GameScore;
 import site.newkiz.gameserver.entity.GameUserScore;
+import site.newkiz.gameserver.entity.NewsQuizDocument;
 import site.newkiz.gameserver.entity.Player;
 import site.newkiz.gameserver.entity.Position;
 import site.newkiz.gameserver.entity.Profile;
@@ -37,6 +43,7 @@ public class GameService {
   private final ProfileRepository profileRepository;
   private final GameSchoolScoreRepository gameSchoolScoreRepository;
   private Game game;
+  private final MongoTemplate mongoTemplate;
 
   @Scheduled(cron = "0 55 17 * * ?")
   public void createGame() throws InterruptedException {
@@ -47,13 +54,18 @@ public class GameService {
 
   public List<GameQuiz> getTodayQuizList() {
     log.info("퀴즈 세팅");
+    Query query = new Query();
+    query.addCriteria(Criteria.where("quiz.ox_quiz.answer").regex("^[oOxX]$"));
+    query.with(Sort.by(Sort.Direction.DESC, "published"));
+    query.limit(20); // 최근 20개만
 
-    List<GameQuiz> gameQuizList = new ArrayList<>();
-    // todo 임의 퀴즈 세팅
-    for (int i = 1; i <= 10; i++) {
-      gameQuizList.add(new GameQuiz("Q" + i + ". 퀴즈 질문", true, "해설"));
-    }
-    return gameQuizList;
+    return mongoTemplate.find(query, NewsQuizDocument.class).stream().map(q -> {
+      String question = q.getQuiz().getOxQuiz().getQuestion();
+      boolean answer = q.getQuiz().getOxQuiz().getAnswer().equalsIgnoreCase("O");
+      String explanation = q.getQuiz().getOxQuiz().getExplanation();
+
+      return new GameQuiz(question, answer, explanation);
+    }).collect(Collectors.toList());
   }
 
   public void joinGame(Integer userId) {
@@ -93,10 +105,11 @@ public class GameService {
 
     // 게임의 퀴즈 수 만큼 진행
     for (int currentQuizNumber = 1; currentQuizNumber <= game.quizCount(); currentQuizNumber++) {
-      log.info("현재 문제 번호: " + currentQuizNumber);
       // 현재 문제
       game.setCurrentQuizNumber(currentQuizNumber);
       GameQuiz gameQuiz = game.getCurrnetQuiz();
+
+      log.info("현재 문제 번호: {} (정답: {})", currentQuizNumber, game.getCurrnetQuiz().isAnswer());
 
       // 현재 문제 정보 send
       messagingTemplate.convertAndSend("/sub/quiz-info",
@@ -106,7 +119,7 @@ public class GameService {
       Thread.sleep(gameQuiz.getTimeLeft() * 1000);
 
       // 정답 판정
-      log.info(currentQuizNumber + " 번 문제 정답: ~~~");
+      log.info("{}번 문제 정답: {}", currentQuizNumber, game.getCurrnetQuiz().isAnswer());
       QuizResult quizResult = checkAnswers();
       messagingTemplate.convertAndSend("/sub/quiz-result", quizResult);
 

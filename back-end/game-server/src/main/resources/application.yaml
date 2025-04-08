@@ -4,6 +4,11 @@ spring:
       host: ${REDIS_HOST}
       port: ${REDIS_PORT}
 
+    mongodb:
+      uri: mongodb://${MONGO_USER}:${MONGO_PASSWORD}@${MONGO_HOST}:${MONGO_PORT}/?authSource=admin&authMechanism=SCRAM-SHA-1
+      database: ${MONGO_DATABASE}
+
+
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://${MYSQL_HOST}/${MYSQL_DATABASE}?serverTimezone=Asia/Seoul

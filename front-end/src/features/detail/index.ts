@@ -6,4 +6,6 @@ export type {
   NewsQuizCheck, 
   QuizChoic, 
   QuizSubmissionResponse,
-  MultipleChoiceQuiz  } from './model/types';
+  MultipleChoiceQuiz, 
+  ApiResponse,
+  GetNewsSummaryRequest  } from './model/types';

@@ -1,16 +1,17 @@
 import { useState } from "react";
 import Button from "@/shared/ui/Button";
-import {  NewsCategory } from "@/features/main/model/types";
+import { GetRecommendNews } from "../api/MainApi";
 
 interface RecommendedNewsProps {
     userProfile: {
-       interests: string[]
+       interests: string[];
     }
 };
 
 export const RecommendedNews: React.FC<RecommendedNewsProps> = ({ userProfile }) => {
-
-
+    const interests = userProfile.interests;
+    console.log("interests: ",interests)
+    const [data: recommendedNews, isLoading, isError, error ] = GetRecommendNews();
     const [selectedCategory, setSelectedCategory] = useState<NewsCategory>('전체');
     
     //카테고리 별 뉴스 필터링
@@ -18,11 +19,16 @@ export const RecommendedNews: React.FC<RecommendedNewsProps> = ({ userProfile })
       ? newsData
       : newsData.filter((news) => news.category === selectedCategory);
 
+      if(isLoading) return <div>Loading</div>
+      if(isError) {
+        console.error("Error fetching today's news:", error); // 에러 로그 출력
+        return  <div>Error: {error.message}</div>;
+      }
     return (
         <div>
             {/* 카테고리 버튼 리스트 */}
             <div className="flex justify-center gap-3">
-                {userProfile.interests.map((category) => [
+                {interests.map((category) => [
                     <Button
                         key={category.label}
                         label={category.label}

@@ -27,6 +27,7 @@ export const GamePage: React.FC = () => {
   const [userId, setUserId] = useState<number | undefined>(undefined)
   const [characterName, setCharacterName] = useState<string | null>(null)
   const [nickname, setNickname] = useState<string | null>(null)
+  const [isDead, setIsDead] = useState<boolean>(false);
 
   const dispatch = useAppDispatch()
   const movementProhibition = useAppSelector((state) => state.game.movementProhibition)
@@ -96,6 +97,7 @@ export const GamePage: React.FC = () => {
       delete newPlayers[userId]
       return newPlayers
     })
+    setIsDead(true)
   }
 
   // 조이스틱 데이터 처리
@@ -241,10 +243,10 @@ export const GamePage: React.FC = () => {
           </Suspense>
         </Canvas>
         <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 z-20">
-          {userId !== undefined && !quizResult?.wrongPlayers[userId] ? (
+          {userId !== undefined && !isDead ? (
             <JoystickController onMove={handleJoystickMove} onStop={handleJoystickStop} />
           ) : (
-            currentGameState !== "FINISHED" && <div className="px-8 py-2 bg-[#7CBA36] rounded-lg text-white text-center font-bold text-lg">나가기</div>
+            currentGameState !== "FINISHED" && <div className="bottom-10 px-8 py-2 bg-[#7CBA36] rounded-lg text-white text-center font-bold text-lg">나가기</div>
           )}
         </div>
       </div>

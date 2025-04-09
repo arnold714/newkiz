@@ -5,8 +5,7 @@ import { GetRecommendNews, GetRecommendCategory } from "../api/MainApi";
 import "@shared/styles/CustomScroll.css"
 import { interest, Category } from "@/features/main";
 import { Link } from "react-router-dom";
-import { NewsItem } from "@/features/main";
-import { useQuery } from "react-query";
+import { useQuery } from '@tanstack/react-query';
 import "../styles/ReommendedNews.css"
 
 interface RecommendedNewsProps {
@@ -22,14 +21,13 @@ export const RecommendedNews: React.FC<RecommendedNewsProps> = ({ userProfile })
     const {data: recommendedNews, isLoading: isNewsLoading, isError: isNewsError, error: newsError, } = GetRecommendNews();
     // 선택한 카테고리 버튼 값
     const [selectedCategory, setSelectedCategory] = useState<Category>('전체');
-    const { data: recommendedCategory, isLoading: isCatLoading, isError: isCatError, error: catError } = useQuery<NewsItem[], Error>(
-        ['recommendedCategory', selectedCategory],
-        () => GetRecommendCategory(selectedCategory),
-        {
-            enabled: selectedCategory !== "전체", // selectedCategory가 "전체"일 때는 요청하지 않음
-            initialData: [], // 처음 로딩 시 빈 배열을 설정
-        }
-    );
+    
+    const { data: recommendedCategory, isLoading: isCatLoading, isError: isCatError, error: catError } = useQuery({
+        queryKey: ['recommendedCategory', selectedCategory], // queryKey
+        queryFn: () => GetRecommendCategory(selectedCategory), // queryFn
+        enabled: selectedCategory !== "전체", // 조건부 실행 옵션
+        initialData: [], // 초기 데이터 설정
+    });
 
     // 선택된 카테고리에 따라 보여줄 데이터
     const newsToDisplay = selectedCategory === "전체" ? recommendedNews : recommendedCategory;

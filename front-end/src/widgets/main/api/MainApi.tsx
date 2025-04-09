@@ -43,7 +43,6 @@ export const GetRecommendNews =  () => {
 
 //카테고리 별 뉴스 추천
 export const GetRecommendCategory = ( categoryId:string ) => {
-    console.log("categoryId:",categoryId)
     return useQuery<NewsItem[], Error>({
         queryKey: ['recommendedCategory', categoryId],
         queryFn: async () => {

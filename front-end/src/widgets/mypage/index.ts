@@ -9,3 +9,5 @@ export { ScrappedWordModal } from './ui/ScrappedWordModal';
 export { SelectCharacterModal } from './ui/SelectCharacterModal';
 export { fetchUserGraph } from './api/GraphApi'
 export { fetchUserProfile } from './api/ProfileApi'
+export { GetWrongAnswer, PostWrongAnswer } from './api/myPageApi';
+

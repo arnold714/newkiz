@@ -46,7 +46,7 @@ public class GameService {
   private final MongoTemplate mongoTemplate;
 
   // todo 게임 test 반복
-  @Scheduled(cron = "0 */1 * * * ?", zone = "Asia/Seoul")
+  // @Scheduled(cron = "0 */1 * * * ?", zone = "Asia/Seoul")
   public void test() throws InterruptedException {
     if (game != null && game.getState() != State.FINISHED) {
       return;

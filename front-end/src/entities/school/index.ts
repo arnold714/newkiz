@@ -1,0 +1,1 @@
+export type { School } from './model/types'

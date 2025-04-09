@@ -1,0 +1,29 @@
+spring:
+  application:
+    name: kidsnews-server
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 5MB
+  data:
+    mongodb:
+      uri: mongodb://${MONGO_USER}:${MONGO_PASSWORD}@${MONGO_HOST}/?authSource=admin&authMechanism=SCRAM-SHA-1
+      database: ${MONGO_DATABASE}
+article:
+  limit: 20
+  today: 5
+  table: ${TABLE_NAME}
+
+cloud:
+  aws:
+    credentials:
+      access-key: ${S3_ACCESS_KEY}
+      secret-key: ${S3_SECRET_KEY}
+    region:
+      static: ${S3_REGION}
+    s3:
+      bucket: ${S3_BUCKET}
+    stack:
+      auto: false
+
+

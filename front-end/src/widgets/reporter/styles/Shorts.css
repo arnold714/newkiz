@@ -1,0 +1,22 @@
+/* 방법 1: slick-slide에 margin 적용 */
+.shorts-carousel .slick-track {
+    display: flex;
+  }
+
+.shorts-carousel .slick-slide {
+    margin: 0 8px;
+  }
+  
+  .shorts-carousel .slick-list {
+    margin: 0 -8px;
+  }
+  
+  /* 또는 방법 2: div 내부에 margin 적용 (더 권장됨) */
+  .shorts-carousel .slick-slide > div {
+    margin: 0 1px;
+  }
+  
+  .shorts-carousel .slick-list {
+    margin: 0 -8px;
+  }
+  

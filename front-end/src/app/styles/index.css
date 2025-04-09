@@ -96,6 +96,7 @@ html, body {
   max-width: var(--max-width); /* CSS 변수로 최대 너비 적용 */
   min-width: var(--min-width);
   margin: 0 auto; /* 중앙 정렬 */
+  overflow: hidden !important;
 }
 
 body {
@@ -124,5 +125,14 @@ button {
 @media (max-width: 600px) {
   :root {
     --max-width: 100%;
+  }
+}
+
+/* 기존 CSS 코드 끝부분 (이미지에 보이는 녹색 텍스트 "zi재형zon"과 같은 효과를 위한 클래스) */
+
+@layer utilities {
+  .text-stroke-1 {
+    -webkit-text-stroke-width: 0.3px;
+    -webkit-text-stroke-color: white;
   }
 }

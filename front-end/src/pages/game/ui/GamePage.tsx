@@ -204,7 +204,7 @@ export const GamePage: React.FC = () => {
             />
             <TileMap tilesetPath={`${tileMapUrl}assets/Basic_Grass_Biom_things.png`} tileSize={16} mapWidth={16} mapHeight={10} tileData={biomeData} scale={0.5} wScale={wScale} />
             {/* 로컬 플레이어 */}
-            {characterName && userId !== undefined && nickname && activePlayers[userId] && (
+            {characterName && userId !== undefined && nickname && (
               <CharacterSprite
                 characterName={characterName}
                 joystickData={joystickData}

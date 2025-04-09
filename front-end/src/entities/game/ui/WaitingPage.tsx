@@ -28,13 +28,13 @@ export const WaitingPage = ({ waitingInfo }: WaitingPageProps) => {
         ]);
   
         console.log("학교 랭킹 response:", schoolResponse);
-        if (schoolResponse.success && schoolResponse.data.rankings) {
-          setSchoolRanking(schoolResponse.data.rankings);
+        if (schoolResponse.success && schoolResponse.data.rank) {
+          setSchoolRanking(schoolResponse.data.rank);
         }
   
         console.log("개인 랭킹 response:", personalResponse);
-        if (personalResponse.success && personalResponse.data.rankings) {
-          setPersonalRanking(personalResponse.data.rankings);
+        if (personalResponse.success && personalResponse.data.rank) {
+          setPersonalRanking(personalResponse.data.rank);
         }
       } catch (error) {
         console.error("랭킹 정보 불러오기 실패:", error);

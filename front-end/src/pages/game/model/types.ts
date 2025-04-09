@@ -8,7 +8,7 @@ export interface SchoolRank {
   export interface SchoolRankingProps {
     success: boolean;
     data: {
-      rankings: SchoolRank[];
+      rank: SchoolRank[];
     };
     error: null | string;
   }
@@ -24,7 +24,7 @@ export interface SchoolRank {
   export interface PersonalRankingProps {
     success: boolean;
     data: {
-      rankings: PersonalRank[];
+      rank: PersonalRank[];
     };
     error: null | string;
   }

@@ -26,13 +26,9 @@ export const WaitingPage = ({ waitingInfo }: WaitingPageProps) => {
           getSchoolRank(),
           getPersonalRank()
         ]);
-  
-        console.log("학교 랭킹 response:", schoolResponse);
         if (schoolResponse.success && schoolResponse.data.rank) {
           setSchoolRanking(schoolResponse.data.rank);
         }
-  
-        console.log("개인 랭킹 response:", personalResponse);
         if (personalResponse.success && personalResponse.data.rank) {
           setPersonalRanking(personalResponse.data.rank);
         }

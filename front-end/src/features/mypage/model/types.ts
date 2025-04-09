@@ -114,3 +114,20 @@ export interface UpdateMyPageRequest {
   characterId: string;
   interests: string[];
 }
+
+export interface WrongAnswerResponse {
+  success: boolean;
+  data: WrongAnswerItem[] | null;
+  error: string | null;
+};
+
+export interface WrongAnswerItem {
+  id: string;
+  quiz: {
+    multipleChoiceQuiz: {
+      question: string;
+      options: string[];
+      answer: string;
+    }
+  }
+};

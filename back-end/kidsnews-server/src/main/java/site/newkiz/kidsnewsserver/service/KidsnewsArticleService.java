@@ -7,6 +7,9 @@ import org.springframework.web.multipart.MultipartFile;
 import site.newkiz.kidsnewsserver.Entity.Kidsnews;
 import site.newkiz.kidsnewsserver.Entity.Reply;
 import site.newkiz.kidsnewsserver.dto.*;
+import site.newkiz.kidsnewsserver.global.exception.BadRequestException;
+import site.newkiz.kidsnewsserver.global.exception.ForbiddenException;
+import site.newkiz.kidsnewsserver.global.exception.NotFoundException;
 import site.newkiz.kidsnewsserver.repository.KidsnewsRepository;
 import site.newkiz.kidsnewsserver.util.S3Uploader;
 
@@ -41,7 +44,7 @@ public class KidsnewsArticleService {
         // cursor 기준 이후 데이터만 필터링
         Optional<Kidsnews> cursorNews = kidsnewsRepository.findById(cursor);
         if (cursorNews.isEmpty()) {
-            return List.of(); // 잘못된 커서면 빈 리스트
+            throw new BadRequestException("잘못된 cursor 입니다.");
         }
 
         LocalDateTime cursorTime = cursorNews.get().getCreatedAt();
@@ -77,17 +80,17 @@ public class KidsnewsArticleService {
 
     public KidsnewsResponseDto getById(String id) {
         Kidsnews news = kidsnewsRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("뉴스가 존재하지 않습니다."));
+                .orElseThrow(() -> new NotFoundException("뉴스가 존재하지 않습니다."));
         news.setViews(news.getViews() + 1);
         return KidsnewsResponseDto.fromEntity(kidsnewsRepository.save(news));
     }
 
     public KidsnewsResponseDto update(String id, String userId, KidsnewsUpdateRequest request) throws IOException {
         Kidsnews news = kidsnewsRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("뉴스가 존재하지 않습니다."));
+                .orElseThrow(() -> new NotFoundException("뉴스가 존재하지 않습니다."));
 
         if (!news.getUserId().equals(userId)) {
-            throw new RuntimeException("수정 권한이 없습니다.");
+            throw new ForbiddenException("수정 권한이 없습니다.");
         }
 
         news.setTitle(request.getTitle());
@@ -106,10 +109,10 @@ public class KidsnewsArticleService {
 
     public void delete(String id, String userId) {
         Kidsnews news = kidsnewsRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("뉴스가 존재하지 않습니다."));
+                .orElseThrow(() -> new NotFoundException("뉴스가 존재하지 않습니다."));
 
         if (!news.getUserId().equals(userId)) {
-            throw new RuntimeException("삭제 권한이 없습니다.");
+            throw new ForbiddenException("삭제 권한이 없습니다.");
         }
 
         kidsnewsRepository.deleteById(id);
@@ -117,14 +120,14 @@ public class KidsnewsArticleService {
 
     public KidsnewsResponseDto like(String id, String userId) {
         Kidsnews news = kidsnewsRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("뉴스가 존재하지 않습니다."));
+                .orElseThrow(() -> new NotFoundException("뉴스가 존재하지 않습니다."));
         news.setLikes(news.getLikes() + 1);
         return KidsnewsResponseDto.fromEntity(kidsnewsRepository.save(news));
     }
 
     public KidsnewsResponseDto addReply(String id, String userId, ReplyCreateRequest request) {
         Kidsnews news = kidsnewsRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("뉴스가 존재하지 않습니다."));
+                .orElseThrow(() -> new NotFoundException("뉴스가 존재하지 않습니다."));
         Reply reply = new Reply();
         reply.setId(UUID.randomUUID().toString());
         reply.setContent(request.getContent());
@@ -140,7 +143,7 @@ public class KidsnewsArticleService {
 
     public KidsnewsResponseDto updateReply(String newsId, String replyId, String userId, ReplyUpdateRequest request) {
         Kidsnews news = kidsnewsRepository.findById(newsId)
-                .orElseThrow(() -> new RuntimeException("뉴스가 존재하지 않습니다."));
+                .orElseThrow(() -> new NotFoundException("뉴스가 존재하지 않습니다."));
 
         for (Reply reply : news.getReplyList()) {
             if (reply.getId().equals(replyId) && reply.getUserId().equals(userId)) {
@@ -156,7 +159,7 @@ public class KidsnewsArticleService {
 
     public KidsnewsResponseDto deleteReply(String newsId, String replyId, String userId) {
         Kidsnews news = kidsnewsRepository.findById(newsId)
-                .orElseThrow(() -> new RuntimeException("뉴스가 존재하지 않습니다."));
+                .orElseThrow(() -> new NotFoundException("뉴스가 존재하지 않습니다."));
 
         news.getReplyList().removeIf(reply -> reply.getId().equals(replyId) && reply.getUserId().equals(userId));
         return KidsnewsResponseDto.fromEntity(kidsnewsRepository.save(news));

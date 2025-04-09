@@ -15,7 +15,6 @@ export const PersonalRankingModal = ({ closeModal }: PersonalRankingModalProps) 
         const fetchPersonalRanking = async () => {
           try {
             const personalResponse = await getPersonalRank();
-            console.log("학교 랭킹 response:", personalResponse);
             if (personalResponse.success && personalResponse.data.rank) {
               setPersonalRanking(personalResponse.data.rank);
             }

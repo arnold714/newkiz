@@ -15,9 +15,8 @@ export const PersonalRankingModal = ({ closeModal }: PersonalRankingModalProps) 
         const fetchPersonalRanking = async () => {
           try {
             const personalResponse = await getPersonalRank();
-            console.log("학교 랭킹 response:", personalResponse);
-            if (personalResponse.success && personalResponse.data.rankings) {
-              setPersonalRanking(personalResponse.data.rankings);
+            if (personalResponse.success && personalResponse.data.rank) {
+              setPersonalRanking(personalResponse.data.rank);
             }
           } catch (error) {
             console.error("학교 랭킹 불러오기 실패:", error);

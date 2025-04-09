@@ -29,13 +29,25 @@ public class JwtAuthenticationFilter implements WebFilter {
   public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
     try {
       String accessToken = cookieUtil.getAccessToken(exchange.getRequest());
+      String refreshToken = cookieUtil.getRefreshToken(exchange.getRequest());
 
       log.info("First enter");
       log.info(exchange.getRequest().getURI().getPath());
       log.info(exchange.getRequest().getMethod().name());
 
-      if (accessToken != null) {
-        Integer userId = jwtUtil.getId(accessToken);
+      if (accessToken != null || refreshToken != null) {
+        if(refreshToken != null) {
+          Integer userId = jwtUtil.getId(refreshToken);
+          String name = jwtUtil.getName(refreshToken);
+
+          String newAccessToken = jwtUtil.createAccessToken(userId, name);
+          String newRefreshToken = jwtUtil.createRefreshToken(userId, name);
+
+          cookieUtil.addAccessTokenCookie(exchange.getResponse(), newAccessToken);
+          cookieUtil.addRefreshTokenCookie(exchange.getResponse(), newRefreshToken);
+        }
+
+        Integer userId = jwtUtil.getId(accessToken != null ? accessToken : refreshToken);
         Authentication authentication = new UsernamePasswordAuthenticationToken(userId, "", null);
 
         return profileRepository.findByUserId(userId)
@@ -62,6 +74,7 @@ public class JwtAuthenticationFilter implements WebFilter {
               }
             }));
       }
+
     } catch (Exception e) {
       throw new RuntimeException(e);
     }

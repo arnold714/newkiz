@@ -1,10 +1,12 @@
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { RankType } from "../model/type"
 import PersonalRanking from './PersonalRanking'
 import SchoolRanking from "./SchoolRanking"
 import { MdOutlineKeyboardArrowDown, MdOutlineKeyboardArrowUp } from "react-icons/md";
 import '@shared/styles/CustomScroll.css';
 import { NewWaitingInfo } from "@/features/game/model/types";
+import { PersonalRank, SchoolRank } from "@/pages/game/model/types";
+import { getPersonalRank, getSchoolRank } from "@/pages/game/api/GameApi";
 
 interface WaitingPageProps {
   waitingInfo: NewWaitingInfo;
@@ -14,6 +16,35 @@ export const WaitingPage = ({ waitingInfo }: WaitingPageProps) => {
   const [time, setTime] = useState<number | null>(null);
   const [selected, setSelected] = useState<RankType>("personal")
   const [isToggleOpen, setIsToggleOpen] = useState<boolean>(false)
+  const [schoolRanking, setSchoolRanking] = useState<SchoolRank[]>([]);
+  const [personalRanking, setPersonalRanking] = useState<PersonalRank[]>([]);
+  
+  const fetchSchoolRanking = useCallback(async () => {
+    try {
+      const response = await getSchoolRank();
+      if (response.success && response.data.rankings) {
+        setSchoolRanking(response.data.rankings);
+      }
+    } catch (error) {
+      console.error('학교 랭킹 불러오기 실패:', error);
+    }
+  }, []);
+
+  const fetchPersonalRanking = useCallback(async () => {
+    try {
+      const response = await getPersonalRank();
+      if (response.success && response.data.rankings) {
+        setPersonalRanking(response.data.rankings);
+      }
+    } catch (error) {
+      console.error('개인 랭킹 불러오기 실패:', error);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchSchoolRanking();
+    fetchPersonalRanking();
+  }, [fetchSchoolRanking, fetchPersonalRanking]);
 
   useEffect(()=>{
     setTime(waitingInfo.timeLeft)
@@ -66,9 +97,9 @@ export const WaitingPage = ({ waitingInfo }: WaitingPageProps) => {
             </div>
             <div className="flex flex-col flex-1 w-2/3 text-black items-center mt-5">
               {selected === "personal" ? (
-                <PersonalRanking />
+                <PersonalRanking personalRanks={personalRanking} />
               ) : (
-                <SchoolRanking />
+                <SchoolRanking schoolRanks={schoolRanking} />
               )}
             </div>
           </div>

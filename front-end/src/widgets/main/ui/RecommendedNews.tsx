@@ -1,3 +1,4 @@
+import { LuChevronRight } from "react-icons/lu";
 import { useState } from "react";
 import Button from "@/shared/ui/Button";
 import { GetRecommendNews, GetRecommendCategory } from "../api/MainApi";
@@ -54,34 +55,45 @@ export const RecommendedNews: React.FC<RecommendedNewsProps> = ({ userProfile })
             </div>
 
             {/* 해당 카테고리의 뉴스 카드 */}
-            <div className="mt-5 space-y-4 pb-20">
+            <div className="mt-5 space-y-4 pb-15">
                 {newsToDisplay && newsToDisplay.length > 0 ? (
-                newsToDisplay.map((news) => (
-                    <Link to={`detail/${news.id}`}>
-                    <div
-                    key={news.id}
-                    className="flex mb-4 items-start p-4 bg-white rounded-[10px] mx-5 shadow-[0px_3px_6px_rgba(32,32,32,0.23)] transform transition-transform duration-200 hover:scale-105 focus:scale-105"
+                    <>
+                    {newsToDisplay.map((news) => (
+                        <Link key={news.id} to={`detail/${news.id}`}>
+                        <div
+                            className="flex mb-4 items-start p-4 bg-white rounded-[10px] mx-5 shadow-[0px_3px_6px_rgba(32,32,32,0.23)] transform transition-transform duration-200 hover:scale-105 focus:scale-105"
+                        >
+                            <img
+                            src={news.img}
+                            alt={news.title}
+                            className="w-[130px] h-[130px] object-cover rounded-lg flex-shrink-0"
+                            />
+                            <div className="ml-4 flex flex-col justify-between w-full">
+                            <h3 className="text-2xl font-bold text-[#202020] clamp-2 mb-2">
+                                {news.title}
+                            </h3>
+                            <p className="text-xl text-gray-600 clamp-2">
+                                {news.article}
+                            </p>
+                            </div>
+                        </div>
+                        </Link>
+                    ))}
+                    {/* 뉴스 카드 리스트가 끝난 후 "더보기" 추가 */}
+                    <Link to={`/category`}
+                        className="flex justify-center items-center"
                     >
-                    <img
-                        src={news.img}
-                        alt={news.title}
-                        className="w-[130px] h-[130px] object-cover rounded-lg flex-shrink-0"
-                    />
-                    <div className="ml-4 flex flex-col justify-between w-full">
-                        <h3 className="text-2xl font-bold text-[#202020] clamp-2 mb-2">
-                        {news.title}
-                        </h3>
-                        <p className="text-xl text-gray-600 clamp-2">
-                        {news.article}
+                        <p className="text-center text-[#202020] text-lg cursor-pointer">
+                            다양한 뉴스 보러가기 
                         </p>
-                    </div>
-                    </div>
+                        <LuChevronRight size={20}/>
                     </Link>
-                ))
+
+                    </>
                 ) : (
-                <div className="text-center text-gray-500 text-lg">
+                    <div className="text-center text-gray-500 text-lg">
                     해당 카테고리에 추천 뉴스가 없습니다.
-                </div>
+                    </div>
                 )}
             </div>
         </div>

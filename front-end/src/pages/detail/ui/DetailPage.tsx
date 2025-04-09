@@ -84,11 +84,12 @@ export default function DetailPage() {
   }, [id, fetchNewsScrapStatus, fetchNewsDetail ]); 
 
   if (isLoading) {
-    return <div>로딩 중...</div>; // 로딩 중 메시지 또는 스켈레톤 UI 표시
-  }
+    return <div>로딩 중...</div>;
+  };
+
   if (!newsDetail) {
-    return <div>데이터가 없습니다.</div>
-  }
+    return <div>데이터가 없습니다.. 메인 홈으로 이동합니다. </div>;
+  };
 
   const filteredContext = newsDetail?.contextList?.filter((contextLevel: context) => {
     if (activeButton === '상' && contextLevel.level === 3) {

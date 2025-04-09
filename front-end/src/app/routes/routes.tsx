@@ -3,7 +3,7 @@ import { Suspense, lazy } from "react"
 import { createBrowserRouter, RouteObject } from "react-router-dom"
 import { LoadingComponent } from "@/shared"
 // import { ProtectedGameRoute } from "@/shared/model/ProtectedGameRoute"
-import { ProtectedRoute } from "@/shared"
+// import { ProtectedRoute } from "@/shared"
 
 // 디테일 페이지
 const DetailPage = lazy(() => import("@pages/detail").then((module) => ({ default: module.DetailPage })))
@@ -238,9 +238,9 @@ const routes: RouteObject[] = [
     ),
   },
   {
-    element: <ProtectedRoute />,
-    children: [
-  {
+  //   element: <ProtectedRoute />,
+  //   children: [
+  // {
     path: "/category",
     element: (
       <Suspense fallback={<LoadingComponent />}>
@@ -265,8 +265,8 @@ const routes: RouteObject[] = [
             <CategoryDetailPage />
           </Suspense>
         ),
-      },
-    ],
+    //   },
+    // ],
   },
     ],
   },

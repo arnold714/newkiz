@@ -1,20 +1,31 @@
-import { ReactNode } from 'react';
 import Header from './Header';
 import NavBar from './NavBar';
-
-type LayoutProps = {
-  children: ReactNode;
-};
+import { LayoutProps } from '../types/common';
+import { useLocation } from 'react-router-dom';
 
 const Layout = ({ children }: LayoutProps) => {
+  const { pathname } = useLocation();
+  const imgUrl: string = import.meta.env.VITE_AWS_S3_BASE_URL;
+
+  const showBackground =
+    pathname === "/" ||
+    pathname.startsWith("/reporter") ||
+    pathname.startsWith("/category");
+
+    const backgroundStyle = showBackground ? {
+      backgroundImage: `url(${imgUrl}assets/background.png)`,
+      backgroundRepeat: 'repeat',
+      backgroundSize: 'cover',
+      backgroundPosition: 'center'
+    } : {};
+
   return (
-    <div
-      className="bg-[url(https://newkiz.s3.ap-northeast-2.amazonaws.com/assets/background.png)] bg-repeat bg-[length:100%_100%]  max-w-[var(--max-width)] min-w-[var(--min-width)] mx-auto bg-cover bg-center bg-no-repeat"
-    >
-      <Header />
-        <div className="min-h-screen overflow-y-auto pb-18">
-          {children}
-        </div>
+    <div className={`${showBackground ? 'max-w-[var(--max-width)] min-w-[var(--min-width)] mx-auto' : ''} h-screen flex flex-col`}
+    style={backgroundStyle}>
+      {!pathname.startsWith("/search/") && <Header />}
+      <div>
+        {children}
+      </div>
       <NavBar />
     </div>
   );

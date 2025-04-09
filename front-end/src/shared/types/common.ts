@@ -1,3 +1,5 @@
+import { ReactNode } from "react";
+
 export type Direction = -1 | 1;
 
 export interface Position {
@@ -17,3 +19,5 @@ export interface Boundaries {
   minY: number;
   maxY: number;
 }
+
+export type LayoutProps = {children: ReactNode; }

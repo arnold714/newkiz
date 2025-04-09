@@ -1,20 +1,34 @@
-export const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${
-    import.meta.env.VITE_KAKAO_REST_API_KEY
-  }&redirect_uri=${import.meta.env.VITE_KAKAO_REDIRECT_URI}&response_type=code`;
-  
-  export const handleLogin = () => {
-    window.location.href = KAKAO_AUTH_URL;
-  };
-  
-  export const checkUserExists = async (kakaoToken: string): Promise<boolean> => {
-    const response = await fetch("/api/check-user", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ token: kakaoToken }),
+import { customAxios } from "@/shared";
+
+const API_URL = import.meta.env.VITE_API_URL;
+
+// 카카오 로그인 호출 함수
+export const handleLogin = () => {
+  try {
+    // 카카오 로그인 URL로 리다이렉트
+    window.location.href = `${API_URL}/oauth2/authorization/kakao`;
+  } catch (error) {
+    console.error("카카오 로그인 중 오류 발생:", error);
+  }
+};
+
+// JWT 토큰 갱신 API 호출 함수
+export const refreshToken = async (refreshToken: string) => {
+  try {
+    const response = await customAxios.post("/api/auth/refresh", {
+      refreshToken,
     });
-    const data = await response.json();
-    return data.exists;
-  };
-  
+
+    if (response.data.success) {
+      const { accessToken, refreshToken: newRefreshToken } = response.data.data;
+      console.log("토큰 갱신 성공:", { accessToken, newRefreshToken });
+      // 갱신된 토큰 저장 로직 (예: localStorage)
+      localStorage.setItem("accessToken", accessToken);
+      localStorage.setItem("refreshToken", newRefreshToken);
+    } else {
+      console.error("토큰 갱신 실패:", response.data.error);
+    }
+  } catch (error) {
+    console.error("토큰 갱신 중 오류 발생:", error);
+  }
+};

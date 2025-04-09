@@ -6,7 +6,7 @@ import { GetTodayReadNewsCount } from "../api/MainApi"
 
 export const ProgressGraph: React.FC = () => {
 
-  const {data: todayReadNewsCount, isLoading, isError, error } = GetTodayReadNewsCount();
+  const { data: todayReadNewsCount, isLoading, isError, error } = GetTodayReadNewsCount();
   const [windowWidth, setWindowWidth] = useState(window.innerWidth)
   const [isEnabled, setIsEnabled] = useState<boolean>(false)
   const [remainingTime, setRemainingTime] = useState<string>("")
@@ -32,9 +32,9 @@ export const ProgressGraph: React.FC = () => {
 
   if (isLoading) return <div className="loading">Loading...</div>;
   if (isError) {
-      console.error("Error fetching today read news:", error); // 에러 로그 출력
-      return  <div>Error: {error.message}</div>;
-    }
+    console.error("Error fetching today read news:", error); // 에러 로그 출력
+    return <div>Error: {error.message}</div>;
+  }
 
   const options: ApexCharts.ApexOptions = {
     chart: {
@@ -87,32 +87,43 @@ export const ProgressGraph: React.FC = () => {
   // 시간 계산해서 버튼 보여주기
   const checkTimeValidity = () => {
     const now = dayjs() // dayjs 객체 생성
-  
+
     const GAME_START_HOUR = 17 // 시 
     const ENABLE_START = dayjs().set("hour", GAME_START_HOUR).set("minute", 50).set("second", 0) // 50분
     const ENABLE_END = dayjs().set("hour", GAME_START_HOUR).set("minute", 59).set("second", 59) // 59분 59초
-  
+
     const isInTimeRange = now.isAfter(ENABLE_START) && now.isBefore(ENABLE_END) // GAME_START_HOUR 시 ENABLE_START분 ~ GAME_START_HOUR시 ENABLE_END까지
     setIsEnabled(isInTimeRange) // isInTimeRange라면 true -> 입장 가능
-  
+
     // 게임 시작까지 남은 시간
     const gameDiffInSeconds = ENABLE_END.diff(now, "second")
-    const gameMinutes = Math.floor(gameDiffInSeconds / 60)
+    const gameHours = Math.floor(gameDiffInSeconds / 3600)
+    const gameMinutes = Math.floor((gameDiffInSeconds % 3600) / 60)
     const gameSeconds = gameDiffInSeconds % 60
-    const formattedGameTime = `${gameMinutes.toString().padStart(2, "0")}:${gameSeconds
-      .toString()
-      .padStart(2, "0")}`
-  
+
+    let formattedGameTime
+    if (gameDiffInSeconds >= 3600) { // 60분(3600초) 이상인 경우
+      formattedGameTime = `${gameHours.toString().padStart(2, "0")}:${gameMinutes.toString().padStart(2, "0")}:${gameSeconds.toString().padStart(2, "0")}`
+    } else { // 60분 미만인 경우
+      formattedGameTime = `${gameMinutes.toString().padStart(2, "0")}:${gameSeconds.toString().padStart(2, "0")}`
+    }
+
     setRemainingTime(formattedGameTime)
-  
+
     // 입장 가능 시간까지 남은 시간
     if (now.isBefore(ENABLE_START)) {
       const enterDiffInSeconds = ENABLE_START.diff(now, "second")
-      const enterMinutes = Math.floor(enterDiffInSeconds / 60)
+      const enterHours = Math.floor(enterDiffInSeconds / 3600)
+      const enterMinutes = Math.floor((enterDiffInSeconds % 3600) / 60)
       const enterSeconds = enterDiffInSeconds % 60
-      const formattedEnterTime = `${enterMinutes.toString().padStart(2, "0")}:${enterSeconds
-        .toString()
-        .padStart(2, "0")}`
+
+      let formattedEnterTime
+      if (enterDiffInSeconds >= 3600) { // 60분(3600초) 이상인 경우
+        formattedEnterTime = `${enterHours.toString().padStart(2, "0")}:${enterMinutes.toString().padStart(2, "0")}:${enterSeconds.toString().padStart(2, "0")}`
+      } else { // 60분 미만인 경우
+        formattedEnterTime = `${enterMinutes.toString().padStart(2, "0")}:${enterSeconds.toString().padStart(2, "0")}`
+      }
+
       setStartEnterTime(formattedEnterTime)
     } else {
       setStartEnterTime("")

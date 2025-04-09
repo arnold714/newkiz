@@ -83,9 +83,9 @@ export const CharacterSprite: React.FC<CharacterSpriteProps> = ({
   useEffect(() => {
     if (!isLocal && initialPosition) {
       // 방향감지
-      if (initialPosition[0] !== position[0]) {
-        setDirection(initialPosition[0] > position[0] ? -1 : 1)
-      }
+      // if (initialPosition[0] !== position[0]) {
+      //   setDirection(initialPosition[0] > position[0] ? -1 : 1)
+      // }
 
       // 움직인 거리 계산 (Math.hypot <- 피타고라스 정리 계산 = 유클리드 거리 계산)
       const distance = Math.hypot(initialPosition[0] - position[0], initialPosition[1] - position[1])

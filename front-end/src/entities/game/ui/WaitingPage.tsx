@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { RankType } from "../model/type"
 import PersonalRanking from './PersonalRanking'
 import SchoolRanking from "./SchoolRanking"
@@ -18,33 +18,31 @@ export const WaitingPage = ({ waitingInfo }: WaitingPageProps) => {
   const [isToggleOpen, setIsToggleOpen] = useState<boolean>(false)
   const [schoolRanking, setSchoolRanking] = useState<SchoolRank[]>([]);
   const [personalRanking, setPersonalRanking] = useState<PersonalRank[]>([]);
-  
-  const fetchSchoolRanking = useCallback(async () => {
-    try {
-      const response = await getSchoolRank();
-      if (response.success && response.data.rankings) {
-        setSchoolRanking(response.data.rankings);
-      }
-    } catch (error) {
-      console.error('학교 랭킹 불러오기 실패:', error);
-    }
-  }, []);
-
-  const fetchPersonalRanking = useCallback(async () => {
-    try {
-      const response = await getPersonalRank();
-      if (response.success && response.data.rankings) {
-        setPersonalRanking(response.data.rankings);
-      }
-    } catch (error) {
-      console.error('개인 랭킹 불러오기 실패:', error);
-    }
-  }, []);
 
   useEffect(() => {
-    fetchSchoolRanking();
-    fetchPersonalRanking();
-  }, [fetchSchoolRanking, fetchPersonalRanking]);
+    const fetchRankings = async () => {
+      try {
+        const [schoolResponse, personalResponse] = await Promise.all([
+          getSchoolRank(),
+          getPersonalRank()
+        ]);
+  
+        console.log("학교 랭킹 response:", schoolResponse);
+        if (schoolResponse.success && schoolResponse.data.rankings) {
+          setSchoolRanking(schoolResponse.data.rankings);
+        }
+  
+        console.log("개인 랭킹 response:", personalResponse);
+        if (personalResponse.success && personalResponse.data.rankings) {
+          setPersonalRanking(personalResponse.data.rankings);
+        }
+      } catch (error) {
+        console.error("랭킹 정보 불러오기 실패:", error);
+      }
+    };
+  
+    fetchRankings();
+  }, []);
 
   useEffect(()=>{
     setTime(waitingInfo.timeLeft)

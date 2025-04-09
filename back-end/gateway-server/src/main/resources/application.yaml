@@ -46,6 +46,11 @@ spring:
           predicates:
             - Path=/api/recommend/**          
 
+        - id: kidsnews-service
+          uri: http://kidsnews-service
+          predicates:
+            - Path=/api/kidsnews/**    
+
   r2dbc:
     url: r2dbc:pool:mysql://${MYSQL_HOST}/${MYSQL_DATABASE}?serverTimezone=Asia/Seoul
     username: ${MYSQL_USER}

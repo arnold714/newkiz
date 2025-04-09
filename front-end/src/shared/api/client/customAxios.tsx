@@ -19,7 +19,7 @@ const createAxiosInstance = (baseURL?: string) => {
         (config) => {
         const accessToken = cookies.get('accessToken');
         if (accessToken) {
-            config.headers.Authorization = `Bearer ${accessToken}`;
+            config.headers.Authorization = `${accessToken}`;
         }
         return config;
     },
@@ -40,17 +40,16 @@ const createAxiosInstance = (baseURL?: string) => {
         originalRequest._retry = true; // 중복 요청 방지 플래그 설정
 
         try {
-          // 예: 로컬 스토리지에서 기존 리프레시 토큰을 가져온 후 토큰 갱신 호출
-          const storedRefreshToken = localStorage.getItem("refreshToken");
+          const storedRefreshToken = cookies.get("refreshToken");
           if (storedRefreshToken) {
             // refreshToken 함수를 호출하여 새로운 액세스 토큰 발급
             await refreshToken(storedRefreshToken);
 
-            // 갱신된 액세스 토큰을 로컬 스토리지에서 가져옴
-            const newAccessToken = localStorage.getItem("accessToken");
+            // 갱신된 액세스 토큰을 쿠키에서 가져옴
+            const newAccessToken = cookies.get("accessToken");
             if (newAccessToken) {
               // 새로운 액세스 토큰을 헤더에 반영
-              originalRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
+              originalRequest.headers["Authorization"] = `${newAccessToken}`;
               // 원래 요청 재시도
               return instance(originalRequest);
             }
@@ -77,9 +76,17 @@ const refreshToken = async (refreshToken: string): Promise<void> => {
     });
     const { accessToken, refreshToken: newRefreshToken } = response.data;
 
-    // 새로 발급받은 토큰을 로컬 스토리지에 저장
-    localStorage.setItem("accessToken", accessToken);
-    localStorage.setItem("refreshToken", newRefreshToken);
+    const cookies = new Cookies();
+
+    // 새로 발급받은 토큰을 쿠키에 저장 (2시간 유효)
+    cookies.set("accessToken", accessToken, {
+      path: "/",
+      maxAge: 60 * 60 * 2, 
+    });
+    cookies.set("refreshToken", newRefreshToken, {
+      path: "/",
+      maxAge: 60 * 60 * 2, 
+    });
   } catch (error) {
     console.error("리프레시 토큰 요청 실패:", error);
     throw error; // 에러를 상위로 전달

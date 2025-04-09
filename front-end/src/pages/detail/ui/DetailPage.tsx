@@ -83,12 +83,22 @@ export default function DetailPage() {
     fetchNewsDetail();
   }, [id, fetchNewsScrapStatus, fetchNewsDetail ]); 
 
+  useEffect(() => {
+    if(!newsDetail) {
+      const timer = setTimeout(() => {
+        navigate(`/`);
+      }, 2000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [newsDetail, navigate])
+
   if (isLoading) {
     return <div>로딩 중...</div>;
   };
 
   if (!newsDetail) {
-    return <div>데이터가 없습니다.. 메인 홈으로 이동합니다. </div>;
+    return <div className="flex justify-center items-center mt-80 font-semibold text-[20px]">데이터가 없습니다.. 메인 홈으로 이동합니다. </div>;
   };
 
   const filteredContext = newsDetail?.contextList?.filter((contextLevel: context) => {

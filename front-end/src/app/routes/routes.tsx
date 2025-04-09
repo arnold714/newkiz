@@ -25,8 +25,6 @@ const WrongAnswerPage = lazy(() => import("@pages/mypage").then((module) => ({ d
 const ReporterPage = lazy(() => import("@pages/reporter").then((module) => ({ default: module.ReporterPage })))
 const CreateArticlePage = lazy(() => import("@pages/reporter").then((module) => ({ default: module.CreateArticlePage })))
 const ArticlePreviewPage = lazy(() => import("@pages/reporter").then((module) => ({ default: module.ArticlePreviewPage })))
-const ShortsUploadPage = lazy(() => import("@pages/reporter").then((module) => ({ default: module.ShortsUploadPage })))
-const ShortsSettingPage = lazy(() => import("@pages/reporter").then((module) => ({ default: module.ShortsSettingPage })))
 // 검색 페이지
 const SearchPage = lazy(() => import("@pages/search").then((module) => ({ default: module.SearchPage })))
 // 검색 결과 페이지
@@ -170,22 +168,6 @@ const routes: RouteObject[] = [
         element: (
           <Suspense fallback={<LoadingComponent />}>
             <ArticlePreviewPage />
-          </Suspense>
-        ),
-      },
-      {
-        path: "upload",
-        element: (
-          <Suspense fallback={<LoadingComponent />}>
-            <ShortsUploadPage />
-          </Suspense>
-        ),
-      },
-      {
-        path: "setting",
-        element: (
-          <Suspense fallback={<LoadingComponent />}>
-            <ShortsSettingPage />
           </Suspense>
         ),
       },

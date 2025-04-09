@@ -159,7 +159,7 @@ export default function CategoryDetailPage() {
       )}
 
       {/* 뉴스 목록 */}
-      <div className="flex-grow overflow-y-auto">
+      <div className="flex-grow overflow-y-auto pb-8">
         <div className="p-3">
           <div className="mb-4">
             <h1 className="ml-1 text-ms font-bold text-white">

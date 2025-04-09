@@ -43,7 +43,7 @@ export default function MainPage() {
 
   const nickname = userProfile?.nickname || "닉네임";
   const characterId = userProfile?.characterId || "nico";
-
+  const userProfileForNews = userProfile ? userProfile : { interests: [] };
   return (
       <div className="h-screen flex flex-col overflow-auto scroll pb-20">
         <div className='my-5 flex justify-center min-gap-2 gap-[10vw]  items-center'>
@@ -66,7 +66,7 @@ export default function MainPage() {
           <div className="text-2xl font-bold text-center m-3">
           {nickname} 님을 위한 추천 뉴스
           </div>
-          <RecommendedNews />
+          <RecommendedNews userProfile={userProfileForNews}/>
         </div>
       </div>
   );

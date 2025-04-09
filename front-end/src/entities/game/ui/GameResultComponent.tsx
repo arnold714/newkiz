@@ -24,15 +24,14 @@ export const GameResultComponent: React.FC<GameResultComponentProps> = ({ scoreR
   }
 
   useEffect(() => {
-    const converted = Object.entries(scoreRank)
-      .flatMap(([rank, players]) =>
-        players.map(player => ({
-          ...player,
-          rank: Number(rank),
-        }))
-      )
+    const converted = Object.entries(scoreRank).flatMap(([rank, players]) =>
+      players.map((player) => ({
+        ...player,
+        rank: Number(rank),
+      }))
+    )
 
-    setRawData(converted);
+    setRawData(converted)
   }, [scoreRank])
 
   // 컬럼 정의에 keyof GameResult 타입을 사용
@@ -40,15 +39,14 @@ export const GameResultComponent: React.FC<GameResultComponentProps> = ({ scoreR
     () => [
       {
         headerName: "순위",
+        cellRenderer: (params: any) => {
+          if (params.value > 0) return `↓ ${params.value}`
+          if (params.value < 0) return `↑ ${Math.abs(params.value)}`
+          return "-"
+        },
         field: "rank",
         sortable: true,
         width: 80,
-        cellRenderer: (params: any) => {
-          if (params.value > 0) return `↓ ${params.value}`;
-          if (params.value < 0) return `↑ ${Math.abs(params.value)}`;
-          return '-';
-        }
-
       },
       {
         headerName: "닉네임",

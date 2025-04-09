@@ -18,7 +18,7 @@ export const CharacterSprite: React.FC<CharacterSpriteProps> = ({
   setMapBoundaries,
   quizResult,
   onPlayerRemove,
-  isLocal
+  isLocal,
 }) => {
   // state
   const [position, setPosition] = useState<[number, number, number]>(initialPosition)
@@ -187,35 +187,33 @@ export const CharacterSprite: React.FC<CharacterSpriteProps> = ({
 
   // 퀴즈 탈락 애니메이션 처리
   useEffect(() => {
-    console.log("퀴즈 결과:", quizResult);
-    
+    console.log("퀴즈 결과:", quizResult)
+
     if (!userId || !quizResult || !quizResult.wrongPlayers) {
-      console.log("유저 아이디 || 퀴즈 결과 || 틀린 플레이어가 없음", { userId, quizResult });
-      return;
+      console.log("유저 아이디 || 퀴즈 결과 || 틀린 플레이어가 없음", { userId, quizResult })
+      return
     }
-  
-    console.log("Wrong players array:", quizResult.wrongPlayers);
-    
+
+    console.log("Wrong players array:", quizResult.wrongPlayers)
+
     // 탈락한 플레이어인지 확인
     if (quizResult.wrongPlayers.includes(userId)) {
-      console.log(`Player ${userId} has been eliminated`);
-      setIsDead(true);
-      setIsMoving(false); // 움직임 즉시 중단
-      console.log(userId, " 탈락.");
-  
+      console.log(`Player ${userId} has been eliminated`)
+      setIsDead(true)
+      setIsMoving(false) // 움직임 즉시 중단
+      console.log(userId, " 탈락.")
+
       // 이미 죽은 상태에서 다시 리셋되지 않도록 처리
-      setDeathAnimationComplete(false);
+      setDeathAnimationComplete(false)
     }
-  }, [quizResult, userId]);
+  }, [quizResult, userId])
 
   // 퀴즈 탈락 유저 처리
   useEffect(() => {
     if (isDead && deathAnimationComplete && onPlayerRemove && userId !== undefined) {
-      const timer = setTimeout(() => {
+      setTimeout(() => {
         onPlayerRemove(userId)
-      }, 500)
-
-      return () => clearTimeout(timer)
+      }, 1000)
     }
   }, [isDead, deathAnimationComplete, onPlayerRemove, userId])
 
@@ -255,7 +253,9 @@ export const CharacterSprite: React.FC<CharacterSpriteProps> = ({
 
           {/* 닉네임 표시 - Html 컴포넌트 사용 */}
           <Html position={[0, -0.7, 0]} center style={{ userSelect: "none", zIndex: 1, position: "relative" }}>
-            <div style={{ color: "white", background: `${isLocal?'rgba(255, 30, 50, 0.5)':'rgba(0,0,0,0.5)'}`, padding: "2px 5px", borderRadius: "3px", whiteSpace: "nowrap", zIndex: "50" }}>{nickname}</div>
+            <div style={{ color: "white", background: `${isLocal ? "rgba(255, 30, 50, 0.5)" : "rgba(0,0,0,0.5)"}`, padding: "2px 5px", borderRadius: "3px", whiteSpace: "nowrap", zIndex: "50" }}>
+              {nickname}
+            </div>
           </Html>
         </>
       )}

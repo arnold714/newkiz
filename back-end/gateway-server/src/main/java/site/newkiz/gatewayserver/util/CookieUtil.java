@@ -17,7 +17,7 @@ public class CookieUtil {
   public void addCookie(ServerHttpResponse response, String name, String value, long maxAge) {
     ResponseCookie cookie = ResponseCookie.from(name, value)
         .domain(".newkiz.site")
-        .httpOnly(true)
+        .httpOnly(false))
         .sameSite("None")
         .secure(true)
         .path("/")

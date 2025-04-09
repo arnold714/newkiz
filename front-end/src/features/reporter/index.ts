@@ -1,0 +1,1 @@
+export type { ReporterArticle } from './model/types'

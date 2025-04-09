@@ -67,7 +67,6 @@ export const ParticipationOptions: React.FC<NewsDetailContentProps> = ({ id, sum
       // 응답이 성공적이며 summary 데이터가 존재할 때 -> NewsSummaryResult 페이지로 이동
       if (response && response.success && response.data) {
         navigate(`/newssummaryresult/${id}`, { state: { summaryData: response.data, summary } });
-
       } else {
         // 데이터가 없을 경우 기존 뉴스 요약 페이지로 이동
         navigate(`/newssummary/${id}`, { state: { summary } });

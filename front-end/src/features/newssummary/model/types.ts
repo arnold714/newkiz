@@ -3,10 +3,15 @@ export interface PostNewsSummaryRequest {
 }
 
 export interface GetNewsAiSummaryRequest {
-  id: string;
-  newsId: string;
-  userId: string;
-  summary: string;
-  aiSummary: string;
-  updatedAt: string;
-}
+  success: boolean;
+  data: {
+    id: string;
+    newsId: string;
+    userId: string;
+    summary: string;
+    updatedAt: string;
+  };
+  error: string | null;
+};
+
+

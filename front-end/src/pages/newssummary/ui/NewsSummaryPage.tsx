@@ -1,10 +1,16 @@
 import { useState,ChangeEvent } from 'react';
 import { LuX } from "react-icons/lu";
 import { NewsSummaryResult } from '@/widgets/newssummary';
-import { useNavigate, useParams } from 'react-router-dom';
-import { PostNewsSummary, GetNewsAiSummary } from '@/widgets/newssummary';
-import { PostNewsSummaryRequest, GetNewsAiSummaryRequest } from '@/features/newssummary';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { PostNewsSummary } from '@/widgets/newssummary';
+import { PostNewsSummaryRequest } from '@/features/newssummary';
+import { GetNewsSummaryResponse } from '@/features/detail/model/types';
 import Swal from 'sweetalert2';
+
+interface LocationState {
+  summaryData?: GetNewsSummaryResponse["data"];
+  summary: string;
+};
 
 const imgUrl: string = import.meta.env.VITE_AWS_S3_BASE_URL
 
@@ -12,6 +18,7 @@ export default function NewsSummaryPage() {
 
     const { id } = useParams<{id: string}>()
     const name = '뿡뿡이';
+    const location = useLocation();
     const navigate = useNavigate();
     const [ thought, setThought ] = useState<string>('');
     const [showResult, setShowResult ] = useState<boolean>(false);
@@ -19,10 +26,13 @@ export default function NewsSummaryPage() {
     const [enterCount, setEnterCount] = useState<number>(0); 
     // 요약 결과
     const [summaryResult, setSummaryResult] = useState<PostNewsSummaryRequest| null>(null); 
-    // 뉴스 요약 (post와 동시에 요약 결과 get요청)
-    const [aiSummary, setAiSummary] = useState<GetNewsAiSummaryRequest | null>(null); 
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
-    
+
+    const { summaryData, summary } = (location.state as LocationState) || { summary: '' };
+    console.log('summaryData, summary:',summaryData, summary)
+    if (summaryData) {
+      return <NewsSummaryResult summary={summary} summaryData={summaryData} />;
+    };
     const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
       const newText = e.target.value;
       
@@ -77,16 +87,12 @@ export default function NewsSummaryPage() {
         setShowResult(true); 
         setErrorMessage(null); 
 
-        const aiResult = await GetNewsAiSummary(id);
-        if (aiResult) {
-          setAiSummary(aiResult); // AI 요약 상태 업데이트
-        }
       }
     }
     };
 
-    if (showResult && summaryResult && aiSummary) {
-      return <NewsSummaryResult thought={thought} aiSummary={aiSummary} />;
+    if (showResult && summaryResult ) {
+      return <NewsSummaryResult thought={thought} summary={summary} />;
     }
 
     return (

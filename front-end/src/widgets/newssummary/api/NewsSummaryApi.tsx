@@ -1,6 +1,7 @@
 import { customAxios } from "@/shared";
 import { PostNewsSummaryRequest, GetNewsAiSummaryRequest  } from "@/features/newssummary";
 
+//요약 저장
 export const PostNewsSummary = async (newsId: string, summary: string): Promise<PostNewsSummaryRequest | null> => {
   try {
     const response = await customAxios.post(`/api/news/${newsId}/summary`, {
@@ -14,6 +15,7 @@ export const PostNewsSummary = async (newsId: string, summary: string): Promise<
   }
 }
 
+//요약 조회
 export const GetNewsAiSummary = async (newsId:string):Promise<GetNewsAiSummaryRequest | null > => {
   try {
     const response =  await customAxios.get(`/api/news/${newsId}/summary`)

@@ -180,13 +180,13 @@ export default function DetailPage() {
         {/* 참여 컨텐츠 */}
         <div>
           <p className='m-5 text-2xl font-bold'>함께 참여해 볼까요?</p>
-          <ParticipationOptions id={id} />
+          <ParticipationOptions id={id}  summary={newsDetail.summary} />
         </div>
 
         <div className="h-1.5 w-full bg-[#F5F6FA]"></div>
         <div>
           <p className='m-5 text-2xl font-semibold'>이런 기사도 있어요!</p>
-          <NewsRecommendationList /> 
+          <NewsRecommendationList id={id} /> 
         </div>
       </div>
       <div>

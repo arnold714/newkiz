@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { LuArrowUp, LuPen, LuCirclePlay, LuX, LuPlus } from "react-icons/lu";
+import { LuArrowUp, LuPen, LuX, LuPlus } from "react-icons/lu";
 import "@widgets/reporter/styles/FunctionButton.css";
 
 const FunctionButton = ({ scrollRef }: { scrollRef: React.RefObject<HTMLDivElement> }) => {

@@ -13,6 +13,7 @@ import { useAppDispatch, useAppSelector } from "@/app/redux/hooks"
 import { setMovementProhibition } from "@/features/game/model/gameSlice"
 import { IJoystickUpdateEvent } from "react-joystick-component/build/lib/Joystick"
 import { useUserProfile } from "@/shared"
+import { Link } from "react-router-dom"
 
 export const GamePage: React.FC = () => {
   const [joystickData, setJoystickData] = useState<JoystickData>({
@@ -97,7 +98,9 @@ export const GamePage: React.FC = () => {
       delete newPlayers[userId]
       return newPlayers
     })
-    setIsDead(true)
+    if(user?.userId === userId){
+      setIsDead(true)
+    }
   }
 
   // 조이스틱 데이터 처리
@@ -246,7 +249,7 @@ export const GamePage: React.FC = () => {
           {userId !== undefined && !isDead ? (
             <JoystickController onMove={handleJoystickMove} onStop={handleJoystickStop} />
           ) : (
-            currentGameState !== "FINISHED" && <div className="bottom-10 px-8 py-2 bg-[#7CBA36] rounded-lg text-white text-center font-bold text-lg">나가기</div>
+            currentGameState !== "FINISHED" && <Link className="px-8 py-2 bg-[#7CBA36] rounded-lg text-white text-center font-bold text-lg" to="/">나가기</Link>
           )}
         </div>
       </div>

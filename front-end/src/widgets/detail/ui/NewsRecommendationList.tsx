@@ -1,30 +1,20 @@
+import { GetRelatedNews } from "../api/DetailApi";
 import SwipeCarousel from "@/shared/ui/SwipeCarousel";
+import { Link } from "react-router-dom";
 import "../styles/NewsRecommendationList.css"
-export interface NewsRecommendationList {
-  id: number;
-  title: string;
-  description: string;
-};
 
-const NewsRecommendationData:NewsRecommendationList[] = [
-  {
-    id: 1,
-    title: '우유 한박스 들고가는 고양이가 화제...',
-    description: '한 고양이가 우유상자를...'
-  },
-  {
-    id: 2,
-    title: '알고보니 놀라운 비밀',
-    description: '사진 속 진실은...'
-  },
-  {
-    id: 3,
-    title: '이것이 진짜 소식',
-    description: '알아두면 좋은 정보'
-  },
-];
+interface NewsDetailContentProps {
+  id?: string;
+}
 
-export const NewsRecommendationList = () => {
+export const NewsRecommendationList:React.FC<NewsDetailContentProps> = ({id}) => {
+  if (!id) {
+    return <div>뉴스 아이디가 없습니다.</div>;
+  }
+  const {data: relatedNews, isLoading, isError, error } = GetRelatedNews(id);
+  if (isLoading) return <div>Loading</div>;
+  if (isError) return <div>{error.message}</div>
+
   return (
     <div>
     <div className="mt-3">
@@ -36,14 +26,13 @@ export const NewsRecommendationList = () => {
         arrows={false}
         dots={false}
       >
-        {NewsRecommendationData.map((item) => (
-          <div
-            key={item.id}
-            className="bg-white border-2 border-[#EBEBEB] h-[200px] p-2 rounded-lg cursor-pointer"
-          >
-            <div className="font-semibold">{item.title}</div>
-            <p>더보기...</p>
-          </div>
+        {relatedNews.map((item) => (
+           <Link to={`/detail/${item.id}`} key={item.id}>
+           <div className="bg-white border-2 border-[#EBEBEB] h-[200px] p-2 rounded-lg cursor-pointer">
+             <div className="font-semibold clamp-3">{item.title}</div>
+             <p>더보기...</p>
+           </div>
+         </Link>
         ))}
       </SwipeCarousel>
     </div>

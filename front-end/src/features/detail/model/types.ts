@@ -1,3 +1,8 @@
+export interface ApiResponse {
+    success: boolean;
+    data: NewsDetail[]; 
+    error: string | null;
+  };
 // 뉴스 상세 정보( textList 임시)
 export interface NewsDetail {
   id: string;
@@ -14,6 +19,7 @@ export interface NewsDetail {
   wordList: word[];
   contextList: context[];
 };
+
 // 단어 사전
 export interface word {
   word: string;
@@ -87,3 +93,17 @@ export interface WordItem {
 export interface NewsScrapStatus {
   isSrcapped: boolean;
 };
+
+
+//요약 조회
+export interface GetNewsSummaryResponse {
+  success: boolean;
+  data: {
+    id: string;
+    newsId: string;
+    userId: string;
+    summary: string;
+    updatedAt: string;
+  };
+  error: string | null;
+}

@@ -4,8 +4,12 @@ import {
   QuizData, 
   NewsScrapStatus, 
   NewsQuizCheck,
-  QuizSubmissionResponse } from "@/features/detail/model/types";
+  QuizSubmissionResponse,
+  ApiResponse,
+  GetNewsSummaryResponse } from "@/features/detail/model/types";
 import { useQuery } from "@tanstack/react-query";
+
+
 // 뉴스 상세내용 
 export const GetNewsDetail = async (newsId: string): Promise<NewsDetail | undefined> => {
   try {
@@ -100,3 +104,27 @@ export const DeleteNewsScrap = async (newsId:string): Promise<NewsScrapStatus | 
     console.error('뉴스 스크랩 취소 실패:', error);
   }
 };
+
+//관련 뉴스 조회
+export const GetRelatedNews = (newsId: string) => {
+  return useQuery<NewsDetail[], Error>({
+    queryKey: ['relatedNews', newsId],
+    queryFn: async () => {
+      const response = await customAxios.get<ApiResponse>(`/api/news/${newsId}/related`);
+      console.log('관련 뉴스 api response:', response.data.data);
+      return response.data.data;
+    },
+    initialData: [],
+  })
+};
+
+//요약 조회
+export const GetNewsSummary = async (newsId:string):Promise< GetNewsSummaryResponse | null > => {
+  try {
+    const response =  await customAxios.get(`/api/news/${newsId}/summary`)
+    return response.data.data;
+  } catch(error) {
+    console.log('ai 요약 가져오기 실패:', error)
+    return null;
+  }
+}

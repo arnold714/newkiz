@@ -9,6 +9,8 @@ export {
   PostNewsScrap, 
   DeleteNewsScrap,
   GetNewsQuizCheck,
-  PostNewsQuiz } from "./api/DetailApi";
+  PostNewsQuiz,
+  GetRelatedNews,
+  GetNewsSummary } from "./api/DetailApi";
 export { NewsRecommendationList } from "./ui/NewsRecommendationList";
 export { ActionButton } from "./ui/ActionButton";

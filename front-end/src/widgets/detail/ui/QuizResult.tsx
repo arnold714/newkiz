@@ -1,6 +1,6 @@
 import { LuX, LuCircle } from "react-icons/lu";
 import { useState, useEffect } from "react";
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 interface QuizResultProps {
   isCorrect: boolean;
@@ -10,11 +10,11 @@ interface QuizResultProps {
 
 export const QuizResult = ({ isCorrect, onClose, explanation }: QuizResultProps) => {
   const [shouldReRender, setShouldReRender] = useState(false);
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
-  // const isRedirectToWrongNote = () => {
-  //   navigate('mypage/')
-  // };
+  const isRedirectToWrongNote = () => {
+    navigate('/mypage/wronganswer')
+  };
   
   // 상태 변경 시 컴포넌트가 리렌더링되도록 처리
   useEffect(() => {
@@ -59,7 +59,7 @@ export const QuizResult = ({ isCorrect, onClose, explanation }: QuizResultProps)
         <div className="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4 mt-5 max-w-[250px] mx-auto">
           <button
             className="bg-[#7CBA36] min-w-[200px] h-[60px] rounded-[10px] text-white font-semibold text-2xl shadow-[4px_4px_3px_rgba(0,0,0,0.13)]"
-            // onClick={isRedirectToWrongNote}
+            onClick={isRedirectToWrongNote}
           >
             오답노트로 가기
           </button>

@@ -3,7 +3,7 @@ import { Suspense, lazy } from "react"
 import { createBrowserRouter, RouteObject } from "react-router-dom"
 import { LoadingComponent } from "@/shared"
 // import { ProtectedGameRoute } from "@/shared/model/ProtectedGameRoute"
-import { ProtectedRoute } from "@/shared"
+// import { ProtectedRoute } from "@/shared"
 
 // 디테일 페이지
 const DetailPage = lazy(() => import("@pages/detail").then((module) => ({ default: module.DetailPage })))
@@ -55,9 +55,9 @@ const routes: RouteObject[] = [
     ),
   },
   // 로그인해야만 접근할 수 있는 페이지들을 ProtectedRoute로 감싼다.
-  {
-    element: <ProtectedRoute />,
-    children: [
+  // {
+  //   element: <ProtectedRoute />,
+  //   children: [
   {
     path: "/",
     element: (
@@ -268,8 +268,8 @@ const routes: RouteObject[] = [
       },
     ],
   },
-    ],
-  },
+  //   ],
+  // },
   // 없는 페이지 처리
   {
     path: "*",

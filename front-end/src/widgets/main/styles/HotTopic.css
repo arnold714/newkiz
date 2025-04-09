@@ -1,0 +1,78 @@
+/* 전체 Swiper 컨테이너 */
+.swiper {
+    padding-bottom: 40px;
+
+    
+}
+.mySwiper {
+    position: relative; /* 도트가 swiper 내에서 겹치지 않게 하기 위해 */
+  }
+
+/* 비활성 도트 */
+.swiper-pagination-bullet {
+    background-color: #D9D9D9; /* 기본 도트 색상 */
+    opacity: 0.6; /* 도트의 투명도 */
+}
+
+/* 활성 도트 */
+.swiper-pagination-bullet-active {
+    background-color:#7CBA36; /* 활성화된 도트 색상 */
+    opacity: 1; /* 활성화된 도트의 투명도 */
+}
+
+/* Swiper Slide 스타일 */
+.swiper-slide {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--card-background-color); /* 배경색 */
+    border-radius: 10px;
+    backdrop-filter: blur(4px); /* 배경 블러 효과 */
+    box-shadow: var(--small-shadow); /* 작은 그림자 */
+    transition: all 0.3s ease;
+    opacity: 0.3; /* 기본적으로 모든 슬라이드를 연하게 설정 */
+    transform: scale(0.9); /* 기본적으로 모든 슬라이드를 약간 축소 */
+}
+
+/* Swiper Slide 커스텀 효과 */
+.swiper .swiper-slide::after {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 80px;
+    height: 80px;
+    border-top: 1px solid var(--placeholder-color); /* 도트 색상 */
+    border-left: 1px solid rgba(255, 255, 255, 0.6); /* 흰색 경계선 */
+    border-radius: 7px 0 0 0;
+    content: "";
+    transition: width 0.3s ease, height 0.3s ease;
+}
+
+/* Hover 효과 */
+.swiper .swiper-slide:hover {
+    background: var(--text04); /* 텍스트 색상 */
+}
+
+.swiper .swiper-slide:hover::after {
+    width: 170px;
+    height: 170px;
+}
+
+/* 활성 슬라이드 스타일 */
+.swiper-slide-active {
+    opacity: 1;
+    transform: scale(1);
+    z-index: 2; /* 활성 슬라이드를 다른 슬라이드 위로 */
+    border-radius: 10px; 
+}
+
+/* 이전 및 다음 슬라이드 스타일 */
+.swiper-slide-prev,
+.swiper-slide-next {
+    z-index: 1; /* 슬라이드가 앞에 나타날 수 있도록 */
+}
+.news-slide {
+    position: relative; /* 자식 요소의 절대 위치 기준 */
+    overflow: hidden;   /* 텍스트가 이미지 밖으로 나가지 않게 */
+  }

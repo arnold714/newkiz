@@ -11,29 +11,27 @@ const SchoolRanking: React.FC<SchoolRankingComponentProps> = ({ schoolRanks }) =
   return (
     <div className="flex flex-col w-full h-full justify-center mb-5">
       <div className="flex flex-row flex-1 h-full w-full justify-evenly items-end">
-        {schoolRanks && schoolRanks.length > 0 ? (
+        {schoolRanks && schoolRanks.length > 0 && (
           <>
             <div className="flex flex-col items-center w-14 overflow-visible whitespace-nowrap">
-              <p>{schoolRanks[1]?.schoolName || "야동초"}</p>
+              <p>{schoolRanks[1]?.schoolName}</p>
               <div className="w-14 h-20 bg-[#7CBA36] rounded-lg shadow-xl relative flex justify-center">
                 <img src={`${medalUrl}assets/silver.png`} alt="silver medal" className="absolute" />
               </div>
             </div>
             <div className="flex flex-col items-center w-14 overflow-visible whitespace-nowrap">
-              <p>{schoolRanks[0]?.schoolName || "화정남초"}</p>
+              <p>{schoolRanks[0]?.schoolName}</p>
               <div className="w-14 h-24 bg-[#7CBA36] rounded-lg shadow-xl relative flex justify-center">
                 <img src={`${medalUrl}assets/gold.png`} alt="gold medal" className="absolute" />
               </div>
             </div>
             <div className="flex flex-col items-center w-14 overflow-visible whitespace-nowrap">
-              <p>{schoolRanks[2]?.schoolName || "목원초"}</p>
+              <p>{schoolRanks[2]?.schoolName}</p>
               <div className="w-14 h-16 bg-[#7CBA36] rounded-lg shadow-xl relative flex justify-center">
                 <img src={`${medalUrl}assets/bronze.png`} alt="bronze medal" className="absolute" />
               </div>
             </div>
           </>
-        ) : (
-          <div>데이터를 불러오는 중...</div>
         )}
       </div>
       <div className="mt-5 overflow-auto">

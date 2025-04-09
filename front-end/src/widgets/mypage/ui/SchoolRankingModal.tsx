@@ -15,7 +15,6 @@ export const SchoolRankingModal = ({ closeModal }: SchoolRankingModalProps) => {
     const fetchSchoolRanking = async () => {
       try {
         const schoolResponse = await getSchoolRank();
-        console.log("학교 랭킹 response:", schoolResponse);
         if (schoolResponse.success && schoolResponse.data.rank) {
           setSchoolRanking(schoolResponse.data.rank);
         }

@@ -29,10 +29,10 @@ export default function MainPage() {
             interests,
           };
 
-          // 쿠키에 저장 (7일 유효)
+          // 쿠키에 저장 (1일 유효)
           setCookie("userProfile", JSON.stringify(userProfileForCookie), {
             path: "/",
-            maxAge: 60 * 60 * 24 * 7, // 7일
+            maxAge: 60 * 60 * 24, // 1일
           });
         }
       } catch (error) {

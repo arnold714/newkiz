@@ -17,7 +17,7 @@ const createAxiosInstance = (baseURL?: string) => {
     // 요청 인터셉터
     instance.interceptors.request.use(
         (config) => {
-        const accessToken = cookies.get('accessToken');
+        const accessToken = cookies.get('ACCESS_TOKEN');
         if (accessToken) {
             config.headers.Authorization = `${accessToken}`;
         }
@@ -40,13 +40,13 @@ const createAxiosInstance = (baseURL?: string) => {
         originalRequest._retry = true; // 중복 요청 방지 플래그 설정
 
         try {
-          const storedRefreshToken = cookies.get("refreshToken");
+          const storedRefreshToken = cookies.get("REFRESH_TOKEN");
           if (storedRefreshToken) {
             // refreshToken 함수를 호출하여 새로운 액세스 토큰 발급
             await refreshToken(storedRefreshToken);
 
             // 갱신된 액세스 토큰을 쿠키에서 가져옴
-            const newAccessToken = cookies.get("accessToken");
+            const newAccessToken = cookies.get("ACCESS_TOKEN");
             if (newAccessToken) {
               // 새로운 액세스 토큰을 헤더에 반영
               originalRequest.headers["Authorization"] = `${newAccessToken}`;
@@ -79,11 +79,11 @@ const refreshToken = async (refreshToken: string): Promise<void> => {
     const cookies = new Cookies();
 
     // 새로 발급받은 토큰을 쿠키에 저장 (2시간 유효)
-    cookies.set("accessToken", accessToken, {
+    cookies.set("ACCESS_TOKEN", accessToken, {
       path: "/",
       maxAge: 60 * 60 * 2, 
     });
-    cookies.set("refreshToken", newRefreshToken, {
+    cookies.set("REFRESH_TOKEN", newRefreshToken, {
       path: "/",
       maxAge: 60 * 60 * 2, 
     });

@@ -1,0 +1,1 @@
+export type { PostNewsSummaryRequest, GetNewsAiSummaryRequest  } from './model/types';

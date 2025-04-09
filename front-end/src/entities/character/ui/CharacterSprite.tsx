@@ -27,7 +27,6 @@ export const CharacterSprite: React.FC<CharacterSpriteProps> = ({
   const [texturesLoaded, setTexturesLoaded] = useState<boolean>(false)
   const [isDead, setIsDead] = useState<boolean>(false)
   const [deathAnimationComplete, setDeathAnimationComplete] = useState<boolean>(false)
-  const [isGhost, setIsGhost] = useState<boolean>(false)
   // ref
   const characterRef = useRef<THREE.Group>(null)
   const frameCount = useRef(0)
@@ -66,7 +65,6 @@ export const CharacterSprite: React.FC<CharacterSpriteProps> = ({
 
   const handleDeathAnimationComplete = () => {
     setDeathAnimationComplete(true)
-    setIsGhost(true)
   }
 
   // 조이스틱 데이터 변경 시 캐릭터 상태 업데이트
@@ -237,7 +235,7 @@ export const CharacterSprite: React.FC<CharacterSpriteProps> = ({
     <group ref={characterRef} position={position}>
       {texturesLoaded && (
         <>
-          {isDead && !isGhost ? (
+          {isDead && !deathAnimationComplete ? (
             <SpriteAnimation
               texturePath={textureDeadPath}
               frameWidth={24}
@@ -248,8 +246,8 @@ export const CharacterSprite: React.FC<CharacterSpriteProps> = ({
               loop={false}
               onAnimationComplete={handleDeathAnimationComplete}
             />
-          ) : isDead && isGhost ? (
-            <SpriteAnimation texturePath={textureGhostPath} frameWidth={24} totalWidth={96} frameCount={4} frameTime={100} direction={direction} />
+          ) : isDead && deathAnimationComplete ? (
+            null
           ) : (
             <>
               {!isMoving && <SpriteAnimation texturePath={textureIdlePath} frameWidth={24} totalWidth={72} frameCount={3} frameTime={200} direction={direction} />}
@@ -258,11 +256,12 @@ export const CharacterSprite: React.FC<CharacterSpriteProps> = ({
           )}
 
           {/* 닉네임 표시 - Html 컴포넌트 사용 */}
+          {!isDead&&
           <Html position={[0, -0.7, 0]} center style={{ userSelect: "none", zIndex: 1, position: "relative" }}>
             <div style={{ color: "white", background: `${isLocal ? "rgba(255, 30, 50, 0.5)" : "rgba(0,0,0,0.5)"}`, padding: "2px 5px", borderRadius: "3px", whiteSpace: "nowrap", zIndex: "50" }}>
               {nickname}
             </div>
-          </Html>
+          </Html>}
         </>
       )}
     </group>

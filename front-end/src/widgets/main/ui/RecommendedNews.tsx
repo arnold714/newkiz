@@ -87,7 +87,7 @@ export const RecommendedNews: React.FC<RecommendedNewsProps> = ({ userProfile })
                         </Link>
                     ))}
                     {/* 뉴스 카드 리스트가 끝난 후 "더보기" 추가 */}
-                    <Link to={`/category`}
+                    <Link to={`/category/details/it_science`}
                         className="flex justify-center items-center"
                     >
                         <p className="text-center text-[#202020] text-lg cursor-pointer">

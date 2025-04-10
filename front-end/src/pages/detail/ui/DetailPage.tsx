@@ -31,7 +31,7 @@ export default function DetailPage() {
   const [newsDetail, setNewsDetail] = useState<NewsDetail|null>(null);
 
   const handleBack = () => {
-    navigate(`/`);
+    navigate(-1);
   };
 
   //뉴스 스크랩 여부

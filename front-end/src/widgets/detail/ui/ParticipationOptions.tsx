@@ -23,8 +23,9 @@ export const ParticipationOptions: React.FC<NewsDetailContentProps> = ({ id, sum
   const navigate = useNavigate();
 
   // 뉴스 퀴즈 중복 참여 여부 체크 (id가 없으면 기본값 설정)
-  const { data } = id ? GetNewsQuizCheck(id) : { data: null };
+  const { data, refetch } = id ? GetNewsQuizCheck(id) : { data: null, refetch: () => {}  };
 
+  
   useEffect(() => {
     if (!id) {
       setErrorMessage("올바른 뉴스 id가 제공되지 않았습니다.");
@@ -77,6 +78,12 @@ export const ParticipationOptions: React.FC<NewsDetailContentProps> = ({ id, sum
       navigate(`/newssummary/${id}`, { state: { summary } });
     }
   };
+  
+  const handleNewsReturn = () => {
+    refetch(); // 데이터를 새로 가져오기
+    setIsModalOpen(false); // 모달 닫기
+  };
+
 
   return (
     <div>
@@ -124,6 +131,7 @@ export const ParticipationOptions: React.FC<NewsDetailContentProps> = ({ id, sum
             id={id} 
             quizData={newsQuizData}
             isSolved={data?.data ?? false} 
+            onNewsReturn={handleNewsReturn} 
           />
         </Modal>
       </div>

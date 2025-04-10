@@ -22,6 +22,7 @@ Modal.setAppElement('#root');
 export default function DetailPage() {
 
   const userProfile = useUserProfile();
+  console.log('userprofile:', userProfile)
   const navigate = useNavigate();
   const { id } = useParams<{id:string}>();
   const [activeButton, setActiveButton] = useState<string>('상'); 

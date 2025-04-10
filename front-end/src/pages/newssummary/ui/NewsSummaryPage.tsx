@@ -4,7 +4,7 @@ import { NewsSummaryResult } from '@/widgets/newssummary';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { PostNewsSummary } from '@/widgets/newssummary';
 import { PostNewsSummaryRequest } from '@/features/newssummary';
-import { GetNewsSummaryResponse } from '@/features/detail/model/types';
+import { GetNewsSummaryResponse, } from '@/features/detail/model/types';
 import { useUserProfile } from "@/shared";
 import Swal from 'sweetalert2';
 
@@ -33,9 +33,11 @@ export default function NewsSummaryPage() {
 
     const { summaryData, summary } = (location.state as LocationState) || { summary: '' };
     console.log('summaryData, summary:',summaryData, summary)
+    
     if (summaryData) {
       return <NewsSummaryResult summary={summary} summaryData={summaryData} />;
     };
+
     const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
       const newText = e.target.value;
       

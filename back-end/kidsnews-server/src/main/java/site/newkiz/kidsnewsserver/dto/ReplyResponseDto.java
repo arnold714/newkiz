@@ -15,6 +15,7 @@ public class ReplyResponseDto {
     private boolean isUpdated;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private String userId;
 
     public static ReplyResponseDto fromEntity(Reply reply) {
         return ReplyResponseDto.builder()
@@ -24,6 +25,7 @@ public class ReplyResponseDto {
                 .isUpdated(reply.isUpdated())
                 .createdAt(reply.getCreatedAt())
                 .updatedAt(reply.getUpdatedAt())
+                .userId(reply.getUserId())
                 .build();
     }
 }

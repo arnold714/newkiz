@@ -21,8 +21,6 @@ export const refreshToken = async (refreshToken: string) => {
 
     if (response.data.success) {
       const { accessToken, refreshToken: newRefreshToken } = response.data.data;
-      console.log("토큰 갱신 성공:", { accessToken, newRefreshToken });
-      // 갱신된 토큰 저장 로직 (예: localStorage)
       localStorage.setItem("accessToken", accessToken);
       localStorage.setItem("refreshToken", newRefreshToken);
     } else {

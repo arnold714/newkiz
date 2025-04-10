@@ -84,8 +84,8 @@ export default function ArticlePreviewPage() {
             className="w-10 h-12 mr-2"
           />
           <p className="font-bold text-lg leading-tight">
-            생성된 표지를 확인해보세요! <br />
-            이제 {isEdit ? "기사 수정" : "기사를 등록"}해볼까요?
+            작성된 기사를 확인해보세요! <br />
+            이제 {isEdit ? "기사를 수정" : "기사를 등록"}해볼까요?
           </p>
         </div>
 

@@ -66,7 +66,7 @@ export const ParticipationOptions: React.FC<NewsDetailContentProps> = ({ id, sum
       const response: GetNewsSummaryResponse | null = await GetNewsSummary(id);
       // 응답이 성공적이며 summary 데이터가 존재할 때 -> NewsSummaryResult 페이지로 이동
       if (response && response.summary) {
-        console.log('응답 성공 및 summary 데이터 존재:', response.summary);
+        // console.log('응답 성공 및 summary 데이터 존재:', response.summary);
         navigate(`/newssummary/${id}`, { 
           state: { 
             summaryData: response,

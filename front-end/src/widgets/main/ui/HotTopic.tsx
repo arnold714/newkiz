@@ -31,7 +31,7 @@ export const HotTopic = () => {
 
     if (isLoading) return <div className="loading">Loading...</div>;
     if (isError) {
-        console.error("Error fetching today's news:", error); // 에러 로그 출력
+        console.error(error); // 에러 로그 출력
         return  <div>Error: {error.message}</div>;
       }
 

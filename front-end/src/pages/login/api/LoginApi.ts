@@ -1,5 +1,3 @@
-import { customAxios } from "@/shared";
-
 const API_URL = import.meta.env.VITE_API_URL;
 
 // 카카오 로그인 호출 함수

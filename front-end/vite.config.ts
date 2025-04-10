@@ -110,13 +110,9 @@ export default defineConfig({
         ],
       },
     }),
+    basicSsl()
   ],
   define: {
     global: 'window',
   },
-  // server: {
-  //   https: true,
-  //   host: 'test.newkiz.site', // 또는 0.0.0.0으로 전체 IP 바인딩
-  //   port: 5173
-  // },
 })

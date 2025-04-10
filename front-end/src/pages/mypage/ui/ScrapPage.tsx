@@ -40,10 +40,14 @@ export const ScrapPage = () => {
               {scrappedNews.length > 0 ? (
                 <>
                   {scrappedNews.slice(0, 3).map((news) => (
-                    <div key={news.id} className="flex flex-col w-full border-b border-gray-200 pb-3 mb-3">
+                    <Link
+                      key={news.id}
+                      to={`/detail/${news.id}`}
+                      className="flex flex-col w-full border-b border-gray-200 pb-3 mb-3"
+                    >
                       <p className="font-semibold text-[16px]">{news.title}</p>
                       <p className="text-sm text-[#9E9E9E] mt-1">{formatPublishedDate(news.published)}</p>
-                    </div>
+                    </Link>
                   ))}
                   {scrappedNews.length > 3 && ( // 기사 수 3개 이상이면 더보기 버튼 생성
                     <Link className="flex justify-center items-center text-[#9E9E9E] font-semibold py-2" to="news">더보기 &gt;</Link>

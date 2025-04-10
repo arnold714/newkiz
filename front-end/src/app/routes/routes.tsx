@@ -18,7 +18,6 @@ const MyPage = lazy(() => import("@pages/mypage").then((module) => ({ default: m
 const ModifyInfoPage = lazy(() => import("@pages/mypage").then((module) => ({ default: module.ModifyInfoPage })))
 const ScrapPage = lazy(() => import("@pages/mypage").then((module) => ({ default: module.ScrapPage })))
 const ScrappedNewsPage = lazy(() => import("@pages/mypage").then((module) => ({ default: module.ScrappedNewsPage })))
-const ScrappedWordsPage = lazy(() => import("@pages/mypage").then((module) => ({ default: module.ScrappedWordsPage })))
 const SummaryPage = lazy(() => import("@pages/mypage").then((module) => ({ default: module.SummaryPage })))
 const WrongAnswerPage = lazy(() => import("@pages/mypage").then((module) => ({ default: module.WrongAnswerPage })))
 // 리포터 페이지
@@ -114,14 +113,6 @@ const routes: RouteObject[] = [
             element: (
               <Suspense fallback={<LoadingComponent />}>
                 <ScrappedNewsPage />
-              </Suspense>
-            ),
-          },
-          {
-            path: "words",
-            element: (
-              <Suspense fallback={<LoadingComponent />}>
-                <ScrappedWordsPage />
               </Suspense>
             ),
           },

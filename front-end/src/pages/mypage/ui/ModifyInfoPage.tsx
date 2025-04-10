@@ -21,13 +21,13 @@ export const ModifyInfoPage = () => {
   const imgUrl: string = import.meta.env.VITE_AWS_S3_BASE_URL
 
    // 표시용 상태 (읽기 전용)
-   const [birthday, setBirthday] = useState<string>("");      // 생년월일
+   const [birthday, setBirthday] = useState<string>("");
    const [gender, setGender] = useState<string>("");   
   // 사용자 정보 상태
   const [nickname, setNickname] = useState("");
   const [schoolName, setSchoolName] = useState("");
-  const [schoolId, setSchoolId] = useState<number>(0); // 학교 검색 시 ID 저장
-  const [difficulty, setDifficulty] = useState<number>(2); // 1=하,2=중,3=상 (기본값: 중)
+  const [schoolId, setSchoolId] = useState<number>(0); 
+  const [difficulty, setDifficulty] = useState<number>(2); 
   const [characterId, setCharacterId] = useState<string>("");
   const [selectedInterests, setSelectedInterests] = useState<string[]>([]);
 

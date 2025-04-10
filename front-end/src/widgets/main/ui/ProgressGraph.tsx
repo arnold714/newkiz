@@ -77,77 +77,47 @@ export const ProgressGraph: React.FC = () => {
   // 시간 계산해서 버튼 보여주기
   const checkTimeValidity = () => {
     const now = dayjs(); // 현재 시간
-
-    // 현재 시각 기준 입장 가능 시간 구간 정의
-    const ENABLE_START_1 = dayjs().set("minute", 25).set("second", 0);
-    const ENABLE_END_1 = dayjs().set("minute", 29).set("second", 59);
-    const ENABLE_START_2 = dayjs().set("minute", 55).set("second", 0);
-    const ENABLE_END_2 = dayjs().set("minute", 59).set("second", 59);
-
-    // 입장 가능 여부 판단
-    const isInTimeRange =
-      (now.isAfter(ENABLE_START_1) && now.isBefore(ENABLE_END_1)) ||
-      (now.isAfter(ENABLE_START_2) && now.isBefore(ENABLE_END_2));
-
+    
+    // 현재 시각의 분과 초 추출
+    const currentMinute = now.minute();
+    
+    // 5분 주기로 반복되는 패턴에서 현재 위치 계산 (0-4)
+    const minuteInCycle = currentMinute % 5;
+    
+    // 활성화 여부 판단: 
+    // 2-4분 구간에 활성화 (3분 동안)
+    const isInTimeRange = minuteInCycle >= 2;
+    
     setIsEnabled(isInTimeRange);
-
-    // 게임 시작까지 남은 시간 계산 (둘 중 가까운 쪽 기준)
-    const nextEnableEnd = now.isBefore(ENABLE_END_1)
-      ? ENABLE_END_1
-      : ENABLE_END_2;
-
-    const gameDiffInSeconds = nextEnableEnd.diff(now, "second");
-    const gameHours = Math.floor(gameDiffInSeconds / 3600);
-    const gameMinutes = Math.floor((gameDiffInSeconds % 3600) / 60);
-    const gameSeconds = gameDiffInSeconds % 60;
-
-    let formattedGameTime;
-    if (gameDiffInSeconds >= 3600) {
-      formattedGameTime = `${gameHours.toString().padStart(2, "0")}:${gameMinutes
-        .toString()
-        .padStart(2, "0")}:${gameSeconds.toString().padStart(2, "0")}`;
-    } else {
-      formattedGameTime = `${gameMinutes.toString().padStart(2, "0")}:${gameSeconds
-        .toString()
-        .padStart(2, "0")}`;
-    }
-
-    setRemainingTime(formattedGameTime);
-
-    // 입장 가능 시간까지 남은 시간 계산
-    if (!isInTimeRange) {
-      let nextEnableStart;
-
-      if (now.isBefore(ENABLE_START_1)) {
-        nextEnableStart = ENABLE_START_1;
-      } else if (now.isBefore(ENABLE_START_2)) {
-        nextEnableStart = ENABLE_START_2;
-      } else {
-        // 둘 다 지났으면 다음 시의 25분으로 세팅
-        nextEnableStart = now.add(1, "hour").set("minute", 25).set("second", 0);
-      }
-
-      const enterDiffInSeconds = nextEnableStart.diff(now, "second");
-      const enterHours = Math.floor(enterDiffInSeconds / 3600);
-      const enterMinutes = Math.floor((enterDiffInSeconds % 3600) / 60);
-      const enterSeconds = enterDiffInSeconds % 60;
-
-      let formattedEnterTime;
-      if (enterDiffInSeconds >= 3600) {
-        formattedEnterTime = `${enterHours.toString().padStart(2, "0")}:${enterMinutes
-          .toString()
-          .padStart(2, "0")}:${enterSeconds.toString().padStart(2, "0")}`;
-      } else {
-        formattedEnterTime = `${enterMinutes.toString().padStart(2, "0")}:${enterSeconds
-          .toString()
-          .padStart(2, "0")}`;
-      }
-
-      setStartEnterTime(formattedEnterTime);
-    } else {
+    
+    // 남은 시간 계산
+    let nextChangeTime;
+    
+    if (isInTimeRange) {
+      // 현재 활성화 상태일 때 - 비활성화될 때까지 남은 시간 계산
+      nextChangeTime = now.startOf('hour').add(Math.floor(currentMinute / 5) * 5 + 5, 'minute');
+      
+      const diffInSeconds = nextChangeTime.diff(now, 'second');
+      const minutes = Math.floor(diffInSeconds / 60);
+      const seconds = diffInSeconds % 60;
+      
+      const formattedTime = `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+      setRemainingTime(formattedTime);
       setStartEnterTime("");
+    } else {
+      // 현재 비활성화 상태일 때 - 활성화될 때까지 남은 시간 계산
+      nextChangeTime = now.startOf('hour').add(Math.floor(currentMinute / 5) * 5 + 2, 'minute');
+      
+      const diffInSeconds = nextChangeTime.diff(now, 'second');
+      const minutes = Math.floor(diffInSeconds / 60);
+      const seconds = diffInSeconds % 60;
+      
+      const formattedTime = `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+      setStartEnterTime(formattedTime);
+      setRemainingTime("");
     }
   };
+  
 
 
   useEffect(() => {

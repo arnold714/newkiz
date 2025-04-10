@@ -63,7 +63,7 @@ export default function MainPage() {
 
   return (
     <div className="h-screen flex flex-col overflow-auto scroll pb-20">
-      <div className='my-5 flex justify-center min-gap-2 gap-[10vw] items-center'>
+      <div className='my-5 flex justify-evenly items-center'>
         <div className='flex flex-col justify-center items-center'>
           <p className='text-[#202020] text-[20px] font-extrabold text-stroke-1 mb-0'>{nickname}</p>
           <img src={`${imgUrl}dinos/${characterId}.png`}

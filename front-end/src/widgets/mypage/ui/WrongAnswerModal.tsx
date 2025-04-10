@@ -2,6 +2,7 @@ import { WrongAnswerItem } from "@/features/mypage";
 import { LuChevronLeft } from "react-icons/lu";
 import { FaLightbulb, FaQuestionCircle, FaTrashAlt } from "react-icons/fa";
 import { PostWrongAnswer } from "@/widgets/mypage";
+import { showError, showSuccess } from "@/shared";
 
 interface WrongAnswerModalProps {
     closeModal: () => void;
@@ -14,11 +15,11 @@ export const WrongAnswerModal = ({ closeModal, wrongdata, onQuizDeleted }: Wrong
     const handleDeleteQuiz = async (quizId: string) => {
         try {
             await PostWrongAnswer(quizId);  // Post 요청 보내기
-            alert("퀴즈가 삭제되었습니다.");  // 삭제 완료 후 알림
+            showSuccess("퀴즈가 삭제되었습니다.");  // 삭제 완료 후 알림
             onQuizDeleted(quizId);  // 삭제된 퀴즈 반영
             closeModal();  // 모달 닫기
         } catch (error) {
-            alert("퀴즈 삭제에 실패했습니다.");
+            showError("퀴즈 삭제에 실패했습니다.");
         }
     };
 

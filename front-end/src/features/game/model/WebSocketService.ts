@@ -27,7 +27,7 @@ export const createWebSocketService = (baseUrl: string) => {
         });
 
         client.current.onConnect = () => {
-          console.log("웹 소켓 연결 성공");
+          // console.log("웹 소켓 연결 성공");
 
           // 최초 연결 시 userId 전송
           client.current?.publish({
@@ -41,7 +41,7 @@ export const createWebSocketService = (baseUrl: string) => {
               `/sub/users/${userId}/info`,
               (message: IMessage) => {
                 callbacks.onWaitingInfo!(JSON.parse(message.body));
-                console.log("GameInfo: ", JSON.parse(message.body));
+                // console.log("GameInfo: ", JSON.parse(message.body));
               }
             );
           }
@@ -58,7 +58,7 @@ export const createWebSocketService = (baseUrl: string) => {
           if (callbacks.onQuizInfo) {
             client.current?.subscribe(`/sub/quiz-info`, (message: IMessage) => {
               callbacks.onQuizInfo!(JSON.parse(message.body));
-              console.log("quizInfo: ", JSON.parse(message.body));
+              // console.log("quizInfo: ", JSON.parse(message.body));
             });
           }
 
@@ -68,7 +68,7 @@ export const createWebSocketService = (baseUrl: string) => {
               `/sub/quiz-result`,
               (message: IMessage) => {
                 callbacks.onQuizResult!(JSON.parse(message.body));
-                console.log("quizResult: ", JSON.parse(message.body));
+                // console.log("quizResult: ", JSON.parse(message.body));
               }
             );
           }

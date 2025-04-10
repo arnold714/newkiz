@@ -1,15 +1,16 @@
 import { LuX, LuCircle } from "react-icons/lu";
-import { useState, useEffect } from "react";
+
 import { useNavigate } from "react-router-dom";
 
 interface QuizResultProps {
   isCorrect: boolean;
   explanation: string;
   onClose: () => void;
+  onQuizResultUpdate?: () => void; 
 }
 
-export const QuizResult = ({ isCorrect, onClose, explanation }: QuizResultProps) => {
-  const [shouldReRender, setShouldReRender] = useState(false);
+export const QuizResult = ({ isCorrect, onClose, explanation, onQuizResultUpdate  }: QuizResultProps) => {
+ 
   const navigate = useNavigate();
 
   const isRedirectToWrongNote = () => {
@@ -17,21 +18,17 @@ export const QuizResult = ({ isCorrect, onClose, explanation }: QuizResultProps)
   };
   
   // 상태 변경 시 컴포넌트가 리렌더링되도록 처리
-  useEffect(() => {
-    if (shouldReRender) {
-      setShouldReRender(false);
-    }
-  }, [shouldReRender]);
-
   const handleClose = () => {
-    setShouldReRender(true); // 상태를 true로 설정하여 리렌더링 트리거
     onClose(); // 부모 컴포넌트에서 제공하는 onClose 함수 호출
+    if (onQuizResultUpdate) {
+      onQuizResultUpdate(); // 부모 컴포넌트에 퀴즈 결과 업데이트 알림
+    }
   };
 
   return (
     <div>
-      <div className="m-5">
-        <div className="flex justify-center items-center mt-10">
+      <div className="mx-5 mb-5">
+        <div className="flex justify-center items-center">
           {isCorrect ? (
             <LuCircle size={180} className="stroke-[#748BFF] stroke-3" />
           ) : (

@@ -1,8 +1,7 @@
 .action-button-wrapper {
   position: fixed;
   bottom: 80px;
-  left: 40%;
-  
+  left: 45%;
   z-index: 2;
   display: flex;
   flex-direction: column;
@@ -10,11 +9,10 @@
 }
 
 .fab-item {
-  background-color: #3b82f6;
-  color: white;
+  background-color: white;
   border-radius: 50%;
   padding: 12px;
-  border: none;
+  border: #EBEBEB;
   margin-bottom: 8px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
   transition: background-color 0.2s, transform 0.3s ease;
@@ -23,11 +21,12 @@
 }
 
 .fab-item:hover {
-  background-color: #2563eb;
+  background-color:white;
 }
 
 .fab-main {
-  background-color: #3b82f6;
+  border: #EBEBEB;
+  background-color: white;
   color: white;
   border-radius: 50%;
   padding: 12px;
@@ -37,9 +36,6 @@
   cursor: pointer;
 }
 
-.fab-main:hover {
-  background-color: #2563eb;
-}
 
 @keyframes slideUp {
   from {
@@ -49,5 +45,12 @@
   to {
     transform: translateY(0);
     opacity: 1;
+  }
+}
+
+@media (min-width: 500px) {
+  .action-button-wrapper {
+    left: 49%; /* 화면 크기가 600px 이상일 때 중앙 정렬 */
+    transform: translateX(-50%); /* 정확히 중앙으로 이동 */
   }
 }

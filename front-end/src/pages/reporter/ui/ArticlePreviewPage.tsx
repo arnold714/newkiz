@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { LuX } from "react-icons/lu";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useUserProfile } from "@/shared";
+import { showError, showSuccess, useUserProfile } from "@/shared";
 import { createArticle, updateArticle } from "@/pages/reporter";
 import "@shared/styles/CustomScroll.css"
 
@@ -44,23 +44,23 @@ export default function ArticlePreviewPage() {
       // 신규 작성 - POST 요청
       const result = await createArticle(formData);
       if (result.success) {
-        alert("새 기사가 등록되었습니다!");
+        showSuccess("새 기사가 등록되었습니다!");
         navigate("/reporter");
       } else {
-        alert("기사 등록 실패");
+        showError("기사 등록 실패");
       }
     } else {
       // 수정 모드 - 기존 기사 ID를 활용한 PATCH 요청
       if (!articleId) {
-        alert("수정 대상 기사가 없습니다.");
+        showError("수정 대상 기사가 없습니다.");
         return;
       }
       const result = await updateArticle(articleId, formData);
       if (result.success) {
-        alert("기사 수정이 완료되었습니다!");
+        showSuccess("기사 수정이 완료되었습니다!");
         navigate("/reporter");
       } else {
-        alert("기사 수정 실패");
+        showError("기사 수정 실패");
       }
     }
   };
@@ -84,8 +84,8 @@ export default function ArticlePreviewPage() {
             className="w-10 h-12 mr-2"
           />
           <p className="font-bold text-lg leading-tight">
-            생성된 표지를 확인해보세요! <br />
-            이제 {isEdit ? "기사 수정" : "기사를 등록"}해볼까요?
+            작성된 기사를 확인해보세요! <br />
+            이제 {isEdit ? "기사를 수정" : "기사를 등록"}해볼까요?
           </p>
         </div>
 

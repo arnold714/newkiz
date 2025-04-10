@@ -12,6 +12,7 @@ Modal.setAppElement("#root");
 export const WrongAnswerPage = () => {
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
     const navigate = useNavigate();
+    const [selectedItem, setSelectedItem] = useState<WrongAnswerItem | undefined>(undefined);
     const [wrongdata, setWrongdata] = useState<WrongAnswerItem[] | undefined>();
 
     useEffect(() => {
@@ -27,6 +28,7 @@ export const WrongAnswerPage = () => {
         if (wrongdata) {
             const updatedData = wrongdata.filter(item => item.id !== quizId);
             setWrongdata(updatedData);
+            setSelectedItem(undefined);
         }
     };
 
@@ -39,7 +41,7 @@ export const WrongAnswerPage = () => {
             <div className="flex flex-col w-full items-center my-5 gap-5">
                 {wrongdata?.map((data) => (
                     <div className="flex flex-col items-start w-[90%]" key={data.id}>
-                        <p className="font-semibold cursor-pointer" onClick={() => setIsModalOpen(true)}>
+                        <p className="font-semibold cursor-pointer" onClick={() => {setSelectedItem(data); setIsModalOpen(true)}}>
                             {data.quiz.multipleChoiceQuiz.question}
                         </p>
                         <hr className="border-1 border-gray-100 w-full mt-2" />
@@ -55,7 +57,7 @@ export const WrongAnswerPage = () => {
             >
                 <WrongAnswerModal
                     closeModal={() => setIsModalOpen(false)}
-                    wrongdata={wrongdata}
+                    wrongdata={selectedItem} 
                     onQuizDeleted={handleQuizDeletion} 
                 />
             </Modal>

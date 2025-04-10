@@ -14,8 +14,8 @@ interface ArticleDetailModalProps {
 
 const ArticleDetailModal = ({ isOpen, onClose, article }: ArticleDetailModalProps) => {
   const [detailedArticle, setDetailedArticle] = useState<ReporterArticle | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
+  const [, setLoading] = useState<boolean>(false);
+  const [, setError] = useState<string | null>(null);
   const [commentText, setCommentText] = useState<string>('');
   const [editingReplyId, setEditingReplyId] = useState<string | null>(null);
   const [editingText, setEditingText] = useState<string>('');

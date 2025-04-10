@@ -95,6 +95,10 @@ export const ReporterNews = () => {
     });
   };
 
+  const getCommentCount = (article: ReporterArticle) => {
+    return article.replies ? article.replies.length : 0;
+  };
+
   return (
     <div className="pt-2 pb-20">
       {loading ? (
@@ -143,29 +147,30 @@ export const ReporterNews = () => {
             </div>
 
             <div className="flex justify-between m-2">
-              <div className="flex items-center gap-3">
-                {isLiked ? (
-                  <FaHeart 
-                    size={25}
-                    onClick={() => handleLikeClick(news)}
-                    className="cursor-pointer text-[#FF5C5C]"
-                  />
-                ) : (
-                  <FaRegHeart 
-                    size={25}
-                    onClick={() => handleLikeClick(news)}
-                    className="cursor-pointer text-black"
-                  />
-                )}
-                <div>
-                  <FaRegComment size={25} />
+              <div className="flex items-center gap-8">
+                <div className="flex flex-col items-center">
+                  {isLiked ? (
+                    <FaHeart 
+                      size={25}
+                      onClick={() => handleLikeClick(news)}
+                      className="cursor-pointer text-[#FF5C5C]"
+                    />
+                  ) : (
+                    <FaRegHeart 
+                      size={25}
+                      onClick={() => handleLikeClick(news)}
+                      className="cursor-pointer text-black"
+                    />
+                  )}
+                  <span className="text-sm font-medium mt-1">{news.likes}</span>
+                </div>
+                <div className="flex flex-col items-center">
+                  <FaRegComment size={25} className="cursor-pointer" onClick={() => openModal(news)} />
+                  <span className="text-sm font-medium mt-1">{getCommentCount(news)}</span>
                 </div>
               </div>
             </div>
 
-            <div className="mx-2">
-              게시글의 좋아요 수: {news.likes}
-            </div>
             <div className="mx-2 mb-5 cursor-pointer" onClick={() => openModal(news)}>
               {news.content.slice(0, 100)}...
             </div>

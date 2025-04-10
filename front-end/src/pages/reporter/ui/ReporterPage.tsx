@@ -9,7 +9,7 @@ export default function ReporterPage() {
   const location = useLocation();
 
   return (
-    <div ref={scrollRef} className="overflow-y-auto h-screen scroll pb-10 relative">
+    <div ref={scrollRef} className="overflow-y-auto h-screen scroll pb-15 relative">
       {location.pathname === "/reporter" && (
         <>
           <div className="bg-white/75">

@@ -9,6 +9,7 @@ import { SelectCharacterModal } from "@/widgets/mypage";
 import { fetchMyPage, updateMyPage } from "@/pages/mypage";
 import { interestMap, interestMapReverse } from "@/features/mypage"
 import { SchoolSearchModal } from "@/widgets/login";
+import { showError, showSuccess } from "@/shared";
 
 Modal.setAppElement("#root")
 
@@ -93,7 +94,7 @@ export const ModifyInfoPage = () => {
       };
 
       await updateMyPage(patchData);
-      alert("수정이 완료되었습니다.");
+      showSuccess("수정이 완료되었습니다.");
 
       // 기존 쿠키에서 프로필 정보를 읽고, 변경된 값들을 병합
       let existingProfile: any = {};
@@ -122,7 +123,7 @@ export const ModifyInfoPage = () => {
       navigate(-1);
     } catch (error) {
       console.error("마이페이지 수정 실패:", error);
-      alert("수정에 실패했습니다. 다시 시도해주세요.");
+      showError("수정에 실패했습니다. 다시 시도해주세요.");
     }
   };
 

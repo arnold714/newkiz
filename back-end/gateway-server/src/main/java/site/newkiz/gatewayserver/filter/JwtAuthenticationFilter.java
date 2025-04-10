@@ -36,7 +36,7 @@ public class JwtAuthenticationFilter implements WebFilter {
       log.info(exchange.getRequest().getMethod().name());
 
       if (accessToken != null || refreshToken != null) {
-        if(refreshToken != null) {
+        if (refreshToken != null) {
           Integer userId = jwtUtil.getId(refreshToken);
           String name = jwtUtil.getName(refreshToken);
 
@@ -75,19 +75,28 @@ public class JwtAuthenticationFilter implements WebFilter {
             }));
       }
 
+      if (exchange.getRequest().getURI().getPath().startsWith("/login")) {
+        return chain.filter(exchange);
+      }
+
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
-
-    return chain.filter(exchange);
+    return redirectToLogin(exchange.getResponse());
   }
 
   private Mono<Void> redirectToProfileSetup(ServerHttpResponse response) {
     if (!response.isCommitted()) {
-      response.setStatusCode(HttpStatus.SEE_OTHER);
-      response.getHeaders()
-          .add("Location", applicationConfig.getDomain() + "/userinfo");
+      response.setStatusCode(HttpStatus.FORBIDDEN);
     }
     return response.setComplete();
   }
+
+  private Mono<Void> redirectToLogin(ServerHttpResponse response) {
+    if (!response.isCommitted()) {
+      response.setStatusCode(HttpStatus.UNAUTHORIZED);
+    }
+    return response.setComplete();
+  }
+
 }

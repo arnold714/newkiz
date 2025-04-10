@@ -11,9 +11,10 @@ interface QuizModalProps {
   id?: string;
   quizData: QuizData | null; 
   isSolved?:boolean | null;
+  onNewsReturn: () => void;
 }
 
-export const QuizModal = ({ closeModal, id, quizData, isSolved }: QuizModalProps) => {
+export const QuizModal = ({ closeModal, id, quizData, isSolved, onNewsReturn }: QuizModalProps) => {
   
 
   // 내가 선택한 답
@@ -113,7 +114,11 @@ export const QuizModal = ({ closeModal, id, quizData, isSolved }: QuizModalProps
         </div>
       ) : (
         // QuizResult 모달 표시
-        <QuizResult isCorrect={isCorrect} explanation={quizData.quiz.multipleChoiceQuiz.explanation} onClose={closeModal} />
+        <QuizResult 
+          isCorrect={isCorrect} 
+          explanation={quizData.quiz.multipleChoiceQuiz.explanation} 
+          onClose={closeModal} 
+          onQuizResultUpdate={onNewsReturn}/>
       )}
     </div>
   );

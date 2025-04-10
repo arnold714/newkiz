@@ -90,7 +90,7 @@ export const NewsDetailContet: React.FC<NewsDetailContentProps> = ({
                       positions={['top', 'bottom', 'left', 'right']}
                       onClickOutside={() => setPopoverData(null)}
                       content={
-                        <div className="bg-white border border-gray-300 p-2.5 rounded min-w-[200px]shadow-[0_2px_8px_rgba(0,0,0,0.15)] relative max-w-[300px]">
+                        <div className="bg-white border border-gray-300 p-2.5 rounded min-w-[200px]shadow-[0_2px_8px_rgba(0,0,0,0.15)] relative max-w-[300px] mx-3">
                           <div className="flex items-center justify-end">    
                             <LuX
                               size={25}

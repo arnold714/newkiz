@@ -3,7 +3,6 @@ import react from "@vitejs/plugin-react"
 import { VitePWA } from "vite-plugin-pwa"
 import tailwindcss from '@tailwindcss/vite'
 import tsconfigPaths from 'vite-tsconfig-paths';
-import basicSsl from '@vitejs/plugin-basic-ssl'
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -111,14 +110,8 @@ export default defineConfig({
         ],
       },
     }),
-    basicSsl()
   ],
   define: {
     global: 'window',
   },
-  // server: {
-  //   https: true,
-  //   host: 'test.newkiz.site', // 또는 0.0.0.0으로 전체 IP 바인딩
-  //   port: 5173
-  // },
 })

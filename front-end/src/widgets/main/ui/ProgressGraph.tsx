@@ -20,16 +20,6 @@ export const ProgressGraph: React.FC = () => {
     return () => window.removeEventListener("resize", handleResize)
   }, [])
 
-  useEffect(() => {
-    // 초기 상태 확인
-    checkTimeValidity()
-
-    // 1초마다 시간 확인
-    const intervalId = setInterval(checkTimeValidity, 1000)
-
-    return () => clearInterval(intervalId)
-  }, [])
-
   if (isLoading) return <div className="loading">Loading...</div>;
   if (isError) {
     console.error("Error fetching today read news:", error); // 에러 로그 출력
@@ -129,6 +119,17 @@ export const ProgressGraph: React.FC = () => {
       setStartEnterTime("")
     }
   }
+  
+  useEffect(() => {
+    // 초기 상태 확인
+    checkTimeValidity()
+
+    // 1초마다 시간 확인
+    const intervalId = setInterval(checkTimeValidity, 1000)
+
+    return () => clearInterval(intervalId)
+  }, [])
+
 
   return (
     <div className="bg-white/90 shadow-m rounded-[15px] shadow-[4px_4px_3px_rgba(0,0,0,0.13)] w-40 h-40 m-3 sm:w-60 sm:h-60 flex justify-center items-center">

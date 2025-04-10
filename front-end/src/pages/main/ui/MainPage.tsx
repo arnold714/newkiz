@@ -65,7 +65,7 @@ export default function MainPage() {
     <div className="h-screen flex flex-col overflow-auto scroll pb-20">
       <div className='my-5 flex justify-center min-gap-2 gap-[10vw] items-center'>
         <div className='flex flex-col justify-center items-center'>
-          <p className='text-[#7CBA36] text-[20px] font-extrabold text-stroke-1 mb-0'>{nickname}</p>
+          <p className='text-[#202020] text-[20px] font-extrabold text-stroke-1 mb-0'>{nickname}</p>
           <img src={`${imgUrl}dinos/${characterId}.png`}
             alt={`character_${characterId}`} className='w-[60%] min-w-25 sm:w-35 mt-0'/>
         </div>

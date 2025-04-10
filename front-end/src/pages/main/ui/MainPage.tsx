@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import { AxiosError } from 'axios';
 import { fetchMyPage } from "@/pages/mypage";
-import { useUserProfile } from '@/shared';
+import { useUserProfile, showError } from '@/shared';
 import { HotTopic, ProgressGraph, RecommendedNews } from '@/widgets/main';
 import "@shared/styles/CustomScroll.css";
 
@@ -45,6 +45,7 @@ export default function MainPage() {
           if (error.response?.status === 401) {
             navigate("/login"); // 로그인 페이지로 리다이렉트
           } else if (error.response?.status === 403) {
+            showError("프로필을 등록해주세요")
             navigate("/userinfo"); // 프로필 등록 페이지로 리다이렉트
           } else {
             console.error("유저 정보 불러오기 실패:", error);
@@ -64,7 +65,7 @@ export default function MainPage() {
     <div className="h-screen flex flex-col overflow-auto scroll pb-20">
       <div className='my-5 flex justify-center min-gap-2 gap-[10vw] items-center'>
         <div className='flex flex-col justify-center items-center'>
-          <p className='text-[#7CBA36] text-[20px] font-extrabold text-stroke-1 mb-0'>{nickname}</p>
+          <p className='text-[#202020] text-[20px] font-extrabold text-stroke-1 mb-0'>{nickname}</p>
           <img src={`${imgUrl}dinos/${characterId}.png`}
             alt={`character_${characterId}`} className='w-[60%] min-w-25 sm:w-35 mt-0'/>
         </div>

@@ -34,12 +34,10 @@ const createAxiosInstance = (baseURL?: string) => {
       return response;
     },
     (error) => {
-      // 401 Unauthorized 오류 처리 (리다이렉트는 MainPage에서 처리)
       if (error.response?.status === 401) {
         window.location.href = "/login"; // 로그인 페이지로 리다이렉트
       }
 
-      // 403 Forbidden 오류 처리 (리다이렉트는 MainPage에서 처리)
       if (error.response?.status === 403) {
         window.location.href = "/userinfo"; // 프로필 등록 페이지로 리다이렉트
       }

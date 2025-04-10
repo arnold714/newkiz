@@ -5,7 +5,6 @@ import { AxiosError } from 'axios';
 import { fetchMyPage } from "@/pages/mypage";
 import { useUserProfile, showError } from '@/shared';
 import { HotTopic, ProgressGraph, RecommendedNews } from '@/widgets/main';
-import Swal from "sweetalert2";  
 import "@shared/styles/CustomScroll.css";
 
 export default function MainPage() {

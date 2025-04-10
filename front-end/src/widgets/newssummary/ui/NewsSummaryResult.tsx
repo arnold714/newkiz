@@ -18,9 +18,8 @@ export const NewsSummaryResult: React.FC<NewsSummaryResultProps> = ({ thought, s
     const { id } = useParams<{id: string}>()
     const handleBackButtonClick = () => {
         navigate(`/detail/${id}?refresh=${Date.now()}`);
-    }
-    console.log('summary:', summary)
-    console.log('userCharactor:',userCharacter)
+    };
+
     return (
         <div className='overflow-y-auto max-h-[calc(100vh-100px)] bg-[#BFD46F] pb-10'>
             <div className='bg-white w-[calc(100%-30px)] mx-auto h-[calc(100%-20px)] overflow-y-auto  my-3 p-5 rounded-xl '>

@@ -32,7 +32,6 @@ export default function NewsSummaryPage() {
     const userCharacter = userProfile ? userProfile.characterId : "olaf";
 
     const { summaryData, summary } = (location.state as LocationState) || { summary: '' };
-    console.log('summaryData, summary:',summaryData, summary)
     
     if (summaryData) {
       return <NewsSummaryResult summary={summary} summaryData={summaryData} userCharacter={userCharacter}/>;

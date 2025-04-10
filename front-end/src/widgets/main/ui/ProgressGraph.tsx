@@ -172,7 +172,7 @@ export const ProgressGraph: React.FC = () => {
           {isEnabled ? (
             <Link
               to="/game"
-              state={{ from: "main" }}
+              state={{ from: "/" }}
               className="rounded-lg px-3 py-2 bg-[#7CBA36] text-white font-semibold"
             >
               게임 입장하기

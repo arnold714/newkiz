@@ -3,7 +3,8 @@ export interface ApiResponse {
     data: NewsDetail[]; 
     error: string | null;
   };
-// 뉴스 상세 정보( textList 임시)
+  
+// 뉴스 상세 정보
 export interface NewsDetail {
   id: string;
   title: string;
@@ -106,4 +107,4 @@ export interface GetNewsSummaryResponse {
     updatedAt: string;
   };
   error: string | null;
-}
+};

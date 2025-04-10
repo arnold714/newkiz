@@ -4,6 +4,7 @@ import { LuEllipsisVertical } from "react-icons/lu";
 import { ReporterArticle } from '@/features/reporter';
 import { fetchAllKidsNews, ArticleDetailModal, postLike, deleteArticle } from '@/widgets/reporter';
 import "@shared/styles/CustomScroll.css"
+import { AxiosError } from 'axios';
 import { showError, useUserProfile } from '@/shared';
 import { useNavigate } from 'react-router-dom';
 
@@ -27,17 +28,30 @@ export const ReporterNews = () => {
   // 기사 목록을 API로부터 가져오는 함수
   const fetchNewsList = async () => {
     setLoading(true);
-    const result = await fetchAllKidsNews();
-    if (result.success) {
-      setNewsList(result.data);  // `data`가 ReporterArticle[] 형태
-    } else {
-      setError(result.error);
+    try {
+      const result = await fetchAllKidsNews();
+      if (result.success) {
+        setNewsList(result.data); 
+      } else {
+        setError(result.error);
+      }
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (error.response?.status === 401) {
+          navigate("/login"); 
+          alert("로그인이 필요합니다");
+        } else if (error.response?.status === 403) {
+          showError("프로필을 등록해주세요");
+          navigate("/userinfo");
+        }
+      }
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   useEffect(() => {
-    fetchNewsList();  // 컴포넌트 마운트 시 기사 목록 가져오기
+    fetchNewsList();
   }, []);
 
   const openModal = (article: ReporterArticle) => {

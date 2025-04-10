@@ -2,7 +2,6 @@ import { Layout } from "@/shared"
 import { Suspense, lazy } from "react"
 import { createBrowserRouter, RouteObject } from "react-router-dom"
 import { LoadingComponent } from "@/shared"
-import { ProtectedGameRoute } from "@/shared/model/ProtectedGameRoute"
 // import { ProtectedRoute } from "@/shared"
 
 // 디테일 페이지
@@ -40,7 +39,7 @@ const NewsSummaryPage = lazy(() => import("@pages/newssummary").then((module) =>
 const CategoryPage = lazy(() => import("@pages/category").then((module) => ({ default: module.CategoryPage })))
 const CategoryDetailPage = lazy(() => import("@pages/category").then((module) => ({ default: module.CategoryDetailPage })))
 // 잘못된 접근 
-const ForbiddenPage = lazy(()=> import("@shared/ui/ForbiddenPage").then((module)=>({default:module.ForbiddenPage})))
+const ForbiddenPage = lazy(() => import("@shared/ui/ForbiddenPage").then((module) => ({ default: module.ForbiddenPage })))
 
 const routes: RouteObject[] = [
   {
@@ -75,11 +74,9 @@ const routes: RouteObject[] = [
   {
     path: "/game",
     element: (
-      <ProtectedGameRoute> {/* game url로 직접 접근하지 못하도록 막는 코드 */}
-        <Suspense fallback={<LoadingComponent />}>
-          <GamePage />
-        </Suspense>
-      </ProtectedGameRoute>
+      <Suspense fallback={<LoadingComponent />}>
+        <GamePage />
+      </Suspense>
     ),
   },
   {
@@ -180,7 +177,7 @@ const routes: RouteObject[] = [
       <Suspense fallback={<LoadingComponent />}>
         <Layout>
           <SearchResultsPage />
-          </Layout>
+        </Layout>
       </Suspense>
     ),
   },
@@ -211,9 +208,9 @@ const routes: RouteObject[] = [
     ),
   },
   {
-  //   element: <ProtectedRoute />,
-  //   children: [
-  // {
+    //   element: <ProtectedRoute />,
+    //   children: [
+    // {
     path: "/category",
     element: (
       <Suspense fallback={<LoadingComponent />}>
@@ -238,9 +235,9 @@ const routes: RouteObject[] = [
             <CategoryDetailPage />
           </Suspense>
         ),
-    //   },
-    // ],
-  },
+        //   },
+        // ],
+      },
     ],
   },
   // 없는 페이지 처리

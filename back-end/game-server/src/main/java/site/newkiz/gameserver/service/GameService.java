@@ -45,24 +45,7 @@ public class GameService {
   private Game game;
   private final MongoTemplate mongoTemplate;
 
-  // todo 게임 test 반복
-  @Scheduled(cron = "0 */1 * * * ?", zone = "Asia/Seoul")
-  public void test() throws InterruptedException {
-    if (game != null && game.getState() != State.FINISHED) {
-      return;
-    }
-
-    log.info("----test----");
-    createGame();
-
-    log.info("Test Game start after 10 seconds");
-    Thread.sleep(10000);
-
-    log.info("Test Game start!");
-    startGame();
-  }
-
-  @Scheduled(cron = "0 55 17 * * ?", zone = "Asia/Seoul")
+  @Scheduled(cron = "0 2,7,12,17,22,27,32,37,42,47,52,57 * * * ?", zone = "Asia/Seoul")
   public void createGame() throws InterruptedException {
     log.info("게임 생성");
     game = new Game();
@@ -73,8 +56,8 @@ public class GameService {
     log.info("퀴즈 세팅");
     Query query = new Query();
     query.addCriteria(Criteria.where("quiz.ox_quiz.answer").regex("^[oOxX]$"));
-    query.with(Sort.by(Sort.Direction.DESC, "published"));
-    query.limit(10); // todo 최근 20개만
+    query.with(Sort.by(Sort.Direction.DESC, "updated_at"));
+    query.limit(5); // todo 최근 5개만
 
     return mongoTemplate.find(query, NewsQuizDocument.class).stream().map(q -> {
       String question = q.getQuiz().getOxQuiz().getQuestion();
@@ -110,7 +93,7 @@ public class GameService {
     }
   }
 
-  @Scheduled(cron = "0 0 18 * * ?", zone = "Asia/Seoul")
+  @Scheduled(cron = "0 */5 * * * ?", zone = "Asia/Seoul")
   public void startGame() throws InterruptedException {
     log.info("게임 시작 - 총 {} 문제", game.quizCount());
 

@@ -10,6 +10,7 @@ public class KidsnewsCreateRequest {
     private String title;
     private String content;
     private String author;
+    private String userId;
     private MultipartFile image;
 }
 

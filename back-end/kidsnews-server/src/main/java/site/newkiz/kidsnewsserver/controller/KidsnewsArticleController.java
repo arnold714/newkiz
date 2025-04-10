@@ -35,6 +35,7 @@ public class KidsnewsArticleController {
         request.setTitle(title);
         request.setContent(content);
         request.setAuthor(author);
+        request.setUserId(userId);
         request.setImage(image);
 
         return ApiResponse.success(kidsnewsArticleService.create(userId, request));

@@ -15,19 +15,3 @@ export async function fetchScrappedNews(): Promise<NewsItem[]> {
     return [];
   }
 }
-
-export async function fetchScrappedWords(): Promise<VocaItem[]> {
-    try {
-      const response = await customAxios.get<ScrapVocaResponse>("/api/mypage/scrap/voca");
-      if (response.data.success) {
-        // 응답 데이터 구조에 맞춰서 data.word 배열을 반환
-        return response.data.data.word;
-      } else {
-        console.error("스크랩 단어 API 오류:", response.data.error);
-        return [];
-      }
-    } catch (error) {
-      console.error("스크랩 단어 불러오기 실패:", error);
-      return [];
-    }
-  }

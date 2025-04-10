@@ -75,7 +75,7 @@ export const GamePage: React.FC = () => {
   useEffect(() => {
     if (allPlayers) {
       setActivePlayers(allPlayers)
-      console.log("activePlayers: ", activePlayers)
+      // console.log("activePlayers: ", activePlayers)
     }
   }, [allPlayers])
 

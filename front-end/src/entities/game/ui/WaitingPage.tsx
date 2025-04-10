@@ -97,8 +97,8 @@ export const WaitingPage = ({ waitingInfo }: WaitingPageProps) => {
                 <SchoolRanking schoolRanks={schoolRanking} />
               )}
             </div>
+            <Link className="mt-4 px-8 py-2 bg-[#7CBA36] rounded-lg text-white text-center font-bold text-lg" to="/">나가기</Link>
           </div>
-          <Link className="mt-4 px-8 py-2 bg-[#7CBA36] rounded-lg text-white text-center font-bold text-lg" to="/">나가기</Link>
         </div>
       }
     </div>

@@ -47,7 +47,7 @@ export const RecommendedNews: React.FC<RecommendedNewsProps> = ({ userProfile })
             <div className="flex justify-between items-center px-10">
                 <div className="flex-shrink-0 w-1"></div>
                 {/* 카테고리 버튼 리스트 */}
-                <div className="flex gap-3 overflow-x-auto whitespace-nowrap">
+                <div className="flex gap-3 overflow-x-auto whitespace-nowrap pb-2">
                     {categories.map((category) => (
                         <Button
                             key={category}

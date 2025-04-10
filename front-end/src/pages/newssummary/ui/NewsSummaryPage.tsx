@@ -4,11 +4,12 @@ import { NewsSummaryResult } from '@/widgets/newssummary';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { PostNewsSummary } from '@/widgets/newssummary';
 import { PostNewsSummaryRequest } from '@/features/newssummary';
-import { GetNewsSummaryResponse } from '@/features/detail/model/types';
+import { GetNewsSummaryResponse, } from '@/features/detail/model/types';
+import { useUserProfile } from "@/shared";
 import Swal from 'sweetalert2';
 
 interface LocationState {
-  summaryData?: GetNewsSummaryResponse["data"];
+  summaryData?: GetNewsSummaryResponse;
   summary: string;
 };
 
@@ -16,8 +17,8 @@ const imgUrl: string = import.meta.env.VITE_AWS_S3_BASE_URL
 
 export default function NewsSummaryPage() {
 
+    const userProfile = useUserProfile();
     const { id } = useParams<{id: string}>()
-    const name = '뿡뿡이';
     const location = useLocation();
     const navigate = useNavigate();
     const [ thought, setThought ] = useState<string>('');
@@ -27,12 +28,15 @@ export default function NewsSummaryPage() {
     // 요약 결과
     const [summaryResult, setSummaryResult] = useState<PostNewsSummaryRequest| null>(null); 
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
+    const userName = userProfile ? userProfile.nickname : "사용자";
+    const userCharacter = userProfile ? userProfile.characterId : "olaf";
 
     const { summaryData, summary } = (location.state as LocationState) || { summary: '' };
-    console.log('summaryData, summary:',summaryData, summary)
+    
     if (summaryData) {
-      return <NewsSummaryResult summary={summary} summaryData={summaryData} />;
+      return <NewsSummaryResult summary={summary} summaryData={summaryData} userCharacter={userCharacter}/>;
     };
+
     const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
       const newText = e.target.value;
       
@@ -92,12 +96,13 @@ export default function NewsSummaryPage() {
     };
 
     if (showResult && summaryResult ) {
-      return <NewsSummaryResult thought={thought} summary={summary} />;
-    }
+      return <NewsSummaryResult thought={thought} summary={summary} userCharacter={userCharacter}/>;
+    };
+
 
     return (
-      <div className='overflow-y-auto max-h-[calc(100vh-100px)] bg-[#BFD46F]'>
-        <div className='bg-white w-[calc(100%-30px)] mx-auto h-[calc(100%-20px)] my-3 p-5 rounded-xl'>
+      <div className='overflow-y-auto max-h-[calc(100vh-100px)] bg-[#BFD46F] pb-10'>
+        <div className='bg-white w-[calc(100%-30px)] mx-auto h-[calc(100%-20px)] my-3 p-5 rounded-xl '>
           <div className='flex justify-end'>
             <LuX size={30} 
               onClick={handleBackButtonClick}
@@ -106,8 +111,8 @@ export default function NewsSummaryPage() {
 
           <div className='flex items-center'>
             
-            <img src={`${imgUrl}dinos/nico.svg`} alt="character_nico" className='w-20 m-5 '/>
-            <p className='text-2xl font-bold m-3'>{name}님의 <br /> 생각을 적어주세요!</p>
+            <img src={`${imgUrl}dinos/${userCharacter}.svg`} alt="character_nico" className='w-20 m-5 '/>
+            <p className='text-2xl font-bold m-3'>{userName}님의 <br /> 생각을 적어주세요!</p>
           </div>
 
           <div>

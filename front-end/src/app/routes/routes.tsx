@@ -2,7 +2,7 @@ import { Layout } from "@/shared"
 import { Suspense, lazy } from "react"
 import { createBrowserRouter, RouteObject } from "react-router-dom"
 import { LoadingComponent } from "@/shared"
-// import { ProtectedGameRoute } from "@/shared/model/ProtectedGameRoute"
+import { ProtectedGameRoute } from "@/shared/model/ProtectedGameRoute"
 // import { ProtectedRoute } from "@/shared"
 
 // 디테일 페이지
@@ -25,8 +25,6 @@ const WrongAnswerPage = lazy(() => import("@pages/mypage").then((module) => ({ d
 const ReporterPage = lazy(() => import("@pages/reporter").then((module) => ({ default: module.ReporterPage })))
 const CreateArticlePage = lazy(() => import("@pages/reporter").then((module) => ({ default: module.CreateArticlePage })))
 const ArticlePreviewPage = lazy(() => import("@pages/reporter").then((module) => ({ default: module.ArticlePreviewPage })))
-const ShortsUploadPage = lazy(() => import("@pages/reporter").then((module) => ({ default: module.ShortsUploadPage })))
-const ShortsSettingPage = lazy(() => import("@pages/reporter").then((module) => ({ default: module.ShortsSettingPage })))
 // 검색 페이지
 const SearchPage = lazy(() => import("@pages/search").then((module) => ({ default: module.SearchPage })))
 // 검색 결과 페이지
@@ -78,11 +76,11 @@ const routes: RouteObject[] = [
   {
     path: "/game",
     element: (
-      // <ProtectedGameRoute> {/* game url로 직접 접근하지 못하도록 막는 코드 */}
+      <ProtectedGameRoute> {/* game url로 직접 접근하지 못하도록 막는 코드 */}
         <Suspense fallback={<LoadingComponent />}>
           <GamePage />
         </Suspense>
-      // </ProtectedGameRoute>
+      </ProtectedGameRoute>
     ),
   },
   {
@@ -170,22 +168,6 @@ const routes: RouteObject[] = [
         element: (
           <Suspense fallback={<LoadingComponent />}>
             <ArticlePreviewPage />
-          </Suspense>
-        ),
-      },
-      {
-        path: "upload",
-        element: (
-          <Suspense fallback={<LoadingComponent />}>
-            <ShortsUploadPage />
-          </Suspense>
-        ),
-      },
-      {
-        path: "setting",
-        element: (
-          <Suspense fallback={<LoadingComponent />}>
-            <ShortsSettingPage />
           </Suspense>
         ),
       },

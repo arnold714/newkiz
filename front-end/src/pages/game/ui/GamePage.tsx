@@ -68,8 +68,8 @@ export const GamePage: React.FC = () => {
   useEffect(() => {
     if (!gameState) return
     setCurrentGameState(gameState.state)
-    console.log("게임 state: ", gameState.state)
-    console.log("gameState 데이터: ", gameState)
+    // console.log("게임 state: ", gameState.state)
+    // console.log("gameState 데이터: ", gameState)
   }, [gameState])
 
   useEffect(() => {
@@ -80,24 +80,24 @@ export const GamePage: React.FC = () => {
   }, [allPlayers])
 
   // quizResult가 변경될 때마다 activePlayers에서 탈락한 플레이어 제거
-  useEffect(() => {
-    if (quizResult && quizResult.wrongPlayers && quizResult.wrongPlayers.length > 0) {
-      setActivePlayers((prevPlayers) => {
-        const newPlayers = { ...prevPlayers }
-        quizResult.wrongPlayers.forEach((playerId) => {
-          delete newPlayers[playerId]
-        })
-        return newPlayers
-      })
-    }
-  }, [quizResult])
+  // useEffect(() => {
+  //   if (quizResult && quizResult.wrongPlayers && quizResult.wrongPlayers.length > 0) {
+  //     setActivePlayers((prevPlayers) => {
+  //       const newPlayers = { ...prevPlayers }
+  //       quizResult.wrongPlayers.forEach((playerId) => {
+  //         delete newPlayers[playerId]
+  //       })
+  //       return newPlayers
+  //     })
+  //   }
+  // }, [quizResult])
 
   const handlePlayerRemove = (userId: number) => {
-    setActivePlayers((prev) => {
-      const newPlayers = { ...prev }
-      delete newPlayers[userId]
-      return newPlayers
-    })
+    // setActivePlayers((prev) => {
+    //   const newPlayers = { ...prev }
+    //   delete newPlayers[userId]
+    //   return newPlayers
+    // })
     if(user?.userId === userId){
       setIsDead(true)
     }
@@ -141,7 +141,6 @@ export const GamePage: React.FC = () => {
             player.position.y,
             0, // z 좌표
           ]
-          console.log(`Setting position for player ${player.id}: [${player.position.x}, ${player.position.y}]`)
         }
       })
 
@@ -245,7 +244,7 @@ export const GamePage: React.FC = () => {
                 ))}
           </Suspense>
         </Canvas>
-        <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 z-20">
+        <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 z-20">
           {userId !== undefined && !isDead ? (
             <JoystickController onMove={handleJoystickMove} onStop={handleJoystickStop} />
           ) : (

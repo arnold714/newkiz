@@ -4,6 +4,8 @@ import { fetchRecentSearches, deleteSearchHistory, fetchPopularKeywords } from "
 import { RecentSearchItem } from "@/features/search";
 import { useNavigate } from "react-router-dom";
 import "@shared/styles/CustomScroll.css"
+import { AxiosError } from "axios";
+import { showError } from "@/shared";
 import { WordCloud } from "@/widgets/search";
 
 export default function SearchPage() {
@@ -54,6 +56,15 @@ export default function SearchPage() {
     } catch (err) {
       console.error("최근 검색어 로드 에러:", err);
       setError("최근 검색어 불러오기 오류");
+      if (err instanceof AxiosError) {
+        if (err.response?.status === 401) {
+          navigate("/login"); // 로그인 페이지로 리다이렉트
+          alert("로그인이 필요합니다");
+        } else if (err.response?.status === 403) {
+          showError("프로필을 등록해주세요");
+          navigate("/userinfo"); // 프로필 등록 페이지로 리다이렉트
+        }
+      }
     } finally {
       setLoading(false);
     }
@@ -70,6 +81,15 @@ export default function SearchPage() {
       }
     } catch (err) {
       setError("인기 검색어 불러오기 오류");
+      if (err instanceof AxiosError) {
+        if (err.response?.status === 401) {
+          navigate("/login"); // 로그인 페이지로 리다이렉트
+          alert("로그인이 필요합니다");
+        } else if (err.response?.status === 403) {
+          showError("프로필을 등록해주세요");
+          navigate("/userinfo"); // 프로필 등록 페이지로 리다이렉트
+        }
+      }
     }
   };
 

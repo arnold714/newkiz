@@ -36,7 +36,6 @@ public class RankService {
               .totalScore(((Number) top10.get(i)[2]).intValue())
               .build()
       );
-      System.out.println(rankSchools.get(i));
     }
 
     return rankSchools;
@@ -63,7 +62,6 @@ public class RankService {
               .totalScore(((Number) top10.get(i)[3]).intValue())
               .build()
       );
-      System.out.println(rankUsers.get(i));
     }
 
     return rankUsers;

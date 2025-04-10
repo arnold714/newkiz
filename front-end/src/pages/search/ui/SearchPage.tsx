@@ -145,7 +145,7 @@ export default function SearchPage() {
       </div>
 
       {/* 스크롤 가능한 컨텐츠 부분 */}
-      <div className="flex-1 overflow-y-auto p-4 scroll">
+      <div className="flex-1 overflow-y-auto pb-15 p-4 scroll">
         {/* 회색 구분선 */}
         <hr className="border-b-5 border-gray-100 -mx-4 mb-6" />
 
@@ -174,15 +174,21 @@ export default function SearchPage() {
         {/* 인기 검색어 */}
         <div className="space-y-2 mb-6">
           <h2 className="font-semibold text-xl mb-3">인기 검색어</h2>
-          <WordCloud
-            keywords={popularKeywords.map(item => ({
-              _id: item._id, // _id를 text로 사용
-              count: item.count, // count를 weight로 사용
-            }))}
-            onKeywordClick={handleSearch}
-            width={360}
-            height={360}
-          />
+          <div className="flex justify-center w-full mt-6"> {/* Added centering container with top margin */}
+            <div className="bg-white rounded-2xl shadow-md overflow-hidden border border-gray-100">
+              <div className="p-2">
+                <WordCloud
+                  keywords={popularKeywords.map(item => ({
+                    _id: item._id,
+                    count: item.count,
+                  }))}
+                  onKeywordClick={handleRecentSearchClick}
+                  width={360} /* Increased from 360 to 400 */
+                  height={220} /* Increased from 360 to 400 */
+                />
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

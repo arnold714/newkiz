@@ -58,52 +58,52 @@ public class KidsnewsArticleService {
 
 
     public KidsnewsResponseDto create(String userId, KidsnewsCreateRequest request) throws IOException {
-        Kidsnews news = new Kidsnews();
-        news.setTitle(request.getTitle());
-        news.setContent(request.getContent());
-        news.setAuthor(request.getAuthor());
-        news.setUserId(userId);
-        news.setViews(0);
-        news.setLikes(0);
-        news.setCreatedAt(LocalDateTime.now());
-        news.setUpdatedAt(LocalDateTime.now());
-        news.setReplyList(new ArrayList<>());
+        Kidsnews kidsnews = new Kidsnews();
+        kidsnews.setTitle(request.getTitle());
+        kidsnews.setContent(request.getContent());
+        kidsnews.setAuthor(request.getAuthor());
+        kidsnews.setUserId(userId);
+        kidsnews.setViews(0);
+        kidsnews.setLikes(0);
+        kidsnews.setCreatedAt(LocalDateTime.now());
+        kidsnews.setUpdatedAt(LocalDateTime.now());
+        kidsnews.setReplyList(new ArrayList<>());
 
         MultipartFile image = request.getImage();
         if (image != null && !image.isEmpty()) {
             String imageUrl = s3Uploader.uploadImage(image, "kidsnews");
-            news.setImg(imageUrl);
+            kidsnews.setImg(imageUrl);
         }
 
-        return KidsnewsResponseDto.fromEntity(kidsnewsRepository.save(news));
+        return KidsnewsResponseDto.fromEntity(kidsnewsRepository.save(kidsnews));
     }
 
     public KidsnewsResponseDto getById(String id) {
-        Kidsnews news = kidsnewsRepository.findById(id)
+        Kidsnews kidsnews = kidsnewsRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("뉴스가 존재하지 않습니다."));
-        news.setViews(news.getViews() + 1);
-        return KidsnewsResponseDto.fromEntity(kidsnewsRepository.save(news));
+        kidsnews.setViews(kidsnews.getViews() + 1);
+        return KidsnewsResponseDto.fromEntity(kidsnewsRepository.save(kidsnews));
     }
 
     public KidsnewsResponseDto update(String id, String userId, KidsnewsUpdateRequest request) throws IOException {
-        Kidsnews news = kidsnewsRepository.findById(id)
+        Kidsnews kidsnews = kidsnewsRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("뉴스가 존재하지 않습니다."));
 
-        if (!news.getUserId().equals(userId)) {
+        if (!kidsnews.getUserId().equals(userId)) {
             throw new ForbiddenException("수정 권한이 없습니다.");
         }
 
-        news.setTitle(request.getTitle());
-        news.setContent(request.getContent());
-        news.setUpdatedAt(LocalDateTime.now());
+        kidsnews.setTitle(request.getTitle());
+        kidsnews.setContent(request.getContent());
+        kidsnews.setUpdatedAt(LocalDateTime.now());
 
         MultipartFile image = request.getImage();
         if (image != null && !image.isEmpty()) {
             String imageUrl = s3Uploader.uploadImage(image, "kidsnews");
-            news.setImg(imageUrl);
+            kidsnews.setImg(imageUrl);
         }
 
-        return KidsnewsResponseDto.fromEntity(kidsnewsRepository.save(news));
+        return KidsnewsResponseDto.fromEntity(kidsnewsRepository.save(kidsnews));
     }
 
 
@@ -119,14 +119,14 @@ public class KidsnewsArticleService {
     }
 
     public KidsnewsResponseDto like(String id, String userId) {
-        Kidsnews news = kidsnewsRepository.findById(id)
+        Kidsnews kidsnews = kidsnewsRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("뉴스가 존재하지 않습니다."));
-        news.setLikes(news.getLikes() + 1);
-        return KidsnewsResponseDto.fromEntity(kidsnewsRepository.save(news));
+        kidsnews.setLikes(kidsnews.getLikes() + 1);
+        return KidsnewsResponseDto.fromEntity(kidsnewsRepository.save(kidsnews));
     }
 
     public KidsnewsResponseDto addReply(String id, String userId, ReplyCreateRequest request) {
-        Kidsnews news = kidsnewsRepository.findById(id)
+        Kidsnews kidsnews = kidsnewsRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("뉴스가 존재하지 않습니다."));
         Reply reply = new Reply();
         reply.setId(UUID.randomUUID().toString());
@@ -137,15 +137,15 @@ public class KidsnewsArticleService {
         reply.setUpdatedAt(LocalDateTime.now());
         reply.setUpdated(false);
 
-        news.getReplyList().add(reply);
-        return KidsnewsResponseDto.fromEntity(kidsnewsRepository.save(news));
+        kidsnews.getReplyList().add(reply);
+        return KidsnewsResponseDto.fromEntity(kidsnewsRepository.save(kidsnews));
     }
 
     public KidsnewsResponseDto updateReply(String newsId, String replyId, String userId, ReplyUpdateRequest request) {
-        Kidsnews news = kidsnewsRepository.findById(newsId)
+        Kidsnews kidsnews = kidsnewsRepository.findById(newsId)
                 .orElseThrow(() -> new NotFoundException("뉴스가 존재하지 않습니다."));
 
-        for (Reply reply : news.getReplyList()) {
+        for (Reply reply : kidsnews.getReplyList()) {
             if (reply.getId().equals(replyId) && reply.getUserId().equals(userId)) {
                 reply.setContent(request.getContent());
                 reply.setUpdated(true);
@@ -154,14 +154,14 @@ public class KidsnewsArticleService {
             }
         }
 
-        return KidsnewsResponseDto.fromEntity(kidsnewsRepository.save(news));
+        return KidsnewsResponseDto.fromEntity(kidsnewsRepository.save(kidsnews));
     }
 
     public KidsnewsResponseDto deleteReply(String newsId, String replyId, String userId) {
-        Kidsnews news = kidsnewsRepository.findById(newsId)
+        Kidsnews kidsnews = kidsnewsRepository.findById(newsId)
                 .orElseThrow(() -> new NotFoundException("뉴스가 존재하지 않습니다."));
 
-        news.getReplyList().removeIf(reply -> reply.getId().equals(replyId) && reply.getUserId().equals(userId));
-        return KidsnewsResponseDto.fromEntity(kidsnewsRepository.save(news));
+        kidsnews.getReplyList().removeIf(reply -> reply.getId().equals(replyId) && reply.getUserId().equals(userId));
+        return KidsnewsResponseDto.fromEntity(kidsnewsRepository.save(kidsnews));
     }
 }

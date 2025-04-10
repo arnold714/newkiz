@@ -3,7 +3,7 @@ import Modal from 'react-modal';
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "@/pages/detail/styles/Detail.css";
-import { QuizData } from "@/features/detail";
+import { GetNewsSummaryResponse, QuizData } from "@/features/detail";
 
 
 Modal.setAppElement('#root');
@@ -61,21 +61,22 @@ export const ParticipationOptions: React.FC<NewsDetailContentProps> = ({ id, sum
       console.error("ID is missing!");
       return;
     }
-
+  
     try {
-      const response = await GetNewsSummary(id);
-      console.log('뉴스요약 :', response)
-      console.log(summary)
+      const response: GetNewsSummaryResponse | null = await GetNewsSummary(id);
+      console.log(summary);
+      console.log('response 응답:', response)
       // 응답이 성공적이며 summary 데이터가 존재할 때 -> NewsSummaryResult 페이지로 이동
-      if (response && response.data.summary) {
-        navigate(`/newssummaryresult/${id}`, { 
+      if (response && response.summary) {
+        console.log('응답 성공 및 summary 데이터 존재:', response.summary);
+        navigate(`/newssummary/${id}`, { 
           state: { 
-            summaryData: response.data ,            // 응답 전체를 summaryData에 담거나
-            summary: {summary}        // 원하는 텍스트만 별도로 전달
+            summaryData: response,
+            summary  
           } 
-
         });
-        // 데이터가 없을 경우 기존 뉴스 요약 페이지로 이동
+      } else {
+        // 요약 데이터가 없을 경우 기존 뉴스 요약 페이지로 이동
         navigate(`/newssummary/${id}`, { state: { summary } });
       }
     } catch (error) {

@@ -9,7 +9,7 @@ import { useUserProfile } from "@/shared";
 import Swal from 'sweetalert2';
 
 interface LocationState {
-  summaryData?: GetNewsSummaryResponse["data"];
+  summaryData?: GetNewsSummaryResponse;
   summary: string;
 };
 
@@ -35,7 +35,7 @@ export default function NewsSummaryPage() {
     console.log('summaryData, summary:',summaryData, summary)
     
     if (summaryData) {
-      return <NewsSummaryResult summary={summary} summaryData={summaryData} />;
+      return <NewsSummaryResult summary={summary} summaryData={summaryData} userCharacter={userCharacter}/>;
     };
 
     const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -102,8 +102,8 @@ export default function NewsSummaryPage() {
 
 
     return (
-      <div className='overflow-y-auto max-h-[calc(100vh-100px)] bg-[#BFD46F]'>
-        <div className='bg-white w-[calc(100%-30px)] mx-auto h-[calc(100%-20px)] my-3 p-5 rounded-xl'>
+      <div className='overflow-y-auto max-h-[calc(100vh-100px)] bg-[#BFD46F] pb-10'>
+        <div className='bg-white w-[calc(100%-30px)] mx-auto h-[calc(100%-20px)] my-3 p-5 rounded-xl '>
           <div className='flex justify-end'>
             <LuX size={30} 
               onClick={handleBackButtonClick}

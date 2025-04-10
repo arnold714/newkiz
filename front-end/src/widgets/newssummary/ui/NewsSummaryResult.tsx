@@ -6,7 +6,7 @@ interface NewsSummaryResultProps {
     id?: string;
     thought?: string;
     summary: string; 
-    summaryData?: GetNewsSummaryResponse["data"]
+    summaryData?: GetNewsSummaryResponse;
     userCharacter?: string;
 };
 
@@ -20,17 +20,17 @@ export const NewsSummaryResult: React.FC<NewsSummaryResultProps> = ({ thought, s
         navigate(`/detail/${id}?refresh=${Date.now()}`);
     }
     console.log('summary:', summary)
-
+    console.log('userCharactor:',userCharacter)
     return (
-        <div className='overflow-y-auto max-h-[calc(100vh-100px)] bg-[#BFD46F]'>
-            <div className='bg-white w-[calc(100%-30px)] mx-auto h-[calc(100%-20px)] overflow-y-auto pb-22 my-3 p-5 rounded-xl '>
+        <div className='overflow-y-auto max-h-[calc(100vh-100px)] bg-[#BFD46F] pb-10'>
+            <div className='bg-white w-[calc(100%-30px)] mx-auto h-[calc(100%-20px)] overflow-y-auto  my-3 p-5 rounded-xl '>
                 <div className='flex items-center'>
                     <img src={`${imgUrl}dinos/${userCharacter}.svg`} alt="character_nico" className='w-20 m-5 ' />
                     <p className='text-2xl font-semibold m-5'> 정말 잘하셨어요! <br /> AI가 요약한 글과 비교해 볼까요?</p>
                 </div>
 
                 <div className='w-full bg-[#FAFAFA] border-2 border-[#E6E6E6] rounded-[10px] p-3 overflow-y-auto h-[200px]'>
-                <p>{ thought ? thought : summaryData?.summary }</p>
+                <p>{ thought ? thought : summaryData? summaryData.summary : null }</p>
                 </div>
                 <div className="flex justify-center my-4">
                     <LuChevronsDown size={30} />

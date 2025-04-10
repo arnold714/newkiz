@@ -1,1 +1,1 @@
-export type { ReporterArticle } from './model/types'
+export type { ReporterArticle, Reply } from './model/types'

@@ -79,7 +79,7 @@ export default function ArticlePreviewPage() {
         {/* 상단 안내 문구 */}
         <div className="flex items-center mt-3 mb-5">
           <img
-            src="https://newkiz.s3.ap-northeast-2.amazonaws.com/dinos/nico.png"
+            src={reporterImgUrl}
             alt="character"
             className="w-10 h-12 mr-2"
           />

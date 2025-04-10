@@ -42,14 +42,8 @@ export const GetRecommendNews =  () => {
 };
 
 //카테고리 별 뉴스 추천
-export const GetRecommendCategory = ( categoryId:string ) => {
-    return useQuery<NewsItem[], Error>({
-        queryKey: ['recommendedCategory', categoryId],
-        queryFn: async () => {
-            const response = await customAxios.get<ApiResponse>(`/api/news/recommend/category/${categoryId}`);
-            console.log('카테고리 별 뉴스 추천 API response:', response.data.data);
-            return response.data.data;
-        },
-        initialData: [],
-    })
+export const GetRecommendCategory = async (categoryId: string): Promise<NewsItem[]> => {
+    const response = await customAxios.get<ApiResponse>(`/api/news/recommend/category/${categoryId}`);
+    console.log('카테고리 별 뉴스 추천 API response:', response.data.data);
+    return response.data.data;
 };

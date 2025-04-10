@@ -1,4 +1,4 @@
-import { Shorts, ReporterNews } from "@/widgets/reporter";
+import { ReporterNews } from "@/widgets/reporter";
 import FunctionButton from "@/widgets/reporter/ui/FunctionButton";
 import { useRef } from "react";
 import { Outlet, useLocation } from "react-router-dom";
@@ -9,12 +9,9 @@ export default function ReporterPage() {
   const location = useLocation();
 
   return (
-    <div ref={scrollRef} className="overflow-y-auto h-screen scroll pb-10 relative">
+    <div ref={scrollRef} className="overflow-y-auto h-screen scroll pb-15 relative">
       {location.pathname === "/reporter" && (
         <>
-          <div className="my-5">
-            <Shorts />
-          </div>
           <div className="bg-white/75">
             <ReporterNews />
           </div>

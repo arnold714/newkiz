@@ -127,4 +127,4 @@ export const GetNewsSummary = async (newsId:string):Promise< GetNewsSummaryRespo
     console.log('ai 요약 가져오기 실패:', error)
     return null;
   }
-}
+};

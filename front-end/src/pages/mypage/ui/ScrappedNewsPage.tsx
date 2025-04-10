@@ -3,6 +3,7 @@ import { LuChevronLeft, LuSearch } from "react-icons/lu";
 import { useNavigate } from "react-router-dom";
 import { fetchScrappedNews } from "@/pages/mypage";
 import { NewsItem } from "@/features/mypage";
+import { Link } from "react-router-dom";
 
 export const ScrappedNewsPage = () => {
 
@@ -43,10 +44,14 @@ export const ScrappedNewsPage = () => {
                 </div>
                 <div className="flex flex-col w-full items-center my-3 mt-5">
                     {filteredNews.map((news) => (
-                        <div key={news.id} className="flex flex-col w-full border-b border-gray-200 pb-3 mb-3">
-                            <p className="font-semibold text-[16px]">{news.title}</p>
-                            <p className="text-sm text-[#9E9E9E] mt-1">{news.published}</p>
-                        </div>
+                        <Link
+                        key={news.id}
+                        to={`/detail/${news.id}`}
+                        className="flex flex-col w-full border-b border-gray-200 pb-3 mb-3"
+                        >
+                        <p className="font-semibold text-[16px]">{news.title}</p>
+                        <p className="text-sm text-[#9E9E9E] mt-1">{news.published}</p>
+                        </Link>
                     ))}
                 </div>
             </div>

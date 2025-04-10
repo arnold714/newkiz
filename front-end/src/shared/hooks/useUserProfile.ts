@@ -22,7 +22,7 @@ export const useUserProfile = (): UserProfileCookie | null => {
   }, [cookies])
 
   useEffect(() => {
-    console.log("userProfile: ", userProfile)
+    // console.log("userProfile: ", userProfile)
   }, [userProfile])
 
   return userProfile

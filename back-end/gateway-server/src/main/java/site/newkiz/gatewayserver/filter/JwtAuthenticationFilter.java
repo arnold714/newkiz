@@ -100,6 +100,11 @@ public class JwtAuthenticationFilter implements WebFilter {
   private Mono<Void> redirectToLogin(ServerHttpResponse response) {
     if (!response.isCommitted()) {
       response.setStatusCode(HttpStatus.UNAUTHORIZED);
+      response.getHeaders().add("Access-Control-Allow-Origin", applicationConfig.getDomain());
+      response.getHeaders()
+          .add("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE, OPTIONS");
+      response.getHeaders().add("Access-Control-Allow-Headers", "*");
+      response.getHeaders().add("Access-Control-Allow-Credentials", "true");
     }
     return response.setComplete();
   }

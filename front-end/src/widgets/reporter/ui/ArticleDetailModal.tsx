@@ -3,7 +3,7 @@ import { LuX } from 'react-icons/lu';
 import { FaTrashAlt, FaEdit, FaUserCircle } from 'react-icons/fa';
 import { ReporterArticle, Reply } from '@/features/reporter';
 import { fetchKidsNewsById, addComment, updateComment, deleteComment } from '@widgets/reporter'; 
-import { useUserProfile } from '@/shared';
+import { showError, useUserProfile } from '@/shared';
 import "@shared/styles/CustomScroll.css"
 
 interface ArticleDetailModalProps {
@@ -65,7 +65,7 @@ const ArticleDetailModal = ({ isOpen, onClose, article }: ArticleDetailModalProp
       setCommentText('');
       await refreshArticleDetails();  // 댓글 목록 새로고침
     } else {
-      alert('댓글 작성에 실패했습니다. 다시 시도해주세요.');
+      showError('댓글 작성에 실패했습니다. 다시 시도해주세요.');
     }
     setSubmitting(false);
   };
@@ -92,7 +92,7 @@ const ArticleDetailModal = ({ isOpen, onClose, article }: ArticleDetailModalProp
       setEditingReplyId(null);
       await refreshArticleDetails();  // 댓글 목록 새로고침
     } else {
-      alert('댓글 수정에 실패했습니다. 다시 시도해주세요.');
+      showError('댓글 수정에 실패했습니다. 다시 시도해주세요.');
     }
     setSubmitting(false);
   };
@@ -110,7 +110,7 @@ const ArticleDetailModal = ({ isOpen, onClose, article }: ArticleDetailModalProp
     if (result.success) {
       await refreshArticleDetails();  // 댓글 목록 새로고침
     } else {
-      alert('댓글 삭제에 실패했습니다. 다시 시도해주세요.');
+      showError('댓글 삭제에 실패했습니다. 다시 시도해주세요.');
     }
     setSubmitting(false);
   };

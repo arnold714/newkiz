@@ -4,7 +4,7 @@ import { LuEllipsisVertical } from "react-icons/lu";
 import { ReporterArticle } from '@/features/reporter';
 import { fetchAllKidsNews, ArticleDetailModal, postLike, deleteArticle } from '@/widgets/reporter';
 import "@shared/styles/CustomScroll.css"
-import { useUserProfile } from '@/shared';
+import { showError, useUserProfile } from '@/shared';
 import { useNavigate } from 'react-router-dom';
 
 export const ReporterNews = () => {
@@ -73,7 +73,7 @@ export const ReporterNews = () => {
   const handleEdit = (article: ReporterArticle) => {
     // 작성자와 로그인한 유저가 다르면 수정 불가
     if (userProfile?.nickname !== article.author) {
-      alert("수정 권한이 없습니다.");
+      showError("수정 권한이 없습니다.");
       return;
     }
 
@@ -87,10 +87,10 @@ export const ReporterNews = () => {
 
     deleteArticle(article.id).then((res) => {
       if (res.success) {
-        alert("게시글이 삭제되었습니다.");
+        showError("게시글이 삭제되었습니다.");
         setNewsList((prev) => prev.filter((item) => item.id !== article.id));
       } else {
-        alert("삭제에 실패했습니다.");
+        showError("삭제에 실패했습니다.");
       }
     });
   };

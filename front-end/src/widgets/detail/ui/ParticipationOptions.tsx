@@ -3,7 +3,7 @@ import Modal from 'react-modal';
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "@/pages/detail/styles/Detail.css";
-import { QuizData } from "@/features/detail";
+import { GetNewsSummaryResponse, QuizData } from "@/features/detail";
 
 
 Modal.setAppElement('#root');
@@ -23,8 +23,9 @@ export const ParticipationOptions: React.FC<NewsDetailContentProps> = ({ id, sum
   const navigate = useNavigate();
 
   // 뉴스 퀴즈 중복 참여 여부 체크 (id가 없으면 기본값 설정)
-  const { data } = id ? GetNewsQuizCheck(id) : { data: null };
+  const { data, refetch } = id ? GetNewsQuizCheck(id) : { data: null, refetch: () => {}  };
 
+  
   useEffect(() => {
     if (!id) {
       setErrorMessage("올바른 뉴스 id가 제공되지 않았습니다.");
@@ -60,24 +61,33 @@ export const ParticipationOptions: React.FC<NewsDetailContentProps> = ({ id, sum
       console.error("ID is missing!");
       return;
     }
-
+  
     try {
-      const response = await GetNewsSummary(id);
-      console.log('요약 여부:',response)
+      const response: GetNewsSummaryResponse | null = await GetNewsSummary(id);
       // 응답이 성공적이며 summary 데이터가 존재할 때 -> NewsSummaryResult 페이지로 이동
-      if (response && response.success && response.data) {
-        navigate(`/newssummaryresult/${id}`, { state: { summaryData: response.data, summary } });
-
+      if (response && response.summary) {
+        console.log('응답 성공 및 summary 데이터 존재:', response.summary);
+        navigate(`/newssummary/${id}`, { 
+          state: { 
+            summaryData: response,
+            summary  
+          } 
+        });
       } else {
-        // 데이터가 없을 경우 기존 뉴스 요약 페이지로 이동
+        // 요약 데이터가 없을 경우 기존 뉴스 요약 페이지로 이동
         navigate(`/newssummary/${id}`, { state: { summary } });
       }
     } catch (error) {
-      console.error("뉴스 요약 데이터 불러오기 실패:", error);
-      // 에러 발생 시에도 기존 페이지로 이동
+      console.error(error);
       navigate(`/newssummary/${id}`, { state: { summary } });
     }
   };
+  
+  const handleNewsReturn = () => {
+    refetch(); // 데이터를 새로 가져오기
+    setIsModalOpen(false); // 모달 닫기
+  };
+
 
   return (
     <div>
@@ -125,6 +135,7 @@ export const ParticipationOptions: React.FC<NewsDetailContentProps> = ({ id, sum
             id={id} 
             quizData={newsQuizData}
             isSolved={data?.data ?? false} 
+            onNewsReturn={handleNewsReturn} 
           />
         </Modal>
       </div>

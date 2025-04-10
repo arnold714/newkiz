@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { RiRobot2Line } from "react-icons/ri";
 import "../styles/ActionButton.css"
 
-const imgUrl: string = import.meta.env.VITE_AWS_S3_BASE_URL
 
 interface ActionButtonProps {
   newsId: string;
@@ -21,7 +21,7 @@ export const ActionButton = ({ newsId }: ActionButtonProps) => {
   useEffect(() => {
     const updateOffset = () => {
       const width = Math.min(Math.max(window.innerWidth, 360), 600);
-      setOffsetX((width / 2) - 16); // 콘텐츠 절반 - 오른쪽 여백
+      setOffsetX((width * 0.4)-5); // 콘텐츠 절반 - 오른쪽 여백
     };
 
     updateOffset();
@@ -36,7 +36,9 @@ export const ActionButton = ({ newsId }: ActionButtonProps) => {
         style={{ transform: `translateX(${offsetX}px)` }}
       >
       <button onClick={handleNavigate} className="fab-item">
-      <img src={`${imgUrl}dinos/nico.svg`} alt="character_nico" className="w-12"/>
+        <RiRobot2Line 
+          size={30}
+        />
       </button>
     </div>
   );

@@ -13,6 +13,7 @@ import {
    GetNewsScrapStatus, 
    ActionButton,
    GetNewsDetail } from "@/widgets/detail";
+import { useUserProfile } from "@/shared";
 import "@shared/styles/CustomScroll.css"
 import "../styles/Detail.css"
 
@@ -20,15 +21,17 @@ Modal.setAppElement('#root');
 
 export default function DetailPage() {
 
+  const userProfile = useUserProfile();
+  console.log('userprofile:', userProfile)
   const navigate = useNavigate();
   const { id } = useParams<{id:string}>();
-  const [activeButton, setActiveButton] = useState('상'); 
+  const [activeButton, setActiveButton] = useState<string>('상'); 
   const [isNewsScrapped, setIsNewsScrapped] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [newsDetail, setNewsDetail] = useState<NewsDetail|null>(null);
 
   const handleBack = () => {
-    navigate(-1);
+    navigate(`/`);
   };
 
   //뉴스 스크랩 여부
@@ -36,7 +39,6 @@ export default function DetailPage() {
     try {
       setIsLoading(true);
       const response = await GetNewsScrapStatus(id!); // 스크랩 상태 불러오기
-      console.log('뉴스 스크랩 상태:', response); // 응답 확인
       if (response) {
         setIsNewsScrapped(response.isSrcapped); // 응답값의 isScrapped 속성으로 상태 설정
       }
@@ -58,7 +60,7 @@ export default function DetailPage() {
         setIsNewsScrapped(true);
       }
     } catch (error) {
-      console.error('뉴스 스크랩 상태를 변경하는 데 실패했습니다.', error);
+      return error
     }
   };
   //뉴스 상세 정보 불러오기
@@ -66,12 +68,11 @@ export default function DetailPage() {
     try {
       setIsLoading(true);
       const response = await GetNewsDetail(id!);
-      console.log('뉴스 상세 데이터 불러오기 성공:', response);
       if (response) {
         setNewsDetail(response); // 뉴스 상세 정보 상태에 저장
       }
     } catch (error) {
-      console.error('뉴스 상세 정보 불러오기 실패:', error)
+      return error
     } finally {
       setIsLoading(false);
     }
@@ -92,6 +93,26 @@ export default function DetailPage() {
       return () => clearTimeout(timer);
     }
   }, [newsDetail, navigate])
+
+  useEffect(() => {
+    // userProfile이 존재할 때 difficulty에 맞춰 activeButton을 설정
+    if (userProfile) {
+      switch (userProfile.difficulty) {
+        case 1:
+          setActiveButton('하');
+          break;
+        case 2:
+          setActiveButton('중');
+          break;
+        case 3:
+          setActiveButton('상');
+          break;
+        default:
+          setActiveButton('중'); // 기본값을 '중'
+          break;
+      }
+    }
+  }, [userProfile]);
 
   if (isLoading) {
     return <div>로딩 중...</div>;
@@ -116,7 +137,7 @@ export default function DetailPage() {
 
   return (
     <div className="overflow-y-auto max-h-[calc(100vh-100px)] bg-[#BFD46F]" >
-      <div className="bg-white p-5 mx-3 mt-5 mb-5 rounded-xl pb-18">
+      <div className="bg-white p-5 mx-3 mt-5 mb-5 rounded-xl pb-10">
         <div className="flex justify-between items-center">
           {/* 뒤로 가기  */}
           <LuChevronLeft 
@@ -184,7 +205,7 @@ export default function DetailPage() {
               </div>
             ))
           )}
-</div>
+      </div>
 
         <div className="h-1.5 w-full bg-[#F5F6FA]"></div>
 
@@ -196,7 +217,7 @@ export default function DetailPage() {
 
         <div className="h-1.5 w-full bg-[#F5F6FA]"></div>
         <div>
-          <p className='m-5 text-2xl font-semibold'>이런 기사도 있어요!</p>
+          <p className='m-5 text-2xl font-bold'>이런 기사도 있어요!</p>
           <NewsRecommendationList id={id} /> 
         </div>
       </div>

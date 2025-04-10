@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { LuChevronLeft } from 'react-icons/lu';
 import '@shared/styles/CustomScroll.css';
-import { characters, Character } from "@/shared";
+import { characters, Character, showError } from "@/shared";
 
 interface SelectCharacterModalProps {
     closeModal: () => void;
@@ -28,7 +28,7 @@ interface SelectCharacterModalProps {
   
     const handleConfirm = () => {
       if (!selectedCharacter) {
-        alert("캐릭터를 선택해주세요.");
+        showError("캐릭터를 선택해주세요.");
         return;
       }
       onSelectCharacter(selectedCharacter);

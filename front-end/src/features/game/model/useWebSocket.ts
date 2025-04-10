@@ -37,7 +37,7 @@ export const useWebSocket = (userId?: number) => {
             {}
           );
           setAllPlayers(playersMap);
-          console.log("playersMap: ", playersMap);
+          // console.log("playersMap: ", playersMap);
         },
         onMove(moveInfo: Player) {
           if (boundaries) {
@@ -54,11 +54,10 @@ export const useWebSocket = (userId?: number) => {
                   position: denormalizedPosition
                 },
               };
-              console.log("Player moved - updated position for player:", moveInfo.id, denormalizedPosition);
               return updatedPlayers;
             });
           } else {
-            console.warn("Boundaries not set yet, cannot denormalize position");
+            console.log("바운더리 설정 에러");
           }
         },
         onQuizInfo(quizInfo: QuizInfo) {
@@ -72,7 +71,7 @@ export const useWebSocket = (userId?: number) => {
         }
       })
       .then(() => setConnected(true))
-      .catch((err) => console.error("Failed to connect:", err));
+      .catch((err) => console.error("웹 소켓 연결 에러:", err));
 
     return () => webSocketService.disconnect();
   }, [userId, boundaries]);

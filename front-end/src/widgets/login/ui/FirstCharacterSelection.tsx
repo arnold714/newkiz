@@ -1,7 +1,7 @@
 import { LuChevronLeft } from "react-icons/lu";
 import "@shared/styles/CustomScroll.css"
 import { BasicInfo } from "@/features/login";
-import { characters } from "@/shared";
+import { characters, showError } from "@/shared";
 
 interface FirstCharacterSelectionProps {
   basicInfo?: BasicInfo;
@@ -25,7 +25,7 @@ export default function FirstCharacterSelection({
 
   const handleNext = () => {
     if (!selectedCharacter) {
-      alert("캐릭터를 선택해주세요.");
+      showError("캐릭터를 선택해주세요.");
       return;
     }
     nextStep();

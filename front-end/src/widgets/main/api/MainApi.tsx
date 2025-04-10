@@ -8,7 +8,7 @@ export const GetTodayNews = () => {
         queryKey: ['todayNews'],
         queryFn: async () => {
             const response = await customAxios.get<ApiResponse>('/api/news/today');
-            console.log("오늘의 뉴스 API response:", response.data);
+            // console.log("오늘의 뉴스 API response:", response.data);
             return response.data.data;
         },
         initialData: [],
@@ -21,7 +21,7 @@ export const GetTodayReadNewsCount = () => {
         queryKey: ['todayReadNewsCount'],
         queryFn: async () => {
             const response = await customAxios.get('/api/records/news/today');
-            console.log('오늘 읽은 뉴스 API response:', response.data);
+            // console.log('오늘 읽은 뉴스 API response:', response.data);
             return response.data;
         },
         initialData:{ success: false, data: 0, error: null },
@@ -34,7 +34,7 @@ export const GetRecommendNews =  () => {
         queryKey: ['recommendedNews'],
         queryFn: async () => {
             const response = await customAxios.get<ApiResponse>(`/api/news/recommend`);
-            console.log('개인 맞춤형 추천 뉴스(전체) API response:', response.data.data);
+            // console.log('개인 맞춤형 추천 뉴스(전체) API response:', response.data.data);
             return response.data.data;
         },
         initialData: [],
@@ -44,6 +44,6 @@ export const GetRecommendNews =  () => {
 //카테고리 별 뉴스 추천
 export const GetRecommendCategory = async (categoryId: string): Promise<NewsItem[]> => {
     const response = await customAxios.get<ApiResponse>(`/api/news/recommend/category/${categoryId}`);
-    console.log('카테고리 별 뉴스 추천 API response:', response.data.data);
+    // console.log('카테고리 별 뉴스 추천 API response:', response.data.data);
     return response.data.data;
 };

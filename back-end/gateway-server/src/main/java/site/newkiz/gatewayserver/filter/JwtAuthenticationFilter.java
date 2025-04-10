@@ -88,6 +88,11 @@ public class JwtAuthenticationFilter implements WebFilter {
   private Mono<Void> redirectToProfileSetup(ServerHttpResponse response) {
     if (!response.isCommitted()) {
       response.setStatusCode(HttpStatus.FORBIDDEN);
+      response.getHeaders().add("Access-Control-Allow-Origin", applicationConfig.getDomain());
+      response.getHeaders()
+          .add("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE, OPTIONS");
+      response.getHeaders().add("Access-Control-Allow-Headers", "*");
+      response.getHeaders().add("Access-Control-Allow-Credentials", "true");
     }
     return response.setComplete();
   }

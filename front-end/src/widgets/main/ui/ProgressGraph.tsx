@@ -76,49 +76,79 @@ export const ProgressGraph: React.FC = () => {
 
   // 시간 계산해서 버튼 보여주기
   const checkTimeValidity = () => {
-    const now = dayjs() // dayjs 객체 생성
+  const now = dayjs(); // 현재 시간
 
-    const GAME_START_HOUR = 17 // 시 
-    const ENABLE_START = dayjs().set("hour", GAME_START_HOUR).set("minute", 50).set("second", 0) // 50분
-    const ENABLE_END = dayjs().set("hour", GAME_START_HOUR).set("minute", 59).set("second", 59) // 59분 59초
+  // 현재 시각 기준 입장 가능 시간 구간 정의
+  const ENABLE_START_1 = dayjs().set("minute", 25).set("second", 0);
+  const ENABLE_END_1 = dayjs().set("minute", 29).set("second", 59);
+  const ENABLE_START_2 = dayjs().set("minute", 55).set("second", 0);
+  const ENABLE_END_2 = dayjs().set("minute", 59).set("second", 59);
 
-    const isInTimeRange = now.isAfter(ENABLE_START) && now.isBefore(ENABLE_END) // GAME_START_HOUR 시 ENABLE_START분 ~ GAME_START_HOUR시 ENABLE_END까지
-    setIsEnabled(isInTimeRange) // isInTimeRange라면 true -> 입장 가능
+  // 입장 가능 여부 판단
+  const isInTimeRange =
+    (now.isAfter(ENABLE_START_1) && now.isBefore(ENABLE_END_1)) ||
+    (now.isAfter(ENABLE_START_2) && now.isBefore(ENABLE_END_2));
 
-    // 게임 시작까지 남은 시간
-    const gameDiffInSeconds = ENABLE_END.diff(now, "second")
-    const gameHours = Math.floor(gameDiffInSeconds / 3600)
-    const gameMinutes = Math.floor((gameDiffInSeconds % 3600) / 60)
-    const gameSeconds = gameDiffInSeconds % 60
+  setIsEnabled(isInTimeRange);
 
-    let formattedGameTime
-    if (gameDiffInSeconds >= 3600) { // 60분(3600초) 이상인 경우
-      formattedGameTime = `${gameHours.toString().padStart(2, "0")}:${gameMinutes.toString().padStart(2, "0")}:${gameSeconds.toString().padStart(2, "0")}`
-    } else { // 60분 미만인 경우
-      formattedGameTime = `${gameMinutes.toString().padStart(2, "0")}:${gameSeconds.toString().padStart(2, "0")}`
-    }
+  // 게임 시작까지 남은 시간 계산 (둘 중 가까운 쪽 기준)
+  const nextEnableEnd = now.isBefore(ENABLE_END_1)
+    ? ENABLE_END_1
+    : ENABLE_END_2;
 
-    setRemainingTime(formattedGameTime)
+  const gameDiffInSeconds = nextEnableEnd.diff(now, "second");
+  const gameHours = Math.floor(gameDiffInSeconds / 3600);
+  const gameMinutes = Math.floor((gameDiffInSeconds % 3600) / 60);
+  const gameSeconds = gameDiffInSeconds % 60;
 
-    // 입장 가능 시간까지 남은 시간
-    if (now.isBefore(ENABLE_START)) {
-      const enterDiffInSeconds = ENABLE_START.diff(now, "second")
-      const enterHours = Math.floor(enterDiffInSeconds / 3600)
-      const enterMinutes = Math.floor((enterDiffInSeconds % 3600) / 60)
-      const enterSeconds = enterDiffInSeconds % 60
-
-      let formattedEnterTime
-      if (enterDiffInSeconds >= 3600) { // 60분(3600초) 이상인 경우
-        formattedEnterTime = `${enterHours.toString().padStart(2, "0")}:${enterMinutes.toString().padStart(2, "0")}:${enterSeconds.toString().padStart(2, "0")}`
-      } else { // 60분 미만인 경우
-        formattedEnterTime = `${enterMinutes.toString().padStart(2, "0")}:${enterSeconds.toString().padStart(2, "0")}`
-      }
-
-      setStartEnterTime(formattedEnterTime)
-    } else {
-      setStartEnterTime("")
-    }
+  let formattedGameTime;
+  if (gameDiffInSeconds >= 3600) {
+    formattedGameTime = `${gameHours.toString().padStart(2, "0")}:${gameMinutes
+      .toString()
+      .padStart(2, "0")}:${gameSeconds.toString().padStart(2, "0")}`;
+  } else {
+    formattedGameTime = `${gameMinutes.toString().padStart(2, "0")}:${gameSeconds
+      .toString()
+      .padStart(2, "0")}`;
   }
+
+  setRemainingTime(formattedGameTime);
+
+  // 입장 가능 시간까지 남은 시간 계산
+  if (!isInTimeRange) {
+    let nextEnableStart;
+
+    if (now.isBefore(ENABLE_START_1)) {
+      nextEnableStart = ENABLE_START_1;
+    } else if (now.isBefore(ENABLE_START_2)) {
+      nextEnableStart = ENABLE_START_2;
+    } else {
+      // 둘 다 지났으면 다음 시의 25분으로 세팅
+      nextEnableStart = now.add(1, "hour").set("minute", 25).set("second", 0);
+    }
+
+    const enterDiffInSeconds = nextEnableStart.diff(now, "second");
+    const enterHours = Math.floor(enterDiffInSeconds / 3600);
+    const enterMinutes = Math.floor((enterDiffInSeconds % 3600) / 60);
+    const enterSeconds = enterDiffInSeconds % 60;
+
+    let formattedEnterTime;
+    if (enterDiffInSeconds >= 3600) {
+      formattedEnterTime = `${enterHours.toString().padStart(2, "0")}:${enterMinutes
+        .toString()
+        .padStart(2, "0")}:${enterSeconds.toString().padStart(2, "0")}`;
+    } else {
+      formattedEnterTime = `${enterMinutes.toString().padStart(2, "0")}:${enterSeconds
+        .toString()
+        .padStart(2, "0")}`;
+    }
+
+    setStartEnterTime(formattedEnterTime);
+  } else {
+    setStartEnterTime("");
+  }
+};
+
   
   useEffect(() => {
     // 초기 상태 확인

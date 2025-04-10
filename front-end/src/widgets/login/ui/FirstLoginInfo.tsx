@@ -6,6 +6,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { ko } from "date-fns/locale";
 import "@shared/styles/CustomScroll.css"
 import { BasicInfo } from "@/features/login";
+import { showError } from "@/shared";
 
 interface FirstLoginInfoProps {
   basicInfo: BasicInfo;
@@ -50,19 +51,19 @@ export default function FirstLoginInfo({
 
   const handleNext = () => {
     if (!basicInfo.nickname) {
-      alert("닉네임을 입력해주세요.");
+      showError("닉네임을 입력해주세요.");
       return;
     }
     if (!basicInfo.birthdate) {
-      alert("생년월일을 입력해주세요.");
+      showError("생년월일을 입력해주세요.");
       return;
     }
     if (!basicInfo.schoolName) {
-      alert("출신 학교를 선택해주세요.");
+      showError("출신 학교를 선택해주세요.");
       return;
     }
     if (!basicInfo.gender) {
-      alert("성별을 선택해주세요.");
+      showError("성별을 선택해주세요.");
       return;
     }
     nextStep();

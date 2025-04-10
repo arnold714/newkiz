@@ -2,6 +2,7 @@ import "@shared/styles/CustomScroll.css"
 import { BasicInfo, MyPageRequest } from "@/features/login";
 import { interestMap } from "@/features/login";
 import { postFirstLogin } from "@/widgets/login";
+import { showError, showSuccess } from "@/shared";
 
 interface FinalConfirmProps {
   basicInfo: BasicInfo;
@@ -41,12 +42,12 @@ export default function FinalConfirm({
       };
 
       await postFirstLogin(requestData);
-      alert("정보가 성공적으로 등록되었습니다!");
+      showSuccess("정보가 성공적으로 등록되었습니다!");
 
       window.location.href = "/";
     } catch (error) {
       console.error("정보 등록 실패:", error);
-      alert("등록에 실패했습니다. 다시 시도해주세요.");
+      showError("등록에 실패했습니다. 다시 시도해주세요.");
     }
   };
 

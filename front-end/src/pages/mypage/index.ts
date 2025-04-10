@@ -5,6 +5,5 @@ export { ScrapPage } from './ui/ScrapPage';
 export { SummaryPage } from './ui/SummaryPage';
 export { WrongAnswerPage } from './ui/WrongAnswerPage';
 export { ScrappedNewsPage } from './ui/ScrappedNewsPage';
-export { ScrappedWordsPage } from './ui/ScrappedWordsPage';
-export { fetchScrappedNews, fetchScrappedWords } from './api/ScrapApi';
+export { fetchScrappedNews } from './api/ScrapApi';
 export { fetchSummaries } from './api/SummaryApi';

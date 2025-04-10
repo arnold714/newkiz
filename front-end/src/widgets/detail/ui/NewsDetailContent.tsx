@@ -1,6 +1,6 @@
 import { Popover } from 'react-tiny-popover';
 import { useState } from 'react';
-import { LuBookmark, LuBookmarkCheck, LuX } from "react-icons/lu";
+import { LuX } from "react-icons/lu";
 
 interface NewsDetailContentProps {
   id?: string;
@@ -33,7 +33,6 @@ export const NewsDetailContet: React.FC<NewsDetailContentProps> = ({
     definition: string;
     index: number;
   } | null>(null);
-  const [isWordScrapped, setIsWordScrapped] = useState<boolean>(false);
 
   // 날짜 계산
   const publishedDate = new Date(published);
@@ -59,13 +58,16 @@ export const NewsDetailContet: React.FC<NewsDetailContentProps> = ({
 
   return (
     <div>
-      <div className="font-extrabold text-xl sm:text-3xl">{title}</div>
-      <div className="mt-2 text-[#757575]">
-        업데이트: {updateDay} |{' '}
-        <a href={link} target="_blank" rel="noopener noreferrer">
-          기사 원문
-        </a>
+      <div className='ml-3'>
+        <div className="font-extrabold text-xl sm:text-3xl">{title}</div>
+        <div className="mt-2 text-[#757575]">
+          업데이트: {updateDay} |{' '}
+          <a href={link} target="_blank" rel="noopener noreferrer">
+            기사 원문
+          </a>
+        </div>
       </div>
+      
 
       {/* 뉴스 이미지 */}
       <div className="m-5">
@@ -89,20 +91,7 @@ export const NewsDetailContet: React.FC<NewsDetailContentProps> = ({
                       onClickOutside={() => setPopoverData(null)}
                       content={
                         <div className="bg-white border border-gray-300 p-2.5 rounded min-w-[200px]shadow-[0_2px_8px_rgba(0,0,0,0.15)] relative max-w-[300px]">
-                          <div className="flex items-center justify-between relative mb-2">
-                            {isWordScrapped ? (
-                              <LuBookmarkCheck
-                                size={25}
-                                onClick={() => setIsWordScrapped(!isWordScrapped)}
-                                className="cursor-pointer text-black"
-                              />
-                            ) : (
-                              <LuBookmark
-                                size={25}
-                                onClick={() => setIsWordScrapped(!isWordScrapped)}
-                                className="cursor-pointer text-black"
-                              />
-                            )}
+                          <div className="flex items-center justify-end">    
                             <LuX
                               size={25}
                               onClick={() => setPopoverData(null)}
@@ -150,20 +139,7 @@ export const NewsDetailContet: React.FC<NewsDetailContentProps> = ({
                         onClickOutside={() => setPopoverData(null)} 
                         content={
                           <div className="bg-white border border-gray-300 p-2.5 rounded min-w-[200px] shadow-[0_2px_8px_rgba(0,0,0,0.15)] relative max-w-[300px]">
-                            <div className="flex items-center justify-between relative mb-2">
-                              {isWordScrapped ? (
-                                <LuBookmarkCheck
-                                  size={25}
-                                  onClick={() => setIsWordScrapped(!isWordScrapped)}
-                                  className="cursor-pointer text-black"
-                                />
-                              ) : (
-                                <LuBookmark
-                                  size={25}
-                                  onClick={() => setIsWordScrapped(!isWordScrapped)}
-                                  className="cursor-pointer text-black"
-                                />
-                              )}
+                            <div className="flex items-center justify-end">
                               <LuX
                                 size={25}
                                 onClick={() => setPopoverData(null)}

@@ -1,5 +1,6 @@
 import { LuChevronLeft } from "react-icons/lu";
 import "@shared/styles/CustomScroll.css"
+import { showError } from "@/shared";
 
 interface FirstInterestSelectionProps {
   interests: string[];
@@ -26,7 +27,7 @@ export default function FirstInterestSelection({
 
   const handleNext = () => {
     if (interests.length === 0) {
-      alert("최소 1개 이상의 관심사를 선택해주세요.");
+      showError("최소 1개 이상의 관심사를 선택해주세요.");
       return;
     }
     nextStep();

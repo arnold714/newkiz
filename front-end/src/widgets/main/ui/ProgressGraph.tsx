@@ -76,80 +76,80 @@ export const ProgressGraph: React.FC = () => {
 
   // 시간 계산해서 버튼 보여주기
   const checkTimeValidity = () => {
-  const now = dayjs(); // 현재 시간
+    const now = dayjs(); // 현재 시간
 
-  // 현재 시각 기준 입장 가능 시간 구간 정의
-  const ENABLE_START_1 = dayjs().set("minute", 25).set("second", 0);
-  const ENABLE_END_1 = dayjs().set("minute", 29).set("second", 59);
-  const ENABLE_START_2 = dayjs().set("minute", 55).set("second", 0);
-  const ENABLE_END_2 = dayjs().set("minute", 59).set("second", 59);
+    // 현재 시각 기준 입장 가능 시간 구간 정의
+    const ENABLE_START_1 = dayjs().set("minute", 25).set("second", 0);
+    const ENABLE_END_1 = dayjs().set("minute", 29).set("second", 59);
+    const ENABLE_START_2 = dayjs().set("minute", 55).set("second", 0);
+    const ENABLE_END_2 = dayjs().set("minute", 59).set("second", 59);
 
-  // 입장 가능 여부 판단
-  const isInTimeRange =
-    (now.isAfter(ENABLE_START_1) && now.isBefore(ENABLE_END_1)) ||
-    (now.isAfter(ENABLE_START_2) && now.isBefore(ENABLE_END_2));
+    // 입장 가능 여부 판단
+    const isInTimeRange =
+      (now.isAfter(ENABLE_START_1) && now.isBefore(ENABLE_END_1)) ||
+      (now.isAfter(ENABLE_START_2) && now.isBefore(ENABLE_END_2));
 
-  setIsEnabled(isInTimeRange);
+    setIsEnabled(isInTimeRange);
 
-  // 게임 시작까지 남은 시간 계산 (둘 중 가까운 쪽 기준)
-  const nextEnableEnd = now.isBefore(ENABLE_END_1)
-    ? ENABLE_END_1
-    : ENABLE_END_2;
+    // 게임 시작까지 남은 시간 계산 (둘 중 가까운 쪽 기준)
+    const nextEnableEnd = now.isBefore(ENABLE_END_1)
+      ? ENABLE_END_1
+      : ENABLE_END_2;
 
-  const gameDiffInSeconds = nextEnableEnd.diff(now, "second");
-  const gameHours = Math.floor(gameDiffInSeconds / 3600);
-  const gameMinutes = Math.floor((gameDiffInSeconds % 3600) / 60);
-  const gameSeconds = gameDiffInSeconds % 60;
+    const gameDiffInSeconds = nextEnableEnd.diff(now, "second");
+    const gameHours = Math.floor(gameDiffInSeconds / 3600);
+    const gameMinutes = Math.floor((gameDiffInSeconds % 3600) / 60);
+    const gameSeconds = gameDiffInSeconds % 60;
 
-  let formattedGameTime;
-  if (gameDiffInSeconds >= 3600) {
-    formattedGameTime = `${gameHours.toString().padStart(2, "0")}:${gameMinutes
-      .toString()
-      .padStart(2, "0")}:${gameSeconds.toString().padStart(2, "0")}`;
-  } else {
-    formattedGameTime = `${gameMinutes.toString().padStart(2, "0")}:${gameSeconds
-      .toString()
-      .padStart(2, "0")}`;
-  }
-
-  setRemainingTime(formattedGameTime);
-
-  // 입장 가능 시간까지 남은 시간 계산
-  if (!isInTimeRange) {
-    let nextEnableStart;
-
-    if (now.isBefore(ENABLE_START_1)) {
-      nextEnableStart = ENABLE_START_1;
-    } else if (now.isBefore(ENABLE_START_2)) {
-      nextEnableStart = ENABLE_START_2;
-    } else {
-      // 둘 다 지났으면 다음 시의 25분으로 세팅
-      nextEnableStart = now.add(1, "hour").set("minute", 25).set("second", 0);
-    }
-
-    const enterDiffInSeconds = nextEnableStart.diff(now, "second");
-    const enterHours = Math.floor(enterDiffInSeconds / 3600);
-    const enterMinutes = Math.floor((enterDiffInSeconds % 3600) / 60);
-    const enterSeconds = enterDiffInSeconds % 60;
-
-    let formattedEnterTime;
-    if (enterDiffInSeconds >= 3600) {
-      formattedEnterTime = `${enterHours.toString().padStart(2, "0")}:${enterMinutes
+    let formattedGameTime;
+    if (gameDiffInSeconds >= 3600) {
+      formattedGameTime = `${gameHours.toString().padStart(2, "0")}:${gameMinutes
         .toString()
-        .padStart(2, "0")}:${enterSeconds.toString().padStart(2, "0")}`;
+        .padStart(2, "0")}:${gameSeconds.toString().padStart(2, "0")}`;
     } else {
-      formattedEnterTime = `${enterMinutes.toString().padStart(2, "0")}:${enterSeconds
+      formattedGameTime = `${gameMinutes.toString().padStart(2, "0")}:${gameSeconds
         .toString()
         .padStart(2, "0")}`;
     }
 
-    setStartEnterTime(formattedEnterTime);
-  } else {
-    setStartEnterTime("");
-  }
-};
+    setRemainingTime(formattedGameTime);
 
-  
+    // 입장 가능 시간까지 남은 시간 계산
+    if (!isInTimeRange) {
+      let nextEnableStart;
+
+      if (now.isBefore(ENABLE_START_1)) {
+        nextEnableStart = ENABLE_START_1;
+      } else if (now.isBefore(ENABLE_START_2)) {
+        nextEnableStart = ENABLE_START_2;
+      } else {
+        // 둘 다 지났으면 다음 시의 25분으로 세팅
+        nextEnableStart = now.add(1, "hour").set("minute", 25).set("second", 0);
+      }
+
+      const enterDiffInSeconds = nextEnableStart.diff(now, "second");
+      const enterHours = Math.floor(enterDiffInSeconds / 3600);
+      const enterMinutes = Math.floor((enterDiffInSeconds % 3600) / 60);
+      const enterSeconds = enterDiffInSeconds % 60;
+
+      let formattedEnterTime;
+      if (enterDiffInSeconds >= 3600) {
+        formattedEnterTime = `${enterHours.toString().padStart(2, "0")}:${enterMinutes
+          .toString()
+          .padStart(2, "0")}:${enterSeconds.toString().padStart(2, "0")}`;
+      } else {
+        formattedEnterTime = `${enterMinutes.toString().padStart(2, "0")}:${enterSeconds
+          .toString()
+          .padStart(2, "0")}`;
+      }
+
+      setStartEnterTime(formattedEnterTime);
+    } else {
+      setStartEnterTime("");
+    }
+  };
+
+
   useEffect(() => {
     // 초기 상태 확인
     checkTimeValidity()
@@ -172,7 +172,7 @@ export const ProgressGraph: React.FC = () => {
           {isEnabled ? (
             <Link
               to="/game"
-              state={{from: "main"}} 
+              state={{ from: "main" }}
               className="rounded-lg px-3 py-2 bg-[#7CBA36] text-white font-semibold"
             >
               게임 입장하기

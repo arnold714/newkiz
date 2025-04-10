@@ -62,7 +62,7 @@ public class GameService {
     startGame();
   }
 
-  @Scheduled(cron = "0 55 17 * * ?", zone = "Asia/Seoul")
+  @Scheduled(cron = "0 25,55 * * * ?", zone = "Asia/Seoul")
   public void createGame() throws InterruptedException {
     log.info("게임 생성");
     game = new Game();
@@ -110,7 +110,7 @@ public class GameService {
     }
   }
 
-  @Scheduled(cron = "0 0 18 * * ?", zone = "Asia/Seoul")
+  @Scheduled(cron = "0 0,30 * * * ?", zone = "Asia/Seoul")
   public void startGame() throws InterruptedException {
     log.info("게임 시작 - 총 {} 문제", game.quizCount());
 

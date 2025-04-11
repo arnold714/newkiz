@@ -3,9 +3,7 @@ import { customAxios } from "@/shared"
 
 export const GetWrongAnswer = async():Promise<WrongAnswerItem[] | undefined> => {
     try {
-        const response = await customAxios.get<WrongAnswerResponse>(`api/records/quiz`);
-        console.log('오답 리스트 api 요청 성공:', response.data);
-        
+        const response = await customAxios.get<WrongAnswerResponse>(`api/records/quiz`);  
         if (response.data.data === null) {
             return undefined;
           }
@@ -19,7 +17,6 @@ export const GetWrongAnswer = async():Promise<WrongAnswerItem[] | undefined> => 
 export const PostWrongAnswer = async(quizId: string):Promise<WrongAnswerResponse | undefined> => {
     try {
         const response = await customAxios.post(`/api/records/quiz/${quizId}`);
-        console.log('오답 post 요청 성공:', response.data );
         return response.data;
     } catch(error) {
         console.error('오답 post 실패:', error)

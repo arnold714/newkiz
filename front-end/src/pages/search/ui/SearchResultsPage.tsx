@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { LuSearch, LuChevronLeft } from "react-icons/lu";
 import { useParams, useNavigate } from "react-router-dom";
-// import { SearchFilterButtons } from "@/widgets/search/ui/SearchFilterButtons";
 import { NewsResults } from "@/widgets/search/ui/NewsResults";
 import "@shared/styles/CustomScroll.css"
 import { fetchSearchResults } from "@/pages/search";

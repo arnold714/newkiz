@@ -1,0 +1,290 @@
+[
+  {
+    "_id": {"$oid": "67f0dd2a1570ee5ea35e6d29"},
+    "_class": "site.newkiz.newsserver.entity.QuizSolveLog",
+    "isCorrect": true,
+    "newsId": "67eb5b1c6fa7984d08537399",
+    "solvedAt": {"$date": "2025-04-05T07:35:06.418Z"},
+    "userId": "4"
+  },
+  {
+    "_id": {"$oid": "67f4e43701d456453404fea0"},
+    "_class": "site.newkiz.newsserver.entity.QuizSolveLog",
+    "isCorrect": false,
+    "newsId": "67edfec1a1682e42cac66802",
+    "solvedAt": {"$date": "2025-04-08T08:54:15.872Z"},
+    "userId": "3"
+  },
+  {
+    "_id": {"$oid": "67f4e44501d456453404fea2"},
+    "_class": "site.newkiz.newsserver.entity.QuizSolveLog",
+    "isCorrect": false,
+    "newsId": "67edfeaca1682e42cac66798",
+    "solvedAt": {"$date": "2025-04-08T08:54:29.659Z"},
+    "userId": "3"
+  },
+  {
+    "_id": {"$oid": "67f4e45201d456453404fea3"},
+    "_class": "site.newkiz.newsserver.entity.QuizSolveLog",
+    "isCorrect": true,
+    "newsId": "67edfeb6a1682e42cac667c9",
+    "solvedAt": {"$date": "2025-04-08T08:54:42.313Z"},
+    "userId": "3"
+  },
+  {
+    "_id": {"$oid": "67f4e45801d456453404fea5"},
+    "_class": "site.newkiz.newsserver.entity.QuizSolveLog",
+    "isCorrect": false,
+    "newsId": "67edfea2a1682e42cac66765",
+    "solvedAt": {"$date": "2025-04-08T08:54:48.392Z"},
+    "userId": "3"
+  },
+  {
+    "_id": {"$oid": "67f4e46e01d456453404fea6"},
+    "_class": "site.newkiz.newsserver.entity.QuizSolveLog",
+    "isCorrect": false,
+    "newsId": "67edfebba1682e42cac667e3",
+    "solvedAt": {"$date": "2025-04-08T08:55:10.476Z"},
+    "userId": "3"
+  },
+  {
+    "_id": {"$oid": "67f62cdda1876a12e2769d43"},
+    "_class": "site.newkiz.newsserver.entity.QuizSolveLog",
+    "isCorrect": false,
+    "newsId": "67ef90013358fef3c143bae9",
+    "solvedAt": {"$date": "2025-04-09T08:16:29.724Z"},
+    "userId": "3"
+  },
+  {
+    "_id": {"$oid": "67f71dcafc23b9473bad995e"},
+    "_class": "site.newkiz.newsserver.entity.QuizSolveLog",
+    "isCorrect": true,
+    "newsId": "67eca8f8798417f5ce281f32",
+    "solvedAt": {"$date": "2025-04-10T01:24:26.392Z"},
+    "userId": "5"
+  },
+  {
+    "_id": {"$oid": "67f71ed3fc23b9473bad9960"},
+    "_class": "site.newkiz.newsserver.entity.QuizSolveLog",
+    "isCorrect": true,
+    "newsId": "67eb5b306fa7984d08537404",
+    "solvedAt": {"$date": "2025-04-10T01:28:51.565Z"},
+    "userId": "5"
+  },
+  {
+    "_id": {"$oid": "67f71f43fc23b9473bad9964"},
+    "_class": "site.newkiz.newsserver.entity.QuizSolveLog",
+    "isCorrect": true,
+    "newsId": "67edfecca1682e42cac6683c",
+    "solvedAt": {"$date": "2025-04-10T01:30:43.854Z"},
+    "userId": "5"
+  },
+  {
+    "_id": {"$oid": "67f71f60fc23b9473bad9966"},
+    "_class": "site.newkiz.newsserver.entity.QuizSolveLog",
+    "isCorrect": true,
+    "newsId": "67eca8f9798417f5ce281f3a",
+    "solvedAt": {"$date": "2025-04-10T01:31:12.164Z"},
+    "userId": "5"
+  },
+  {
+    "_id": {"$oid": "67f71fa1fc23b9473bad9967"},
+    "_class": "site.newkiz.newsserver.entity.QuizSolveLog",
+    "isCorrect": false,
+    "newsId": "67eca8f9798417f5ce281f3a",
+    "solvedAt": {"$date": "2025-04-10T01:32:17.598Z"},
+    "userId": "5"
+  },
+  {
+    "_id": {"$oid": "67f723cbfc23b9473bad996a"},
+    "_class": "site.newkiz.newsserver.entity.QuizSolveLog",
+    "isCorrect": true,
+    "newsId": "67eb5b2e6fa7984d085373f5",
+    "solvedAt": {"$date": "2025-04-10T01:50:03.935Z"},
+    "userId": "5"
+  },
+  {
+    "_id": {"$oid": "67f72b69fc23b9473bad9978"},
+    "_class": "site.newkiz.newsserver.entity.QuizSolveLog",
+    "isCorrect": true,
+    "newsId": "67f7219f5ebc0c19776b4dab",
+    "solvedAt": {"$date": "2025-04-10T02:22:33.590Z"},
+    "userId": "6"
+  },
+  {
+    "_id": {"$oid": "67f72b74fc23b9473bad9979"},
+    "_class": "site.newkiz.newsserver.entity.QuizSolveLog",
+    "isCorrect": true,
+    "newsId": "67ef90013358fef3c143baeb",
+    "solvedAt": {"$date": "2025-04-10T02:22:44.051Z"},
+    "userId": "6"
+  },
+  {
+    "_id": {"$oid": "67f72e18fc23b9473bad997e"},
+    "_class": "site.newkiz.newsserver.entity.QuizSolveLog",
+    "isCorrect": true,
+    "newsId": "67ef90013358fef3c143bae9",
+    "solvedAt": {"$date": "2025-04-10T02:34:00.036Z"},
+    "userId": "6"
+  },
+  {
+    "_id": {"$oid": "67f72e32fc23b9473bad997f"},
+    "_class": "site.newkiz.newsserver.entity.QuizSolveLog",
+    "isCorrect": true,
+    "newsId": "67ef90013358fef3c143baec",
+    "solvedAt": {"$date": "2025-04-10T02:34:26.279Z"},
+    "userId": "6"
+  },
+  {
+    "_id": {"$oid": "67f72e38fc23b9473bad9980"},
+    "_class": "site.newkiz.newsserver.entity.QuizSolveLog",
+    "isCorrect": true,
+    "newsId": "67ef90023358fef3c143baef",
+    "solvedAt": {"$date": "2025-04-10T02:34:31.999Z"},
+    "userId": "6"
+  },
+  {
+    "_id": {"$oid": "67f730c9fc23b9473bad9981"},
+    "_class": "site.newkiz.newsserver.entity.QuizSolveLog",
+    "isCorrect": true,
+    "newsId": "67ef90013358fef3c143baea",
+    "solvedAt": {"$date": "2025-04-10T02:45:29.140Z"},
+    "userId": "6"
+  },
+  {
+    "_id": {"$oid": "67f7313cfc23b9473bad9982"},
+    "_class": "site.newkiz.newsserver.entity.QuizSolveLog",
+    "isCorrect": true,
+    "newsId": "67ef90013358fef3c143baed",
+    "solvedAt": {"$date": "2025-04-10T02:47:24.320Z"},
+    "userId": "6"
+  },
+  {
+    "_id": {"$oid": "67f75663fc23b9473bad99fa"},
+    "_class": "site.newkiz.newsserver.entity.QuizSolveLog",
+    "isCorrect": true,
+    "newsId": "67ef90023358fef3c143baee",
+    "solvedAt": {"$date": "2025-04-10T05:25:55.609Z"},
+    "userId": "5"
+  },
+  {
+    "_id": {"$oid": "67f75b4afc23b9473bad99fb"},
+    "_class": "site.newkiz.newsserver.entity.QuizSolveLog",
+    "isCorrect": true,
+    "newsId": "67f749e61640602f954ac245",
+    "solvedAt": {"$date": "2025-04-10T05:46:50.051Z"},
+    "userId": "5"
+  },
+  {
+    "_id": {"$oid": "67f76498fc23b9473bad9a06"},
+    "_class": "site.newkiz.newsserver.entity.QuizSolveLog",
+    "isCorrect": true,
+    "newsId": "67f749e41640602f954ac1f4",
+    "solvedAt": {"$date": "2025-04-10T06:26:32.367Z"},
+    "userId": "5"
+  },
+  {
+    "_id": {"$oid": "67f79f8da1876a12e2769d53"},
+    "_class": "site.newkiz.newsserver.entity.QuizSolveLog",
+    "isCorrect": true,
+    "newsId": "67ef90013358fef3c143bae8",
+    "solvedAt": {"$date": "2025-04-10T10:38:05.181Z"},
+    "userId": "5"
+  },
+  {
+    "_id": {"$oid": "67f7a17ca1876a12e2769d5e"},
+    "_class": "site.newkiz.newsserver.entity.QuizSolveLog",
+    "isCorrect": false,
+    "newsId": "67f749e61640602f954ac245",
+    "solvedAt": {"$date": "2025-04-10T10:46:20.202Z"},
+    "userId": "6"
+  },
+  {
+    "_id": {"$oid": "67f7aa96fc23b9473bad9a26"},
+    "_class": "site.newkiz.newsserver.entity.QuizSolveLog",
+    "isCorrect": false,
+    "newsId": "67edfeaca1682e42cac66798",
+    "solvedAt": {"$date": "2025-04-10T11:25:10.441Z"},
+    "userId": "6"
+  },
+  {
+    "_id": {"$oid": "67f7afb5fc23b9473bad9a32"},
+    "_class": "site.newkiz.newsserver.entity.QuizSolveLog",
+    "isCorrect": false,
+    "newsId": "67f7219f5ebc0c19776b4dab",
+    "solvedAt": {"$date": "2025-04-10T11:47:01.921Z"},
+    "userId": "45"
+  },
+  {
+    "_id": {"$oid": "67f7afbbfc23b9473bad9a34"},
+    "_class": "site.newkiz.newsserver.entity.QuizSolveLog",
+    "isCorrect": true,
+    "newsId": "67f749e41640602f954ac1dd",
+    "solvedAt": {"$date": "2025-04-10T11:47:07.313Z"},
+    "userId": "45"
+  },
+  {
+    "_id": {"$oid": "67f7afc2fc23b9473bad9a36"},
+    "_class": "site.newkiz.newsserver.entity.QuizSolveLog",
+    "isCorrect": false,
+    "newsId": "67ef90003358fef3c143bade",
+    "solvedAt": {"$date": "2025-04-10T11:47:14.238Z"},
+    "userId": "45"
+  },
+  {
+    "_id": {"$oid": "67f7e2daa1876a12e2769d72"},
+    "_class": "site.newkiz.newsserver.entity.QuizSolveLog",
+    "isCorrect": false,
+    "newsId": "67f749e61640602f954ac245",
+    "solvedAt": {"$date": "2025-04-10T15:25:14.934Z"},
+    "userId": "7"
+  },
+  {
+    "_id": {"$oid": "67f7e929a1876a12e2769d83"},
+    "_class": "site.newkiz.newsserver.entity.QuizSolveLog",
+    "isCorrect": false,
+    "newsId": "67ef90013358fef3c143baeb",
+    "solvedAt": {"$date": "2025-04-10T15:52:09.971Z"},
+    "userId": "45"
+  },
+  {
+    "_id": {"$oid": "67f7f171a1876a12e2769d8e"},
+    "_class": "site.newkiz.newsserver.entity.QuizSolveLog",
+    "isCorrect": true,
+    "newsId": "67f749e41640602f954ac1f4",
+    "solvedAt": {"$date": "2025-04-10T16:27:29.126Z"},
+    "userId": "8"
+  },
+  {
+    "_id": {"$oid": "67f7f199a1876a12e2769d90"},
+    "_class": "site.newkiz.newsserver.entity.QuizSolveLog",
+    "isCorrect": false,
+    "newsId": "67f749e41640602f954ac1f4",
+    "solvedAt": {"$date": "2025-04-10T16:28:09.151Z"},
+    "userId": "45"
+  },
+  {
+    "_id": {"$oid": "67f7f65da1876a12e2769d91"},
+    "_class": "site.newkiz.newsserver.entity.QuizSolveLog",
+    "isCorrect": true,
+    "newsId": "67ef90013358fef3c143bae9",
+    "solvedAt": {"$date": "2025-04-10T16:48:29.020Z"},
+    "userId": "45"
+  },
+  {
+    "_id": {"$oid": "67f7fedea1876a12e2769da8"},
+    "_class": "site.newkiz.newsserver.entity.QuizSolveLog",
+    "isCorrect": false,
+    "newsId": "67edfeaca1682e42cac66798",
+    "solvedAt": {"$date": "2025-04-10T17:24:46.799Z"},
+    "userId": "8"
+  },
+  {
+    "_id": {"$oid": "67f87308a1876a12e2769db7"},
+    "_class": "site.newkiz.newsserver.entity.QuizSolveLog",
+    "isCorrect": false,
+    "newsId": "67edfeaca1682e42cac66798",
+    "solvedAt": {"$date": "2025-04-11T01:40:24.660Z"},
+    "userId": "45"
+  }
+]

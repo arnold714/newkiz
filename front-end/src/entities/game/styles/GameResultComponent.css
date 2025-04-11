@@ -1,0 +1,29 @@
+/* Remove outer border */
+.custom-ag-grid .ag-root-wrapper {
+  border: none !important;
+}
+
+/* Change column border color to #7CBA36 */
+.custom-ag-grid .ag-header-cell {
+  border-right: 1px solid #7cba36 !important;
+}
+
+.custom-ag-grid .ag-cell {
+  border-right: 1px solid #7cba36 !important;
+}
+
+/* Change header bottom border */
+.custom-ag-grid .ag-header {
+  border-bottom: 1px solid #7cba36 !important;
+}
+
+/* Change row border color */
+.custom-ag-grid .ag-row {
+  border-bottom: 1px solid #7cba36 !important;
+}
+
+/* Remove last column right border */
+.custom-ag-grid .ag-header-cell:last-child,
+.custom-ag-grid .ag-cell:last-child {
+  border-right: none !important;
+}

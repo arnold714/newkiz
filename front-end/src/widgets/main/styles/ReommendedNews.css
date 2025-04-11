@@ -1,0 +1,9 @@
+.clamp-2 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  text-overflow: ellipsis;
+  word-break: break-word;  /* 긴 단어를 강제로 줄바꿈 */
+}

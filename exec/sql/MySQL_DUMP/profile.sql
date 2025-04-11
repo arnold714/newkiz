@@ -1,0 +1,11 @@
+INSERT INTO newkiz.profile (id, birthday, difficulty, gender, nickname, user_id, school_id, character_id) VALUES (17, '1990-01-01', 3, 'MALE', 'mrha', 7, 1, 'nico');
+INSERT INTO newkiz.profile (id, birthday, difficulty, gender, nickname, user_id, school_id, character_id) VALUES (33, '1990-01-01', 3, 'MALE', 'jaehyung', 4, 1, 'mono');
+INSERT INTO newkiz.profile (id, birthday, difficulty, gender, nickname, user_id, school_id, character_id) VALUES (37, '1990-01-01', 1, 'MALE', 'ansooparty', 8, 4388, 'kira');
+INSERT INTO newkiz.profile (id, birthday, difficulty, gender, nickname, user_id, school_id, character_id) VALUES (40, '2025-03-31', 3, 'MALE', 'zl승아zon', 2, 2176, 'cole');
+INSERT INTO newkiz.profile (id, birthday, difficulty, gender, nickname, user_id, school_id, character_id) VALUES (42, '2025-03-31', 2, 'MALE', '인주', 3, 10, 'cole');
+INSERT INTO newkiz.profile (id, birthday, difficulty, gender, nickname, user_id, school_id, character_id) VALUES (45, '1997-06-29', 2, 'MALE', 'taeyeonn', 6, 2176, 'loki');
+INSERT INTO newkiz.profile (id, birthday, difficulty, gender, nickname, user_id, school_id, character_id) VALUES (46, '2002-11-16', 2, 'FEMALE', '승아킹', 44, 259, 'kira');
+INSERT INTO newkiz.profile (id, birthday, difficulty, gender, nickname, user_id, school_id, character_id) VALUES (47, '2000-12-16', 2, 'FEMALE', '뿡뿡이', 5, 482, 'olaf');
+INSERT INTO newkiz.profile (id, birthday, difficulty, gender, nickname, user_id, school_id, character_id) VALUES (48, '2000-12-17', 3, 'FEMALE', '뿡뿡이', 45, 482, 'kuro');
+INSERT INTO newkiz.profile (id, birthday, difficulty, gender, nickname, user_id, school_id, character_id) VALUES (49, '1976-10-08', 2, 'MALE', '테스터1', 46, 5829, 'kira');
+INSERT INTO newkiz.profile (id, birthday, difficulty, gender, nickname, user_id, school_id, character_id) VALUES (50, '2000-09-29', 2, 'MALE', 'homoviator', 47, 4212, 'kuro');

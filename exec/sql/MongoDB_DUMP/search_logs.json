@@ -1,0 +1,254 @@
+[
+  {
+    "_id": {"$oid": "67f48385ac22755d954f8c8e"},
+    "_class": "site.newkiz.newsserver.entity.SearchLog",
+    "keyword": "윤석열",
+    "searchedAt": {"$date": "2025-04-10T01:50:29.211Z"},
+    "userId": "4"
+  },
+  {
+    "_id": {"$oid": "67f4c7ab725f6f5537bb1364"},
+    "_class": "site.newkiz.newsserver.entity.SearchLog",
+    "keyword": "손흥민",
+    "searchedAt": {"$date": "2025-04-10T10:07:41.102Z"},
+    "userId": "6"
+  },
+  {
+    "_id": {"$oid": "67f5dcbffc23b9473bad991f"},
+    "_class": "site.newkiz.newsserver.entity.SearchLog",
+    "keyword": "ㅎㅇ",
+    "searchedAt": {"$date": "2025-04-09T02:34:39.975Z"},
+    "userId": "3"
+  },
+  {
+    "_id": {"$oid": "67f5dcc3fc23b9473bad9920"},
+    "_class": "site.newkiz.newsserver.entity.SearchLog",
+    "keyword": "테슬라",
+    "searchedAt": {"$date": "2025-04-09T02:35:45.257Z"},
+    "userId": "3"
+  },
+  {
+    "_id": {"$oid": "67f5dd08fc23b9473bad992a"},
+    "_class": "site.newkiz.newsserver.entity.SearchLog",
+    "keyword": "출산율",
+    "searchedAt": {"$date": "2025-04-09T02:35:52.705Z"},
+    "userId": "3"
+  },
+  {
+    "_id": {"$oid": "67f615e9fc23b9473bad9941"},
+    "_class": "site.newkiz.newsserver.entity.SearchLog",
+    "keyword": "기아",
+    "searchedAt": {"$date": "2025-04-10T07:42:43.169Z"},
+    "userId": "6"
+  },
+  {
+    "_id": {"$oid": "67f712a7fc23b9473bad9949"},
+    "_class": "site.newkiz.newsserver.entity.SearchLog",
+    "keyword": "테슬라",
+    "searchedAt": {"$date": "2025-04-10T00:37:21.646Z"},
+    "userId": "6"
+  },
+  {
+    "_id": {"$oid": "67f712cdfc23b9473bad994a"},
+    "_class": "site.newkiz.newsserver.entity.SearchLog",
+    "keyword": "iot",
+    "searchedAt": {"$date": "2025-04-10T00:37:33.432Z"},
+    "userId": "6"
+  },
+  {
+    "_id": {"$oid": "67f712d2fc23b9473bad994b"},
+    "_class": "site.newkiz.newsserver.entity.SearchLog",
+    "keyword": "기기",
+    "searchedAt": {"$date": "2025-04-10T00:37:38.886Z"},
+    "userId": "6"
+  },
+  {
+    "_id": {"$oid": "67f712d8fc23b9473bad994c"},
+    "_class": "site.newkiz.newsserver.entity.SearchLog",
+    "keyword": "축구",
+    "searchedAt": {"$date": "2025-04-10T11:26:07.859Z"},
+    "userId": "6"
+  },
+  {
+    "_id": {"$oid": "67f712dbfc23b9473bad994d"},
+    "_class": "site.newkiz.newsserver.entity.SearchLog",
+    "keyword": "야구",
+    "searchedAt": {"$date": "2025-04-10T00:37:47.503Z"},
+    "userId": "6"
+  },
+  {
+    "_id": {"$oid": "67f712e7fc23b9473bad994e"},
+    "_class": "site.newkiz.newsserver.entity.SearchLog",
+    "keyword": "삼성",
+    "searchedAt": {"$date": "2025-04-10T07:42:51.464Z"},
+    "userId": "6"
+  },
+  {
+    "_id": {"$oid": "67f715f5fc23b9473bad994f"},
+    "_class": "site.newkiz.newsserver.entity.SearchLog",
+    "keyword": "출산율",
+    "searchedAt": {"$date": "2025-04-10T00:51:01.286Z"},
+    "userId": "4"
+  },
+  {
+    "_id": {"$oid": "67f71616fc23b9473bad9950"},
+    "_class": "site.newkiz.newsserver.entity.SearchLog",
+    "keyword": "트럼프",
+    "searchedAt": {"$date": "2025-04-10T01:30:51.408Z"},
+    "userId": "4"
+  },
+  {
+    "_id": {"$oid": "67f7173dfc23b9473bad9953"},
+    "_class": "site.newkiz.newsserver.entity.SearchLog",
+    "keyword": "양현종",
+    "searchedAt": {"$date": "2025-04-10T10:07:31.554Z"},
+    "userId": "6"
+  },
+  {
+    "_id": {"$oid": "67f7176afc23b9473bad9954"},
+    "_class": "site.newkiz.newsserver.entity.SearchLog",
+    "keyword": "류현진",
+    "searchedAt": {"$date": "2025-04-10T10:07:26.246Z"},
+    "userId": "6"
+  },
+  {
+    "_id": {"$oid": "67f7176ffc23b9473bad9955"},
+    "_class": "site.newkiz.newsserver.entity.SearchLog",
+    "keyword": "김하성",
+    "searchedAt": {"$date": "2025-04-10T00:57:19.661Z"},
+    "userId": "6"
+  },
+  {
+    "_id": {"$oid": "67f71773fc23b9473bad9956"},
+    "_class": "site.newkiz.newsserver.entity.SearchLog",
+    "keyword": "이정후",
+    "searchedAt": {"$date": "2025-04-10T01:02:24.764Z"},
+    "userId": "6"
+  },
+  {
+    "_id": {"$oid": "67f719e0fc23b9473bad9957"},
+    "_class": "site.newkiz.newsserver.entity.SearchLog",
+    "keyword": "기아",
+    "searchedAt": {"$date": "2025-04-10T01:30:49.358Z"},
+    "userId": "4"
+  },
+  {
+    "_id": {"$oid": "67f720e6fc23b9473bad9968"},
+    "_class": "site.newkiz.newsserver.entity.SearchLog",
+    "keyword": "갤럭시",
+    "searchedAt": {"$date": "2025-04-10T10:06:34.869Z"},
+    "userId": "6"
+  },
+  {
+    "_id": {"$oid": "67f766ada1876a12e2769d4e"},
+    "_class": "site.newkiz.newsserver.entity.SearchLog",
+    "keyword": "AI",
+    "searchedAt": {"$date": "2025-04-10T07:37:03.564Z"},
+    "userId": "7"
+  },
+  {
+    "_id": {"$oid": "67f79883fc23b9473bad9a16"},
+    "_class": "site.newkiz.newsserver.entity.SearchLog",
+    "keyword": "배구",
+    "searchedAt": {"$date": "2025-04-10T10:08:03.932Z"},
+    "userId": "6"
+  },
+  {
+    "_id": {"$oid": "67f79885fc23b9473bad9a17"},
+    "_class": "site.newkiz.newsserver.entity.SearchLog",
+    "keyword": "농구",
+    "searchedAt": {"$date": "2025-04-10T10:08:05.926Z"},
+    "userId": "6"
+  },
+  {
+    "_id": {"$oid": "67f79887fc23b9473bad9a18"},
+    "_class": "site.newkiz.newsserver.entity.SearchLog",
+    "keyword": "nba",
+    "searchedAt": {"$date": "2025-04-10T10:08:07.728Z"},
+    "userId": "6"
+  },
+  {
+    "_id": {"$oid": "67f7988afc23b9473bad9a19"},
+    "_class": "site.newkiz.newsserver.entity.SearchLog",
+    "keyword": "흥국",
+    "searchedAt": {"$date": "2025-04-10T10:08:10.341Z"},
+    "userId": "6"
+  },
+  {
+    "_id": {"$oid": "67f7988cfc23b9473bad9a1a"},
+    "_class": "site.newkiz.newsserver.entity.SearchLog",
+    "keyword": "김연경",
+    "searchedAt": {"$date": "2025-04-10T10:08:12.240Z"},
+    "userId": "6"
+  },
+  {
+    "_id": {"$oid": "67f7a04da1876a12e2769d56"},
+    "_class": "site.newkiz.newsserver.entity.SearchLog",
+    "keyword": "삼성",
+    "searchedAt": {"$date": "2025-04-10T10:42:31.756Z"},
+    "userId": "5"
+  },
+  {
+    "_id": {"$oid": "67f7a056a1876a12e2769d57"},
+    "_class": "site.newkiz.newsserver.entity.SearchLog",
+    "keyword": "갤럭시",
+    "searchedAt": {"$date": "2025-04-10T10:41:26.152Z"},
+    "userId": "5"
+  },
+  {
+    "_id": {"$oid": "67f7a05ba1876a12e2769d58"},
+    "_class": "site.newkiz.newsserver.entity.SearchLog",
+    "keyword": "야구",
+    "searchedAt": {"$date": "2025-04-10T10:42:11.539Z"},
+    "userId": "5"
+  },
+  {
+    "_id": {"$oid": "67f7a062a1876a12e2769d59"},
+    "_class": "site.newkiz.newsserver.entity.SearchLog",
+    "keyword": "손흥민",
+    "searchedAt": {"$date": "2025-04-10T10:42:00.691Z"},
+    "userId": "5"
+  },
+  {
+    "_id": {"$oid": "67f7a067a1876a12e2769d5a"},
+    "_class": "site.newkiz.newsserver.entity.SearchLog",
+    "keyword": "선거",
+    "searchedAt": {"$date": "2025-04-10T10:41:43.379Z"},
+    "userId": "5"
+  },
+  {
+    "_id": {"$oid": "67f7a088a1876a12e2769d5b"},
+    "_class": "site.newkiz.newsserver.entity.SearchLog",
+    "keyword": "윤석열",
+    "searchedAt": {"$date": "2025-04-10T10:42:16.968Z"},
+    "userId": "5"
+  },
+  {
+    "_id": {"$oid": "67f801c5a1876a12e2769dac"},
+    "_class": "site.newkiz.newsserver.entity.SearchLog",
+    "keyword": "기아",
+    "searchedAt": {"$date": "2025-04-10T17:37:09.307Z"},
+    "userId": "8"
+  },
+  {
+    "_id": {"$oid": "67f801cfa1876a12e2769dad"},
+    "_class": "site.newkiz.newsserver.entity.SearchLog",
+    "keyword": "삼성",
+    "searchedAt": {"$date": "2025-04-10T17:37:19.492Z"},
+    "userId": "8"
+  },
+  {
+    "_id": {"$oid": "67f8621ba1876a12e2769db3"},
+    "_class": "site.newkiz.newsserver.entity.SearchLog",
+    "keyword": "삼성",
+    "searchedAt": {"$date": "2025-04-11T01:43:29.948Z"},
+    "userId": "45"
+  },
+  {
+    "_id": {"$oid": "67f873cda1876a12e2769db8"},
+    "_class": "site.newkiz.newsserver.entity.SearchLog",
+    "keyword": "기아",
+    "searchedAt": {"$date": "2025-04-11T01:43:41.357Z"},
+    "userId": "45"
+  }
+]

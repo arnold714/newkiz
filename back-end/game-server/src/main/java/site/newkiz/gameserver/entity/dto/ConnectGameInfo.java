@@ -1,6 +1,5 @@
 package site.newkiz.gameserver.entity.dto;
 
-import java.time.Duration;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Map;
@@ -20,15 +19,7 @@ public class ConnectGameInfo {
 
   public ConnectGameInfo(Game game) {
     ZonedDateTime now = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
-    ZonedDateTime nextGameTime = null;
-
-    if (now.getMinute() < 30) {
-      nextGameTime = now.withMinute(30).withSecond(0).withNano(0);
-    } else {
-      nextGameTime = now.plusHours(1).withMinute(0).withSecond(0).withNano(0);
-    }
-
-    this.timeLeft = (int) Duration.between(now, nextGameTime).getSeconds();
+    this.timeLeft = game.getStartMinute() * 60 - (now.getMinute() * 60 + now.getSecond());
     this.state = game.getState();
     this.players = game.getPlayers();
   }

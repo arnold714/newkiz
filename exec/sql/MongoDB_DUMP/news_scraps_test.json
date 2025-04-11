@@ -1,0 +1,163 @@
+[
+  {
+    "_id": {"$oid": "67edf2a81cb95c5e89420440"},
+    "_class": "site.newkiz.newsserver.entitiy.NewsScrap",
+    "createdAt": {"$date": "2025-04-03T02:30:00.706Z"},
+    "newsId": "67eca8f5798417f5ce281eec",
+    "userId": "1"
+  },
+  {
+    "_id": {"$oid": "67edf2b31cb95c5e89420441"},
+    "_class": "site.newkiz.newsserver.entitiy.NewsScrap",
+    "createdAt": {"$date": "2025-04-03T02:30:11.229Z"},
+    "newsId": "67eca8f5798417f5ce281eec",
+    "userId": "3"
+  },
+  {
+    "_id": {"$oid": "67f151a5bcec6e2e7ad906e7"},
+    "_class": "site.newkiz.newsserver.entitiy.NewsScrap",
+    "createdAt": {"$date": "2025-04-05T15:52:05.800Z"},
+    "newsId": "67ef90003358fef3c143bae0",
+    "userId": "5"
+  },
+  {
+    "_id": {"$oid": "67f15243bcec6e2e7ad906e8"},
+    "_class": "site.newkiz.newsserver.entitiy.NewsScrap",
+    "createdAt": {"$date": "2025-04-05T15:54:43.661Z"},
+    "newsId": "67ef90003358fef3c143badf",
+    "userId": "5"
+  },
+  {
+    "_id": {"$oid": "67f20d5b7ce5e243acc6a4a3"},
+    "_class": "site.newkiz.newsserver.entity.NewsScrap",
+    "createdAt": {"$date": "2025-04-06T05:12:59.215Z"},
+    "newsId": "67ef90023358fef3c143baef",
+    "userId": "5"
+  },
+  {
+    "_id": {"$oid": "67f5da96fc23b9473bad9909"},
+    "_class": "site.newkiz.newsserver.entity.NewsScrap",
+    "createdAt": {"$date": "2025-04-09T02:25:26.487Z"},
+    "newsId": "67edfeb6a1682e42cac667c9",
+    "userId": "3"
+  },
+  {
+    "_id": {"$oid": "67f5daaffc23b9473bad990a"},
+    "_class": "site.newkiz.newsserver.entity.NewsScrap",
+    "createdAt": {"$date": "2025-04-09T02:25:51.066Z"},
+    "newsId": "67ef90013358fef3c143baeb",
+    "userId": "3"
+  },
+  {
+    "_id": {"$oid": "67f5dae8fc23b9473bad990f"},
+    "_class": "site.newkiz.newsserver.entity.NewsScrap",
+    "createdAt": {"$date": "2025-04-09T02:26:48.667Z"},
+    "newsId": "67ef90013358fef3c143baeb",
+    "userId": "6"
+  },
+  {
+    "_id": {"$oid": "67f5de5bfc23b9473bad9932"},
+    "_class": "site.newkiz.newsserver.entity.NewsScrap",
+    "createdAt": {"$date": "2025-04-09T02:41:31.633Z"},
+    "newsId": "67edfea8a1682e42cac66785",
+    "userId": "4"
+  },
+  {
+    "_id": {"$oid": "67f74d16fc23b9473bad9987"},
+    "_class": "site.newkiz.newsserver.entity.NewsScrap",
+    "createdAt": {"$date": "2025-04-10T04:46:14.034Z"},
+    "newsId": "67f749e31640602f954ac1c5",
+    "userId": "4"
+  },
+  {
+    "_id": {"$oid": "67f74d5dfc23b9473bad99a8"},
+    "_class": "site.newkiz.newsserver.entity.NewsScrap",
+    "createdAt": {"$date": "2025-04-10T04:47:25.951Z"},
+    "newsId": "67f749e61640602f954ac246",
+    "userId": "5"
+  },
+  {
+    "_id": {"$oid": "67f74d5ffc23b9473bad99a9"},
+    "_class": "site.newkiz.newsserver.entity.NewsScrap",
+    "createdAt": {"$date": "2025-04-10T04:47:27.073Z"},
+    "newsId": "67edfea6a1682e42cac6677a",
+    "userId": "6"
+  },
+  {
+    "_id": {"$oid": "67f74d64fc23b9473bad99ad"},
+    "_class": "site.newkiz.newsserver.entity.NewsScrap",
+    "createdAt": {"$date": "2025-04-10T04:47:32.413Z"},
+    "newsId": "67edfea5a1682e42cac66773",
+    "userId": "6"
+  },
+  {
+    "_id": {"$oid": "67f74d75fc23b9473bad99b8"},
+    "_class": "site.newkiz.newsserver.entity.NewsScrap",
+    "createdAt": {"$date": "2025-04-10T04:47:49.890Z"},
+    "newsId": "67f749e51640602f954ac218",
+    "userId": "4"
+  },
+  {
+    "_id": {"$oid": "67f74dd4fc23b9473bad99d0"},
+    "_class": "site.newkiz.newsserver.entity.NewsScrap",
+    "createdAt": {"$date": "2025-04-10T04:49:24.059Z"},
+    "newsId": "67ef90013358fef3c143bae7",
+    "userId": "5"
+  },
+  {
+    "_id": {"$oid": "67f74e11fc23b9473bad99dc"},
+    "_class": "site.newkiz.newsserver.entity.NewsScrap",
+    "createdAt": {"$date": "2025-04-10T04:50:25.324Z"},
+    "newsId": "67edfea9a1682e42cac66787",
+    "userId": "8"
+  },
+  {
+    "_id": {"$oid": "67f74e1ffc23b9473bad99de"},
+    "_class": "site.newkiz.newsserver.entity.NewsScrap",
+    "createdAt": {"$date": "2025-04-10T04:50:39.292Z"},
+    "newsId": "67edfeb6a1682e42cac667c9",
+    "userId": "8"
+  },
+  {
+    "_id": {"$oid": "67f74e68fc23b9473bad99f1"},
+    "_class": "site.newkiz.newsserver.entity.NewsScrap",
+    "createdAt": {"$date": "2025-04-10T04:51:52.698Z"},
+    "newsId": "67e8ed50964fa9feac885955",
+    "userId": "8"
+  },
+  {
+    "_id": {"$oid": "67f79edea1876a12e2769d4f"},
+    "_class": "site.newkiz.newsserver.entity.NewsScrap",
+    "createdAt": {"$date": "2025-04-10T10:35:10.410Z"},
+    "newsId": "67ef90013358fef3c143baea",
+    "userId": "5"
+  },
+  {
+    "_id": {"$oid": "67f7a134fc23b9473bad9a25"},
+    "_class": "site.newkiz.newsserver.entity.NewsScrap",
+    "createdAt": {"$date": "2025-04-10T10:45:08.089Z"},
+    "newsId": "67f749e61640602f954ac245",
+    "userId": "6"
+  },
+  {
+    "_id": {"$oid": "67f7afaffc23b9473bad9a31"},
+    "_class": "site.newkiz.newsserver.entity.NewsScrap",
+    "createdAt": {"$date": "2025-04-10T11:46:55.685Z"},
+    "newsId": "67f7219f5ebc0c19776b4dab",
+    "userId": "45"
+  },
+  {
+    "_id": {"$oid": "67f80104a1876a12e2769dab"},
+    "_class": "site.newkiz.newsserver.entity.NewsScrap",
+    "createdAt": {"$date": "2025-04-10T17:33:56.140Z"},
+    "newsId": "67edfeaca1682e42cac66798",
+    "userId": "8"
+  },
+  {
+    "_id": {"$oid": "67f85a69a1876a12e2769dae"},
+    "_class": "site.newkiz.newsserver.entity.NewsScrap",
+    "createdAt": {"$date": "2025-04-10T23:55:21.346Z"},
+    "newsId": "67edfeaca1682e42cac66798",
+    "userId": "45"
+  }
+]

@@ -1,0 +1,123 @@
+[
+  {
+    "_id": 3,
+    "CULTURE": 5,
+    "ECONOMY": 8,
+    "IT_SCIENCE": 15,
+    "POLITICS": 6,
+    "SOCIETY": 20,
+    "SPORTS": 17,
+    "WORLD": 16,
+    "_class": "site.newkiz.mypageserver.entity.CategoryScore"
+  },
+  {
+    "_id": 4,
+    "CULTURE": 1,
+    "ECONOMY": 22,
+    "IT_SCIENCE": 19,
+    "POLITICS": 7,
+    "SOCIETY": 4,
+    "SPORTS": 11,
+    "WORLD": 3,
+    "_class": "site.newkiz.mypageserver.entity.CategoryScore"
+  },
+  {
+    "_id": 6,
+    "CULTURE": 1,
+    "ECONOMY": 2,
+    "IT_SCIENCE": 6,
+    "POLITICS": 1,
+    "SOCIETY": 6,
+    "SPORTS": 3,
+    "WORLD": 1,
+    "_class": "site.newkiz.mypageserver.entity.CategoryScore"
+  },
+  {
+    "_id": 5,
+    "CULTURE": 0,
+    "ECONOMY": 0,
+    "IT_SCIENCE": 0,
+    "POLITICS": 0,
+    "SOCIETY": -3,
+    "SPORTS": 0,
+    "WORLD": 0,
+    "_class": "site.newkiz.mypageserver.entity.CategoryScore"
+  },
+  {
+    "_id": 7,
+    "CULTURE": 0,
+    "ECONOMY": 1,
+    "IT_SCIENCE": 0,
+    "POLITICS": 2,
+    "SOCIETY": 1,
+    "SPORTS": 1,
+    "WORLD": 0,
+    "_class": "site.newkiz.mypageserver.entity.CategoryScore"
+  },
+  {
+    "_id": 2,
+    "CULTURE": 1,
+    "ECONOMY": 22,
+    "IT_SCIENCE": 19,
+    "POLITICS": 7,
+    "SOCIETY": 4,
+    "SPORTS": 11,
+    "WORLD": 3,
+    "_class": "site.newkiz.mypageserver.entity.CategoryScore"
+  },
+  {
+    "_id": 8,
+    "CULTURE": 1,
+    "ECONOMY": 7,
+    "IT_SCIENCE": 3,
+    "POLITICS": 1,
+    "SOCIETY": 1,
+    "SPORTS": 6,
+    "WORLD": 0,
+    "_class": "site.newkiz.mypageserver.entity.CategoryScore"
+  },
+  {
+    "_id": 44,
+    "CULTURE": 0,
+    "ECONOMY": 0,
+    "IT_SCIENCE": 0,
+    "POLITICS": 2,
+    "SOCIETY": 0,
+    "SPORTS": 3,
+    "WORLD": 0,
+    "_class": "site.newkiz.mypageserver.entity.CategoryScore"
+  },
+  {
+    "_id": 45,
+    "CULTURE": 0,
+    "ECONOMY": 4,
+    "IT_SCIENCE": 2,
+    "POLITICS": 1,
+    "SOCIETY": 2,
+    "SPORTS": 13,
+    "WORLD": 1,
+    "_class": "site.newkiz.mypageserver.entity.CategoryScore"
+  },
+  {
+    "_id": 46,
+    "CULTURE": 0,
+    "ECONOMY": 0,
+    "IT_SCIENCE": 4,
+    "POLITICS": 0,
+    "SOCIETY": 1,
+    "SPORTS": 0,
+    "WORLD": 0,
+    "_class": "site.newkiz.mypageserver.entity.CategoryScore"
+  },
+  {
+    "_id": 47,
+    "CULTURE": 0,
+    "ECONOMY": 2,
+    "IT_SCIENCE": 0,
+    "POLITICS": 0,
+    "SOCIETY": 1,
+    "SPORTS": 2,
+    "WORLD": 0,
+    "_class": "site.newkiz.mypageserver.entity.CategoryScore"
+  }
+]

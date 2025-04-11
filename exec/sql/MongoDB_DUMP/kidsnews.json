@@ -1,0 +1,30 @@
+[
+  {
+    "_id": {"$oid": "67f601ea8dd99d29cc3fbf76"},
+    "_class": "site.newkiz.kidsnewsserver.Entity.Kidsnews",
+    "author": "박재형",
+    "content": "샘모루 초등학교 앞에 작은 숲이 만들어졌어요. 나무 30그루와 꽃밭이 심어졌고, 나무 그늘 아래에는 벤치와 작은 새집도 설치되었어요.\n\n이 숲은 마을 사람들이 함께 만든 곳이에요. 학교에 다니는 아이들은 점심시간이나 방과 후에 이곳에 와서 친구들과 놀거나 책을 읽어요.\n\n초등학교 3학년 민지 어린이는 “숲에서 새가 지저귀는 걸 들을 수 있어서 좋아요. 나무 아래에서 쉬면 기분이 편안해져요”라고 말했어요.\n\n숲을 만든 마을 어른들은 \"아이들이 자연 속에서 자라길 바란다\"고 했어요.\n\n이 작은 숲은 아이들에게 소중한 놀이터가 되었답니다",
+    "created_at": {"$date": "2025-04-09T05:13:13.546Z"},
+    "img": "https://newkiz-s3.s3.ap-northeast-2.amazonaws.com/kidsnews/7e3728aa-c341-4595-9bca-09ff7eaa6321-img1.png",
+    "likes": 6527,
+    "reply_list": "[{_id=e462badf-a206-41fd-bedc-3fdc14938a87, content=좋아요!!!, author=허인주, user_id=3, isUpdated=true, created_at=Wed Apr 09 14:41:29 KST 2025, updated_at=Thu Apr 10 13:55:57 KST 2025}]",
+    "title": "학교 앞에 새로 생긴 작은 숲, 아이들의 놀이터가 되다!",
+    "updated_at": {"$date": "2025-04-09T05:22:43.914Z"},
+    "user_id": "1",
+    "views": 6571
+  },
+  {
+    "_id": {"$oid": "67f70a137ec4200b6163c239"},
+    "_class": "site.newkiz.kidsnewsserver.Entity.Kidsnews",
+    "author": "zl승아zon",
+    "content": "4월 10일 벌어진 KIA 타이거즈와 롯데 자이언츠 간의 경기에서, 피치클락에 대한 항의가 이어졌다.",
+    "created_at": {"$date": "2025-04-10T00:00:18.982Z"},
+    "img": "https://newkiz-s3.s3.ap-northeast-2.amazonaws.com/kidsnews/8d29ac87-17db-4497-ac76-beda03c723ee-DALL%C2%B7E%202025-03-18%2013.16.33%20-%20A%20realistic%20action%20shot%20of%20a%20baseball%20player%20resembling%20Kim%20Do-young%2C%20wearing%20a%20KIA%20Tigers%20uniform%20with%20the%20number%205%2C%20hitting%20a%20home%20run.%20The%20scene%20ca.webp",
+    "likes": 16,
+    "reply_list": "[{_id=26ebf84c-ae00-41c8-a9ec-6435c58b5d65, content=허걱, author=zl승아zon, user_id=6, isUpdated=false, created_at=Thu Apr 10 11:19:55 KST 2025, updated_at=Thu Apr 10 11:19:55 KST 2025}, {_id=5a679117-aefe-4838-ada6-812db6698692, content=왜 그랬는지 궁금해요!, author=뿡뿡이, user_id=5, isUpdated=false, created_at=Thu Apr 10 19:40:56 KST 2025, updated_at=Thu Apr 10 19:40:56 KST 2025}, {_id=1a8a826e-9981-4838-9d93-89233e57b355, content=우와, author=ansooparty, user_id=8, isUpdated=false, created_at=Fri Apr 11 02:31:29 KST 2025, updated_at=Fri Apr 11 02:31:29 KST 2025}]",
+    "title": "피치클락의 허점",
+    "updated_at": {"$date": "2025-04-10T00:03:44.556Z"},
+    "user_id": "6",
+    "views": 38
+  }
+]

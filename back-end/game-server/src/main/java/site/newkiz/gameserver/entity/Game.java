@@ -20,7 +20,7 @@ public class Game {
   private int startMinute;
 
   // 전체 퀴즈 정보
-  private List<GameQuiz> gameQuizList;
+  private List<Quiz> quizList;
 
   // 현재 퀴즈
   private int currentQuizNumber;
@@ -49,11 +49,11 @@ public class Game {
   }
 
   public int quizCount() {
-    return this.gameQuizList.size();
+    return this.quizList.size();
   }
 
-  public GameQuiz getCurrnetQuiz() {
-    return this.gameQuizList.get(this.currentQuizNumber - 1);
+  public Quiz getCurrnetQuiz() {
+    return this.quizList.get(this.currentQuizNumber - 1);
   }
 
   public static Map<String, Object> toPlayingGameInfo(Game game) {
@@ -64,11 +64,9 @@ public class Game {
     return result;
   }
 
-  public static Map<String, Object> toFinishedGameInfo(Game game,
-      Map<Integer, List<GameScore>> scoreRank) {
+  public static Map<String, Object> toFinishedGameInfo(Game game) {
     Map<String, Object> result = new HashMap<>();
     result.put("state", game.getState());
-    result.put("scoreRank", scoreRank);
 
     return result;
   }

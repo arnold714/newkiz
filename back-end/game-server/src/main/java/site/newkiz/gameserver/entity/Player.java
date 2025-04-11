@@ -16,16 +16,13 @@ public class Player {
   private String characterName;
   private Position position;
   private int score;
-  private School school;
 
-  public Player(Integer id, String nickname, String characterName, Position position,
-      School school) {
+  public Player(Integer id, String nickname, String characterName, Position position) {
     this.id = id;
     this.nickname = nickname;
     this.characterName = characterName;
     this.position = position;
     this.score = 0;
-    this.school = school;
   }
 
   public void addScore() {

@@ -45,7 +45,7 @@ export const SummaryPage = () => {
                 const summaryId = item.newsSummary.id;       // 식별자
                 const title = item.newsDocument.title;       // 기사 제목
                 const userSummary = item.newsSummary.summary; // 사용자 요약
-                const aiSummary = item.newsDocument.article; // AI 요약 (서버 필드명 확인)
+                const aiSummary = item.newsDocument.summary; // AI 요약 (서버 필드명 확인)
                 const link = item.newsDocument.link;         // 기사 링크
 
                 return (

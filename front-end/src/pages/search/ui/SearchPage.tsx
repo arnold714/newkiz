@@ -4,6 +4,8 @@ import { fetchRecentSearches, deleteSearchHistory, fetchPopularKeywords } from "
 import { RecentSearchItem } from "@/features/search";
 import { useNavigate } from "react-router-dom";
 import "@shared/styles/CustomScroll.css"
+import { AxiosError } from "axios";
+import { showError } from "@/shared";
 import { WordCloud } from "@/widgets/search";
 
 export default function SearchPage() {
@@ -54,6 +56,15 @@ export default function SearchPage() {
     } catch (err) {
       console.error("최근 검색어 로드 에러:", err);
       setError("최근 검색어 불러오기 오류");
+      if (err instanceof AxiosError) {
+        if (err.response?.status === 401) {
+          navigate("/login"); // 로그인 페이지로 리다이렉트
+          alert("로그인이 필요합니다");
+        } else if (err.response?.status === 403) {
+          showError("프로필을 등록해주세요");
+          navigate("/userinfo"); // 프로필 등록 페이지로 리다이렉트
+        }
+      }
     } finally {
       setLoading(false);
     }
@@ -70,6 +81,15 @@ export default function SearchPage() {
       }
     } catch (err) {
       setError("인기 검색어 불러오기 오류");
+      if (err instanceof AxiosError) {
+        if (err.response?.status === 401) {
+          navigate("/login"); // 로그인 페이지로 리다이렉트
+          alert("로그인이 필요합니다");
+        } else if (err.response?.status === 403) {
+          showError("프로필을 등록해주세요");
+          navigate("/userinfo"); // 프로필 등록 페이지로 리다이렉트
+        }
+      }
     }
   };
 
@@ -125,7 +145,7 @@ export default function SearchPage() {
       </div>
 
       {/* 스크롤 가능한 컨텐츠 부분 */}
-      <div className="flex-1 overflow-y-auto p-4 scroll">
+      <div className="flex-1 overflow-y-auto pb-15 p-4 scroll">
         {/* 회색 구분선 */}
         <hr className="border-b-5 border-gray-100 -mx-4 mb-6" />
 
@@ -154,15 +174,21 @@ export default function SearchPage() {
         {/* 인기 검색어 */}
         <div className="space-y-2 mb-6">
           <h2 className="font-semibold text-xl mb-3">인기 검색어</h2>
-          <WordCloud
-            keywords={popularKeywords.map(item => ({
-              _id: item._id, // _id를 text로 사용
-              count: item.count, // count를 weight로 사용
-            }))}
-            onKeywordClick={handleSearch}
-            width={360}
-            height={360}
-          />
+          <div className="flex justify-center w-full mt-6"> {/* Added centering container with top margin */}
+            <div className="bg-white rounded-2xl shadow-md overflow-hidden border border-gray-100">
+              <div className="p-2">
+                <WordCloud
+                  keywords={popularKeywords.map(item => ({
+                    _id: item._id,
+                    count: item.count,
+                  }))}
+                  onKeywordClick={handleRecentSearchClick}
+                  width={360} /* Increased from 360 to 400 */
+                  height={220} /* Increased from 360 to 400 */
+                />
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

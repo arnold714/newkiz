@@ -20,16 +20,6 @@ export const ProgressGraph: React.FC = () => {
     return () => window.removeEventListener("resize", handleResize)
   }, [])
 
-  useEffect(() => {
-    // 초기 상태 확인
-    checkTimeValidity()
-
-    // 1초마다 시간 확인
-    const intervalId = setInterval(checkTimeValidity, 1000)
-
-    return () => clearInterval(intervalId)
-  }, [])
-
   if (isLoading) return <div className="loading">Loading...</div>;
   if (isError) {
     console.error("Error fetching today read news:", error); // 에러 로그 출력
@@ -86,49 +76,60 @@ export const ProgressGraph: React.FC = () => {
 
   // 시간 계산해서 버튼 보여주기
   const checkTimeValidity = () => {
-    const now = dayjs() // dayjs 객체 생성
-
-    const GAME_START_HOUR = 17 // 시 
-    const ENABLE_START = dayjs().set("hour", GAME_START_HOUR).set("minute", 50).set("second", 0) // 50분
-    const ENABLE_END = dayjs().set("hour", GAME_START_HOUR).set("minute", 59).set("second", 59) // 59분 59초
-
-    const isInTimeRange = now.isAfter(ENABLE_START) && now.isBefore(ENABLE_END) // GAME_START_HOUR 시 ENABLE_START분 ~ GAME_START_HOUR시 ENABLE_END까지
-    setIsEnabled(isInTimeRange) // isInTimeRange라면 true -> 입장 가능
-
-    // 게임 시작까지 남은 시간
-    const gameDiffInSeconds = ENABLE_END.diff(now, "second")
-    const gameHours = Math.floor(gameDiffInSeconds / 3600)
-    const gameMinutes = Math.floor((gameDiffInSeconds % 3600) / 60)
-    const gameSeconds = gameDiffInSeconds % 60
-
-    let formattedGameTime
-    if (gameDiffInSeconds >= 3600) { // 60분(3600초) 이상인 경우
-      formattedGameTime = `${gameHours.toString().padStart(2, "0")}:${gameMinutes.toString().padStart(2, "0")}:${gameSeconds.toString().padStart(2, "0")}`
-    } else { // 60분 미만인 경우
-      formattedGameTime = `${gameMinutes.toString().padStart(2, "0")}:${gameSeconds.toString().padStart(2, "0")}`
-    }
-
-    setRemainingTime(formattedGameTime)
-
-    // 입장 가능 시간까지 남은 시간
-    if (now.isBefore(ENABLE_START)) {
-      const enterDiffInSeconds = ENABLE_START.diff(now, "second")
-      const enterHours = Math.floor(enterDiffInSeconds / 3600)
-      const enterMinutes = Math.floor((enterDiffInSeconds % 3600) / 60)
-      const enterSeconds = enterDiffInSeconds % 60
-
-      let formattedEnterTime
-      if (enterDiffInSeconds >= 3600) { // 60분(3600초) 이상인 경우
-        formattedEnterTime = `${enterHours.toString().padStart(2, "0")}:${enterMinutes.toString().padStart(2, "0")}:${enterSeconds.toString().padStart(2, "0")}`
-      } else { // 60분 미만인 경우
-        formattedEnterTime = `${enterMinutes.toString().padStart(2, "0")}:${enterSeconds.toString().padStart(2, "0")}`
-      }
-
-      setStartEnterTime(formattedEnterTime)
+    const now = dayjs(); // 현재 시간
+    
+    // 현재 시각의 분과 초 추출
+    const currentMinute = now.minute();
+    
+    // 5분 주기로 반복되는 패턴에서 현재 위치 계산 (0-4)
+    const minuteInCycle = currentMinute % 5;
+    
+    // 활성화 여부 판단: 
+    // 2-4분 구간에 활성화 (3분 동안)
+    const isInTimeRange = minuteInCycle >= 2;
+    
+    setIsEnabled(isInTimeRange);
+    
+    // 남은 시간 계산
+    let nextChangeTime;
+    
+    if (isInTimeRange) {
+      // 현재 활성화 상태일 때 - 비활성화될 때까지 남은 시간 계산
+      nextChangeTime = now.startOf('hour').add(Math.floor(currentMinute / 5) * 5 + 5, 'minute');
+      
+      const diffInSeconds = nextChangeTime.diff(now, 'second');
+      const minutes = Math.floor(diffInSeconds / 60);
+      const seconds = diffInSeconds % 60;
+      
+      const formattedTime = `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+      setRemainingTime(formattedTime);
+      setStartEnterTime("");
     } else {
-      setStartEnterTime("")
+      // 현재 비활성화 상태일 때 - 활성화될 때까지 남은 시간 계산
+      nextChangeTime = now.startOf('hour').add(Math.floor(currentMinute / 5) * 5 + 2, 'minute');
+      
+      const diffInSeconds = nextChangeTime.diff(now, 'second');
+      const minutes = Math.floor(diffInSeconds / 60);
+      const seconds = diffInSeconds % 60;
+      
+      const formattedTime = `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+      setStartEnterTime(formattedTime);
+      setRemainingTime("");
     }
-  }
+  };
+  
+
+
+  useEffect(() => {
+    // 초기 상태 확인
+    checkTimeValidity()
+
+    // 1초마다 시간 확인
+    const intervalId = setInterval(checkTimeValidity, 1000)
+
+    return () => clearInterval(intervalId)
+  }, [])
+
 
   return (
     <div className="bg-white/90 shadow-m rounded-[15px] shadow-[4px_4px_3px_rgba(0,0,0,0.13)] w-40 h-40 m-3 sm:w-60 sm:h-60 flex justify-center items-center">
@@ -141,6 +142,7 @@ export const ProgressGraph: React.FC = () => {
           {isEnabled ? (
             <Link
               to="/game"
+              state={{ from: "/" }}
               className="rounded-lg px-3 py-2 bg-[#7CBA36] text-white font-semibold"
             >
               게임 입장하기

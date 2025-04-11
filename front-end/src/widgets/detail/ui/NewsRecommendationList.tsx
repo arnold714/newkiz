@@ -1,6 +1,7 @@
 import { GetRelatedNews } from "../api/DetailApi";
 import SwipeCarousel from "@/shared/ui/SwipeCarousel";
 import { Link } from "react-router-dom";
+import { LuChevronRight } from "react-icons/lu";
 import "../styles/NewsRecommendationList.css"
 
 interface NewsDetailContentProps {
@@ -26,11 +27,16 @@ export const NewsRecommendationList:React.FC<NewsDetailContentProps> = ({id}) =>
         arrows={false}
         dots={false}
       >
-        {relatedNews.map((item) => (
+        {relatedNews.map((item, idx) => (
            <Link to={`/detail/${item.id}`} key={item.id}>
-           <div className="bg-white border-2 border-[#EBEBEB] h-[200px] p-2 rounded-lg cursor-pointer">
-             <div className="font-semibold clamp-3">{item.title}</div>
-             <p>더보기...</p>
+           <div className="flex flex-col  bg-[#FFFFFF] border-1 border-[#EBEBEB] h-[160px] w-[180px] p-2 rounded-lg cursor-pointer shadow-[1px_1px_8px_rgba(0,0,0,0.1)]">
+             <div className="text-[#BFD46F] font-bold text-[25px] ">{idx+1}</div>
+             <div className="font-semibold text-[16px] clamp-3 mx-1 mt-2">{item.title}</div>
+             <div className="flex justify-end items-center mt-1">
+              <p className="mr-1 font-semibold">더보기</p>
+              <LuChevronRight size={15}/>
+             </div>
+
            </div>
          </Link>
         ))}

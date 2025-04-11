@@ -7,6 +7,7 @@ import '@shared/styles/CustomScroll.css';
 import { NewWaitingInfo } from "@/features/game/model/types";
 import { PersonalRank, SchoolRank } from "@/pages/game/model/types";
 import { getPersonalRank, getSchoolRank } from "@/pages/game/api/GameApi";
+import { Link } from "react-router-dom";
 
 interface WaitingPageProps {
   waitingInfo: NewWaitingInfo;
@@ -79,14 +80,14 @@ export const WaitingPage = ({ waitingInfo }: WaitingPageProps) => {
       </div>
       {
         isToggleOpen &&
-        <div className="flex flex-col items-center flex-1 w-full font-bold text-[#212121] overflow-auto scroll">
+        <div className="flex flex-col items-center flex-1 w-full font-bold text-[#212121] overflow-auto scroll pb-3">
           <div className="flex flex-col h-[90%] w-full pt-5 items-center">
             <div className="flex flex-row justify-evenly w-2/3 ">
               <p className={`text-xl mb-2 cursor-pointer ${selected === "personal" ? "text-[#7CBA36] border-b-3 border-[#7CBA36]" : ""}`} onClick={() => onClick("personal")}>
-                개인 랭킹{" "}
+                개인 랭킹
               </p>
               <p className={`text-xl mb-2 cursor-pointer ${selected === "school" ? "text-[#7CBA36] border-b-3 border-[#7CBA36]" : ""}`} onClick={() => onClick("school")}>
-                학교 랭킹{" "}
+                학교 랭킹
               </p>
             </div>
             <div className="flex flex-col flex-1 w-2/3 text-black items-center mt-5">
@@ -96,6 +97,7 @@ export const WaitingPage = ({ waitingInfo }: WaitingPageProps) => {
                 <SchoolRanking schoolRanks={schoolRanking} />
               )}
             </div>
+            <Link className="mt-4 px-8 py-2 bg-[#7CBA36] rounded-lg text-white text-center font-bold text-lg" to="/">나가기</Link>
           </div>
         </div>
       }

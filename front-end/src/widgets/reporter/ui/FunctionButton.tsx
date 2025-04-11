@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { LuArrowUp, LuPen, LuCirclePlay, LuX, LuPlus } from "react-icons/lu";
+import { LuArrowUp, LuPen, LuX, LuPlus } from "react-icons/lu";
 import "@widgets/reporter/styles/FunctionButton.css";
 
 const FunctionButton = ({ scrollRef }: { scrollRef: React.RefObject<HTMLDivElement> }) => {
@@ -43,7 +43,6 @@ const FunctionButton = ({ scrollRef }: { scrollRef: React.RefObject<HTMLDivEleme
           <>
             <button onClick={handleScrollTop} className="fab-item"><LuArrowUp size={24} /></button>
             <button onClick={() => handleNavigate("/reporter/create")} className="fab-item"><LuPen size={24} /></button>
-            <button onClick={() => handleNavigate("/reporter/upload")} className="fab-item"><LuCirclePlay size={24} /></button>
             <button onClick={() => setIsOpen(false)} className="fab-item"><LuX size={24} /></button>
           </>
         )}

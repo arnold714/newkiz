@@ -1,5 +1,7 @@
 package site.newkiz.gameserver.entity;
 
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -14,8 +16,8 @@ public class Game {
   // 게임 상태 - 대기 / 진행중 / 종료
   private State state;
 
-  // 시작 시간 - 단위 시
-  private int startHour;
+  // 시작 시간 - 단위 분
+  private int startMinute;
 
   // 전체 퀴즈 정보
   private List<Quiz> quizList;
@@ -31,10 +33,11 @@ public class Game {
 
 
   public Game() {
+    // todo 5분마다 실행될 때 기준
+    ZonedDateTime now = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
+    this.startMinute = now.getMinute() + 3;
     this.state = State.WAITING;
-    // todo 임의로 18시 시작 지정
-    this.startHour = 18;
-    this.quizList = new ArrayList<>();
+    this.gameQuizList = new ArrayList<>();
     this.currentQuizNumber = 0;
     this.players = new ConcurrentHashMap<>();
     this.alivePlayers = new ConcurrentHashMap<>();

@@ -1,0 +1,12 @@
+INSERT INTO newkiz.user (id, created_at, updated_at, email, image, name, provider, provider_id) VALUES (3, '2025-03-26 02:43:56', null, 'huh0529@naver.com', null, '허인주', 'kakao', '3976087858');
+INSERT INTO newkiz.user (id, created_at, updated_at, email, image, name, provider, provider_id) VALUES (4, '2025-04-01 05:31:48', null, 'arnold714@naver.com', null, '박재형', 'kakao', '4007770796');
+INSERT INTO newkiz.user (id, created_at, updated_at, email, image, name, provider, provider_id) VALUES (6, '2025-04-03 05:04:06', null, 'tytomko@gmail.com', null, '태연', 'kakao', '4200271827');
+INSERT INTO newkiz.user (id, created_at, updated_at, email, image, name, provider, provider_id) VALUES (7, '2025-04-06 06:46:18', null, 'gkwldnjs987@naver.com', null, '하지원', 'kakao', '4204644045');
+INSERT INTO newkiz.user (id, created_at, updated_at, email, image, name, provider, provider_id) VALUES (8, '2025-04-07 03:10:49', null, 'ansoo97@naver.com', null, '강안수', 'kakao', '4205798512');
+INSERT INTO newkiz.user (id, created_at, updated_at, email, image, name, provider, provider_id) VALUES (37, '2025-04-07 03:10:49', null, 'asdsad@naver.com', null, 'qweqwewqe', 'kakao', '123456');
+INSERT INTO newkiz.user (id, created_at, updated_at, email, image, name, provider, provider_id) VALUES (42, '2025-04-07 03:10:49', null, 'test@naver.com', null, 'test', 'kakao', '1234');
+INSERT INTO newkiz.user (id, created_at, updated_at, email, image, name, provider, provider_id) VALUES (43, '2025-04-10 07:54:17', null, '1202yjk@naver.com', null, '김여준', 'kakao', '4210546704');
+INSERT INTO newkiz.user (id, created_at, updated_at, email, image, name, provider, provider_id) VALUES (44, '2025-04-10 11:21:04', null, 'rhdms021117@naver.com', null, '김고은', 'kakao', '4210821158');
+INSERT INTO newkiz.user (id, created_at, updated_at, email, image, name, provider, provider_id) VALUES (45, '2025-04-10 11:32:58', null, 'tls001217@naver.com', null, '신승아', 'kakao', '4010101127');
+INSERT INTO newkiz.user (id, created_at, updated_at, email, image, name, provider, provider_id) VALUES (46, '2025-04-10 12:34:40', null, 'cavalier7@naver.com', null, '고성현', 'kakao', '4210920211');
+INSERT INTO newkiz.user (id, created_at, updated_at, email, image, name, provider, provider_id) VALUES (47, '2025-04-10 15:49:35', null, 'podol1052@naver.com', null, '유창석', 'kakao', '4211147065');

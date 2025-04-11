@@ -1,0 +1,194 @@
+[
+  {
+    "_id": {"$oid": "67e915a6cba3a862b78e1d91"},
+    "_class": "site.newkiz.newsserver.entitiy.NewsSummary",
+    "newsId": "67e8ed4a964fa9feac885935",
+    "summary": "공매도",
+    "updatedAt": {"$date": "2025-03-30T09:57:58.893Z"},
+    "userId": "4"
+  },
+  {
+    "_id": {"$oid": "67f324cb7ce5e243acc6a4a9"},
+    "_class": "site.newkiz.newsserver.entity.NewsSummary",
+    "newsId": "67edfec1a1682e42cac66802",
+    "summary": "ㅁㄴㅇㄹ",
+    "updatedAt": {"$date": "2025-04-08T18:02:40.858Z"},
+    "userId": "5"
+  },
+  {
+    "_id": {"$oid": "67f32e287ce5e243acc6a4ae"},
+    "_class": "site.newkiz.newsserver.entity.NewsSummary",
+    "newsId": "67edfebba1682e42cac667e3",
+    "summary": "asdf",
+    "updatedAt": {"$date": "2025-04-08T23:08:48.572Z"},
+    "userId": "5"
+  },
+  {
+    "_id": {"$oid": "67f5fc27fc23b9473bad9937"},
+    "_class": "site.newkiz.newsserver.entity.NewsSummary",
+    "newsId": "67ef90013358fef3c143baeb",
+    "summary": "asdf",
+    "updatedAt": {"$date": "2025-04-10T04:57:51.846Z"},
+    "userId": "5"
+  },
+  {
+    "_id": {"$oid": "67f726a1fc23b9473bad9974"},
+    "_class": "site.newkiz.newsserver.entity.NewsSummary",
+    "newsId": "67eca8f8798417f5ce281f32",
+    "summary": "요악 입니다",
+    "updatedAt": {"$date": "2025-04-10T02:02:09.648Z"},
+    "userId": "5"
+  },
+  {
+    "_id": {"$oid": "67f72c89fc23b9473bad997a"},
+    "_class": "site.newkiz.newsserver.entity.NewsSummary",
+    "newsId": "67eb5b2e6fa7984d085373f5",
+    "summary": "요약입니다.",
+    "updatedAt": {"$date": "2025-04-10T02:27:21.964Z"},
+    "userId": "5"
+  },
+  {
+    "_id": {"$oid": "67f72ccbfc23b9473bad997c"},
+    "_class": "site.newkiz.newsserver.entity.NewsSummary",
+    "newsId": "67f7219f5ebc0c19776b4dab",
+    "summary": "요약입니다",
+    "updatedAt": {"$date": "2025-04-10T02:28:27.779Z"},
+    "userId": "5"
+  },
+  {
+    "_id": {"$oid": "67f74cdafc23b9473bad9984"},
+    "_class": "site.newkiz.newsserver.entity.NewsSummary",
+    "newsId": "67ef90013358fef3c143bae9",
+    "summary": "야구 재미없다.",
+    "updatedAt": {"$date": "2025-04-10T04:46:52.132Z"},
+    "userId": "8"
+  },
+  {
+    "_id": {"$oid": "67f7516bfc23b9473bad99f8"},
+    "_class": "site.newkiz.newsserver.entity.NewsSummary",
+    "newsId": "67ef90013358fef3c143baec",
+    "summary": " 요약입니다",
+    "updatedAt": {"$date": "2025-04-10T05:04:43.529Z"},
+    "userId": "5"
+  },
+  {
+    "_id": {"$oid": "67f75b52fc23b9473bad99fc"},
+    "_class": "site.newkiz.newsserver.entity.NewsSummary",
+    "newsId": "67f749e61640602f954ac245",
+    "summary": "ㅁㄴㅇㄹ",
+    "updatedAt": {"$date": "2025-04-10T05:46:58.755Z"},
+    "userId": "5"
+  },
+  {
+    "_id": {"$oid": "67f79f7ca1876a12e2769d52"},
+    "_class": "site.newkiz.newsserver.entity.NewsSummary",
+    "newsId": "67ef90013358fef3c143bae8",
+    "summary": "토미 에드먼 현수는 한국 국가대표로도 뛰었던 자랑스러운 선수에요",
+    "updatedAt": {"$date": "2025-04-10T10:37:48.709Z"},
+    "userId": "5"
+  },
+  {
+    "_id": {"$oid": "67f7a36fa1876a12e2769d60"},
+    "_class": "site.newkiz.newsserver.entity.NewsSummary",
+    "newsId": "67f749e41640602f954ac1f4",
+    "summary": "sadasd",
+    "updatedAt": {"$date": "2025-04-10T10:54:39.355Z"},
+    "userId": "6"
+  },
+  {
+    "_id": {"$oid": "67f7a3c8a1876a12e2769d61"},
+    "_class": "site.newkiz.newsserver.entity.NewsSummary",
+    "newsId": "67ef90013358fef3c143baed",
+    "summary": "요약 테스트",
+    "updatedAt": {"$date": "2025-04-10T10:56:08.288Z"},
+    "userId": "5"
+  },
+  {
+    "_id": {"$oid": "67f7a3d2a1876a12e2769d62"},
+    "_class": "site.newkiz.newsserver.entity.NewsSummary",
+    "newsId": "67ef90013358fef3c143baeb",
+    "summary": "야구 요약",
+    "updatedAt": {"$date": "2025-04-10T10:56:18.276Z"},
+    "userId": "6"
+  },
+  {
+    "_id": {"$oid": "67f7af75fc23b9473bad9a2d"},
+    "_class": "site.newkiz.newsserver.entity.NewsSummary",
+    "newsId": "67ef90013358fef3c143baeb",
+    "summary": "배지환이 기회를 놓쳤어요",
+    "updatedAt": {"$date": "2025-04-10T11:45:57.582Z"},
+    "userId": "45"
+  },
+  {
+    "_id": {"$oid": "67f7af9cfc23b9473bad9a2f"},
+    "_class": "site.newkiz.newsserver.entity.NewsSummary",
+    "newsId": "67ef90013358fef3c143bae8",
+    "summary": "에드먼은 너무 잘하고 있어요!",
+    "updatedAt": {"$date": "2025-04-10T11:46:36.170Z"},
+    "userId": "45"
+  },
+  {
+    "_id": {"$oid": "67f7e31aa1876a12e2769d73"},
+    "_class": "site.newkiz.newsserver.entity.NewsSummary",
+    "newsId": "67f749e61640602f954ac245",
+    "summary": ".",
+    "updatedAt": {"$date": "2025-04-10T15:26:36.680Z"},
+    "userId": "7"
+  },
+  {
+    "_id": {"$oid": "67f7e360a1876a12e2769d74"},
+    "_class": "site.newkiz.newsserver.entity.NewsSummary",
+    "newsId": "67ef90013358fef3c143baeb",
+    "summary": ".",
+    "updatedAt": {"$date": "2025-04-10T15:27:28.112Z"},
+    "userId": "7"
+  },
+  {
+    "_id": {"$oid": "67f7e48da1876a12e2769d76"},
+    "_class": "site.newkiz.newsserver.entity.NewsSummary",
+    "newsId": "67f749e41640602f954ac1f4",
+    "summary": ".",
+    "updatedAt": {"$date": "2025-04-10T15:32:29.417Z"},
+    "userId": "7"
+  },
+  {
+    "_id": {"$oid": "67f7e541a1876a12e2769d78"},
+    "_class": "site.newkiz.newsserver.entity.NewsSummary",
+    "newsId": "67f749e51640602f954ac21e",
+    "summary": ".",
+    "updatedAt": {"$date": "2025-04-10T15:35:29.409Z"},
+    "userId": "7"
+  },
+  {
+    "_id": {"$oid": "67f7f105a1876a12e2769d8d"},
+    "_class": "site.newkiz.newsserver.entity.NewsSummary",
+    "newsId": "67f749e31640602f954ac1cc",
+    "summary": "오 좋아여 꺅",
+    "updatedAt": {"$date": "2025-04-10T16:25:41.220Z"},
+    "userId": "6"
+  },
+  {
+    "_id": {"$oid": "67f7f666a1876a12e2769d92"},
+    "_class": "site.newkiz.newsserver.entity.NewsSummary",
+    "newsId": "67ef90013358fef3c143bae9",
+    "summary": "124ee",
+    "updatedAt": {"$date": "2025-04-10T16:48:38.364Z"},
+    "userId": "45"
+  },
+  {
+    "_id": {"$oid": "67f7fecca1876a12e2769da7"},
+    "_class": "site.newkiz.newsserver.entity.NewsSummary",
+    "newsId": "67edfeaca1682e42cac66798",
+    "summary": "서울 집값 비싸요",
+    "updatedAt": {"$date": "2025-04-10T17:24:28.975Z"},
+    "userId": "8"
+  },
+  {
+    "_id": {"$oid": "67f872f8a1876a12e2769db6"},
+    "_class": "site.newkiz.newsserver.entity.NewsSummary",
+    "newsId": "67edfeaca1682e42cac66798",
+    "summary": "서울 집값이 너무 비써요",
+    "updatedAt": {"$date": "2025-04-11T01:40:08.353Z"},
+    "userId": "45"
+  }
+]

@@ -1,68 +1,61 @@
-image: docker:latest
+image: node:22.12.0
 
 stages:
-  - docker-build
-  - push-ecr
-  - update-kustomize
+  - build
+  - deploy
 
 before_script:
   - echo "GitLab CI/CD 시작!"
-  - docker --version
-  - apk add --no-cache python3 py3-pip git aws-cli
-  - aws --version
-  - export BRANCH_NAME=$(echo $CI_COMMIT_REF_NAME | sed 's/\//-/g')  # 브랜치명 슬래시 제거
-  - export SHORT_COMMIT=$(echo $CI_COMMIT_SHORT_SHA)  # 커밋 SHA (7자리)
-  - export DOCKER_IMAGE_TAG="$BRANCH_NAME-$SHORT_COMMIT"  # 최종 태그
-  - echo "DOCKER_IMAGE_TAG=$DOCKER_IMAGE_TAG" >> variables.env  # 변수 저장
+  - mkdir ~/.ssh
+  - echo "$SSH_KEY" > ~/.ssh/ssh_key
+  - chmod 600 ~/.ssh/ssh_key
 
-docker-build:
-  stage: docker-build
-  only:
-    - mypage-server/master
-    - mypage-server/develop
-  script:
-    - echo "Docker 이미지 빌드 시작!"
-    - docker build -t $ECR_REPOSITORY_URI/newkiz:$DOCKER_IMAGE_TAG back-end/mypage-server
-  artifacts:
-    reports:
-      dotenv: variables.env  # 다음 단계에서 변수 사용 가능하게 설정
+  - node -v
+  - npm -v
+  - apt-get update && apt-get install -y python3-pip git awscli  # aws-cli를 apt로 설치
 
-push-ecr:
-  stage: push-ecr
-  only:
-    - mypage-server/master
-    - mypage-server/develop
-  script:
-    - echo "AWS ECR 로그인!"
-    - aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin $ECR_REPOSITORY_URI
-    - echo "ECR에 Docker 이미지 푸시"
-    - docker push $ECR_REPOSITORY_URI/newkiz:$DOCKER_IMAGE_TAG
-  dependencies:
-    - docker-build
 
-update-kustomize:
-  stage: update-kustomize
+# 빌드 단계
+build_vite:
+  stage: build
   only:
-    - mypage-server/master
-    - mypage-server/develop
+    - client/master
+    - client/develop
   script:
-    - echo "Kustomize로 배포 파일 업데이트 시작!"
-    - git clone https://$KUSTOMIZE_REPO_ACCESS_TOKEN_KEY:$KUSTOMIZE_REPO_ACCESS_TOKEN_VALUE@lab.ssafy.com/jjoonior97/newkiz-kustomize.git
-    - cd newkiz-kustomize
+    - cd front-end  # front-end 폴더로 이동
+    - rm package-lock.json
     
     - | # 브랜치별 환경변수 설정
-      if [ "$CI_COMMIT_BRANCH" == "mypage-server/master" ]; then
-        sed -i "s/newkiz:.*/newkiz:$DOCKER_IMAGE_TAG/" overlays/prod/mypage-server.yaml
-      elif [ "$CI_COMMIT_BRANCH" == "mypage-server/develop" ]; then
-        sed -i "s/newkiz:.*/newkiz:$DOCKER_IMAGE_TAG/" overlays/dev/mypage-server.yaml
+      if [ "$CI_COMMIT_BRANCH" == "client/master" ]; then
+        echo "$FRONTEND_PROD_ENV" > .env
+      elif [ "$CI_COMMIT_BRANCH" == "client/develop" ]; then
+        echo "$FRONTEND_DEV_ENV" > .env
       else
-        echo "브랜치가 master 또는 develop 가 아닙니다."
+        echo "브랜치가 dev 또는 prod가 아닙니다."
       fi
+    - echo ".env 확인!"
+    - cat .env
 
-    - git config --global user.email "jjoonior97@gmail.com"
-    - git config --global user.name "InJoo"
-    - git add .
-    - git commit -m "Automated code modification"
-    - git push
-  dependencies:
-    - push-ecr
+    - npm install    # 의존성 설치
+    - npm install -g typescript
+    - npm run build  # vite 빌드 실행
+  artifacts:
+    paths:
+      - front-end/dist  # vite 빌드 결과물 저장
+
+# client/develop 브랜치에 대해 로컬 Nginx에 배포
+deploy_to_local_nginx:
+  stage: deploy
+  only:
+    - client/develop  # client/develop 브랜치에서만 실행
+  script:
+    - scp -o StrictHostKeyChecking=no -i ~/.ssh/ssh_key -P $SSH_PORT -r front-end/dist/* $SSH_USER@$SSH_HOST:/var/www/html
+    - ssh -o StrictHostKeyChecking=no -i ~/.ssh/ssh_key $SSH_USER@$SSH_HOST -p $SSH_PORT "sudo systemctl restart nginx"
+
+# client/master 브랜치에 대해 AWS S3에 배포
+deploy_to_s3:
+  stage: deploy
+  only:
+    - client/master  # client/master 브랜치에서만 실행
+  script:
+    - aws s3 sync front-end/dist/ s3://newkiz-s3  # S3 버킷에 빌드 결과물 업로드

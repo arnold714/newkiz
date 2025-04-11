@@ -26,7 +26,7 @@ public class GameService {
   private final SimpMessagingTemplate messagingTemplate;
   private Game game;
 
-  @Scheduled(cron = "0 55 17 * * ?")
+  @Scheduled(cron = "0 2,7,12,17,22,27,32,37,42,47,52,57 * * * ?", zone = "Asia/Seoul")
   public void createGame() throws InterruptedException {
     log.info("게임 생성");
 
@@ -37,6 +37,10 @@ public class GameService {
 
   public List<Quiz> getTodayQuizList() {
     log.info("퀴즈 세팅");
+    Query query = new Query();
+    query.addCriteria(Criteria.where("quiz.ox_quiz.answer").regex("^[oOxX]$"));
+    query.with(Sort.by(Sort.Direction.DESC, "updated_at"));
+    query.limit(5); // todo 최근 5개만
 
     List<Quiz> quizList = new ArrayList<>();
     // todo 임의 퀴즈 세팅
@@ -67,7 +71,7 @@ public class GameService {
     messagingTemplate.convertAndSend("/sub/move", movedPlayer);
   }
 
-  @Scheduled(cron = "0 0 18 * * ?")
+  @Scheduled(cron = "0 */5 * * * ?", zone = "Asia/Seoul")
   public void startGame() throws InterruptedException {
     log.info("게임 시작 - 총 " + game.quizCount() + " 문제");
 

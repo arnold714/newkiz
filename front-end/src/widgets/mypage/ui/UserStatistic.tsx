@@ -11,20 +11,36 @@ import {
 } from "chart.js";
 import { fetchUserGraph } from "@/widgets/mypage";
 import { GraphData } from "@/features/mypage";
+import { AxiosError } from 'axios';  
+import { showError } from "@/shared"; 
+import { useNavigate } from "react-router-dom";
 
 ChartJS.register(RadialLinearScale, PointElement, LineElement, Filler, Tooltip, Legend);
 
 export const UserStatistic = () => {
     const [graphData, setGraphData] = useState<GraphData | null>(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
-        (async () => {
+      (async () => {
+        try {
           const data = await fetchUserGraph();
           if (data) {
             setGraphData(data);
           }
-        })();
-      }, []);
+        } catch (error) {
+          if (error instanceof AxiosError) {
+            if (error.response?.status === 401) {
+              navigate("/login"); // 로그인 페이지로 리다이렉트
+              alert("로그인이 필요합니다");
+            } else if (error.response?.status === 403) {
+              showError("프로필을 등록해주세요");
+              navigate("/userinfo"); // 프로필 등록 페이지로 리다이렉트
+            }
+          }
+        }
+      })();
+    }, [navigate]);
 
       const chartData = {
         labels: ["경제", "스포츠", "세계", "생활/문화", "사회", "정치", "IT/과학"], // X축 라벨

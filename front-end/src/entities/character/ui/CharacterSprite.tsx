@@ -83,9 +83,9 @@ export const CharacterSprite: React.FC<CharacterSpriteProps> = ({
   useEffect(() => {
     if (!isLocal && initialPosition) {
       // 방향감지
-      if (initialPosition[0] !== position[0]) {
-        setDirection(initialPosition[0] > position[0] ? -1 : 1)
-      }
+      // if (initialPosition[0] !== position[0]) {
+      //   setDirection(initialPosition[0] > position[0] ? -1 : 1)
+      // }
 
       // 움직인 거리 계산 (Math.hypot <- 피타고라스 정리 계산 = 유클리드 거리 계산)
       const distance = Math.hypot(initialPosition[0] - position[0], initialPosition[1] - position[1])
@@ -189,21 +189,18 @@ export const CharacterSprite: React.FC<CharacterSpriteProps> = ({
 
   // 퀴즈 탈락 애니메이션 처리
   useEffect(() => {
-    console.log("퀴즈 결과:", quizResult)
 
     if (!userId || !quizResult || !quizResult.wrongPlayers) {
-      console.log("유저 아이디 || 퀴즈 결과 || 틀린 플레이어가 없음", { userId, quizResult })
+      // console.log("유저 아이디 || 퀴즈 결과 || 틀린 플레이어가 없음", { userId, quizResult })
       return
     }
 
-    console.log("Wrong players array:", quizResult.wrongPlayers)
-
     // 탈락한 플레이어인지 확인
     if (quizResult.wrongPlayers.includes(userId)) {
-      console.log(`Player ${userId} has been eliminated`)
+      // console.log(`Player ${userId} has been eliminated`)
       setIsDead(true)
       setIsMoving(false) // 움직임 즉시 중단
-      console.log(userId, " 탈락.")
+      // console.log(userId, " 탈락.")
 
       // 이미 죽은 상태에서 다시 리셋되지 않도록 처리
       setDeathAnimationComplete(false)

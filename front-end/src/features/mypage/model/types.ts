@@ -90,6 +90,7 @@ export interface NewsDocument {
   link: string;        // 기사 원문 링크
   published: string;
   category: string;
+  summary: string;
   img: string;
   views: number;
   scrap: number;
